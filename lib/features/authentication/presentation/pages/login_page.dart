@@ -45,12 +45,16 @@ class LoginPage extends StatelessWidget {
                     Container(
                         width: 106.sp,
                         height: 1,
-                        decoration: BoxDecoration(color: AppColors.black)),
-                    Text(context.language.loginText),
+                        decoration: BoxDecoration(color: AppColors.nobel)),
+                    Text(
+                      context.language.loginText,
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.nobel),
+                    ),
                     Container(
                         width: 106.sp,
                         height: 1,
-                        decoration: BoxDecoration(color: AppColors.black))
+                        decoration: BoxDecoration(color: AppColors.nobel))
                   ],
                 ),
               ),
