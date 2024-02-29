@@ -1,4 +1,4 @@
-import 'package:base/core/mixins/fx.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

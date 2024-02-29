@@ -1,4 +1,4 @@
-name: base
+name: fms
 description: A new Flutter project.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -42,6 +42,8 @@ dependencies:
   #tool
   flutter_flavor: ^3.1.1
   change_app_package_name: ^1.1.0
+  #flutter pub run change_app_package_name:main com.new.package.name
+  
   google_maps_flutter: ^2.5.0
   flutter_bloc: ^8.1.3
 

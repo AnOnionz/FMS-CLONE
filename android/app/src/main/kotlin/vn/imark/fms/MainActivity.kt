@@ -1,4 +1,4 @@
-package com.example.base1
+package vn.imark.fms
 
 import io.flutter.embedding.android.FlutterActivity
 

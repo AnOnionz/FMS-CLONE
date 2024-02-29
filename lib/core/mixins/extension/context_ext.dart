@@ -1,4 +1,4 @@
-import 'package:base/core/constant/text_styles.dart';
+import 'package:fms/core/constant/text_styles.dart';
 import 'package:flutter/cupertino.dart' show CupertinoTheme, CupertinoThemeData;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';

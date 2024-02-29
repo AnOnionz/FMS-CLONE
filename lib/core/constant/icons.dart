@@ -1,4 +1,4 @@
-import 'package:base/core/constant/fonts.dart';
+import 'package:fms/core/constant/fonts.dart';
 import 'package:flutter/material.dart';
 
 final class AppIconData extends IconData {

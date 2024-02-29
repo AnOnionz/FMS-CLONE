@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:base/core/services/location/location_service.dart';
+import 'package:fms/core/services/location/location_service.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
