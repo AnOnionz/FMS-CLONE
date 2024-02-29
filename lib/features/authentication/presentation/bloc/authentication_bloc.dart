@@ -15,7 +15,6 @@ class AuthenticationBloc
       : _userRepository = userRepository,
         super(AuthenticationState.unknown()) {
     on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
-
     _authenticationStatusSubscription = _userRepository.status.listen(
       (status) => add(_AuthenticationStatusChanged(status)),
     );

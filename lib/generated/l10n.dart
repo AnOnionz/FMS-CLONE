@@ -50,11 +50,41 @@ class L {
     return Localizations.of<L>(context, L);
   }
 
-  /// `abc`
-  String get a {
+  /// `FMS 2023`
+  String get appName {
     return Intl.message(
-      'abc',
-      name: 'a',
+      'FMS 2023',
+      name: 'appName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Đăng nhập`
+  String get loginText {
+    return Intl.message(
+      'Đăng nhập',
+      name: 'loginText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lorem Ipsum is simply dummy text of the printing and`
+  String get loginDescription {
+    return Intl.message(
+      'Lorem Ipsum is simply dummy text of the printing and',
+      name: 'loginDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Đăng nhập bằng tài khoản outcome`
+  String get loginButtonText {
+    return Intl.message(
+      'Đăng nhập bằng tài khoản outcome',
+      name: 'loginButtonText',
       desc: '',
       args: [],
     );

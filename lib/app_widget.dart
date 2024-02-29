@@ -11,6 +11,7 @@ import '/core/environment/config.dart';
 import '/core/mixins/fx.dart';
 import '/generated/l10n.dart';
 import '/routes/routes.dart';
+import 'core/responsive/widgets/flex_builder.dart';
 import 'features/authentication/domain/repositories/user_repository.dart';
 import 'features/authentication/presentation/bloc/authentication_bloc.dart';
 

@@ -21,6 +21,8 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) =>
-      <String, Function>{"a": MessageLookupByLibrary.simpleMessage("123")};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "loginButtonText": MessageLookupByLibrary.simpleMessage(
+            "Đăng nhập bằng tài khoản outcome")
+      };
 }

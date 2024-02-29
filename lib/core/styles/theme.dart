@@ -35,9 +35,9 @@ const Size kDialogSize = Size(300, 170);
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-    extensions: [AppTextTheme()]);
+    extensions: [AppTextTheme.fallback()]);
 
 ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-    extensions: [AppTextTheme()]);
+    extensions: [AppTextTheme.fallback()]);

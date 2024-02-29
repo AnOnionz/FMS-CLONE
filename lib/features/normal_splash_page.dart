@@ -10,7 +10,7 @@ class SplashPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Center(
-        child: Image.asset(AppImages.logo),
+        child: Image.asset(AppImages.splashIcon),
       ),
     );
   }

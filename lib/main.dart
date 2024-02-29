@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/responsive/responsive.dart';
 import '/app_widget.dart';
 import '/core/database/database.dart';
 import '/core/environment/config.dart';
@@ -20,5 +21,7 @@ void main() async {
     UserEntitySchema,
   ]);
   Bloc.observer = SimpleBlocObserver();
-  runApp(ModularApp(module: AppModule(), child: const App()));
+  runApp(ModularApp(
+      module: AppModule(),
+      child: FlexibleBuilder(designSize: Size(430, 934), child: const App())));
 }

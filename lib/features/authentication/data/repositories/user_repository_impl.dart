@@ -62,7 +62,6 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Stream<AuthenticationStatus> get status async* {
     final user = _local.getUserFromLocal();
-    await Future.delayed(1.seconds);
     if (user == null)
       yield AuthenticationStatus.unauthenticated;
     else {
