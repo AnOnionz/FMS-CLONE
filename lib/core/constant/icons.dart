@@ -1,5 +1,6 @@
 import 'package:fms/core/constant/fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/fx.dart';
 
 final class AppIconData extends IconData {
   const AppIconData(int codePoint)

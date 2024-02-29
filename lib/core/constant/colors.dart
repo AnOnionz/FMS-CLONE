@@ -19,5 +19,8 @@ sealed class AppColors {
   static const Color yellow = Color(0xFFE000);
   static const Color black = Color(0xFF000000);
   static const Color white = Color(0xFFFFFFFF);
+  static const Color aliceBlue = Color(0xFFF2F6FB);
   static const Color orange = Color(0xFFE65100);
+  static const Color nobel = Color(0xFF9E9E9E);
+  static const Color solitude = Color(0xFFE4EAF0);
 }
