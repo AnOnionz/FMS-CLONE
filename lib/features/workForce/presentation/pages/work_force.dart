@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -7,6 +6,7 @@ import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/routes/routes.dart';
 
 class WorkForcePage extends StatelessWidget {
   const WorkForcePage({super.key});
@@ -14,12 +14,13 @@ class WorkForcePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _logoSize = Size(140.h, 140.h);
-    ScrollController _ctrl = ScrollController();
+
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: Size(context.screenWidth, 40.h),
             child: AppBar(
                 backgroundColor: AppColors.transparent,
+                forceMaterialTransparency: true,
                 leadingWidth: 60.h,
                 leading: Padding(
                   padding: EdgeInsets.only(left: 16.w),
@@ -30,7 +31,7 @@ class WorkForcePage extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(10.w),
                       child: GestureDetector(
-                        onTap: () => Modular.to.pop(),
+                        onTap: () => context.pop(),
                         child: SvgPicture.asset(
                           AppIcons.back,
                         ),
@@ -93,7 +94,8 @@ class WorkForcePage extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () => context
+                                        .nextRoute(Routes.projectsSelection),
                                     child: Padding(
                                       padding: Fx.pV16,
                                       child: Row(

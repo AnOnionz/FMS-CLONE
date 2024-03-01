@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/features/workForce/presentation/workForce.dart';
+import 'package:fms/features/workForce/presentation/pages/projects_selection.dart';
+import 'package:fms/features/workForce/presentation/pages/work_force.dart';
 
 import '../../core/client/dio_client.dart';
 import '../../core/localization/locale_manager.dart';
@@ -55,6 +56,9 @@ class AppModule extends Module {
         child: (_) => const LoginPage(), transition: TransitionType.fadeIn);
     r.child(Routes.workForce,
         child: (_) => const WorkForcePage(), transition: TransitionType.fadeIn);
+    r.child(Routes.projectsSelection,
+        child: (_) => const ProjectsSelectionPage(),
+        transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> listenConfig<T extends ChangeNotifier>() {

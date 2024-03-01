@@ -25,4 +25,6 @@ sealed class AppColors {
   static const Color orange = Color(0xFFE65100);
   static const Color nobel = Color(0xFF9E9E9E);
   static const Color solitude = Color(0xFFE4EAF0);
+  static const Color nero = Color(0xFF212121);
+  static const Color dimGray = Color(0xFF616161);
 }
