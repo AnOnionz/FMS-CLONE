@@ -49,10 +49,7 @@ class AppModule extends Module {
         child: (_) => const SplashPage(), transition: TransitionType.fadeIn);
     r.module(Routes.admin, module: AdminModule());
     r.child(Routes.home,
-        child: (_) => HomePage(
-              user: r.args.data as UserEntity,
-            ),
-        transition: TransitionType.fadeIn);
+        child: (_) => HomePage(), transition: TransitionType.fadeIn);
     r.child(Routes.login,
         child: (_) => const LoginPage(), transition: TransitionType.fadeIn);
     r.child(Routes.workForce,

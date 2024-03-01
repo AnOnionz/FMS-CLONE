@@ -93,64 +93,76 @@ class WorkForcePage extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  TextButton(
-                                    onPressed: () => context
-                                        .nextRoute(Routes.projectSelection),
-                                    child: Padding(
-                                      padding: Fx.pV16,
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(AppIcons.document),
-                                          SizedBox(width: 8.w),
-                                          Text(
-                                            'Chọn dự án',
-                                            style: context.textTheme.button2
-                                                ?.copyWith(
-                                                    color: AppColors.white),
-                                          ),
-                                        ],
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () => context
+                                          .nextRoute(Routes.projectSelection),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 18.h),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(AppIcons.document),
+                                            SizedBox(width: 4.w),
+                                            Text(
+                                              'Chọn dự án',
+                                              style: context.textTheme.button2
+                                                  ?.copyWith(
+                                                      color: AppColors.white),
+                                            ),
+                                          ],
+                                        ),
                                       ),
+                                      style: ButtonStyle(
+                                          shape: MaterialStatePropertyAll<
+                                                  OutlinedBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50.squared))),
+                                          backgroundColor:
+                                              MaterialStatePropertyAll<Color>(
+                                                  AppColors.orange)),
                                     ),
-                                    style: ButtonStyle(
+                                  ),
+                                  SizedBox(width: 16.w),
+                                  Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () {},
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 18.h),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              AppImages.qr,
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            Text(
+                                              'QR Booth',
+                                              style: context.textTheme.button2
+                                                  ?.copyWith(
+                                                      color: AppColors.orange),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      style: ButtonStyle(
+                                        side: MaterialStatePropertyAll<
+                                                BorderSide>(
+                                            BorderSide(
+                                                color: AppColors.orange)),
                                         shape: MaterialStatePropertyAll<
                                                 OutlinedBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         50.squared))),
-                                        backgroundColor:
-                                            MaterialStatePropertyAll<Color>(
-                                                AppColors.orange)),
-                                  ),
-                                  OutlinedButton(
-                                    onPressed: () {},
-                                    child: Padding(
-                                      padding: Fx.pV16,
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            AppImages.qr,
-                                          ),
-                                          SizedBox(width: 8.w),
-                                          Text(
-                                            'QR Booth',
-                                            style: context.textTheme.button2
-                                                ?.copyWith(
-                                                    color: AppColors.orange),
-                                          ),
-                                        ],
                                       ),
-                                    ),
-                                    style: ButtonStyle(
-                                      side: MaterialStatePropertyAll<
-                                              BorderSide>(
-                                          BorderSide(color: AppColors.orange)),
-                                      shape: MaterialStatePropertyAll<
-                                              OutlinedBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      50.squared))),
                                     ),
                                   ),
                                 ],
@@ -173,7 +185,8 @@ class WorkForcePage extends StatelessWidget {
                                   ),
                                   Text(
                                     'MA00001',
-                                    style: context.textTheme.caption1,
+                                    style: context.textTheme.caption1
+                                        ?.copyWith(color: AppColors.nightRider),
                                   ),
                                   SizedBox(
                                     height: 24.h,
@@ -186,7 +199,8 @@ class WorkForcePage extends StatelessWidget {
                                       ),
                                       Text(
                                         '123 Bình Lợi, Bình Thạnh, HCM',
-                                        style: context.textTheme.caption1,
+                                        style: context.textTheme.caption1
+                                            ?.copyWith(color: AppColors.nobel),
                                       ),
                                     ],
                                   ),
@@ -201,7 +215,8 @@ class WorkForcePage extends StatelessWidget {
                                       ),
                                       Text(
                                         '0909090909',
-                                        style: context.textTheme.caption1,
+                                        style: context.textTheme.caption1
+                                            ?.copyWith(color: AppColors.nobel),
                                       ),
                                     ],
                                   ),
@@ -221,7 +236,7 @@ class WorkForcePage extends StatelessWidget {
                                   child: Text(
                                     'Nghỉ phép',
                                     style: context.textTheme.button2
-                                        ?.copyWith(color: AppColors.white),
+                                        ?.copyWith(color: AppColors.black),
                                   ),
                                 ),
                                 style: ButtonStyle(
