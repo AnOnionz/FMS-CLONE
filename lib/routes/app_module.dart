@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/features/workForce/presentation/pages/projects_selection.dart';
+import 'package:fms/features/workForce/presentation/pages/project_selection.dart';
 import 'package:fms/features/workForce/presentation/pages/work_force.dart';
 
 import '../../core/client/dio_client.dart';
@@ -22,6 +22,7 @@ import '../features/authentication/domain/usecases/logout_usecase.dart';
 import '../features/authentication/presentation/bloc/sign_bloc.dart';
 import '../features/home/presentation/pages/home_page.dart';
 import '../features/normal_splash_page.dart';
+import '../features/workForce/presentation/pages/booth_selection.dart';
 
 class AppModule extends Module {
   @override
@@ -56,8 +57,11 @@ class AppModule extends Module {
         child: (_) => const LoginPage(), transition: TransitionType.fadeIn);
     r.child(Routes.workForce,
         child: (_) => const WorkForcePage(), transition: TransitionType.fadeIn);
-    r.child(Routes.projectsSelection,
-        child: (_) => const ProjectsSelectionPage(),
+    r.child(Routes.projectSelection,
+        child: (_) => const ProjectSelectionPage(),
+        transition: TransitionType.fadeIn);
+    r.child(Routes.boothSelection,
+        child: (_) => const BoothSelectionPage(),
         transition: TransitionType.fadeIn);
   }
 

@@ -95,7 +95,7 @@ class WorkForcePage extends StatelessWidget {
                                 children: [
                                   TextButton(
                                     onPressed: () => context
-                                        .nextRoute(Routes.projectsSelection),
+                                        .nextRoute(Routes.projectSelection),
                                     child: Padding(
                                       padding: Fx.pV16,
                                       child: Row(

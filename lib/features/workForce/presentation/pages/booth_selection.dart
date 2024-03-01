@@ -5,11 +5,12 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/workForce/presentation/widgets/booth_item.dart';
 
 import '../widgets/project_item.dart';
 
-class ProjectsSelectionPage extends StatelessWidget {
-  const ProjectsSelectionPage({super.key});
+class BoothSelectionPage extends StatelessWidget {
+  const BoothSelectionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class ProjectsSelectionPage extends StatelessWidget {
                 ),
               ),
               title: Text(
-                'Chọn dự án',
+                'Chọn Outlet',
                 style: context.textTheme.h2,
               ),
               centerTitle: true,
@@ -43,7 +44,7 @@ class ProjectsSelectionPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Danh sách dự án',
+                  'Danh sách Outlet',
                   style: context.textTheme.h3,
                 ),
                 Expanded(
@@ -55,7 +56,7 @@ class ProjectsSelectionPage extends StatelessWidget {
                         itemCount: 5,
                         itemBuilder: (context, index) => Padding(
                           padding: EdgeInsets.only(top: 16.h),
-                          child: ProjectItem(),
+                          child: BoothItem(),
                         ),
                       )
                     ],

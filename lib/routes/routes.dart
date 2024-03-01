@@ -3,6 +3,7 @@ class Routes {
   static const String admin = '/admin';
   static const String login = '/login';
   static const String workForce = '/work_force';
-  static const String projectsSelection = '/projects_selection';
+  static const String projectSelection = '/project_selection';
+  static const String boothSelection = '/booth_selection';
   static const String home = '/home';
 }
