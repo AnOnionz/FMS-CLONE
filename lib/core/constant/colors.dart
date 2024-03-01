@@ -27,4 +27,5 @@ sealed class AppColors {
   static const Color solitude = Color(0xFFE4EAF0);
   static const Color nero = Color(0xFF212121);
   static const Color dimGray = Color(0xFF616161);
+  static const Color nightRider = Color(0xFF303030);
 }
