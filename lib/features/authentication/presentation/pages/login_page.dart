@@ -17,18 +17,21 @@ class LoginPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 90.h,
+                height: 70.h,
               ),
               Image.asset(AppImages.logo),
               Padding(
-                padding: EdgeInsets.only(top: 20.h, bottom: 16.h),
+                padding: Fx.pV16,
                 child: Text(context.language.appName,
                     style: context.textTheme.h1, textAlign: TextAlign.center),
               ),
-              Text(
-                context.language.loginDescription,
-                style: context.textTheme.body1,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 70.w),
+                child: Text(
+                  context.language.loginDescription,
+                  style: context.textTheme.body1,
+                  textAlign: TextAlign.center,
+                ),
               ),
               Padding(
                 padding: Fx.pH20,
@@ -59,7 +62,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 26.h),
+                padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 24.h),
                 child: SizedBox(
                   width: context.screenSize.width,
                   child: TextButton(
@@ -78,7 +81,8 @@ class LoginPage extends StatelessWidget {
                     style: ButtonStyle(
                         shape: MaterialStatePropertyAll<OutlinedBorder>(
                             RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.dp))),
+                                borderRadius:
+                                    BorderRadius.circular(50.squared))),
                         backgroundColor:
                             MaterialStatePropertyAll<Color>(AppColors.orange)),
                   ),

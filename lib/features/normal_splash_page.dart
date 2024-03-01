@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fms/core/constant/images.dart';
 import '../core/constant/colors.dart';
-import '../core/constant/images.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -10,7 +10,7 @@ class SplashPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Center(
-        child: Image.asset(AppImages.splashIcon),
+        child: Image.asset(AppImages.splash),
       ),
     );
   }
