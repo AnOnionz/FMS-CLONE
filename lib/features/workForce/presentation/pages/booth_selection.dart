@@ -18,7 +18,6 @@ class BoothSelectionPage extends StatelessWidget {
         appBar: PreferredSize(
             preferredSize: Size(context.screenWidth, 40.h),
             child: AppBar(
-              backgroundColor: AppColors.transparent,
               forceMaterialTransparency: true,
               leadingWidth: 40.w,
               leading: Padding(

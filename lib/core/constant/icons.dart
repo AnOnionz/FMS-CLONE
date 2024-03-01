@@ -23,4 +23,8 @@ class AppIcons {
   static String qr = 'qr'.icon.svg;
   static String location = 'location'.icon.svg;
   static String phone = 'phone'.icon.svg;
+  static String circleUser = 'circle_user'.icon.svg;
+  static String report = 'report'.icon.svg;
+  static String statistic = 'statistic'.icon.svg;
+  static String sync = 'sync'.icon.svg;
 }

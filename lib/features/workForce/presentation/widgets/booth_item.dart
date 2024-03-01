@@ -17,7 +17,14 @@ class BoothItem extends StatelessWidget {
         width: context.screenWidth,
         decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16.squared)),
+            borderRadius: BorderRadius.circular(16.squared),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(0, 4),
+                blurRadius: 60,
+                color: '#04060F'.toColor(0.05),
+              )
+            ]),
         padding: Fx.p16,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
