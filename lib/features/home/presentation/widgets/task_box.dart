@@ -5,6 +5,7 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/utilities/flex_extention.dart';
+import 'package:fms/routes/routes.dart';
 
 class TaskBox extends StatefulWidget {
   const TaskBox({super.key});
@@ -23,9 +24,7 @@ class _TaskBoxState extends State<TaskBox> {
       final box = _key.currentContext!.findRenderObject() as RenderBox;
       final Size size = Size(box.size.width, box.size.height);
       setState(() {
-        print(size);
         height = size.height + 40.h;
-        print(height);
       });
     });
     super.initState();
@@ -40,24 +39,27 @@ class _TaskBoxState extends State<TaskBox> {
         children: [
           Align(
             alignment: Alignment.bottomCenter,
-            child: DecoratedBox(
-              key: _key,
-              decoration: BoxDecoration(
-                  color: 'FF0014'.toColor(0.5),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5.squared),
-                      topRight: Radius.circular(60.squared),
-                      bottomLeft: Radius.circular(5.squared),
-                      bottomRight: Radius.circular(5.squared))),
-              child: Padding(
-                padding: EdgeInsets.only(top: 60.h, bottom: 30.h),
-                child: Center(
-                  heightFactor: 1,
-                  child: Text(
-                    'Chấm công',
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.subtitle1
-                        ?.copyWith(color: AppColors.white),
+            child: GestureDetector(
+              onTap: () => context.nextRoute(Routes.locate),
+              child: DecoratedBox(
+                key: _key,
+                decoration: BoxDecoration(
+                    color: 'FF0014'.toColor(0.5),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5.squared),
+                        topRight: Radius.circular(60.squared),
+                        bottomLeft: Radius.circular(5.squared),
+                        bottomRight: Radius.circular(5.squared))),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 60.h, bottom: 30.h),
+                  child: Center(
+                    heightFactor: 1,
+                    child: Text(
+                      'Chấm công',
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.subtitle1
+                          ?.copyWith(color: AppColors.white),
+                    ),
                   ),
                 ),
               ),
