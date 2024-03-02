@@ -6,4 +6,5 @@ class Routes {
   static const String projectSelection = '/project_selection';
   static const String boothSelection = '/booth_selection';
   static const String home = '/home';
+  static const String locate = '/locate';
 }

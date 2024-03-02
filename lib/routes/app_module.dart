@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/timekeeping/presentation/timekeeping_locate.dart';
 import 'package:fms/features/workForce/presentation/pages/project_selection.dart';
 import 'package:fms/features/workForce/presentation/pages/work_force.dart';
 
@@ -59,6 +60,9 @@ class AppModule extends Module {
         transition: TransitionType.fadeIn);
     r.child(Routes.boothSelection,
         child: (_) => const BoothSelectionPage(),
+        transition: TransitionType.fadeIn);
+    r.child(Routes.locate,
+        child: (_) => const TimekeepingLocate(),
         transition: TransitionType.fadeIn);
   }
 

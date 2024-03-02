@@ -8,4 +8,6 @@ sealed class AppImages {
   static String qr = 'qr'.image.png;
   static String project = 'project'.image.png;
   static String logout = 'logout'.image.png;
+  static String locationBackground = 'location_bg'.image.png;
+  static String locationLoad = 'location_load'.image.png;
 }
