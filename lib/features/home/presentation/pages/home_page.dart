@@ -5,8 +5,10 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
+import 'package:fms/features/home/presentation/widgets/tasks.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -47,25 +49,30 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 24.w),
-              child: Text(
-                'Thông tin chung',
-                style: context.textTheme.h2,
-              ),
-            ),
+            _title(context, 'Thông tin chung'),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
                 child: CommonInfo()),
+            _title(context, 'Chức năng hỗ trợ'),
             Padding(
-              padding: EdgeInsets.only(left: 24.w),
-              child: Text(
-                'Chức năng hỗ trợ',
-                style: context.textTheme.h2,
-              ),
-            ),
+                padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
+                child: CommonFeature()),
+            _title(context, 'Danh sách công việc'),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
+                child: Tasks()),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _title(BuildContext context, String name) {
+    return Padding(
+      padding: EdgeInsets.only(left: 24.w),
+      child: Text(
+        name,
+        style: context.textTheme.h2,
       ),
     );
   }

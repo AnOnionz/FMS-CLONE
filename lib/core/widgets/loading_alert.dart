@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/responsive/utilities/flex_extention.dart';
 
 class LoadingAlert extends StatelessWidget {
   const LoadingAlert({super.key});
@@ -8,7 +9,7 @@ class LoadingAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.squared),
       ),
       elevation: 0.0,
       backgroundColor: Colors.black38,

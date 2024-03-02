@@ -30,4 +30,5 @@ class AppIcons {
   static String config = 'config'.icon.svg;
   static String about = 'about'.icon.svg;
   static String notification = 'notification'.icon.svg;
+  static String cameraTask = 'camera_task'.icon.svg;
 }

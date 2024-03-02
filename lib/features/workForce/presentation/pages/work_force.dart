@@ -26,7 +26,7 @@ class WorkForcePage extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16.h)),
+                        borderRadius: BorderRadius.circular(16.squared)),
                     child: Padding(
                       padding: EdgeInsets.all(10.w),
                       child: GestureDetector(
