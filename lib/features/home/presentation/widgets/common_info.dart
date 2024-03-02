@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:fms/features/home/presentation/widgets/stat_chart.dart';
 
 import '../../../../core/constant/colors.dart';
 import 'kpi_chart.dart';
@@ -12,7 +12,6 @@ class CommonInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
       width: context.screenWidth,
       decoration: BoxDecoration(
           color: AppColors.white,
@@ -28,24 +27,68 @@ class CommonInfo extends StatelessWidget {
               color: '#000000'.toColor(0.25),
             )
           ]),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Emart Trường Chinh'),
-                  Text('Maoutlet001'),
-                  Text('Booth A'),
-                  Text('123, Trường Chinh, Bình Thạnh, HCM')
-                ],
+      child: Padding(
+        padding: EdgeInsets.all(22.h),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Emart Trường Chinh',
+                        style: context.textTheme.subtitle1,
+                      ),
+                      SizedBox(height: 8.h),
+                      Text('Maoutlet001', style: context.textTheme.body2),
+                      SizedBox(height: 8.h),
+                      Text('Booth A', style: context.textTheme.body2),
+                      SizedBox(height: 8.h),
+                      Text('123, Trường Chinh, Bình Thạnh, HCM',
+                          style: context.textTheme.body2)
+                    ],
+                  ),
+                ),
+                Expanded(child: KpiChart())
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 16.h, bottom: 12.h),
+              child: Divider(
+                color: AppColors.gainsboro,
               ),
-              KpiChart()
-            ],
-          ),
-          Row(),
-        ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child:
+                        StatChart(title: 'Số bán hôm nay', value: 8, max: 15)),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                    child: StatChart(
+                  title: 'Số lượng quà tồn',
+                  value: 90,
+                  max: 100,
+                  isPercent: true,
+                )),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                    child: StatChart(
+                  title: 'Thời gian dự án',
+                  value: 8,
+                  max: 15,
+                ))
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -7,4 +7,5 @@ sealed class AppImages {
   static String bg = 'bg'.image.svg;
   static String qr = 'qr'.image.png;
   static String project = 'project'.image.png;
+  static String logout = 'logout'.image.png;
 }

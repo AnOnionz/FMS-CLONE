@@ -6,6 +6,7 @@ import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
+import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -14,6 +15,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.aliceBlue,
+      endDrawer: DrawerSide(),
+      drawerScrimColor: AppColors.transparent,
       appBar: PreferredSize(
           preferredSize: Size(context.screenWidth, 35.h),
           child: Padding(
@@ -28,20 +31,39 @@ class HomePage extends StatelessWidget {
               ),
               forceMaterialTransparency: true,
               leadingWidth: context.screenWidth - 40.w,
-              actions: [SvgPicture.asset(AppIcons.circleUser)],
+              actions: [
+                Builder(builder: (context) {
+                  return GestureDetector(
+                      onTap: () {
+                        Scaffold.of(context).openEndDrawer();
+                      },
+                      child: SvgPicture.asset(AppIcons.circleUser));
+                })
+              ],
             ),
           )),
       body: Padding(
         padding: EdgeInsets.only(top: 30.h),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Thông tin chung',
-              style: context.textTheme.h2,
+            Padding(
+              padding: EdgeInsets.only(left: 24.w),
+              child: Text(
+                'Thông tin chung',
+                style: context.textTheme.h2,
+              ),
             ),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
-                child: CommonInfo())
+                child: CommonInfo()),
+            Padding(
+              padding: EdgeInsets.only(left: 24.w),
+              child: Text(
+                'Chức năng hỗ trợ',
+                style: context.textTheme.h2,
+              ),
+            ),
           ],
         ),
       ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/utilities/flex_extention.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+
+import 'circular_slider/appearance.dart';
+import 'circular_slider/circular_slider.dart';
 
 class KpiChart extends StatelessWidget {
   const KpiChart({super.key});
@@ -27,15 +29,27 @@ class KpiChart extends StatelessWidget {
         trackGradientStartAngle: 90,
         trackGradientEndAngle: 270);
     final info = InfoProperties(
-        topLabelStyle: context.textTheme.subtitle1,
-        topLabelText: '150/300',
-        bottomLabelStyle:
-            context.textTheme.caption1?.copyWith(color: AppColors.nobel),
-        bottomLabelText: 'Kpi toàn dự án',
+        topLabel: RichText(
+            text: TextSpan(
+                text: '150/',
+                style: context.textTheme.subtitle1?.copyWith(
+                    fontWeight: FontWeight.w600, color: AppColors.black),
+                children: [
+              TextSpan(text: '300', style: context.textTheme.subtitle1)
+            ])),
+        bottomLabel: Text(
+          'Kpi toàn dự án',
+          style: TextStyle(
+            color: AppColors.nobel,
+            fontSize: 10,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
         mainLabelStyle: TextStyle(
-            color: Colors.transparent,
-            fontSize: 12,
-            fontWeight: FontWeight.w400));
+            color: Colors.black,
+            fontSize: 10,
+            fontWeight: FontWeight.w300,
+            height: 5));
     return AbsorbPointer(
       child: SleekCircularSlider(
         appearance: CircularSliderAppearance(
@@ -44,7 +58,7 @@ class KpiChart extends StatelessWidget {
             infoProperties: info,
             startAngle: 270,
             angleRange: 360,
-            size: 110.0),
+            size: (context.screenWidth - 44.h - 32.w) / 3),
         max: 300,
         initialValue: 150,
       ),

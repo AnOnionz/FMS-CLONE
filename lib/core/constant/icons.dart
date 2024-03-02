@@ -27,4 +27,7 @@ class AppIcons {
   static String report = 'report'.icon.svg;
   static String statistic = 'statistic'.icon.svg;
   static String sync = 'sync'.icon.svg;
+  static String config = 'config'.icon.svg;
+  static String about = 'about'.icon.svg;
+  static String notification = 'notification'.icon.svg;
 }
