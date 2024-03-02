@@ -30,8 +30,7 @@ class OutlineButton extends StatelessWidget {
             Text(
               textScaler: TextScaler.linear(1),
               name,
-              style:
-                  context.textTheme.button2?.copyWith(color: AppColors.orange),
+              style: context.textTheme.button2?.copyWith(color: color),
             ),
           ],
         ),
