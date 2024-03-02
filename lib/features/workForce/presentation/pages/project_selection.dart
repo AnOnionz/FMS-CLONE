@@ -6,6 +6,7 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
+import '../../../../core/widgets/app_bar.dart';
 import '../widgets/project_item.dart';
 
 class ProjectSelectionPage extends StatelessWidget {
@@ -14,26 +15,7 @@ class ProjectSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: Size(context.screenWidth, 40.h),
-            child: AppBar(
-              forceMaterialTransparency: true,
-              leadingWidth: 40.w,
-              leading: Padding(
-                padding: EdgeInsets.only(left: 16.w),
-                child: GestureDetector(
-                  onTap: () => Modular.to.pop(),
-                  child: SvgPicture.asset(
-                    AppIcons.back,
-                  ),
-                ),
-              ),
-              title: Text(
-                'Chọn dự án',
-                style: context.textTheme.h2,
-              ),
-              centerTitle: true,
-            )),
+        appBar: DefaultAppBar(title: 'Chọn dự án'),
         backgroundColor: AppColors.aliceBlue,
         body: SafeArea(
           child: Padding(

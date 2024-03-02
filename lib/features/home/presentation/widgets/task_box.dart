@@ -54,7 +54,7 @@ class _TaskBoxState extends State<TaskBox> {
                 child: Center(
                   heightFactor: 1,
                   child: Text(
-                    'Chấm công Chấm công',
+                    'Chấm công',
                     textAlign: TextAlign.center,
                     style: context.textTheme.subtitle1
                         ?.copyWith(color: AppColors.white),

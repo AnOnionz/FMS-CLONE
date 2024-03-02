@@ -5,9 +5,8 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/workForce/presentation/widgets/booth_item.dart';
-
-import '../widgets/project_item.dart';
 
 class BoothSelectionPage extends StatelessWidget {
   const BoothSelectionPage({super.key});
@@ -15,26 +14,7 @@ class BoothSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: Size(context.screenWidth, 40.h),
-            child: AppBar(
-              forceMaterialTransparency: true,
-              leadingWidth: 40.w,
-              leading: Padding(
-                padding: EdgeInsets.only(left: 16.w),
-                child: GestureDetector(
-                  onTap: () => Modular.to.pop(),
-                  child: SvgPicture.asset(
-                    AppIcons.back,
-                  ),
-                ),
-              ),
-              title: Text(
-                'Chọn Outlet',
-                style: context.textTheme.h2,
-              ),
-              centerTitle: true,
-            )),
+        appBar: DefaultAppBar(title: 'Chọn outlet'),
         backgroundColor: AppColors.aliceBlue,
         body: SafeArea(
           child: Padding(
