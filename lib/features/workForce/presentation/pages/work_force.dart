@@ -8,6 +8,9 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/routes/routes.dart';
 
+import '../../../../core/widgets/button/flat.dart';
+import '../../../../core/widgets/button/outline.dart';
+
 class WorkForcePage extends StatelessWidget {
   const WorkForcePage({super.key});
 
@@ -93,77 +96,24 @@ class WorkForcePage extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: TextButton(
+                                    child: FlatButton(
+                                      name: 'Chọn dự án',
+                                      color: AppColors.orange,
                                       onPressed: () => context
                                           .nextRoute(Routes.projectSelection),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 18.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(AppIcons.document),
-                                            SizedBox(width: 4.w),
-                                            Text(
-                                              'Chọn dự án',
-                                              style: context.textTheme.button2
-                                                  ?.copyWith(
-                                                      color: AppColors.white),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      style: ButtonStyle(
-                                          shape: MaterialStatePropertyAll<
-                                                  OutlinedBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.squared))),
-                                          backgroundColor:
-                                              MaterialStatePropertyAll<Color>(
-                                                  AppColors.orange)),
+                                      icon: SvgPicture.asset(AppIcons.document),
                                     ),
                                   ),
                                   SizedBox(width: 16.w),
                                   Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: () {},
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 18.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              AppImages.qr,
-                                            ),
-                                            SizedBox(width: 4.w),
-                                            Text(
-                                              'QR Booth',
-                                              style: context.textTheme.button2
-                                                  ?.copyWith(
-                                                      color: AppColors.orange),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      style: ButtonStyle(
-                                        side: MaterialStatePropertyAll<
-                                                BorderSide>(
-                                            BorderSide(
-                                                color: AppColors.orange)),
-                                        shape: MaterialStatePropertyAll<
-                                                OutlinedBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        50.squared))),
-                                      ),
+                                      child: OutlineButton(
+                                    name: 'QR Booth',
+                                    color: AppColors.orange,
+                                    onPressed: () {},
+                                    icon: Image.asset(
+                                      AppImages.qr,
                                     ),
-                                  ),
+                                  )),
                                 ],
                               ),
                             ),

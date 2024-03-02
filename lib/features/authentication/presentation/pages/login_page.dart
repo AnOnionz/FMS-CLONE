@@ -4,6 +4,7 @@ import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/routes/routes.dart';
 
 class LoginPage extends StatelessWidget {
@@ -64,29 +65,34 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 24.h),
                 child: SizedBox(
-                  width: context.screenSize.width,
-                  child: TextButton(
-                    onPressed: () {
-                      context.nextRoute(Routes.workForce);
-                    },
-                    child: Padding(
-                      padding: Fx.pV16,
-                      child: Text(
-                        textScaler: TextScaler.linear(1),
-                        context.language.loginButtonText,
-                        style: context.textTheme.button2
-                            ?.copyWith(color: AppColors.white),
-                      ),
+                    width: context.screenSize.width,
+                    child: FlatButton(
+                        onPressed: () => context.nextRoute(Routes.workForce),
+                        name: context.language.loginButtonText,
+                        color: AppColors.orange)
+                    // TextButton(
+                    //   onPressed: () {
+                    //     context.nextRoute(Routes.workForce);
+                    //   },
+                    //   child: Padding(
+                    //     padding: Fx.pV16,
+                    //     child: Text(
+                    //       textScaler: TextScaler.linear(1),
+                    //       context.language.loginButtonText,
+                    //       style: context.textTheme.button2
+                    //           ?.copyWith(color: AppColors.white),
+                    //     ),
+                    //   ),
+                    //   style: ButtonStyle(
+                    //       shape: MaterialStatePropertyAll<OutlinedBorder>(
+                    //           RoundedRectangleBorder(
+                    //               borderRadius:
+                    //                   BorderRadius.circular(50.squared))),
+                    //       backgroundColor:
+                    //           MaterialStatePropertyAll<Color>(AppColors.orange)),
+                    // ),
+
                     ),
-                    style: ButtonStyle(
-                        shape: MaterialStatePropertyAll<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(50.squared))),
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(AppColors.orange)),
-                  ),
-                ),
               )
             ],
           ),
