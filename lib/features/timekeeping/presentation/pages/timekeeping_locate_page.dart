@@ -6,17 +6,17 @@ import 'package:fms/core/widgets/adaptive_indicator.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 
-import '../../../core/constant/colors.dart';
-import '../../../core/widgets/button/outline.dart';
+import '../../../../core/constant/colors.dart';
+import '../../../../core/widgets/button/outline.dart';
 
-class TimekeepingLocate extends StatefulWidget {
-  const TimekeepingLocate({super.key});
+class TimekeepingLocatePage extends StatefulWidget {
+  const TimekeepingLocatePage({super.key});
 
   @override
-  State<TimekeepingLocate> createState() => _TimekeepingLocateState();
+  State<TimekeepingLocatePage> createState() => _TimekeepingLocatePageState();
 }
 
-class _TimekeepingLocateState extends State<TimekeepingLocate> {
+class _TimekeepingLocatePageState extends State<TimekeepingLocatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
