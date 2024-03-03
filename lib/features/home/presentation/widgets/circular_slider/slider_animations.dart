@@ -27,12 +27,10 @@ class SpinAnimationManager {
       })
       ..repeat();
     _animation1 = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: _animController,
-        curve: const Interval(0.5, 1.0, curve: Curves.linear)));
+        parent: _animController, curve: const Interval(0.5, 1.0)));
     _animation2 = Tween<double>(begin: -80.0, end: 100.0).animate(
         CurvedAnimation(
-            parent: _animController,
-            curve: const Interval(0, 1.0, curve: Curves.linear)));
+            parent: _animController, curve: const Interval(0, 1.0)));
     _animation3 = Tween(begin: 0.0, end: 360.0).animate(CurvedAnimation(
         parent: _animController,
         curve: const Interval(0.0, 1.0, curve: SpinnerCurve())));

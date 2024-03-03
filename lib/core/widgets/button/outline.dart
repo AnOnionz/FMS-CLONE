@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-import '../../constant/colors.dart';
-
 class OutlineButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget? icon;

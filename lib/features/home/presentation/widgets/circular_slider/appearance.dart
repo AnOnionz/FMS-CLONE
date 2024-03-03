@@ -26,7 +26,7 @@ class CircularSliderAppearance {
   static const Color _defaultDotColor = Colors.white;
 
   String _defaultPercentageModifier(double value) {
-    final roundedValue = (value).ceil().toInt().toString();
+    final roundedValue = value.ceil().toInt().toString();
     return '$roundedValue %';
   }
 

@@ -4,7 +4,6 @@ import '../datasources/user_local_data_source.dart';
 import '../datasources/user_remote_data_source.dart';
 import '/core/client/dio_client.dart';
 import '/core/constant/type_def.dart';
-import '/core/mixins/fx.dart';
 import '/core/repository/repository.dart';
 import '/core/usecase/either.dart';
 import '/features/authentication/domain/entities/user_entity.dart';

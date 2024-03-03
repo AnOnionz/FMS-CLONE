@@ -99,14 +99,14 @@ class _CurvePainter extends CustomPainter {
       ..strokeWidth = appearance.progressBarWidth;
     drawCircularArc(canvas: canvas, size: size, paint: progressBarPaint);
 
-    var dotPaint = Paint()..color = appearance.dotColor;
+    final dotPaint = Paint()..color = appearance.dotColor;
 
-    Offset handler = degreesToCoordinates(
+    final Offset handler = degreesToCoordinates(
         center!, -math.pi / 2 + startAngle + currentAngle + 1.5, radius);
     canvas.drawCircle(handler, appearance.handlerSize, dotPaint);
   }
 
-  drawCircularArc(
+  void drawCircularArc(
       {required Canvas canvas,
       required Size size,
       required Paint paint,
@@ -123,14 +123,14 @@ class _CurvePainter extends CustomPainter {
         paint);
   }
 
-  drawShadow({required Canvas canvas, required Size size}) {
+  void drawShadow({required Canvas canvas, required Size size}) {
     final shadowStep = appearance.shadowStep != null
         ? appearance.shadowStep!
         : math.max(
             1, (appearance.shadowWidth - appearance.progressBarWidth) ~/ 10);
     final maxOpacity = math.min(1.0, appearance.shadowMaxOpacity);
     final repetitions = math.max(1,
-        ((appearance.shadowWidth - appearance.progressBarWidth) ~/ shadowStep));
+        (appearance.shadowWidth - appearance.progressBarWidth) ~/ shadowStep);
     final opacityStep = maxOpacity / repetitions;
     final shadowPaint = Paint()
       ..strokeCap = StrokeCap.round

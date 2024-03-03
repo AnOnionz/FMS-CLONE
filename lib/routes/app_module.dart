@@ -10,7 +10,6 @@ import '../../core/localization/locale_manager.dart';
 import '../../core/permission/permisson_manager.dart';
 import '../../core/services/location/location_service.dart';
 import '../../core/styles/theme_manager.dart';
-import '../../features/authentication/domain/entities/user_entity.dart';
 import '../../features/authentication/domain/usecases/login_usecase.dart';
 import '../../features/authentication/presentation/bloc/authentication_bloc.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';

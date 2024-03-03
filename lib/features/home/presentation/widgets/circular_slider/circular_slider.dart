@@ -65,8 +65,9 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
   ValueChangedAnimationManager? _animationManager;
   late int _appearanceHashCode;
 
-  bool get _interactionEnabled => (widget.onChangeEnd != null ||
-      widget.onChange != null && !widget.appearance.spinnerMode);
+  bool get _interactionEnabled =>
+      widget.onChangeEnd != null ||
+      widget.onChange != null && !widget.appearance.spinnerMode;
 
   @override
   void initState() {
@@ -111,7 +112,7 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
         angle: widget.angle,
         oldAngle: _oldWidgetAngle,
         oldValue: _oldWidgetValue,
-        valueChangedAnimation: ((double anim, bool animationCompleted) {
+        valueChangedAnimation: (double anim, bool animationCompleted) {
           _animationInProgress = !animationCompleted;
           setState(() {
             if (!animationCompleted) {
@@ -121,14 +122,14 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
               _updateOnChange();
             }
           });
-        }));
+        });
   }
 
   void _spin() {
     _spinManager = SpinAnimationManager(
         tickerProvider: this,
         duration: Duration(milliseconds: widget.appearance.spinnerDuration),
-        spinAnimation: ((double anim1, anim2, anim3) {
+        spinAnimation: (double anim1, anim2, anim3) {
           setState(() {
             _rotation = anim1;
             _startAngle = math.pi * anim2;
@@ -136,7 +137,7 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
             _setupPainter();
             _updateOnChange();
           });
-        }));
+        });
     _spinManager!.spin();
   }
 
@@ -207,7 +208,7 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
   Widget _buildRotatingPainter({double? rotation, required Size size}) {
     if (rotation != null) {
       return Transform(
-          transform: Matrix4.identity()..rotateZ((rotation) * 5 * math.pi / 6),
+          transform: Matrix4.identity()..rotateZ(rotation * 5 * math.pi / 6),
           alignment: FractionalOffset.center,
           child: _buildPainter(size: size));
     } else {
@@ -263,8 +264,8 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
     if (_painter?.center == null) {
       return;
     }
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    var position = renderBox.globalToLocal(details);
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final position = renderBox.globalToLocal(details);
     final double touchWidth = widget.appearance.progressBarWidth >= 25.0
         ? widget.appearance.progressBarWidth
         : 25.0;
@@ -282,8 +283,8 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
     if (_painter == null || _interactionEnabled == false) {
       return false;
     }
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    var position = renderBox.globalToLocal(details);
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final position = renderBox.globalToLocal(details);
 
     final angleWithinRange = isAngleWithinRange(
         startAngle: _startAngle,
