@@ -68,7 +68,7 @@ class LoginPage extends StatelessWidget {
                     width: context.screenSize.width,
                     child: FlatButton(
                         onPressed: () => context.nextRoute(Routes.workForce),
-                        name: context.language.loginButtonText,
+                        text: context.language.loginButtonText,
                         color: AppColors.orange)
                     // TextButton(
                     //   onPressed: () {

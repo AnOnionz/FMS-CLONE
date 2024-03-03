@@ -12,7 +12,7 @@ import '/core/mixins/fx.dart';
 import '/generated/l10n.dart';
 import '/routes/routes.dart';
 import 'features/authentication/domain/repositories/user_repository.dart';
-import 'features/authentication/presentation/bloc/authentication_bloc.dart';
+import 'features/authentication/presentation/blocs/authentication_bloc.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

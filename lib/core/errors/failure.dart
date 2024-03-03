@@ -21,6 +21,11 @@ class UnknowFailure extends Failure {
       : super(null, error, stackTrace);
 }
 
+class MessageFailure extends Failure {
+  const MessageFailure(String? message, Object? error, StackTrace? stackTrace)
+      : super(message, error, stackTrace);
+}
+
 class InternalFailure extends Failure {
   const InternalFailure(String? message, Object? error, StackTrace? stackTrace)
       : super(message, error, stackTrace);

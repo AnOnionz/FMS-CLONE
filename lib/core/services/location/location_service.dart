@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -18,7 +19,7 @@ final class LocationService extends ChangeNotifier {
   }
   final permissionManager = PermissionManager();
 
-  final GeolocatorPlatform geolocatorApple = GeolocatorPlatform.instance;
+  final GeolocatorPlatform _geolocator = GeolocatorPlatform.instance;
   // Keep track of current Location
   Position? _currentLocation;
 
@@ -77,14 +78,14 @@ final class LocationService extends ChangeNotifier {
     bool serviceEnabled;
     LocationPermission permission;
     // Test if location services are enabled.
-    serviceEnabled = await geolocatorApple.isLocationServiceEnabled();
+    serviceEnabled = await _geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
       // show dialog
       subscription?.resume();
       return false;
     }
-    permission = await geolocatorApple.checkPermission();
+    permission = await _geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       try {
         permission = await requestPermission();
@@ -111,7 +112,7 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<LocationPermission> checkPermissions() async {
-    final permission = await geolocatorApple.checkPermission();
+    final permission = await _geolocator.checkPermission();
 
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
@@ -121,7 +122,7 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<bool> checkService() async {
-    _serviceEnabled = await geolocatorApple.isLocationServiceEnabled();
+    _serviceEnabled = await _geolocator.isLocationServiceEnabled();
     if (!_serviceEnabled) {
       return Future.error(LocationErrorServiceDisabled());
     }
@@ -129,7 +130,7 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<LocationPermission> requestPermission() async {
-    final permission = await geolocatorApple.requestPermission();
+    final permission = await _geolocator.requestPermission();
     print(permission);
     if (permission != LocationPermission.always &&
         permission != LocationPermission.whileInUse) {
@@ -147,7 +148,9 @@ final class LocationService extends ChangeNotifier {
         return null;
       }
 
-      final userLocation = await geolocatorApple.getCurrentPosition();
+      final userLocation = await _geolocator.getCurrentPosition(
+          locationSettings:
+              LocationSettings(timeLimit: 10.seconds, distanceFilter: 10));
 
       positionUpdate(userLocation);
       return _currentLocation;
@@ -161,18 +164,18 @@ final class LocationService extends ChangeNotifier {
 
   Future<Position?> getLastKnowPosition() async {
     try {
-      return await geolocatorApple.getLastKnownPosition();
+      return await _geolocator.getLastKnownPosition();
     } catch (_) {
       return Future.error(LocationErrorLoadFailure());
     }
   }
 
   Future<void> openAppSettings() async {
-    await geolocatorApple.openAppSettings();
+    await _geolocator.openAppSettings();
   }
 
   Future<void> openLocationSettings() async {
-    await geolocatorApple.openLocationSettings();
+    await _geolocator.openLocationSettings();
   }
 
   void enablePositionSubscription() {
@@ -217,5 +220,16 @@ final class LocationService extends ChangeNotifier {
 
       return locationStr;
     }
+  }
+
+  Future<bool> isValidDistance(
+      Position start, Position end, double radius) async {
+    final double distance = _geolocator.distanceBetween(
+        start.latitude, start.longitude, end.latitude, end.longitude);
+
+    if (distance > radius) {
+      return false;
+    }
+    return true;
   }
 }

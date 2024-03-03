@@ -16,10 +16,10 @@ class OutlineButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 18.h),
+    return SizedBox(
+      height: 56.h,
+      child: OutlinedButton(
+        onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -32,11 +32,12 @@ class OutlineButton extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      style: ButtonStyle(
-        side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: color)),
-        shape: MaterialStatePropertyAll<OutlinedBorder>(RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.squared))),
+        style: ButtonStyle(
+          side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: color)),
+          shape: MaterialStatePropertyAll<OutlinedBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.squared))),
+        ),
       ),
     );
   }

@@ -32,4 +32,5 @@ sealed class AppColors {
   static const Color brickRed = Color(0xFFD73542);
   static const Color alizarin = Color(0xFFDB2836);
   static const Color gainsboro = Color(0xFFE3E3E3);
+  static const Color royalBlue = Color(0xFF427FDA);
 }

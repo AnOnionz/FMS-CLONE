@@ -97,11 +97,13 @@ class WorkForcePage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: FlatButton(
-                                      name: 'Chọn dự án',
+                                      text: 'Chọn dự án',
                                       color: AppColors.orange,
                                       onPressed: () => context
                                           .nextRoute(Routes.projectSelection),
-                                      icon: SvgPicture.asset(AppIcons.document),
+                                      icon: SvgPicture.asset(
+                                        AppIcons.document,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 16.w),
