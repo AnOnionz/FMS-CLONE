@@ -1,40 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/services/media/media_service.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/core/widgets/button/outline.dart';
+import 'package:fms/routes/routes.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
+import '../../../../core/widgets/take_image_list.dart';
 import '../widgets/time_box.dart';
 
-class TimekeepingPage extends StatelessWidget {
-  const TimekeepingPage({super.key});
+class AttendancePage extends StatelessWidget {
+  const AttendancePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final double appbarHeight = 12.h + 26.4.sp + context.screenPadding.top;
-    final double bottomPadding = 24.h;
-    final double buttonHeight = 56.h;
-    final double space = 32.h;
-    final double cameraHeight = 58.h + 32.h + 14.h + 19.2.sp;
-    final double infoHeight = 32.h + 24.h + 6.h + 19.2.sp * 4;
-    final placeHolder = appbarHeight +
-        bottomPadding +
-        buttonHeight +
-        space +
-        cameraHeight +
-        infoHeight;
+    final type = AttendanceType.CheckIn;
     final GoogleMapService _mapService = GoogleMapService();
-    _mapService.padding = EdgeInsets.only(
-        bottom: context.screenHeight -
-            placeHolder -
-            (context.screenHeight / 2 - placeHolder));
+    final MediaService _mediaService = MediaService();
+    _mapService.padding = paddingBottom(context);
+
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Chấm công'),
+      appBar: PreferredSize(
+          preferredSize: Size(context.screenWidth, 40.h),
+          child: AppBar(
+            backgroundColor: AppColors.aliceBlue,
+            leadingWidth: 40.w,
+            leading: GestureDetector(
+              onTap: () => context.pop(),
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.w),
+                child: SvgPicture.asset(
+                  AppIcons.back,
+                ),
+              ),
+            ),
+            title: Padding(
+              padding: EdgeInsets.only(bottom: 2.h),
+              child: Text(
+                'Chấm công',
+                style: context.textTheme.h2,
+              ),
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 16.w),
+                child: SvgPicture.asset(AppIcons.history),
+              )
+            ],
+            centerTitle: true,
+          )),
       body: Stack(children: [
         _mapService.mapWidget,
         Padding(
@@ -56,15 +77,7 @@ class TimekeepingPage extends StatelessWidget {
                       style: context.textTheme.subtitle1,
                     ),
                     SizedBox(height: 14.h),
-                    Container(
-                        padding: EdgeInsets.all(14.h),
-                        decoration: BoxDecoration(
-                            color: AppColors.solitude,
-                            borderRadius: BorderRadius.circular(6.squared)),
-                        child: SvgPicture.asset(
-                          AppIcons.camera,
-                          height: 30.h,
-                        ))
+                    TakeImageList(),
                   ],
                 ),
               ),
@@ -119,17 +132,65 @@ class TimekeepingPage extends StatelessWidget {
                   ),
                 ),
               ),
-              FlatButton(
-                onPressed: null,
-                text: 'Chấm công vào'.toUpperCase(),
-                color: AppColors.royalBlue,
-                disableColor: '#E4EAFF'.toColor(),
-                disableTextColor: '#C8C8C8'.toColor(),
-              ),
+              _actionButton(type, action: () => showNotification(context))
             ],
           ),
         )
       ]),
     );
+  }
+
+  Widget _actionButton(AttendanceType type, {VoidCallback? action}) {
+    return FlatButton(
+      onPressed: action,
+      text: type.name.toUpperCase(),
+      color: type == AttendanceType.CheckIn
+          ? AppColors.royalBlue
+          : AppColors.orange,
+      disableColor: type == AttendanceType.CheckIn
+          ? '#E4EAFF'.toColor()
+          : '#EADCD6'.toColor(),
+      disableTextColor: type == AttendanceType.CheckIn
+          ? '#C8C8C8'.toColor()
+          : '#BEA092'.toColor(),
+    );
+  }
+
+  EdgeInsets paddingBottom(BuildContext context) {
+    final double appbarHeight = 12.h + 26.4.sp + context.screenPadding.top;
+    final double bottomPadding = 24.h;
+    final double buttonHeight = 56.h;
+    final double space = 32.h;
+    final double cameraHeight = 58.h + 32.h + 14.h + 19.2.sp;
+    final double infoHeight = 32.h + 24.h + 6.h + 19.2.sp * 4;
+    final placeHolder = appbarHeight +
+        bottomPadding +
+        buttonHeight +
+        space +
+        cameraHeight +
+        infoHeight;
+    return EdgeInsets.only(
+        bottom: context.screenHeight -
+            placeHolder -
+            (context.screenHeight / 2 - placeHolder));
+  }
+
+  void showNotification(BuildContext context) {
+    OverlayManager.showSheet(
+        body: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 30.h, bottom: 45.h),
+          child: Text('Chấm công thành công',
+              style:
+                  context.textTheme.h2?.copyWith(color: AppColors.nightRider)),
+        ),
+        OutlineButton(
+            onPressed: () => context.popUtil(Routes.home),
+            name: 'Về trang chủ',
+            color: AppColors.orange)
+      ],
+    ));
   }
 }

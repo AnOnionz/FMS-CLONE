@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../widgets/custom_bottom_sheet.dart';
 import '/core/widgets/loading_alert.dart';
 
 class OverlayManager {
@@ -21,6 +22,16 @@ class OverlayManager {
     await showAppDialog(
       builder: (context) => const LoadingAlert(),
     );
+  }
+
+  static dynamic showSheet({required Widget body}) async {
+    return showModalBottomSheet(
+        context: currentContext!,
+        builder: (context) {
+          return CustomBottomSheet(
+            child: body,
+          );
+        });
   }
 
   static Future<void> showAppDialog({required WidgetBuilder builder}) async {

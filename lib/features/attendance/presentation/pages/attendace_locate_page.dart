@@ -14,8 +14,8 @@ import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/outline.dart';
 import '../blocs/locate/cubit/locate_cubit.dart';
 
-class TimekeepingLocatePage extends StatelessWidget {
-  const TimekeepingLocatePage({super.key});
+class AttendanceLocatePage extends StatelessWidget {
+  const AttendanceLocatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class TimekeepingLocatePage extends StatelessWidget {
                 return Column(
                   children: [
                     Container(
-                      height: 300.h + 100.h,
+                      height: 400.h,
                       child: Stack(
                         children: [
                           Align(
@@ -58,7 +58,7 @@ class TimekeepingLocatePage extends StatelessWidget {
                                   print('state.position: ${state.position}');
 
                                   context
-                                      .nextReplacementRoute(Routes.timekeeping);
+                                      .nextReplacementRoute(Routes.attendance);
                                 }
                               },
                               builder: (context, state) {
@@ -125,8 +125,7 @@ class TimekeepingLocatePage extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 16.h),
                           child: FlatButton(
                               onPressed: () {
-                                context
-                                    .nextReplacementRoute(Routes.timekeeping);
+                                context.nextReplacementRoute(Routes.attendance);
                               },
                               text: 'Tiếp tục',
                               color: AppColors.orange),

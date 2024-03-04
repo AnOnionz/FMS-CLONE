@@ -13,7 +13,8 @@ import '../../routes/admin_module.dart';
 import '../../routes/routes.dart';
 import '../features/attendance/presentation/blocs/locate/cubit/locate_cubit.dart';
 import '../features/attendance/presentation/pages/attendace_locate_page.dart';
-import '../features/attendance/presentation/pages/timekeeping_page.dart';
+
+import '../features/attendance/presentation/pages/attendance_page.dart';
 import '../features/authentication/data/datasources/user_local_data_source.dart';
 import '../features/authentication/data/datasources/user_remote_data_source.dart';
 import '../features/authentication/domain/repositories/user_repository.dart';
@@ -64,10 +65,10 @@ class AppModule extends Module {
         child: (_) => const BoothSelectionPage(),
         transition: TransitionType.fadeIn);
     r.child(Routes.locate,
-        child: (_) => const TimekeepingLocatePage(),
+        child: (_) => const AttendanceLocatePage(),
         transition: TransitionType.fadeIn);
-    r.child(Routes.timekeeping,
-        child: (_) => const TimekeepingPage(),
+    r.child(Routes.attendance,
+        child: (_) => const AttendancePage(),
         transition: TransitionType.fadeIn);
   }
 

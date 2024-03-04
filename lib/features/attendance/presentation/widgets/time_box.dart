@@ -15,7 +15,7 @@ class TimeBox extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          getName(),
+          type.name,
           style: context.textTheme.subtitle1?.copyWith(color: AppColors.nobel),
         ),
         SizedBox(
@@ -24,13 +24,6 @@ class TimeBox extends StatelessWidget {
         timeText(context)
       ],
     );
-  }
-
-  String getName() {
-    return switch (type) {
-      AttendanceType.CheckIn => 'Chấm công vào',
-      AttendanceType.CheckOut => 'Chấm công ra'
-    };
   }
 
   Widget timeText(BuildContext context) {

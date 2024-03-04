@@ -31,13 +31,12 @@ class WorkForcePage extends StatelessWidget {
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(16.squared)),
                     child: Padding(
-                      padding: EdgeInsets.all(10.w),
+                      padding: EdgeInsets.all(8.h),
                       child: GestureDetector(
-                        onTap: () => context.pop(),
-                        child: SvgPicture.asset(
-                          AppIcons.back,
-                        ),
-                      ),
+                          onTap: () => context.pop(),
+                          child: SvgPicture.asset(
+                            AppIcons.back,
+                          )),
                     ),
                   ),
                 ))),
@@ -109,13 +108,12 @@ class WorkForcePage extends StatelessWidget {
                                   SizedBox(width: 16.w),
                                   Expanded(
                                       child: OutlineButton(
-                                    name: 'QR Booth',
-                                    color: AppColors.orange,
-                                    onPressed: () {},
-                                    icon: Image.asset(
-                                      AppImages.qr,
-                                    ),
-                                  )),
+                                          name: 'QR Booth',
+                                          color: AppColors.orange,
+                                          onPressed: () {},
+                                          icon: SvgPicture.asset(
+                                            AppIcons.scan,
+                                          ))),
                                 ],
                               ),
                             ),

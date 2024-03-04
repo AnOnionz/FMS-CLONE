@@ -194,8 +194,16 @@ extension ContextExtensions on BuildContext {
   void pop<T>([T? result]) => Modular.to.pop(result);
 
   ///
+  /// Calls pop repeatedly on the navigator that most tightly encloses the given context until the predicate returns true.
+  ///
+  ///
+  void popUtil(String page) => _popUntil(page);
+
+  ///
   /// Pushes the built widget to the screen using the material fade in animation
   ///
+  ///
+
   Future<T?> nextRoute<T extends Object?>(
     String page, {
     Object? arguments,
@@ -276,3 +284,6 @@ Future<T?> _nextAndRemoveUntilPage<T extends Object?>(
 }) async =>
     await Modular.to.pushNamedAndRemoveUntil(page, (route) => false,
         arguments: arguments, forRoot: forRoot);
+
+void _popUntil<T extends Object?>(String page) =>
+    Modular.to.popUntil(ModalRoute.withName(page));

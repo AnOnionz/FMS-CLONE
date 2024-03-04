@@ -9,11 +9,11 @@ import '../location/location_service.dart';
 import '/core/mixins/common.dart';
 import 'painter/watermark_painter.dart';
 
-sealed class MediaService {
+final class MediaService {
   static ImagePicker _picker = ImagePicker();
 
   Future<XFile?> pickImage(double? maxWidth, double? maxHeight, int? quality,
-      {ImageSource source = ImageSource.gallery}) async {
+      {ImageSource source = ImageSource.camera}) async {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
@@ -23,6 +23,7 @@ sealed class MediaService {
       );
       return pickedFile;
     } catch (e) {
+      print('ERROR');
       Fx.log(e.toString());
       return null;
     }

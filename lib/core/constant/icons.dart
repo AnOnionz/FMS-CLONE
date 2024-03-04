@@ -32,4 +32,7 @@ class AppIcons {
   static String notification = 'notification'.icon.svg;
   static String cameraTask = 'camera_task'.icon.svg;
   static String camera = 'camera'.icon.svg;
+  static String history = 'history'.icon.svg;
+  static String scan = 'scan'.icon.svg;
+  static String close = 'close'.icon.svg;
 }

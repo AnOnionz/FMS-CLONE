@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/constant/colors.dart';
 
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -20,17 +21,17 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: AppBar(
           forceMaterialTransparency: true,
           leadingWidth: 40.w,
-          leading: Padding(
-            padding: EdgeInsets.only(left: 16.w),
-            child: GestureDetector(
-              onTap: () => Modular.to.pop(),
+          leading: GestureDetector(
+            onTap: () => Modular.to.pop(),
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.w),
               child: SvgPicture.asset(
                 AppIcons.back,
               ),
             ),
           ),
           title: Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.only(bottom: 2.h),
             child: Text(
               title,
               style: context.textTheme.h2,
