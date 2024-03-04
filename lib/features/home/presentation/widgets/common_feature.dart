@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/home/presentation/widgets/feature_box.dart';
+import 'package:fms/routes/routes.dart';
 
 class CommonFeature extends StatelessWidget {
   const CommonFeature({super.key});
@@ -25,6 +27,7 @@ class CommonFeature extends StatelessWidget {
         FeatureBox(
           name: 'Nghỉ phép',
           icon: AppIcons.report,
+          onPressed: () => context.nextRoute(Routes.leave),
         )
       ],
     );

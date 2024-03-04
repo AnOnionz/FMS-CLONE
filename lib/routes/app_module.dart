@@ -22,6 +22,7 @@ import '../features/authentication/domain/usecases/logout_usecase.dart';
 import '../features/authentication/presentation/blocs/authentication_bloc.dart';
 import '../features/authentication/presentation/blocs/sign_bloc.dart';
 import '../features/home/presentation/pages/home_page.dart';
+import '../features/leave/presentation/pages/leave_page.dart';
 import '../features/normal_splash_page.dart';
 
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
@@ -70,6 +71,8 @@ class AppModule extends Module {
     r.child(Routes.attendance,
         child: (_) => const AttendancePage(),
         transition: TransitionType.fadeIn);
+    r.child(Routes.leave,
+        child: (_) => const LeavePage(), transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> listenConfig<T extends ChangeNotifier>() {
