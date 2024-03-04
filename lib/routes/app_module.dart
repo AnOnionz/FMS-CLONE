@@ -1,10 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/features/timekeeping/presentation/blocs/locate/cubit/locate_cubit.dart';
-import 'package:fms/features/timekeeping/presentation/pages/timekeeping_locate_page.dart';
-import 'package:fms/features/workForce/presentation/pages/project_selection_page.dart';
-import 'package:fms/features/workForce/presentation/pages/work_force_page.dart';
 
 import '../../core/client/dio_client.dart';
 import '../../core/localization/locale_manager.dart';
@@ -15,6 +11,9 @@ import '../../features/authentication/domain/usecases/login_usecase.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../routes/admin_module.dart';
 import '../../routes/routes.dart';
+import '../features/attendance/presentation/blocs/locate/cubit/locate_cubit.dart';
+import '../features/attendance/presentation/pages/attendace_locate_page.dart';
+import '../features/attendance/presentation/pages/timekeeping_page.dart';
 import '../features/authentication/data/datasources/user_local_data_source.dart';
 import '../features/authentication/data/datasources/user_remote_data_source.dart';
 import '../features/authentication/domain/repositories/user_repository.dart';
@@ -23,8 +22,10 @@ import '../features/authentication/presentation/blocs/authentication_bloc.dart';
 import '../features/authentication/presentation/blocs/sign_bloc.dart';
 import '../features/home/presentation/pages/home_page.dart';
 import '../features/normal_splash_page.dart';
-import '../features/timekeeping/presentation/pages/timekeeping_page.dart';
+
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
+import '../features/workForce/presentation/pages/project_selection_page.dart';
+import '../features/workForce/presentation/pages/work_force_page.dart';
 
 class AppModule extends Module {
   @override

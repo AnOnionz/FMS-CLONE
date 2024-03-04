@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-enum timekeepingType { checkin, checkout }
-
 class TimeBox extends StatelessWidget {
-  final timekeepingType type;
+  final AttendanceType type;
   final DateTime? time;
   const TimeBox({super.key, required this.type, this.time});
 
@@ -29,8 +28,8 @@ class TimeBox extends StatelessWidget {
 
   String getName() {
     return switch (type) {
-      timekeepingType.checkin => 'Chấm công vào',
-      timekeepingType.checkout => 'Chấm công ra'
+      AttendanceType.CheckIn => 'Chấm công vào',
+      AttendanceType.CheckOut => 'Chấm công ra'
     };
   }
 

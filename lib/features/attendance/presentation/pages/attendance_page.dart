@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 
-import '../../../../core/mixins/common.dart';
 import '../../../../core/services/map/google_map_service.dart';
 import '../widgets/time_box.dart';
 
@@ -16,11 +16,23 @@ class TimekeepingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double appbarHeight = 12.h + 26.4.sp + context.screenPadding.top;
+    final double bottomPadding = 24.h;
+    final double buttonHeight = 56.h;
+    final double space = 32.h;
+    final double cameraHeight = 58.h + 32.h + 14.h + 19.2.sp;
+    final double infoHeight = 32.h + 24.h + 6.h + 19.2.sp * 4;
+    final placeHolder = appbarHeight +
+        bottomPadding +
+        buttonHeight +
+        space +
+        cameraHeight +
+        infoHeight;
     final GoogleMapService _mapService = GoogleMapService();
     _mapService.padding = EdgeInsets.only(
-        bottom: (context.screenHeight - 238.h - 19.2.sp * 5) / 2 +
-            (238.h - 19.2.sp * 5));
-
+        bottom: context.screenHeight -
+            placeHolder -
+            (context.screenHeight / 2 - placeHolder));
     return Scaffold(
       appBar: DefaultAppBar(title: 'Chấm công'),
       body: Stack(children: [
@@ -97,10 +109,10 @@ class TimekeepingPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TimeBox(
-                                type: timekeepingType.checkin,
+                                type: AttendanceType.CheckIn,
                                 time: DateTime.now(),
                               ),
-                              TimeBox(type: timekeepingType.checkout),
+                              TimeBox(type: AttendanceType.CheckOut),
                             ],
                           )
                         ]),

@@ -85,7 +85,9 @@ final class LocationService extends ChangeNotifier {
       subscription?.resume();
       return false;
     }
+
     permission = await _geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       try {
         permission = await requestPermission();
@@ -131,7 +133,7 @@ final class LocationService extends ChangeNotifier {
 
   Future<LocationPermission> requestPermission() async {
     final permission = await _geolocator.requestPermission();
-    print(permission);
+
     if (permission != LocationPermission.always &&
         permission != LocationPermission.whileInUse) {
       return Future.error(LocationErrorPermissionDenied());
@@ -142,15 +144,15 @@ final class LocationService extends ChangeNotifier {
 
   Future<Position?> getCurrentPosition() async {
     try {
-      final hasPermission = await _handlePermission();
+      final hasPermission = await _handlePermission().timeout(60.seconds);
 
       if (!hasPermission) {
         return null;
       }
 
-      final userLocation = await _geolocator.getCurrentPosition(
-          locationSettings:
-              LocationSettings(timeLimit: 10.seconds, distanceFilter: 10));
+      final userLocation = await _geolocator
+          .getCurrentPosition(locationSettings: _getLocationSettings())
+          .timeout(60.seconds);
 
       positionUpdate(userLocation);
       return _currentLocation;

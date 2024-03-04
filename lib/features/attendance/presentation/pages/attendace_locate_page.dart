@@ -7,11 +7,12 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/adaptive_indicator.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-import 'package:fms/features/timekeeping/presentation/blocs/locate/cubit/locate_cubit.dart';
+
 import 'package:fms/routes/routes.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/outline.dart';
+import '../blocs/locate/cubit/locate_cubit.dart';
 
 class TimekeepingLocatePage extends StatelessWidget {
   const TimekeepingLocatePage({super.key});

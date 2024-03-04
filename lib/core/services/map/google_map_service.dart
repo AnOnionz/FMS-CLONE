@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -12,7 +10,7 @@ import '/core/services/map/map_service.dart';
 final class GoogleMapService implements MapService {
   GoogleMapController? _controller;
   static const _initPosition = LatLng(15.6283721, 106.6830262);
-  EdgeInsets _padding = EdgeInsets.only(bottom: 100.h);
+  EdgeInsets _padding = EdgeInsets.zero;
 
   void set padding(EdgeInsets e) {
     _padding = e;
@@ -37,6 +35,7 @@ final class GoogleMapService implements MapService {
         padding: _padding,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
+          _controller!.animateCamera(CameraUpdate.newCameraPosition(_initial));
         },
       );
 

@@ -10,10 +10,8 @@ import '../constant/icons.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const DefaultAppBar({
-    Key? key,
-    required this.title,
-  });
+  final List<Widget>? actions;
+  const DefaultAppBar({Key? key, required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +29,14 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          title: Text(
-            title,
-            style: context.textTheme.h2,
+          title: Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: Text(
+              title,
+              style: context.textTheme.h2,
+            ),
           ),
+          actions: actions,
           centerTitle: true,
         ));
   }
