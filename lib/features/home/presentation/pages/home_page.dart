@@ -16,7 +16,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.aliceBlue,
       endDrawer: DrawerSide(),
       drawerScrimColor: AppColors.transparent,
       appBar: PreferredSize(

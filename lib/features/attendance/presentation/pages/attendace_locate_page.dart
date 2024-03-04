@@ -21,7 +21,6 @@ class AttendanceLocatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DefaultAppBar(title: 'Chấm công'),
-        backgroundColor: AppColors.aliceBlue,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),

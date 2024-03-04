@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constant/colors.dart';
 import '../constant/text_styles.dart';
 import '/core/responsive/utilities/flex_extention.dart';
 
@@ -34,10 +35,16 @@ const Size kDialogSize = Size(300, 170);
 
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
+    colorScheme: ColorScheme.light(
+      background: AppColors.aliceBlue,
+    ),
     visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
     extensions: [AppTextTheme.fallback()]);
 
 ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
+    colorScheme: ColorScheme.dark(
+      background: AppColors.aliceBlue,
+    ),
     visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
     extensions: [AppTextTheme.fallback()]);

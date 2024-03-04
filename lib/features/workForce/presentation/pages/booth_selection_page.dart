@@ -12,7 +12,6 @@ class BoothSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DefaultAppBar(title: 'Chọn outlet'),
-        backgroundColor: AppColors.aliceBlue,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),

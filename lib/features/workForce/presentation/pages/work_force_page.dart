@@ -40,7 +40,6 @@ class WorkForcePage extends StatelessWidget {
                     ),
                   ),
                 ))),
-        backgroundColor: AppColors.aliceBlue,
         body: SafeArea(
           child: Column(
             children: [

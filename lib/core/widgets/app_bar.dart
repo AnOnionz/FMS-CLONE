@@ -10,8 +10,8 @@ import '../constant/icons.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final List<Widget>? actions;
-  const DefaultAppBar({Key? key, required this.title, this.actions});
+  final VoidCallback? action;
+  const DefaultAppBar({Key? key, required this.title, this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,16 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: context.textTheme.h2,
             ),
           ),
-          actions: actions,
+          actions: [
+            action != null
+                ? Padding(
+                    padding: EdgeInsets.only(right: 16.w),
+                    child: GestureDetector(
+                        onTap: action,
+                        child: SvgPicture.asset(AppIcons.history)),
+                  )
+                : SizedBox()
+          ],
           centerTitle: true,
         ));
   }

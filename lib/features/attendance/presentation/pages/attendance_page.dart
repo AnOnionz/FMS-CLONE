@@ -11,6 +11,7 @@ import 'package:fms/core/widgets/button/outline.dart';
 import 'package:fms/routes/routes.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
+import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/take_image_list.dart';
 import '../widgets/time_box.dart';
 
@@ -24,35 +25,10 @@ class AttendancePage extends StatelessWidget {
     _mapService.padding = paddingBottom(context);
 
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size(context.screenWidth, 40.h),
-          child: AppBar(
-            backgroundColor: AppColors.aliceBlue,
-            leadingWidth: 40.w,
-            leading: GestureDetector(
-              onTap: () => context.pop(),
-              child: Padding(
-                padding: EdgeInsets.only(left: 16.w),
-                child: SvgPicture.asset(
-                  AppIcons.back,
-                ),
-              ),
-            ),
-            title: Padding(
-              padding: EdgeInsets.only(bottom: 2.h),
-              child: Text(
-                'Chấm công',
-                style: context.textTheme.h2,
-              ),
-            ),
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(right: 16.w),
-                child: SvgPicture.asset(AppIcons.history),
-              )
-            ],
-            centerTitle: true,
-          )),
+      appBar: DefaultAppBar(
+        title: 'Chấm công',
+        action: () {},
+      ),
       body: Stack(children: [
         _mapService.mapWidget,
         Padding(
