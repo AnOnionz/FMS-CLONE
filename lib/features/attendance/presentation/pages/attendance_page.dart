@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/core/widgets/button/outline.dart';
@@ -23,7 +21,6 @@ class AttendancePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final type = AttendanceType.CheckIn;
     final GoogleMapService _mapService = GoogleMapService();
-    final MediaService _mediaService = MediaService();
     _mapService.padding = paddingBottom(context);
 
     return Scaffold(
