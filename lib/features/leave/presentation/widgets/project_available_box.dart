@@ -29,9 +29,11 @@ class ProjectAvailable extends StatelessWidget {
                   color: AppColors.black.withOpacity(0.05))
             ]),
         child: ListTile(
+          onFocusChange: (value) => onPressed,
           contentPadding:
               EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-          onFocusChange: (value) => onPressed,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.squared)),
           trailing: Transform.rotate(
               angle: pi,
               child: SvgPicture.asset(

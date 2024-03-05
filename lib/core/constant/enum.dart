@@ -6,3 +6,5 @@ enum AttendanceType {
 
   final String name;
 }
+
+enum SettingType { none, toggle, transfer }

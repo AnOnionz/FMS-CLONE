@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
+import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 
 import '../../core/client/dio_client.dart';
 import '../../core/localization/locale_manager.dart';
@@ -73,6 +75,10 @@ class AppModule extends Module {
         transition: TransitionType.fadeIn);
     r.child(Routes.leave,
         child: (_) => const LeavePage(), transition: TransitionType.fadeIn);
+    r.child(Routes.setting,
+        child: (_) => const SettingPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.appLock,
+        child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> listenConfig<T extends ChangeNotifier>() {

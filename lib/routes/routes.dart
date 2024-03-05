@@ -9,4 +9,6 @@ class Routes {
   static const String locate = '/locate';
   static const String attendance = '/attendance';
   static const String leave = '/leave';
+  static const String setting = '/setting';
+  static const String appLock = '/app_lock';
 }
