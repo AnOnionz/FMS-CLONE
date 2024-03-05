@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/responsive/responsive.dart';
+
+import 'leave_application_item.dart';
+
+class LeaveHistory extends StatelessWidget {
+  const LeaveHistory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 20.h),
+      child: CustomScrollView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(parent: ClampingScrollPhysics()),
+        slivers: [
+          SliverList.separated(
+            itemCount: 4,
+            separatorBuilder: (context, index) => Divider(
+              color: AppColors.gainsboro,
+              indent: 26.w,
+              endIndent: 26.w,
+            ),
+            itemBuilder: (context, index) {
+              return LeaveApplicationItem();
+            },
+          )
+        ],
+      ),
+    );
+  }
+}

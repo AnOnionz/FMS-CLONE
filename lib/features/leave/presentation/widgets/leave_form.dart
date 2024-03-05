@@ -20,16 +20,13 @@ class LeaveForm extends StatefulWidget {
 class _LeaveFormState extends State<LeaveForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late DateTime start = widget.model.project.start;
-  late DateTime end = widget.model.project.end;
-
   late final TextEditingController reasonController =
       TextEditingController(text: 'Lý do');
 
-  late final TextEditingController startController =
-      TextEditingController(text: DateFormat('HH:mm').format(start));
-  late final TextEditingController endController =
-      TextEditingController(text: DateFormat('HH:mm').format(end));
+  late final TextEditingController startController = TextEditingController(
+      text: DateFormat('HH:mm').format(widget.model.project.start));
+  late final TextEditingController endController = TextEditingController(
+      text: DateFormat('HH:mm').format(widget.model.project.end));
 
   final _border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.squared),
@@ -58,13 +55,15 @@ class _LeaveFormState extends State<LeaveForm> {
                 Expanded(
                     child: timeOf(
                   startController,
-                  start,
+                  widget.model.project.start,
                   enabled: true,
-                  validate: () => inValidTime(start, end),
+                  validate: () => inValidTime(
+                      widget.model.project.start, widget.model.project.end),
                   onDayChanged: (time) => setState(() {
-                    start =
-                        start.copyWith(hour: time.hour, minute: time.minute);
-                    startController.text = DateFormat('HH:mm').format(start);
+                    widget.model.project.start = widget.model.project.start
+                        .copyWith(hour: time.hour, minute: time.minute);
+                    startController.text =
+                        DateFormat('HH:mm').format(widget.model.project.start);
                   }),
                 )),
                 SizedBox(
@@ -74,13 +73,15 @@ class _LeaveFormState extends State<LeaveForm> {
                     child: timeOf(
                         endController,
                         enabled: true,
-                        end,
-                        validate: () => inValidTime(start, end),
+                        widget.model.project.end,
+                        validate: () => inValidTime(widget.model.project.start,
+                            widget.model.project.end),
                         onDayChanged: (time) => setState(() {
-                              end = end.copyWith(
-                                  hour: time.hour, minute: time.minute);
-                              endController.text =
-                                  DateFormat('HH:mm').format(end);
+                              widget.model.project.end =
+                                  widget.model.project.end.copyWith(
+                                      hour: time.hour, minute: time.minute);
+                              endController.text = DateFormat('HH:mm')
+                                  .format(widget.model.project.end);
                             })))
               ],
             ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/responsive/responsive.dart';
 
 import '../widgets/custom_bottom_sheet.dart';
 import '/core/widgets/loading_alert.dart';
@@ -27,6 +29,11 @@ class OverlayManager {
   static dynamic showSheet({required Widget body}) async {
     return showModalBottomSheet(
         context: currentContext!,
+        isScrollControlled: true,
+        constraints: BoxConstraints(
+            maxHeight: currentContext!.screenHeight -
+                currentContext!.screenPadding.top -
+                68.h),
         builder: (context) {
           return CustomBottomSheet(
             child: body,

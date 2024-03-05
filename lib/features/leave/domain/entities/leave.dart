@@ -16,4 +16,7 @@ class Leave {
       reason: reason ?? this.reason,
     );
   }
+
+  @override
+  String toString() => 'Leave(project: $project, reason: $reason)';
 }

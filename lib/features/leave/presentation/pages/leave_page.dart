@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/project.dart';
 import '../widgets/calender_header.dart';
 import '../widgets/leave_form.dart';
+import '../widgets/leave_history.dart';
 
 class LeavePage extends StatefulWidget {
   const LeavePage({super.key});
@@ -76,7 +77,8 @@ class _LeavePageState extends State<LeavePage> {
     super.dispose();
   }
 
-  void _createLeaveApplication(Project project) {
+  void _showSheetCreateLeaveApplication(Project project) {
+    final p = project.copyWith();
     OverlayManager.showSheet(
         body: Padding(
       padding: EdgeInsets.only(top: 20.h),
@@ -93,12 +95,39 @@ class _LeavePageState extends State<LeavePage> {
           SizedBox(height: 26.h),
           LeaveForm(
             date: _focusedDay.value,
-            model: Leave(project: project),
+            model: Leave(project: p),
           ),
           FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                print(p);
+              },
               text: 'Tạo Đơn Nghỉ Phép',
               color: AppColors.orange)
+        ],
+      ),
+    ));
+  }
+
+  void _showSheetHistoryLeave() {
+    OverlayManager.showSheet(
+        body: Padding(
+      padding: EdgeInsets.only(top: 20.h),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 10.w,
+              ),
+              child: Text(
+                'Lịch sử xin nghỉ phép',
+                style: context.textTheme.h2,
+              ),
+            ),
+          ),
+          Expanded(child: LeaveHistory()),
         ],
       ),
     ));
@@ -109,7 +138,7 @@ class _LeavePageState extends State<LeavePage> {
     return Scaffold(
       appBar: DefaultAppBar(
         title: 'Xin nghỉ phép',
-        action: () {},
+        action: () => _showSheetHistoryLeave(),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -219,8 +248,8 @@ class _LeavePageState extends State<LeavePage> {
                           itemBuilder: (context, index) {
                             return ProjectAvailable(
                               project: projects[index],
-                              onPressed: () =>
-                                  _createLeaveApplication(projects[index]),
+                              onPressed: () => _showSheetCreateLeaveApplication(
+                                  projects[index]),
                             );
                           },
                         ),
