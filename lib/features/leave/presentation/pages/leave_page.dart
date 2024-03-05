@@ -1,13 +1,19 @@
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
-import 'package:fms/features/leave/presentation/widgets/event_box.dart';
+import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/features/leave/domain/entities/leave.dart';
+import 'package:fms/features/leave/presentation/widgets/calender_builder.dart';
+import 'package:fms/features/leave/presentation/widgets/project_available_box.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
+
+import '../../domain/entities/project.dart';
+import '../widgets/calender_header.dart';
+import '../widgets/leave_form.dart';
 
 class LeavePage extends StatefulWidget {
   const LeavePage({super.key});
@@ -18,58 +24,84 @@ class LeavePage extends StatefulWidget {
 
 class _LeavePageState extends State<LeavePage> {
   late PageController _pageController;
-  late final ValueNotifier<List<Event>> _selectedEvents;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  late final ValueNotifier<List<Project>> _selectedProjects;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
-  DateTime? _selectedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
+  late final DateTime today = DateTime.now();
+  late final DateTime firstDay =
+      DateTime(today.year, today.month - 3, today.day);
+  late final DateTime lastDay =
+      DateTime(today.year, today.month + 3, today.day);
+
+  final data = {
+    DateTime.now(): [
+      Project(
+          name: 'CellphoneS',
+          start: '1709604000'.dateTimeFromTimeStamp(),
+          end: '1709632800'.dateTimeFromTimeStamp()),
+      Project(
+          name: 'Strongbow',
+          start: '1709629200'.dateTimeFromTimeStamp(),
+          end: '1709658000'.dateTimeFromTimeStamp()),
+      Project(
+          name: 'Blanc',
+          start: '1709629200'.dateTimeFromTimeStamp(),
+          end: '1709658000'.dateTimeFromTimeStamp()),
+    ],
+    DateTime.now().add(1.days): [
+      Project(
+          name: 'CellphoneS',
+          start: '1709629200'.dateTimeFromTimeStamp(),
+          end: '1709658000'.dateTimeFromTimeStamp()),
+      Project(
+          name: 'Strongbow',
+          start: '1709629200'.dateTimeFromTimeStamp(),
+          end: '1709658000'.dateTimeFromTimeStamp()),
+      Project(
+          name: 'Blanc',
+          start: '1709629200'.dateTimeFromTimeStamp(),
+          end: '1709658000'.dateTimeFromTimeStamp()),
+    ]
+  };
+
   @override
   void initState() {
     super.initState();
-    _selectedDay = _focusedDay.value;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    _selectedProjects = ValueNotifier([]);
   }
 
   @override
   void dispose() {
-    _selectedEvents.dispose();
+    _focusedDay.dispose();
+    _selectedProjects.dispose();
     super.dispose();
   }
 
-  final kEvents = LinkedHashMap<DateTime, List<Event>>(
-    equals: isSameDay,
-    hashCode: getHashCode,
-  )..addAll({
-      DateTime.now(): [
-        Event('Today\'s Event 1'),
-        Event('Today\'s Event 2'),
-        Event('Today\'s Event 3'),
-      ]
-    });
-
-  static int getHashCode(DateTime key) {
-    return key.day * 1000000 + key.month * 10000 + key.year;
-  }
-
-  List<Event> _getEventsForDay(DateTime day) {
-    // Implementation example
-    return kEvents[day] ?? [];
-  }
-
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(_selectedDay, selectedDay)) {
-      setState(() {
-        _selectedDay = selectedDay;
-        _focusedDay.value = focusedDay;
-        _rangeStart = null; // Important to clean those
-        _rangeEnd = null;
-        _rangeSelectionMode = RangeSelectionMode.toggledOff;
-      });
-
-      _selectedEvents.value = _getEventsForDay(selectedDay);
-    }
+  void _createLeaveApplication(Project project) {
+    OverlayManager.showSheet(
+        body: Padding(
+      padding: EdgeInsets.only(top: 20.h),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Tạo đơn nghỉ phép',
+              style: context.textTheme.h2,
+            ),
+          ),
+          SizedBox(height: 26.h),
+          LeaveForm(
+            date: _focusedDay.value,
+            model: Leave(project: project),
+          ),
+          FlatButton(
+              onPressed: () {},
+              text: 'Tạo Đơn Nghỉ Phép',
+              color: AppColors.orange)
+        ],
+      ),
+    ));
   }
 
   @override
@@ -113,7 +145,7 @@ class _LeavePageState extends State<LeavePage> {
                     child: ValueListenableBuilder<DateTime>(
                       valueListenable: _focusedDay,
                       builder: (context, value, _) {
-                        return _CalendarHeader(
+                        return CalendarHeader(
                           focusedDay: value,
                           onLeftArrowTap: () {
                             _pageController.previousPage(
@@ -131,79 +163,15 @@ class _LeavePageState extends State<LeavePage> {
                       },
                     ),
                   ),
-                  TableCalendar<Event>(
-                    firstDay: kFirstDay,
-                    lastDay: kLastDay,
-                    focusedDay: _focusedDay.value,
-                    headerVisible: false,
-                    selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                    rangeStartDay: _rangeStart,
-                    rangeEndDay: _rangeEnd,
-                    calendarFormat: _calendarFormat,
-                    rangeSelectionMode: _rangeSelectionMode,
-                    eventLoader: _getEventsForDay,
-                    startingDayOfWeek: StartingDayOfWeek.monday,
-                    onDaySelected: _onDaySelected,
+                  CalendarWidget<Project>(
+                    firstDay: firstDay,
+                    lastDay: lastDay,
                     onCalendarCreated: (controller) =>
                         _pageController = controller,
-                    onPageChanged: (focusedDay) =>
-                        _focusedDay.value = focusedDay,
-                    onFormatChanged: (format) {
-                      if (_calendarFormat != format) {
-                        setState(() {
-                          _calendarFormat = format;
-                        });
-                      }
-                    },
-                    calendarBuilders: CalendarBuilders(
-                      selectedBuilder: (context, day, focusedDay) {
-                        return Container(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            child: Container(
-                              height: 150,
-                              width: 150,
-                              decoration: BoxDecoration(
-                                  color: AppColors.orange,
-                                  borderRadius:
-                                      BorderRadius.circular(12.squared)),
-                              child: Center(
-                                  child: Text(
-                                day.day.toString(),
-                                style: TextStyle(
-                                    fontSize: 14, color: AppColors.white),
-                              )),
-                            ),
-                          ),
-                        );
-                      },
-                      todayBuilder: (context, day, focusedDay) {
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          child: Center(
-                              child: Text(
-                            day.day.toString(),
-                          )),
-                        );
-                      },
-                      markerBuilder: (context, day, events) {
-                        if (events.isNotEmpty) {
-                          return SizedBox(
-                            width: 22.w,
-                            child: Wrap(
-                                alignment: WrapAlignment.center,
-                                spacing: 2.w,
-                                runSpacing: 2.h,
-                                verticalDirection: VerticalDirection.up,
-                                children: events
-                                    .mapIndexed((element, index) =>
-                                        _MarkerBuilder(index: index))
-                                    .toList()),
-                          );
-                        }
-                        return null;
-                      },
-                    ),
+                    onDaySelected: (projectsSelected) =>
+                        _selectedProjects.value = projectsSelected,
+                    data: data,
+                    focusedDay: _focusedDay,
                   ),
                 ],
               ),
@@ -219,9 +187,9 @@ class _LeavePageState extends State<LeavePage> {
               ),
             ),
             Expanded(
-              child: ValueListenableBuilder<List<Event>>(
-                valueListenable: _selectedEvents,
-                builder: (context, value, _) {
+              child: ValueListenableBuilder<List<Project>>(
+                valueListenable: _selectedProjects,
+                builder: (context, projects, _) {
                   return Row(
                     children: [
                       Column(
@@ -247,9 +215,13 @@ class _LeavePageState extends State<LeavePage> {
                         child: ListView.builder(
                           physics: BouncingScrollPhysics(
                               parent: ClampingScrollPhysics()),
-                          itemCount: value.length,
+                          itemCount: projects.length,
                           itemBuilder: (context, index) {
-                            return EventBox();
+                            return ProjectAvailable(
+                              project: projects[index],
+                              onPressed: () =>
+                                  _createLeaveApplication(projects[index]),
+                            );
                           },
                         ),
                       ),
@@ -264,111 +236,3 @@ class _LeavePageState extends State<LeavePage> {
     );
   }
 }
-
-class _CalendarHeader extends StatelessWidget {
-  final DateTime focusedDay;
-  final VoidCallback onLeftArrowTap;
-  final VoidCallback onRightArrowTap;
-
-  const _CalendarHeader({
-    Key? key,
-    required this.focusedDay,
-    required this.onLeftArrowTap,
-    required this.onRightArrowTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final mText = DateFormat.MMMM().format(focusedDay);
-    final yText = focusedDay.year.toString();
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: onLeftArrowTap,
-          child: Container(
-            height: 30.h,
-            width: 30.h,
-            decoration: BoxDecoration(
-                border: Border.all(color: '#CED3DE'.toColor()),
-                borderRadius: BorderRadius.circular(8.squared)),
-            child: Center(child: Icon(Icons.chevron_left)),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: Column(
-              children: [
-                Text(
-                  mText,
-                  style: context.textTheme.subtitle1
-                      ?.copyWith(color: '#222B45'.toColor()),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  yText,
-                  style: context.textTheme.body1
-                      ?.copyWith(color: '#8F9BB3'.toColor()),
-                )
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: onRightArrowTap,
-          child: Container(
-            height: 30.h,
-            width: 30.h,
-            decoration: BoxDecoration(
-                border: Border.all(color: '#CED3DE'.toColor()),
-                borderRadius: BorderRadius.circular(8.squared)),
-            child: Center(child: Icon(Icons.chevron_right)),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _MarkerBuilder extends StatelessWidget {
-  final int index;
-  const _MarkerBuilder({required this.index});
-
-  List<Color> get colors =>
-      ['#FF0000'.toColor(), '#FFD600'.toColor(), '#0095FF'.toColor()];
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 4.w,
-      width: 4.w,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4.squared), color: colors[index]),
-    );
-  }
-}
-
-class Event {
-  final String title;
-
-  const Event(this.title);
-
-  @override
-  String toString() => title;
-}
-
-/// Returns a list of [DateTime] objects from [first] to [last], inclusive.
-List<DateTime> daysInRange(DateTime first, DateTime last) {
-  final dayCount = last.difference(first).inDays + 1;
-  return List.generate(
-    dayCount,
-    (index) => DateTime.utc(first.year, first.month, first.day + index),
-  );
-}
-
-final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);

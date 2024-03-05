@@ -35,4 +35,6 @@ class AppIcons {
   static String history = 'history'.icon.svg;
   static String scan = 'scan'.icon.svg;
   static String close = 'close'.icon.svg;
+  static String clock = 'clock'.icon.svg;
+  static String calendar = 'calendar'.icon.svg;
 }
