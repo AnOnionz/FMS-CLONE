@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-import 'leave_application_item.dart';
+import 'leave_history_item.dart';
 
 class LeaveHistory extends StatelessWidget {
   const LeaveHistory({super.key});
@@ -23,7 +23,7 @@ class LeaveHistory extends StatelessWidget {
               endIndent: 26.w,
             ),
             itemBuilder: (context, index) {
-              return LeaveApplicationItem();
+              return LeaveHistoryItem();
             },
           )
         ],

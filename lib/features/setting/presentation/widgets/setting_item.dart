@@ -52,7 +52,7 @@ class SettingItem extends StatelessWidget {
                     name!,
                     overflow: TextOverflow.clip,
                     style: context.textTheme.subtitle1
-                        ?.copyWith(color: '#212121'.toColor()),
+                        ?.copyWith(color: AppColors.nero),
                   )
                 : SizedBox()
           ],

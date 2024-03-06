@@ -19,7 +19,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         preferredSize: Size(context.screenWidth, 40.h),
         child: AppBar(
           forceMaterialTransparency: true,
-          leadingWidth: 40.w,
+          leadingWidth: 42.w,
           leading: GestureDetector(
             onTap: () => Modular.to.pop(),
             child: Padding(

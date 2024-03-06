@@ -5,8 +5,8 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-class LeaveApplicationItem extends StatelessWidget {
-  const LeaveApplicationItem({super.key});
+class LeaveHistoryItem extends StatelessWidget {
+  const LeaveHistoryItem({super.key});
 
   @override
   Widget build(BuildContext context) {

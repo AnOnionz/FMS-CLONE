@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
 import 'package:fms/features/setting/presentation/pages/setting_page.dart';
+import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
 
 import '../../core/client/dio_client.dart';
 import '../../core/localization/locale_manager.dart';
@@ -79,6 +80,10 @@ class AppModule extends Module {
         child: (_) => const SettingPage(), transition: TransitionType.fadeIn);
     r.child(Routes.appLock,
         child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.appLock,
+        child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.urgency,
+        child: (_) => const UrgencyPage(), transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> listenConfig<T extends ChangeNotifier>() {
