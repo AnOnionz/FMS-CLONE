@@ -6,6 +6,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/core/widgets/button/outline.dart';
+import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:fms/routes/routes.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
@@ -16,6 +17,31 @@ import '../widgets/time_box.dart';
 class AttendancePage extends StatelessWidget {
   const AttendancePage({super.key});
 
+  void _showSheetHistory(BuildContext context) {
+    OverlayManager.showSheet(
+        body: Padding(
+      padding: EdgeInsets.only(top: 20.h),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 10.w,
+              ),
+              child: Text(
+                'Lịch sử chấm công',
+                style: context.textTheme.h2,
+              ),
+            ),
+          ),
+          Expanded(child: AttendanceHistory()),
+        ],
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final type = AttendanceType.CheckIn;
@@ -25,7 +51,7 @@ class AttendancePage extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(
         title: 'Chấm công',
-        action: () {},
+        action: () => _showSheetHistory(context),
       ),
       body: Stack(children: [
         _mapService.mapWidget,
