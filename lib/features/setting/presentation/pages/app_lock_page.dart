@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../core/constant/enum.dart';
-import '../../../../core/constant/icons.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../widgets/setting_item.dart';
 
