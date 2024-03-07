@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/utilities/flex_extention.dart';
+import 'package:fms/core/widgets/adaptive_indicator.dart';
 
 class LoadingAlert extends StatelessWidget {
-  const LoadingAlert({super.key});
+  final String message;
+  const LoadingAlert({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -12,21 +14,18 @@ class LoadingAlert extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.squared),
       ),
       elevation: 0.0,
-      backgroundColor: Colors.black38,
-      child: const SizedBox(
+      backgroundColor: Colors.white,
+      child: SizedBox(
         height: 80,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CupertinoActivityIndicator(),
+            AdaptiveIndicator(),
             SizedBox(height: 8),
             Text(
-              'Waiting...',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
+              message,
+              style: context.textTheme.subtitle1,
             ),
           ],
         ),

@@ -4,6 +4,7 @@ class Routes {
   static const String login = '/login';
   static const String workForce = '/work_force';
   static const String projectSelection = '/project_selection';
+  static const String outletSelection = '/outlet_selection';
   static const String boothSelection = '/booth_selection';
   static const String home = '/home';
   static const String locate = '/locate';
@@ -13,4 +14,10 @@ class Routes {
   static const String appLock = '/app_lock';
   static const String urgency = '/urgency';
   static const String note = '/note';
+  static const String redeemGift = '/redeem_gift';
+  static const String product = '/product';
+  static const String customer = '/customer';
+  static const String receive = '/receive';
+  static const String sampling = '/sampling';
+  static const String review = '/review';
 }

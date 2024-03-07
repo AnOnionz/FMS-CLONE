@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/constant/images.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/utilities/flex_extention.dart';
 
 class ItemContainer extends StatelessWidget {

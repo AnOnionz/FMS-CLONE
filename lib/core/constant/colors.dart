@@ -36,4 +36,5 @@ sealed class AppColors {
   static const Color delRio = Color(0xFFBEA192);
   static const Color roseWhite = Color(0xFFF7EDE9);
   static const Color potPourri = Color(0xFFEADCD6);
+  static const Color lavenderBlue = Color(0xFFCBD6FF);
 }

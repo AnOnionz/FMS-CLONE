@@ -2,9 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
+import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
 import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
+import 'package:fms/features/workForce/presentation/pages/outlet_selection_page.dart';
 
 import '../../core/client/dio_client.dart';
 import '../../core/localization/locale_manager.dart';
@@ -29,19 +31,19 @@ import '../features/home/presentation/pages/home_page.dart';
 import '../features/leave/presentation/pages/leave_page.dart';
 import '../features/normal_splash_page.dart';
 
+import '../features/redeem_gift/presentation/pages/product_page.dart';
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
 import '../features/workForce/presentation/pages/project_selection_page.dart';
 import '../features/workForce/presentation/pages/work_force_page.dart';
+import 'core_module.dart';
 
 class AppModule extends Module {
   @override
+  List<Module> get imports => [
+        CoreModule(),
+      ];
+  @override
   void binds(i) {
-    i.addSingleton<DioClient>(DioClient.new);
-    i.addSingleton<LocationService>(LocationService.new,
-        config: listenConfig());
-    i.addSingleton<ThemeManager>(ThemeManager.new, config: listenConfig());
-    i.addSingleton<LocaleManager>(LocaleManager.new, config: listenConfig());
-    i.addSingleton<PermissionManager>(PermissionManager.new);
     i.add<UserLocalDataSource>(UserLocalDataSourceImpl.new);
     i.add<UserRemoteDataSource>(UserRemoteDataSourceImpl.new);
     i.addSingleton<UserRepository>(UserRepositoryImpl.new);
@@ -66,6 +68,9 @@ class AppModule extends Module {
     r.child(Routes.projectSelection,
         child: (_) => const ProjectSelectionPage(),
         transition: TransitionType.fadeIn);
+    r.child(Routes.outletSelection,
+        child: (_) => const OutletSelectionPage(),
+        transition: TransitionType.fadeIn);
     r.child(Routes.boothSelection,
         child: (_) => const BoothSelectionPage(),
         transition: TransitionType.fadeIn);
@@ -87,13 +92,15 @@ class AppModule extends Module {
         child: (_) => const UrgencyPage(), transition: TransitionType.fadeIn);
     r.child(Routes.note,
         child: (_) => const NotePage(), transition: TransitionType.fadeIn);
-  }
 
-  BindConfig<T> listenConfig<T extends ChangeNotifier>() {
-    return BindConfig(
-      notifier: (listenable) => listenable,
-      onDispose: (listenable) => listenable.dispose(),
-    );
+    r.child(Routes.redeemGift,
+        child: (_) => const RedeemGiftPage(),
+        children: [
+          ChildRoute(Routes.product,
+              child: (context) => RedeemGiftProductPage(),
+              transition: TransitionType.fadeIn),
+        ],
+        transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> blocConfig<T extends Bloc<dynamic, dynamic>>() {

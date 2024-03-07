@@ -55,7 +55,7 @@ dependencies:
 
 
   #animation
-  animate_do: ^3.1.2
+  animate_do: ^3.3.4
   
   
 dependency_overrides:

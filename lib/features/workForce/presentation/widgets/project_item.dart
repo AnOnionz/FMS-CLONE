@@ -12,7 +12,7 @@ class ProjectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.nextRoute(Routes.boothSelection),
+      onTap: () => context.nextRoute(Routes.outletSelection),
       child: Container(
         width: context.screenWidth,
         decoration: BoxDecoration(

@@ -20,9 +20,12 @@ class OverlayManager {
 
   static void hide() => Modular.to.pop();
 
-  static Future<void> showLoading() async {
+  static Future<void> showLoading({String? message}) async {
     await showAppDialog(
-      builder: (context) => const LoadingAlert(),
+      barrierDismissible: false,
+      builder: (context) => LoadingAlert(
+        message: message ?? 'Loading',
+      ),
     );
   }
 
@@ -41,9 +44,11 @@ class OverlayManager {
         });
   }
 
-  static Future<void> showAppDialog({required WidgetBuilder builder}) async {
+  static Future<void> showAppDialog(
+      {required WidgetBuilder builder, bool barrierDismissible = true}) async {
     await showDialog(
       context: currentContext!,
+      barrierDismissible: barrierDismissible,
       builder: builder,
     );
   }

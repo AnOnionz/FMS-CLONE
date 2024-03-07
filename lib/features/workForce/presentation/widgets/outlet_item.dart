@@ -5,13 +5,13 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/routes/routes.dart';
 
-class BoothItem extends StatelessWidget {
-  const BoothItem({super.key});
+class OutletItem extends StatelessWidget {
+  const OutletItem({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.nextAndRemoveUntilRoute(Routes.home),
+      onTap: () => context.nextRoute(Routes.boothSelection),
       child: Container(
         width: context.screenWidth,
         decoration: BoxDecoration(
@@ -29,14 +29,14 @@ class BoothItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Booth A',
+              'Coop smart Lê Văn Việt',
               style:
                   context.textTheme.subtitle1?.copyWith(color: AppColors.nero),
             ),
             SizedBox(
               height: 6.h,
             ),
-            Text('Coop smart Lê Văn Việt-ma000123',
+            Text('ma000123',
                 style: context.textTheme.caption1
                     ?.copyWith(color: AppColors.dimGray))
           ],
