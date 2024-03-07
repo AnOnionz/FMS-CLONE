@@ -10,7 +10,7 @@ import '../constant/icons.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final VoidCallback? action;
+  final Widget? action;
   const DefaultAppBar({Key? key, required this.title, this.action});
 
   @override
@@ -36,20 +36,39 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: context.textTheme.h2,
             ),
           ),
-          actions: [
-            action != null
-                ? Padding(
-                    padding: EdgeInsets.only(right: 16.w),
-                    child: GestureDetector(
-                        onTap: action,
-                        child: SvgPicture.asset(AppIcons.history)),
-                  )
-                : SizedBox()
-          ],
+          actions: [action ?? SizedBox()],
           centerTitle: true,
         ));
   }
 
   @override
   Size get preferredSize => Size(0, 40.h);
+}
+
+class HistoryButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const HistoryButton({super.key, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 16.w),
+      child: GestureDetector(
+          onTap: onPressed, child: SvgPicture.asset(AppIcons.history)),
+    );
+  }
+}
+
+class SearchButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const SearchButton({super.key, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 16.w),
+      child: GestureDetector(
+          onTap: onPressed, child: SvgPicture.asset(AppIcons.search)),
+    );
+  }
 }

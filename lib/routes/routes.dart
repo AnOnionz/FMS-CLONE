@@ -12,4 +12,5 @@ class Routes {
   static const String setting = '/setting';
   static const String appLock = '/app_lock';
   static const String urgency = '/urgency';
+  static const String note = '/note';
 }

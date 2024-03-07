@@ -40,7 +40,7 @@ class UrgencyPage extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(
         title: 'Báo cáo khẩn',
-        action: () => _showSheetHistoryUrgency(),
+        action: HistoryButton(onPressed: () => _showSheetHistoryUrgency()),
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 22.h),

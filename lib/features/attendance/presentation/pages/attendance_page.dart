@@ -50,9 +50,8 @@ class AttendancePage extends StatelessWidget {
 
     return Scaffold(
       appBar: DefaultAppBar(
-        title: 'Chấm công',
-        action: () => _showSheetHistory(context),
-      ),
+          title: 'Chấm công',
+          action: HistoryButton(onPressed: () => _showSheetHistory(context))),
       body: Stack(children: [
         _mapService.mapWidget,
         Padding(
@@ -146,10 +145,10 @@ class AttendancePage extends StatelessWidget {
           : AppColors.orange,
       disableColor: type == AttendanceType.CheckIn
           ? '#E4EAFF'.toColor()
-          : '#EADCD6'.toColor(),
+          : AppColors.potPourri,
       disableTextColor: type == AttendanceType.CheckIn
           ? '#C8C8C8'.toColor()
-          : '#BEA092'.toColor(),
+          : AppColors.delRio,
     );
   }
 

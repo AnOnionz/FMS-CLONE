@@ -34,4 +34,6 @@ sealed class AppColors {
   static const Color gainsboro = Color(0xFFE3E3E3);
   static const Color royalBlue = Color(0xFF427FDA);
   static const Color delRio = Color(0xFFBEA192);
+  static const Color roseWhite = Color(0xFFF7EDE9);
+  static const Color potPourri = Color(0xFFEADCD6);
 }

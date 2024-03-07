@@ -136,7 +136,7 @@ class _LeavePageState extends State<LeavePage> {
     return Scaffold(
       appBar: DefaultAppBar(
         title: 'Xin nghỉ phép',
-        action: () => _showSheetHistoryLeave(),
+        action: HistoryButton(onPressed: () => _showSheetHistoryLeave()),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -226,7 +226,7 @@ class _LeavePageState extends State<LeavePage> {
                             height: 35.h,
                             width: 35.h,
                             decoration: BoxDecoration(
-                                color: '#F7EDE9'.toColor(),
+                                color: AppColors.roseWhite,
                                 borderRadius:
                                     BorderRadius.circular(20.squared)),
                             child: Center(

@@ -41,4 +41,5 @@ class AppIcons {
   static String trash = 'trash'.icon.svg;
   static String cameraOrange = 'camera_orange'.icon.svg;
   static String fingerprint = 'fingerprint'.icon.svg;
+  static String search = 'search'.icon.svg;
 }
