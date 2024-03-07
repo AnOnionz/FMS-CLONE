@@ -31,7 +31,11 @@ import '../features/home/presentation/pages/home_page.dart';
 import '../features/leave/presentation/pages/leave_page.dart';
 import '../features/normal_splash_page.dart';
 
+import '../features/redeem_gift/presentation/pages/customer_page.dart';
 import '../features/redeem_gift/presentation/pages/product_page.dart';
+import '../features/redeem_gift/presentation/pages/receive_page.dart';
+import '../features/redeem_gift/presentation/pages/review_page.dart';
+import '../features/redeem_gift/presentation/pages/sampling_page.dart';
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
 import '../features/workForce/presentation/pages/project_selection_page.dart';
 import '../features/workForce/presentation/pages/work_force_page.dart';
@@ -98,6 +102,18 @@ class AppModule extends Module {
         children: [
           ChildRoute(Routes.product,
               child: (context) => RedeemGiftProductPage(),
+              transition: TransitionType.fadeIn),
+          ChildRoute(Routes.customer,
+              child: (context) => RedeemGiftCustomerPage(),
+              transition: TransitionType.fadeIn),
+          ChildRoute(Routes.receive,
+              child: (context) => RedeemGiftReceivePage(),
+              transition: TransitionType.fadeIn),
+          ChildRoute(Routes.sampling,
+              child: (context) => RedeemGiftSamplingPage(),
+              transition: TransitionType.fadeIn),
+          ChildRoute(Routes.review,
+              child: (context) => RedeemGiftReviewPage(),
               transition: TransitionType.fadeIn),
         ],
         transition: TransitionType.fadeIn);

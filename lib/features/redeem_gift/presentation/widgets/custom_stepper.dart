@@ -1,89 +1,134 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/routes/routes.dart';
 
-class CustomStepper extends StatelessWidget {
+class CustomStepper extends StatefulWidget {
   final List<StepData> steps;
   final Color color;
-  const CustomStepper(
-      {super.key, required this.steps, this.color = AppColors.lavenderBlue});
+  const CustomStepper({
+    super.key,
+    required this.steps,
+    this.color = AppColors.lavenderBlue,
+  });
+
+  @override
+  State<CustomStepper> createState() => _CustomStepperState();
+}
+
+class _CustomStepperState extends State<CustomStepper> {
+  void update() {
+    for (final StepData step in widget.steps) {
+      if (step.state == StepperState.disabled) {
+        if (!Modular.to.path.endsWith(step.route)) {
+          step.state = StepperState.complete;
+        } else {
+          break;
+        }
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    if (Modular.to.path == Routes.redeemGift) {
+      context.nextRoute(Routes.redeemGift + widget.steps.first.route);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Divider(
-          color: color,
-          thickness: 2.h,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: steps
-              .map((step) => StepContainer(
-                  data: step,
-                  inactiveColor: color,
-                  activeColor: '#FFCC80'.toColor()))
-              .toList(),
-        )
-      ],
-    );
+    return NavigationListener(builder: (context, child) {
+      update();
+      return Stack(
+        children: [
+          Divider(
+            color: widget.color,
+            thickness: 2.h,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: widget.steps
+                .map((step) => StepContainer(
+                    data: step,
+                    inactiveColor: widget.color,
+                    activeColor: '#FFCC80'.toColor()))
+                .toList(),
+          )
+        ],
+      );
+    });
   }
 }
 
 class StepContainer extends StatelessWidget {
   final StepData data;
+
   final Color activeColor;
   final Color inactiveColor;
-  const StepContainer(
-      {super.key,
-      required this.activeColor,
-      required this.inactiveColor,
-      required this.data});
 
-  bool get isActive => data.state != StepperState.disabled;
+  const StepContainer({
+    super.key,
+    required this.activeColor,
+    required this.inactiveColor,
+    required this.data,
+  });
+
+  bool get isEditing => data.state != StepperState.disabled;
+
   bool get isComplete => data.state == StepperState.complete;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w),
-      child: Column(
-        children: [
-          isComplete
-              ? Container(
-                  height: 18.h,
-                  width: 18.h,
-                  decoration: BoxDecoration(
-                    color: activeColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: FadeInUp(
-                    child: Icon(
-                      Icons.done,
-                      color: AppColors.white,
-                      size: 14,
-                    ),
-                  ))
-              : Container(
-                  height: 18.h,
-                  width: 18.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
+    return NavigationListener(builder: (contex, child) {
+      if (Modular.to.path.endsWith(data.route)) {
+        data.state = StepperState.editing;
+      }
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
+        child: Column(
+          children: [
+            isComplete
+                ? Container(
+                    height: 18.h,
+                    width: 18.h,
+                    decoration: BoxDecoration(
+                      color: activeColor,
                       shape: BoxShape.circle,
-                      border: Border.all(
-                          color: isActive ? activeColor : inactiveColor,
-                          width: isActive ? 4.h : 2.h)),
-                ),
-          SizedBox(height: 10.h),
-          Text(
-            data.name,
-            style: context.textTheme.caption3?.copyWith(color: AppColors.nobel),
-          )
-        ],
-      ),
-    );
+                    ),
+                    child: FadeInUp(
+                      child: Icon(
+                        Icons.done,
+                        color: AppColors.white,
+                        size: 14,
+                      ),
+                    ))
+                : Container(
+                    height: 18.h,
+                    width: 18.h,
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: isEditing ? activeColor : inactiveColor,
+                            width: isEditing ? 4.h : 2.h)),
+                  ),
+            SizedBox(height: 10.h),
+            Text(
+              data.name,
+              style:
+                  context.textTheme.caption3?.copyWith(color: AppColors.nobel),
+            )
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -91,7 +136,14 @@ enum StepperState { disabled, editing, complete }
 
 class StepData {
   final String name;
+  final String route;
   StepperState state;
 
-  StepData({required this.name, this.state = StepperState.complete});
+  StepData(
+      {required this.name,
+      required this.route,
+      this.state = StepperState.disabled});
+
+  @override
+  String toString() => 'StepData(name: $name, route: $route, state: $state)';
 }

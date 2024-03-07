@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/routes/routes.dart';
 
 import '../widgets/custom_stepper.dart';
 
@@ -23,11 +25,11 @@ class RedeemGiftPage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(16.w, 26.h, 16.w, 12.h),
                 child: CustomStepper(
                   steps: [
-                    StepData(name: 'Sản phẩm'),
-                    StepData(name: 'Khách hàng'),
-                    StepData(name: 'Đổi quà'),
-                    StepData(name: 'Sampling'),
-                    StepData(name: 'Kiểm tra')
+                    StepData(name: 'Sản phẩm', route: Routes.product),
+                    StepData(name: 'Khách hàng', route: Routes.customer),
+                    StepData(name: 'Đổi quà', route: Routes.receive),
+                    StepData(name: 'Sampling', route: Routes.sampling),
+                    StepData(name: 'Kiểm tra', route: Routes.review)
                   ],
                 ),
               );

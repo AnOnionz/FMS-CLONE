@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/home/presentation/widgets/feature_box.dart';
@@ -15,7 +16,8 @@ class CommonFeature extends StatelessWidget {
         FeatureBox(
           name: 'Đồng bộ',
           icon: AppIcons.sync,
-          onPressed: () => context.nextRoute(Routes.redeemGift + '/product'),
+          onPressed: () =>
+              context.nextRoute(Routes.redeemGift + Routes.product),
         ),
         FeatureBox(
           name: 'Thống kê',

@@ -42,4 +42,8 @@ class AppIcons {
   static String cameraOrange = 'camera_orange'.icon.svg;
   static String fingerprint = 'fingerprint'.icon.svg;
   static String search = 'search'.icon.svg;
+  static String search1 = 'search1'.icon.svg;
+  static String barcode = 'barcode'.icon.svg;
+  static String hamburger = 'hamburger'.icon.svg;
+  static String help = 'help'.icon.svg;
 }
