@@ -16,8 +16,7 @@ class RedeemGiftPage extends StatelessWidget {
       appBar: DefaultAppBar(
         title: 'Ghi nhận thông tin khách hàng',
       ),
-      body: SafeArea(
-          child: Column(
+      body: Column(
         children: [
           NavigationListener(
             builder: (BuildContext context, Widget? child) {
@@ -37,7 +36,7 @@ class RedeemGiftPage extends StatelessWidget {
           ),
           Expanded(child: RouterOutlet()),
         ],
-      )),
+      ),
     );
   }
 }

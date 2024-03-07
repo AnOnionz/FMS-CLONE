@@ -46,4 +46,6 @@ class AppIcons {
   static String barcode = 'barcode'.icon.svg;
   static String hamburger = 'hamburger'.icon.svg;
   static String help = 'help'.icon.svg;
+  static String add = 'add'.icon.svg;
+  static String remove = 'remove'.icon.svg;
 }

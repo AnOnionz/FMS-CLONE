@@ -8,51 +8,44 @@ class ItemContainer extends StatelessWidget {
   final Widget leading;
   final Widget trailing;
   final Widget title;
+  final bool titleFlexible;
   ItemContainer(
       {super.key,
       required this.trailing,
       required this.title,
-      required this.leading});
+      required this.leading,
+      this.titleFlexible = true});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
-      padding: EdgeInsets.all(15.h),
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16.squared)),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            SizedBox(
-                height: 65.h,
-                width: 65.h,
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: AppColors.roseWhite.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(15.squared)),
-                    ),
-                    Align(alignment: Alignment.centerLeft, child: leading),
-                  ],
-                )),
-            SizedBox(
-              width: 18.w,
-            ),
-            Expanded(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: title,
-                ),
-                Flexible(child: trailing)
-              ],
-            ))
-          ],
-        ),
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          SizedBox(
+              height: 65.h,
+              width: 65.h,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColors.roseWhite.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(15.squared)),
+                  ),
+                  Align(alignment: Alignment.centerLeft, child: leading),
+                ],
+              )),
+          SizedBox(
+            width: 18.w,
+          ),
+          Expanded(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (titleFlexible) Flexible(child: title) else title,
+              Flexible(child: trailing)
+            ],
+          ))
+        ],
       ),
     );
   }

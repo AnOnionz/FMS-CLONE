@@ -6,68 +6,263 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/core/widgets/item_container.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
+
+import '../../../../core/constant/images.dart';
+import '../widgets/input_quantity.dart';
 
 class RedeemGiftProductPage extends StatelessWidget {
   const RedeemGiftProductPage({super.key});
+
+  void _showSheetConcurProduct(BuildContext context) {
+    OverlayManager.showSheet(
+        body: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.h),
+            child: Text(
+              'Sản phẩm cùng mã barcode',
+              style: context.textTheme.h2,
+            ),
+          ),
+        ),
+        Flexible(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 26.h),
+            child: CustomScrollView(
+              shrinkWrap: true,
+              physics: RangeMaintainingScrollPhysics(
+                  parent: ClampingScrollPhysics()),
+              slivers: [
+                SliverList.builder(
+                  itemCount: 18,
+                  itemBuilder: (context, index) => Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
+                    child: ItemContainer(
+                      titleFlexible: false,
+                      trailing: Radio(
+                        value: false,
+                        groupValue: true,
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        onChanged: (value) {},
+                      ),
+                      leading: Image.asset(AppImages.loginBanner),
+                      title: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tên sản phẩm',
+                            style: context.textTheme.caption1,
+                          ),
+                          Text(
+                            'MA0001223',
+                            style: context.textTheme.caption2
+                                ?.copyWith(color: AppColors.nobel),
+                          ),
+                          Text(
+                            '200.000 vnd / thùng',
+                            style: context.textTheme.caption2,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        FlatButton(onPressed: () {}, text: 'OK', color: AppColors.orange)
+      ],
+    ));
+  }
+
+  void _showSheetSelectProduct(BuildContext context) {
+    OverlayManager.showSheet(
+        body: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.h),
+            child: Text(
+              'Chọn sản phẩm trong danh sách',
+              style: context.textTheme.h2,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 22.h),
+          child: SearchTextField(),
+        ),
+        Flexible(
+          child: Padding(
+            padding: EdgeInsets.only(top: 8.h, bottom: 16.h),
+            child: CustomScrollView(
+              shrinkWrap: true,
+              physics: RangeMaintainingScrollPhysics(
+                  parent: ClampingScrollPhysics()),
+              slivers: [
+                SliverList.builder(
+                  itemCount: 18,
+                  itemBuilder: (context, index) => Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
+                    child: ItemContainer(
+                      titleFlexible: false,
+                      trailing: Radio(
+                        value: false,
+                        groupValue: true,
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        onChanged: (value) {},
+                      ),
+                      leading: Image.asset(AppImages.loginBanner),
+                      title: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tên sản phẩm',
+                            style: context.textTheme.caption1,
+                          ),
+                          Text(
+                            'MA0001223',
+                            style: context.textTheme.caption2
+                                ?.copyWith(color: AppColors.nobel),
+                          ),
+                          Text(
+                            '200.000 vnd / thùng',
+                            style: context.textTheme.caption2,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        FlatButton(onPressed: () {}, text: 'OK', color: AppColors.orange)
+      ],
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(24.h, 24.h, 16.h, 24.h),
-          margin: EdgeInsets.all(16.h),
-          decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10.squared)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(child: SearchTextField()),
-              SizedBox(width: 14.w),
-              IconButton(
-                  color: Colors.amber,
-                  onPressed: () {},
-                  icon: SvgPicture.asset(AppIcons.barcode)),
-              SizedBox(width: 6.w),
-              IconButton(
-                  color: Colors.amber,
-                  onPressed: () {},
-                  icon: SvgPicture.asset(AppIcons.hamburger)),
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(24.h),
-          margin: EdgeInsets.symmetric(horizontal: 16.w),
-          decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10.squared)),
-          child: Column(
-            children: [
-              Row(
+        Expanded(
+            child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(24.h, 24.h, 16.h, 24.h),
+              margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
+              decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(10.squared)),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Sản phẩm khách đã mua',
-                    style: context.textTheme.subtitle1,
-                  ),
-                  SvgPicture.asset(AppIcons.help)
+                  Flexible(child: SearchTextField()),
+                  SizedBox(width: 14.w),
+                  IconButton(
+                      onPressed: () => _showSheetConcurProduct(context),
+                      icon: SvgPicture.asset(AppIcons.barcode)),
+                  SizedBox(width: 6.w),
+                  IconButton(
+                      onPressed: () => _showSheetSelectProduct(context),
+                      icon: SvgPicture.asset(AppIcons.hamburger)),
                 ],
-              )
-            ],
-          ),
-        ),
-        Spacer(),
+              ),
+            ),
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.all(24.h),
+                margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(10.squared)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 20.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Sản phẩm khách đã mua',
+                            style: context.textTheme.subtitle1,
+                          ),
+                          SvgPicture.asset(AppIcons.help)
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: CustomScrollView(
+                        shrinkWrap: true,
+                        physics: RangeMaintainingScrollPhysics(
+                            parent: ClampingScrollPhysics()),
+                        slivers: [
+                          SliverList.separated(
+                            itemCount: 3,
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 22.h,
+                            ),
+                            itemBuilder: (context, index) {
+                              return ItemContainer(
+                                  titleFlexible: false,
+                                  leading: Image.asset(AppImages.loginBanner),
+                                  title: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Tên sản phẩm',
+                                        style: context.textTheme.caption1,
+                                      ),
+                                      Text(
+                                        'MA0001223',
+                                        style: context.textTheme.caption2
+                                            ?.copyWith(color: AppColors.nobel),
+                                      ),
+                                      Text(
+                                        '200.000 vnd / thùng',
+                                        style: context.textTheme.caption2,
+                                      )
+                                    ],
+                                  ),
+                                  trailing: InputQuantity());
+                            },
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )),
         Container(
           color: AppColors.white,
-          padding: EdgeInsets.all(22.h),
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18.w),
+                padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -84,13 +279,15 @@ class RedeemGiftProductPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 18.h),
-              FlatButton(
-                onPressed: () {},
-                text: 'Tiếp tục',
-                color: AppColors.orange,
-                disableTextColor: AppColors.delRio,
-                disableColor: AppColors.potPourri,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: FlatButton(
+                  onPressed: () {},
+                  text: 'Tiếp tục',
+                  color: AppColors.orange,
+                  disableTextColor: AppColors.delRio,
+                  disableColor: AppColors.potPourri,
+                ),
               )
             ],
           ),
