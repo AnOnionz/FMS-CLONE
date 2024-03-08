@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
@@ -8,11 +7,6 @@ import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
 import 'package:fms/features/workForce/presentation/pages/outlet_selection_page.dart';
 
-import '../../core/client/dio_client.dart';
-import '../../core/localization/locale_manager.dart';
-import '../../core/permission/permisson_manager.dart';
-import '../../core/services/location/location_service.dart';
-import '../../core/styles/theme_manager.dart';
 import '../../features/authentication/domain/usecases/login_usecase.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../routes/admin_module.dart';

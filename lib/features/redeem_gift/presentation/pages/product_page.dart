@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -10,151 +8,28 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/core/widgets/item_container.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
+import 'package:fms/features/redeem_gift/presentation/widgets/product/concur_product.dart';
+import 'package:fms/features/redeem_gift/presentation/widgets/product/select_product.dart';
 
 import '../../../../core/constant/images.dart';
 import '../widgets/input_quantity.dart';
 
-class RedeemGiftProductPage extends StatelessWidget {
+class RedeemGiftProductPage extends StatefulWidget {
   const RedeemGiftProductPage({super.key});
 
+  @override
+  State<RedeemGiftProductPage> createState() => _RedeemGiftProductPageState();
+}
+
+class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
+  final items = [];
+
   void _showSheetConcurProduct(BuildContext context) {
-    OverlayManager.showSheet(
-        body: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.h),
-            child: Text(
-              'Sản phẩm cùng mã barcode',
-              style: context.textTheme.h2,
-            ),
-          ),
-        ),
-        Flexible(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 26.h),
-            child: CustomScrollView(
-              shrinkWrap: true,
-              physics: RangeMaintainingScrollPhysics(
-                  parent: ClampingScrollPhysics()),
-              slivers: [
-                SliverList.builder(
-                  itemCount: 18,
-                  itemBuilder: (context, index) => Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
-                    child: ItemContainer(
-                      titleFlexible: false,
-                      trailing: Radio(
-                        value: false,
-                        groupValue: true,
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        onChanged: (value) {},
-                      ),
-                      leading: Image.asset(AppImages.loginBanner),
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Tên sản phẩm',
-                            style: context.textTheme.caption1,
-                          ),
-                          Text(
-                            'MA0001223',
-                            style: context.textTheme.caption2
-                                ?.copyWith(color: AppColors.nobel),
-                          ),
-                          Text(
-                            '200.000 vnd / thùng',
-                            style: context.textTheme.caption2,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        FlatButton(onPressed: () {}, text: 'OK', color: AppColors.orange)
-      ],
-    ));
+    OverlayManager.showSheet(body: ConcurProduct());
   }
 
   void _showSheetSelectProduct(BuildContext context) {
-    OverlayManager.showSheet(
-        body: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.h),
-            child: Text(
-              'Chọn sản phẩm trong danh sách',
-              style: context.textTheme.h2,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 22.h),
-          child: SearchTextField(),
-        ),
-        Flexible(
-          child: Padding(
-            padding: EdgeInsets.only(top: 8.h, bottom: 16.h),
-            child: CustomScrollView(
-              shrinkWrap: true,
-              physics: RangeMaintainingScrollPhysics(
-                  parent: ClampingScrollPhysics()),
-              slivers: [
-                SliverList.builder(
-                  itemCount: 18,
-                  itemBuilder: (context, index) => Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
-                    child: ItemContainer(
-                      titleFlexible: false,
-                      trailing: Radio(
-                        value: false,
-                        groupValue: true,
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        onChanged: (value) {},
-                      ),
-                      leading: Image.asset(AppImages.loginBanner),
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Tên sản phẩm',
-                            style: context.textTheme.caption1,
-                          ),
-                          Text(
-                            'MA0001223',
-                            style: context.textTheme.caption2
-                                ?.copyWith(color: AppColors.nobel),
-                          ),
-                          Text(
-                            '200.000 vnd / thùng',
-                            style: context.textTheme.caption2,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        FlatButton(onPressed: () {}, text: 'OK', color: AppColors.orange)
-      ],
-    ));
+    OverlayManager.showSheet(body: SelectProduct());
   }
 
   @override
@@ -216,36 +91,46 @@ class RedeemGiftProductPage extends StatelessWidget {
                             parent: ClampingScrollPhysics()),
                         slivers: [
                           SliverList.separated(
-                            itemCount: 3,
+                            itemCount: items.length,
                             separatorBuilder: (context, index) => SizedBox(
                               height: 22.h,
                             ),
                             itemBuilder: (context, index) {
-                              return ItemContainer(
-                                  titleFlexible: false,
-                                  leading: Image.asset(AppImages.loginBanner),
-                                  title: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tên sản phẩm',
-                                        style: context.textTheme.caption1,
-                                      ),
-                                      Text(
-                                        'MA0001223',
-                                        style: context.textTheme.caption2
-                                            ?.copyWith(color: AppColors.nobel),
-                                      ),
-                                      Text(
-                                        '200.000 vnd / thùng',
-                                        style: context.textTheme.caption2,
-                                      )
-                                    ],
-                                  ),
-                                  trailing: InputQuantity());
+                              final item = items[index];
+                              return Dismissible(
+                                key: Key(item.toString()),
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    items.removeAt(index);
+                                  });
+                                },
+                                child: ItemContainer(
+                                    titleFlexible: false,
+                                    leading: Image.asset(AppImages.loginBanner),
+                                    title: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Tên sản phẩm',
+                                          style: context.textTheme.caption1,
+                                        ),
+                                        Text(
+                                          'MA0001223',
+                                          style: context.textTheme.caption2
+                                              ?.copyWith(
+                                                  color: AppColors.nobel),
+                                        ),
+                                        Text(
+                                          '200.000 vnd / thùng',
+                                          style: context.textTheme.caption2,
+                                        )
+                                      ],
+                                    ),
+                                    trailing: InputQuantity()),
+                              );
                             },
                           )
                         ],
