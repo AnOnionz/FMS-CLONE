@@ -17,46 +17,49 @@ class RedeemGiftReviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-            child: CustomScrollView(
-          physics:
-              RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
-          slivers: [
-            SliverToBoxAdapter(
-              child: ReviewCustomer(),
+    return Padding(
+      padding: EdgeInsets.only(top: 16.h),
+      child: Column(
+        children: [
+          Expanded(
+              child: CustomScrollView(
+            physics:
+                RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+            slivers: [
+              SliverToBoxAdapter(
+                child: ReviewCustomer(),
+              ),
+              SliverToBoxAdapter(
+                child: ReviewProduct(),
+              ),
+              SliverToBoxAdapter(
+                child: ReviewGift(),
+              ),
+              SliverToBoxAdapter(
+                child: ReviewSampling(),
+              )
+            ],
+          )),
+          Container(
+            decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, -2),
+                  blurRadius: 25,
+                  color: AppColors.black.withOpacity(0.15))
+            ]),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              child: FlatButton(
+                onPressed: () => context.navigate(Routes.home),
+                text: 'Tiếp tục',
+                color: AppColors.orange,
+                disableTextColor: AppColors.delRio,
+                disableColor: AppColors.potPourri,
+              ),
             ),
-            SliverToBoxAdapter(
-              child: ReviewGift(),
-            ),
-            SliverToBoxAdapter(
-              child: ReviewProduct(),
-            ),
-            SliverToBoxAdapter(
-              child: ReviewSampling(),
-            )
-          ],
-        )),
-        Container(
-          decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-            BoxShadow(
-                offset: Offset(0, -2),
-                blurRadius: 25,
-                color: AppColors.black.withOpacity(0.15))
-          ]),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            child: FlatButton(
-              onPressed: () => context.navigate(Routes.home),
-              text: 'Tiếp tục',
-              color: AppColors.orange,
-              disableTextColor: AppColors.delRio,
-              disableColor: AppColors.potPourri,
-            ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 

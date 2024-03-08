@@ -11,14 +11,14 @@ class ReviewCustomer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReviewContainer(
-        margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 6.h),
+        margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 6.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'Thông tin khách hàng',
-              style: context.textTheme.body1,
+              style: context.textTheme.subtitle1,
             ),
             SizedBox(
               height: 22.h,

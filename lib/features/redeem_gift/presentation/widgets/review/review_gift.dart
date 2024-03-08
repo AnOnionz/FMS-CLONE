@@ -17,55 +17,59 @@ class ReviewGift extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Thông tin khách hàng',
-              style: context.textTheme.body1,
+              'Danh sách quà',
+              style: context.textTheme.subtitle1,
             ),
             SizedBox(
-              height: 22.h,
+              height: 14.h,
             ),
-            RichText(
-                text: TextSpan(
-                    text: 'Tên khách hàng : ',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.nobel),
-                    children: [
-                  TextSpan(
-                    text: 'Trần Nhật Tường',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.black),
-                  )
-                ])),
+            for (int x in [1, 2, 3]) _GiftInfoItem(),
             SizedBox(
-              height: 12.h,
+              height: 6.h,
             ),
-            RichText(
-                text: TextSpan(
-                    text: 'Số điện thoại : ',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.nobel),
-                    children: [
-                  TextSpan(
-                    text: '0909090909',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.black),
-                  )
-                ])),
-            SizedBox(
-              height: 12.h,
-            ),
-            RichText(
-                text: TextSpan(
-                    text: 'Mã hóa đơn : ',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.nobel),
-                    children: [
-                  TextSpan(
-                    text: 'MHD00001111',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.black),
-                  )
-                ]))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                    child: Text(
+                  'Tổng số lượng',
+                  style: context.textTheme.button2
+                      ?.copyWith(color: AppColors.orange),
+                )),
+                Flexible(
+                    child: Text('x2',
+                        style: context.textTheme.button2
+                            ?.copyWith(color: AppColors.orange)))
+              ],
+            )
           ],
         ));
+  }
+}
+
+class _GiftInfoItem extends StatelessWidget {
+  const _GiftInfoItem();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+              flex: 5,
+              child: Text(
+                'Quà A',
+                style: context.textTheme.body1,
+              )),
+          Flexible(
+              child: Text(
+            'x1',
+            style: context.textTheme.body1,
+          )),
+        ],
+      ),
+    );
   }
 }
