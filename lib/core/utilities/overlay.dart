@@ -33,6 +33,7 @@ class OverlayManager {
     return showModalBottomSheet(
         context: currentContext!,
         isScrollControlled: true,
+        elevation: 2.0,
         constraints: BoxConstraints(
             maxHeight: currentContext!.screenHeight -
                 currentContext!.screenPadding.top -

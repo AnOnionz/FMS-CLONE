@@ -9,7 +9,9 @@ import '../constant/colors.dart';
 import '../constant/icons.dart';
 
 class TakeImageList extends StatefulWidget {
-  const TakeImageList({super.key});
+  final List<File> images;
+  final int limit;
+  const TakeImageList({super.key, required this.images, required this.limit});
 
   @override
   State<TakeImageList> createState() => _TakeImageListState();
@@ -17,15 +19,17 @@ class TakeImageList extends StatefulWidget {
 
 class _TakeImageListState extends State<TakeImageList> {
   final MediaService _service = MediaService();
-  final List<File> _images = [];
+  late final _images = widget.images;
 
   Future<void> takeImage() async {
-    final file = await _service.pickImage(720, 1280, 90);
-    if (file != null) {
-      setState(() {
-        _images.add(changeFileNameOnlySync(
-            File(file.path), DateTime.now().millisecondsSinceEpoch.toString()));
-      });
+    if (widget.images.length < widget.limit) {
+      final file = await _service.pickImage(720, 1280, 90);
+      if (file != null) {
+        setState(() {
+          widget.images.add(changeFileNameOnlySync(File(file.path),
+              DateTime.now().millisecondsSinceEpoch.toString()));
+        });
+      }
     }
   }
 

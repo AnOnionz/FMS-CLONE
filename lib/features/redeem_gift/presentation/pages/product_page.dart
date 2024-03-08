@@ -10,6 +10,7 @@ import 'package:fms/core/widgets/item_container.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/product/concur_product.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/product/select_product.dart';
+import 'package:fms/routes/routes.dart';
 
 import '../../../../core/constant/images.dart';
 import '../widgets/input_quantity.dart';
@@ -129,7 +130,9 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
                                         )
                                       ],
                                     ),
-                                    trailing: InputQuantity()),
+                                    trailing: InputQuantity(
+                                      max: 100,
+                                    )),
                               );
                             },
                           )
@@ -143,7 +146,12 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
           ],
         )),
         Container(
-          color: AppColors.white,
+          decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+            BoxShadow(
+                offset: Offset(0, -2),
+                blurRadius: 25,
+                color: AppColors.black.withOpacity(0.15))
+          ]),
           child: Column(
             children: [
               Padding(
@@ -167,7 +175,8 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () =>
+                      context.navigate(Routes.redeemGift + Routes.customer),
                   text: 'Tiếp tục',
                   color: AppColors.orange,
                   disableTextColor: AppColors.delRio,

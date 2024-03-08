@@ -6,7 +6,9 @@ import '../../../../core/constant/colors.dart';
 
 class AdvancedTextField extends StatefulWidget {
   final TextEditingController controller;
-  const AdvancedTextField({super.key, required this.controller});
+  final String unit;
+  const AdvancedTextField(
+      {super.key, required this.controller, required this.unit});
 
   @override
   State<AdvancedTextField> createState() => _AdvancedTextFieldState();
@@ -54,7 +56,7 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
           suffixIcon: Padding(
             padding: EdgeInsets.only(right: 12.w),
             child: Text(
-              'vnđ',
+              widget.unit,
               style: context.textTheme.body2?.copyWith(
                   color: _hasFocus || _hasValue
                       ? AppColors.orange

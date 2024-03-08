@@ -44,7 +44,10 @@ class NoteItem extends StatelessWidget {
               )
             ],
           ),
-          trailing: AdvancedTextField(controller: _controller)),
+          trailing: AdvancedTextField(
+            controller: _controller,
+            unit: 'vnđ',
+          )),
     );
   }
 }

@@ -1,12 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/routes/routes.dart';
 
 class CustomStepper extends StatefulWidget {
   final List<StepData> steps;
@@ -22,30 +22,26 @@ class CustomStepper extends StatefulWidget {
 }
 
 class _CustomStepperState extends State<CustomStepper> {
-  void update() {
+  late final steps = widget.steps;
+
+  void listener() {
     for (final StepData step in widget.steps) {
+      if (Modular.to.path.endsWith(step.route)) {
+        step.state = StepperState.editing;
+      }
+      if (step.state == StepperState.editing) {
+        break;
+      }
       if (step.state == StepperState.disabled) {
-        if (!Modular.to.path.endsWith(step.route)) {
-          step.state = StepperState.complete;
-        } else {
-          break;
-        }
+        step.state = StepperState.complete;
       }
     }
   }
 
   @override
-  void initState() {
-    if (Modular.to.path == Routes.redeemGift) {
-      context.nextRoute(Routes.redeemGift + widget.steps.first.route);
-    }
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return NavigationListener(builder: (context, child) {
-      update();
+      listener();
       return Stack(
         children: [
           Divider(
@@ -86,49 +82,41 @@ class StepContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationListener(builder: (contex, child) {
-      if (Modular.to.path.endsWith(data.route)) {
-        data.state = StepperState.editing;
-      }
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.w),
-        child: Column(
-          children: [
-            isComplete
-                ? Container(
-                    height: 18.h,
-                    width: 18.h,
-                    decoration: BoxDecoration(
-                      color: activeColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: FadeInUp(
-                      child: Icon(
-                        Icons.done,
-                        color: AppColors.white,
-                        size: 14,
-                      ),
-                    ))
-                : Container(
-                    height: 18.h,
-                    width: 18.h,
-                    decoration: BoxDecoration(
-                        color: AppColors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: isEditing ? activeColor : inactiveColor,
-                            width: isEditing ? 4.h : 2.h)),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Column(
+        children: [
+          isComplete
+              ? Container(
+                  height: 18.h,
+                  width: 18.h,
+                  decoration: BoxDecoration(
+                    color: activeColor,
+                    shape: BoxShape.circle,
                   ),
-            SizedBox(height: 10.h),
-            Text(
-              data.name,
-              style:
-                  context.textTheme.caption3?.copyWith(color: AppColors.nobel),
-            )
-          ],
-        ),
-      );
-    });
+                  child: Icon(
+                    Icons.done,
+                    color: AppColors.white,
+                    size: 14,
+                  ))
+              : Container(
+                  height: 18.h,
+                  width: 18.h,
+                  decoration: BoxDecoration(
+                      color: AppColors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: isEditing ? activeColor : inactiveColor,
+                          width: isEditing ? 4.h : 2.h)),
+                ),
+          SizedBox(height: 10.h),
+          Text(
+            data.name,
+            style: context.textTheme.caption3?.copyWith(color: AppColors.nobel),
+          )
+        ],
+      ),
+    );
   }
 }
 

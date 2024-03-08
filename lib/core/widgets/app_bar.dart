@@ -11,7 +11,9 @@ import '../constant/icons.dart';
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? action;
-  const DefaultAppBar({Key? key, required this.title, this.action});
+  final VoidCallback? onBack;
+  const DefaultAppBar(
+      {Key? key, required this.title, this.action, this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
           forceMaterialTransparency: true,
           leadingWidth: 42.w,
           leading: GestureDetector(
-            onTap: () => Modular.to.pop(),
+            onTap: onBack ?? () => Modular.to.pop(),
             child: Padding(
               padding: EdgeInsets.only(left: 16.w),
               child: SvgPicture.asset(

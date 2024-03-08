@@ -96,10 +96,10 @@ class AppModule extends Module {
         children: [
           ChildRoute(Routes.product,
               child: (context) => RedeemGiftProductPage(),
-              transition: TransitionType.fadeIn),
+              transition: TransitionType.noTransition),
           ChildRoute(Routes.customer,
               child: (context) => RedeemGiftCustomerPage(),
-              transition: TransitionType.fadeIn),
+              transition: TransitionType.noTransition),
           ChildRoute(Routes.receive,
               child: (context) => RedeemGiftReceivePage(),
               transition: TransitionType.fadeIn),

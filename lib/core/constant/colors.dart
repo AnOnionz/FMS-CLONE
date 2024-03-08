@@ -25,7 +25,7 @@ sealed class AppColors {
   static const Color aliceBlue = Color(0xFFF2F6FB);
   static const Color orange = Color(0xFFE65100);
   static const Color nobel = Color(0xFF9E9E9E);
-  static const Color solitude = Color(0xFFE4EAF0);
+  static const Color solitude = Color(0xFFE4EAFF);
   static const Color nero = Color(0xFF212121);
   static const Color dimGray = Color(0xFF616161);
   static const Color nightRider = Color(0xFF303030);
@@ -37,4 +37,6 @@ sealed class AppColors {
   static const Color roseWhite = Color(0xFFF7EDE9);
   static const Color potPourri = Color(0xFFEADCD6);
   static const Color lavenderBlue = Color(0xFFCBD6FF);
+  static const Color summerSky = Color(0xFF27A9E0);
+  static const Color fireBrick = Color(0xFFB3261E);
 }

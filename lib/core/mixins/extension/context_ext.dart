@@ -211,6 +211,13 @@ extension ContextExtensions on BuildContext {
   }) =>
       _nextPage(page, arguments: arguments, forRoot: forRoot);
 
+  Future<void> navigate(
+    String page, {
+    Object? arguments,
+    bool forRoot = false,
+  }) =>
+      _navigate(page, arguments: arguments);
+
   /// Pushes and replacing the built widget to the screen using the material fade in animation
   Future<T?> nextReplacementRoute<T extends Object?>(
     String page, {
@@ -270,6 +277,13 @@ Future<T?> _nextPage<T extends Object?>(
   bool forRoot = false,
 }) async =>
     await Modular.to.pushNamed(page, arguments: arguments, forRoot: forRoot);
+
+Future<void> _navigate(
+  String page, {
+  Object? arguments,
+}) async =>
+    Modular.to.navigate(page, arguments: arguments);
+
 Future<T?> _nextReplacementPage<T extends Object?>(
   String page, {
   Object? arguments,

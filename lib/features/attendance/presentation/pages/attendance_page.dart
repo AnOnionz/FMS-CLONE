@@ -73,7 +73,10 @@ class AttendancePage extends StatelessWidget {
                       style: context.textTheme.subtitle1,
                     ),
                     SizedBox(height: 14.h),
-                    TakeImageList(),
+                    TakeImageList(
+                      limit: 5,
+                      images: [],
+                    ),
                   ],
                 ),
               ),
@@ -144,7 +147,7 @@ class AttendancePage extends StatelessWidget {
           ? AppColors.royalBlue
           : AppColors.orange,
       disableColor: type == AttendanceType.CheckIn
-          ? '#E4EAFF'.toColor()
+          ? AppColors.solitude
           : AppColors.potPourri,
       disableTextColor: type == AttendanceType.CheckIn
           ? '#C8C8C8'.toColor()
