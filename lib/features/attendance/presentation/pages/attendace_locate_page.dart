@@ -54,8 +54,6 @@ class AttendanceLocatePage extends StatelessWidget {
                             child: BlocConsumer<LocateCubit, LocateState>(
                               listener: (context, state) {
                                 if (state is LocateSuccess) {
-                                  print('state.position: ${state.position}');
-
                                   context
                                       .nextReplacementRoute(Routes.attendance);
                                 }

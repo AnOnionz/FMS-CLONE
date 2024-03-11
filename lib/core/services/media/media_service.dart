@@ -23,7 +23,6 @@ final class MediaService {
       );
       return pickedFile;
     } catch (e) {
-      print('ERROR');
       Fx.log(e.toString());
       return null;
     }

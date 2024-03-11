@@ -96,9 +96,7 @@ class _LeavePageState extends State<LeavePage> {
             model: Leave(project: p),
           ),
           FlatButton(
-              onPressed: () {
-                print(p);
-              },
+              onPressed: () {},
               text: 'Tạo Đơn Nghỉ Phép',
               color: AppColors.orange)
         ],

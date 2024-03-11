@@ -141,8 +141,6 @@ class _AdvancedSwitchState extends State<AdvancedSwitch>
                   ValueListenableBuilder<bool>(
                     valueListenable: _valueController,
                     builder: (_, value, ___) {
-                      print('value: $value');
-
                       return AnimatedCrossFade(
                         crossFadeState: value
                             ? CrossFadeState.showSecond
