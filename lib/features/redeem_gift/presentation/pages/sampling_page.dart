@@ -7,11 +7,19 @@ import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../routes/routes.dart';
 
-class RedeemGiftSamplingPage extends StatelessWidget {
-  const RedeemGiftSamplingPage({super.key});
+class RedeemGiftSamplingPage extends StatefulWidget {
+  final VoidCallback onNext;
+  const RedeemGiftSamplingPage({super.key, required this.onNext});
 
   @override
+  State<RedeemGiftSamplingPage> createState() => _RedeemGiftSamplingPageState();
+}
+
+class _RedeemGiftSamplingPageState extends State<RedeemGiftSamplingPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(
@@ -62,8 +70,7 @@ class RedeemGiftSamplingPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: FlatButton(
-              onPressed: () =>
-                  context.navigate(Routes.redeemGift + Routes.review),
+              onPressed: widget.onNext,
               text: 'Tiếp tục',
               color: AppColors.orange,
               disableTextColor: AppColors.delRio,
@@ -74,4 +81,7 @@ class RedeemGiftSamplingPage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

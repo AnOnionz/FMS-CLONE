@@ -10,4 +10,6 @@ sealed class AppImages {
   static String logout = 'logout'.image.png;
   static String locationBackground = 'location_bg'.image.png;
   static String locationLoad = 'location_load'.image.png;
+  static String congratulation = 'congratulation'.image.png;
+  static String success = 'success'.image.png;
 }

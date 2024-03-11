@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/take_image_list.dart';
-import 'package:fms/routes/routes.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -11,19 +10,23 @@ import '../../../../core/widgets/button/flat.dart';
 import '../widgets/customer/info_form.dart';
 
 class RedeemGiftCustomerPage extends StatefulWidget {
-  const RedeemGiftCustomerPage({super.key});
+  final VoidCallback onNext;
+  const RedeemGiftCustomerPage({super.key, required this.onNext});
 
   @override
   State<RedeemGiftCustomerPage> createState() => _RedeemGiftCustomerPageState();
 }
 
-class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage> {
+class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
+    with AutomaticKeepAliveClientMixin {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _invoiceCodeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(
@@ -52,6 +55,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage> {
                     ),
                   ),
                   InfomationForm(
+                    formKey: _formKey,
                     customerNameController: _customerNameController,
                     phoneNumberController: _phoneNumberController,
                     invoiceCodeController: _invoiceCodeController,
@@ -108,8 +112,11 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: FlatButton(
-              onPressed: () =>
-                  context.navigate(Routes.redeemGift + Routes.receive),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  widget.onNext();
+                }
+              },
               text: 'Tiếp tục',
               color: AppColors.orange,
               disableTextColor: AppColors.delRio,
@@ -120,4 +127,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -4,6 +4,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'info_text_form_field.dart';
 
 class InfomationForm extends StatefulWidget {
+  final GlobalKey formKey;
   final TextEditingController customerNameController;
   final TextEditingController phoneNumberController;
   final TextEditingController invoiceCodeController;
@@ -11,7 +12,8 @@ class InfomationForm extends StatefulWidget {
       {super.key,
       required this.customerNameController,
       required this.phoneNumberController,
-      required this.invoiceCodeController});
+      required this.invoiceCodeController,
+      required this.formKey});
 
   @override
   State<InfomationForm> createState() => _InfomationFormState();
@@ -51,30 +53,37 @@ class _InfomationFormState extends State<InfomationForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
+        key: widget.formKey,
         child: Column(
-      children: [
-        InfoTextFormField(
-          label: 'Tên khách hàng',
-          controller: _nameController,
-          focusNode: _nameFocus,
-        ),
-        SizedBox(
-          height: 18.h,
-        ),
-        InfoTextFormField(
-          label: 'Số điện thoại',
-          controller: _phoneController,
-          focusNode: _phoneFocus,
-        ),
-        SizedBox(
-          height: 18.h,
-        ),
-        InfoTextFormField(
-          label: 'Mã hóa đơn',
-          controller: _invoiceController,
-          focusNode: _invoiceFocus,
-        ),
-      ],
-    ));
+          children: [
+            InfoTextFormField(
+              label: 'Tên khách hàng',
+              controller: _nameController,
+              focusNode: _nameFocus,
+              validate: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Vui long nhap ten khach hang';
+                }
+                return null;
+              },
+            ),
+            SizedBox(
+              height: 18.h,
+            ),
+            InfoTextFormField(
+              label: 'Số điện thoại',
+              controller: _phoneController,
+              focusNode: _phoneFocus,
+            ),
+            SizedBox(
+              height: 18.h,
+            ),
+            InfoTextFormField(
+              label: 'Mã hóa đơn',
+              controller: _invoiceController,
+              focusNode: _invoiceFocus,
+            ),
+          ],
+        ));
   }
 }

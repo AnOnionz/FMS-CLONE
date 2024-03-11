@@ -10,19 +10,20 @@ import 'package:fms/core/widgets/item_container.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/product/concur_product.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/product/select_product.dart';
-import 'package:fms/routes/routes.dart';
 
 import '../../../../core/constant/images.dart';
 import '../widgets/input_quantity.dart';
 
 class RedeemGiftProductPage extends StatefulWidget {
-  const RedeemGiftProductPage({super.key});
+  final VoidCallback onNext;
+  const RedeemGiftProductPage({super.key, required this.onNext});
 
   @override
   State<RedeemGiftProductPage> createState() => _RedeemGiftProductPageState();
 }
 
-class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
+class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
+    with AutomaticKeepAliveClientMixin {
   final items = [];
 
   void _showSheetConcurProduct(BuildContext context) {
@@ -35,6 +36,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(
@@ -175,8 +177,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: FlatButton(
-                  onPressed: () =>
-                      context.navigate(Routes.redeemGift + Routes.customer),
+                  onPressed: widget.onNext,
                   text: 'Tiếp tục',
                   color: AppColors.orange,
                   disableTextColor: AppColors.delRio,
@@ -189,4 +190,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -15,9 +15,5 @@ class Routes {
   static const String urgency = '/urgency';
   static const String note = '/note';
   static const String redeemGift = '/redeem_gift';
-  static const String product = '/product';
-  static const String customer = '/customer';
-  static const String receive = '/receive';
-  static const String sampling = '/sampling';
-  static const String review = '/review';
+  static const String congratulation = '/congratulation';
 }

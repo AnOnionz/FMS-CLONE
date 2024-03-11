@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
+import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
 import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
@@ -25,11 +26,6 @@ import '../features/home/presentation/pages/home_page.dart';
 import '../features/leave/presentation/pages/leave_page.dart';
 import '../features/normal_splash_page.dart';
 
-import '../features/redeem_gift/presentation/pages/customer_page.dart';
-import '../features/redeem_gift/presentation/pages/product_page.dart';
-import '../features/redeem_gift/presentation/pages/receive_page.dart';
-import '../features/redeem_gift/presentation/pages/review_page.dart';
-import '../features/redeem_gift/presentation/pages/sampling_page.dart';
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
 import '../features/workForce/presentation/pages/project_selection_page.dart';
 import '../features/workForce/presentation/pages/work_force_page.dart';
@@ -93,24 +89,9 @@ class AppModule extends Module {
 
     r.child(Routes.redeemGift,
         child: (_) => const RedeemGiftPage(),
-        children: [
-          ChildRoute(Routes.product,
-              child: (context) => RedeemGiftProductPage(),
-              transition: TransitionType.noTransition),
-          ChildRoute(Routes.customer,
-              child: (context) => RedeemGiftCustomerPage(),
-              transition: TransitionType.noTransition),
-          ChildRoute(Routes.receive,
-              child: (context) => RedeemGiftReceivePage(),
-              transition: TransitionType.noTransition),
-          ChildRoute(Routes.sampling,
-              child: (context) => RedeemGiftSamplingPage(),
-              transition: TransitionType.noTransition),
-          ChildRoute(Routes.review,
-              child: (context) => RedeemGiftReviewPage(),
-              transition: TransitionType.noTransition),
-        ],
         transition: TransitionType.fadeIn);
+    r.child(Routes.congratulation,
+        child: (_) => const SuccessPage(), transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> blocConfig<T extends Bloc<dynamic, dynamic>>() {

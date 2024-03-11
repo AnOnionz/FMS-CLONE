@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/review/review_gift.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/review/review_product.dart';
@@ -9,14 +8,21 @@ import 'package:fms/features/redeem_gift/presentation/widgets/review/review_samp
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
-import '../../../../routes/routes.dart';
 import '../widgets/review/review_customer.dart';
 
-class RedeemGiftReviewPage extends StatelessWidget {
-  const RedeemGiftReviewPage({super.key});
+class RedeemGiftReviewPage extends StatefulWidget {
+  final VoidCallback onNext;
+  const RedeemGiftReviewPage({super.key, required this.onNext});
 
   @override
+  State<RedeemGiftReviewPage> createState() => _RedeemGiftReviewPageState();
+}
+
+class _RedeemGiftReviewPageState extends State<RedeemGiftReviewPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: EdgeInsets.only(top: 16.h),
       child: Column(
@@ -50,7 +56,7 @@ class RedeemGiftReviewPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               child: FlatButton(
-                onPressed: () => context.navigate(Routes.home),
+                onPressed: widget.onNext,
                 text: 'Tiếp tục',
                 color: AppColors.orange,
                 disableTextColor: AppColors.delRio,
@@ -62,4 +68,7 @@ class RedeemGiftReviewPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

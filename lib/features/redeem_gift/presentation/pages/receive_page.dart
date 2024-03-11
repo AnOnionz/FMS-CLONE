@@ -7,12 +7,18 @@ import 'package:fms/core/utilities/overlay.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
 import '../../../../core/widgets/button/flat.dart';
-import '../../../../routes/routes.dart';
 import '../widgets/receive/gift_quantity_widget.dart';
 
-class RedeemGiftReceivePage extends StatelessWidget {
-  const RedeemGiftReceivePage({super.key});
+class RedeemGiftReceivePage extends StatefulWidget {
+  final VoidCallback onNext;
+  const RedeemGiftReceivePage({super.key, required this.onNext});
 
+  @override
+  State<RedeemGiftReceivePage> createState() => _RedeemGiftReceivePageState();
+}
+
+class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
+    with AutomaticKeepAliveClientMixin {
   void _showSheetLimitGift(BuildContext context) {
     OverlayManager.showSheet(
         body: Column(
@@ -53,6 +59,7 @@ class RedeemGiftReceivePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(
@@ -137,8 +144,7 @@ class RedeemGiftReceivePage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: FlatButton(
-              onPressed: () =>
-                  context.navigate(Routes.redeemGift + Routes.sampling),
+              onPressed: widget.onNext,
               text: 'Tiếp tục',
               color: AppColors.orange,
               disableTextColor: AppColors.delRio,
@@ -149,4 +155,7 @@ class RedeemGiftReceivePage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

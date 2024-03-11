@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -35,7 +37,11 @@ class ProjectItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.squared)),
                   child: Padding(
                     padding: Fx.p16,
-                    child: Image.asset(AppImages.project),
+                    child: SvgPicture.asset(
+                      AppIcons.document,
+                      colorFilter:
+                          ColorFilter.mode(AppColors.black, BlendMode.srcIn),
+                    ),
                   )),
             ),
             SizedBox(

@@ -48,4 +48,5 @@ class AppIcons {
   static String help = 'help'.icon.svg;
   static String add = 'add'.icon.svg;
   static String remove = 'remove'.icon.svg;
+  static String error = 'error'.icon.svg;
 }

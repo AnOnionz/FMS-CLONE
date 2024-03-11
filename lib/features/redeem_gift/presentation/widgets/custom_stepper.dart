@@ -1,17 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/routes/routes.dart';
 
 class CustomStepper extends StatefulWidget {
+  final int current;
   final List<StepData> steps;
   final Color color;
   const CustomStepper({
     super.key,
+    required this.current,
     required this.steps,
     this.color = AppColors.lavenderBlue,
   });
@@ -23,50 +23,34 @@ class CustomStepper extends StatefulWidget {
 class _CustomStepperState extends State<CustomStepper> {
   late final steps = widget.steps;
 
-  void listener() {
-    if (!Modular.to.path.endsWith(Routes.home)) {
-      for (final StepData step in widget.steps) {
-        if (Modular.to.path.endsWith(step.route)) {
-          step.state = StepperState.editing;
-        }
-        if (step.state == StepperState.editing) {
-          break;
-        }
-        if (step.state == StepperState.disabled) {
-          step.state = StepperState.complete;
-        }
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return NavigationListener(builder: (context, child) {
-      listener();
-      return Stack(
-        children: [
-          Divider(
-            color: widget.color,
-            thickness: 2.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: widget.steps
-                .map((step) => StepContainer(
-                    data: step,
-                    inactiveColor: widget.color,
-                    activeColor: '#FFCC80'.toColor()))
-                .toList(),
-          )
-        ],
-      );
-    });
+    return Stack(
+      children: [
+        Divider(
+          color: widget.color,
+          thickness: 2.h,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: widget.steps
+              .mapIndexed((step, index) => StepContainer(
+                  data: step,
+                  index: index,
+                  currentStep: widget.current,
+                  inactiveColor: widget.color,
+                  activeColor: '#FFCC80'.toColor()))
+              .toList(),
+        )
+      ],
+    );
   }
 }
 
 class StepContainer extends StatelessWidget {
   final StepData data;
-
+  final int index;
+  final int currentStep;
   final Color activeColor;
   final Color inactiveColor;
 
@@ -75,11 +59,15 @@ class StepContainer extends StatelessWidget {
     required this.activeColor,
     required this.inactiveColor,
     required this.data,
+    required this.index,
+    required this.currentStep,
   });
 
-  bool get isEditing => data.state != StepperState.disabled;
+  bool get isEditing => index == currentStep;
 
-  bool get isComplete => data.state == StepperState.complete;
+  bool get isComplete => index < currentStep;
+
+  bool get isDisabled => index > currentStep;
 
   @override
   Widget build(BuildContext context) {
@@ -125,14 +113,11 @@ enum StepperState { disabled, editing, complete }
 
 class StepData {
   final String name;
-  final String route;
-  StepperState state;
 
-  StepData(
-      {required this.name,
-      required this.route,
-      this.state = StepperState.disabled});
+  StepData({
+    required this.name,
+  });
 
   @override
-  String toString() => 'StepData(name: $name, route: $route, state: $state)';
+  String toString() => 'StepData(name: $name)';
 }
