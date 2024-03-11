@@ -5,6 +5,7 @@ import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dar
 import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
 import 'package:fms/features/setting/presentation/pages/setting_page.dart';
+import 'package:fms/features/statistic/presentation/pages/statistic_page.dart';
 import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
 import 'package:fms/features/workForce/presentation/pages/outlet_selection_page.dart';
 
@@ -86,12 +87,13 @@ class AppModule extends Module {
         child: (_) => const UrgencyPage(), transition: TransitionType.fadeIn);
     r.child(Routes.note,
         child: (_) => const NotePage(), transition: TransitionType.fadeIn);
-
     r.child(Routes.redeemGift,
         child: (_) => const RedeemGiftPage(),
         transition: TransitionType.fadeIn);
     r.child(Routes.congratulation,
         child: (_) => const SuccessPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.statistic,
+        child: (_) => const StatisticPage(), transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> blocConfig<T extends Bloc<dynamic, dynamic>>() {

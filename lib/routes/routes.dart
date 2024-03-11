@@ -16,4 +16,5 @@ class Routes {
   static const String note = '/note';
   static const String redeemGift = '/redeem_gift';
   static const String congratulation = '/congratulation';
+  static const String statistic = '/statistic';
 }
