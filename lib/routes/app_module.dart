@@ -102,13 +102,13 @@ class AppModule extends Module {
               transition: TransitionType.noTransition),
           ChildRoute(Routes.receive,
               child: (context) => RedeemGiftReceivePage(),
-              transition: TransitionType.fadeIn),
+              transition: TransitionType.noTransition),
           ChildRoute(Routes.sampling,
               child: (context) => RedeemGiftSamplingPage(),
-              transition: TransitionType.fadeIn),
+              transition: TransitionType.noTransition),
           ChildRoute(Routes.review,
               child: (context) => RedeemGiftReviewPage(),
-              transition: TransitionType.fadeIn),
+              transition: TransitionType.noTransition),
         ],
         transition: TransitionType.fadeIn);
   }

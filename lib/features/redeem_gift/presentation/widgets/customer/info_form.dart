@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import 'info_text_form_field.dart';

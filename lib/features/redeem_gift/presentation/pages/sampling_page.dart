@@ -1,16 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/item_container.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/sampling/sampling_box.dart';
 
 import '../../../../core/constant/colors.dart';
-import '../../../../core/constant/icons.dart';
-import '../../../../core/constant/images.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../routes/routes.dart';
-import '../../../note/presentation/widgets/advanced_text_field.dart';
 
 class RedeemGiftSamplingPage extends StatelessWidget {
   const RedeemGiftSamplingPage({super.key});

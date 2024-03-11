@@ -62,17 +62,4 @@ class RedeemGiftReviewPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _reviewContainer(BuildContext context,
-      {required EdgeInsets margin, required Widget child}) {
-    return Container(
-      padding: EdgeInsets.all(24.h),
-      margin: margin,
-      width: context.screenWidth,
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(10.squared)),
-      child: child,
-    );
-  }
 }

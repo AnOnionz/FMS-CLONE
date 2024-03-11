@@ -10,6 +10,14 @@ import '../widgets/custom_stepper.dart';
 class RedeemGiftPage extends StatelessWidget {
   const RedeemGiftPage({super.key});
 
+  List<StepData> get steps => [
+        StepData(name: 'Sản phẩm', route: Routes.product),
+        StepData(name: 'Khách hàng', route: Routes.customer),
+        StepData(name: 'Đổi quà', route: Routes.receive),
+        StepData(name: 'Sampling', route: Routes.sampling),
+        StepData(name: 'Kiểm tra', route: Routes.review)
+      ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,15 +39,7 @@ class RedeemGiftPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 26.h, 16.w, 12.h),
               child: NavigationListener(builder: (context, child) {
-                return CustomStepper(
-                  steps: [
-                    StepData(name: 'Sản phẩm', route: Routes.product),
-                    StepData(name: 'Khách hàng', route: Routes.customer),
-                    StepData(name: 'Đổi quà', route: Routes.receive),
-                    StepData(name: 'Sampling', route: Routes.sampling),
-                    StepData(name: 'Kiểm tra', route: Routes.review)
-                  ],
-                );
+                return CustomStepper(steps: steps);
               }),
             ),
             Expanded(child: RouterOutlet()),

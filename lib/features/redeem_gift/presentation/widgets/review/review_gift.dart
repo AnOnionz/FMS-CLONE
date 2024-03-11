@@ -23,7 +23,7 @@ class ReviewGift extends StatelessWidget {
             SizedBox(
               height: 14.h,
             ),
-            for (int x in [1, 2, 3]) _GiftInfoItem(),
+            for (final int x in [1, 2, 3]) _GiftInfoItem(),
             SizedBox(
               height: 6.h,
             ),

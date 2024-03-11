@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/review/review_container.dart';
-import 'package:random_string/random_string.dart';
 
 import '../../../../../core/constant/colors.dart';
 
@@ -28,7 +25,7 @@ class ReviewProduct extends StatelessWidget {
             SizedBox(
               height: 14.h,
             ),
-            for (int x in [1, 2, 3]) _ProductInfoItem(),
+            for (final int x in [1, 2, 3]) _ProductInfoItem(),
             SizedBox(
               height: 6.h,
             ),

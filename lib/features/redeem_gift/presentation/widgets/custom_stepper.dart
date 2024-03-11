@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/routes/routes.dart';
 
 class CustomStepper extends StatefulWidget {
   final List<StepData> steps;
@@ -25,15 +24,17 @@ class _CustomStepperState extends State<CustomStepper> {
   late final steps = widget.steps;
 
   void listener() {
-    for (final StepData step in widget.steps) {
-      if (Modular.to.path.endsWith(step.route)) {
-        step.state = StepperState.editing;
-      }
-      if (step.state == StepperState.editing) {
-        break;
-      }
-      if (step.state == StepperState.disabled) {
-        step.state = StepperState.complete;
+    if (!Modular.to.path.endsWith(Routes.home)) {
+      for (final StepData step in widget.steps) {
+        if (Modular.to.path.endsWith(step.route)) {
+          step.state = StepperState.editing;
+        }
+        if (step.state == StepperState.editing) {
+          break;
+        }
+        if (step.state == StepperState.disabled) {
+          step.state = StepperState.complete;
+        }
       }
     }
   }
