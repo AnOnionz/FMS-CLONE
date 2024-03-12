@@ -5,7 +5,6 @@ import 'package:fms/features/redeem_gift/presentation/widgets/sampling/sampling_
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
-import '../../../../routes/routes.dart';
 
 class RedeemGiftSamplingPage extends StatefulWidget {
   final VoidCallback onNext;
