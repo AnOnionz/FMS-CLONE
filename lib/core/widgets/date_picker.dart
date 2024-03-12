@@ -7,7 +7,8 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:intl/intl.dart';
 
 class DatePicker extends StatefulWidget {
-  DatePicker({super.key});
+  final Color? fillColor;
+  DatePicker({super.key, this.fillColor});
 
   @override
   State<DatePicker> createState() => _DatePickerState();
@@ -37,7 +38,7 @@ class _DatePickerState extends State<DatePicker> {
       onTap: () => selectDay(context),
       decoration: InputDecoration(
           filled: true,
-          fillColor: AppColors.white,
+          fillColor: widget.fillColor ?? AppColors.white,
           hintText: 'Chọn ngày',
           hintStyle: context.textTheme.subtitle1,
           contentPadding:

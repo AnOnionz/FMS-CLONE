@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
+import 'package:fms/features/redeem_gift/presentation/pages/history_exchange.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
@@ -27,6 +28,7 @@ import '../features/home/presentation/pages/home_page.dart';
 import '../features/leave/presentation/pages/leave_page.dart';
 import '../features/normal_splash_page.dart';
 
+import '../features/redeem_gift/presentation/pages/history_exchange_detail.dart';
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
 import '../features/workForce/presentation/pages/project_selection_page.dart';
 import '../features/workForce/presentation/pages/work_force_page.dart';
@@ -94,6 +96,12 @@ class AppModule extends Module {
         child: (_) => const SuccessPage(), transition: TransitionType.fadeIn);
     r.child(Routes.statistic,
         child: (_) => const StatisticPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.historyExchange,
+        child: (_) => const HistoryExchangePage(),
+        transition: TransitionType.fadeIn);
+    r.child(Routes.historyExchangeDetail,
+        child: (_) => const HistoryExchangeDetailPage(),
+        transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> blocConfig<T extends Bloc<dynamic, dynamic>>() {

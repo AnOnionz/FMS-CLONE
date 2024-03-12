@@ -8,6 +8,7 @@ import 'package:fms/features/redeem_gift/presentation/widgets/review/review_samp
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
+import '../widgets/exchange_detail.dart';
 import '../widgets/review/review_customer.dart';
 
 class RedeemGiftReviewPage extends StatefulWidget {
@@ -27,25 +28,7 @@ class _RedeemGiftReviewPageState extends State<RedeemGiftReviewPage>
       padding: EdgeInsets.only(top: 16.h),
       child: Column(
         children: [
-          Expanded(
-              child: CustomScrollView(
-            physics:
-                RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
-            slivers: [
-              SliverToBoxAdapter(
-                child: ReviewCustomer(),
-              ),
-              SliverToBoxAdapter(
-                child: ReviewProduct(),
-              ),
-              SliverToBoxAdapter(
-                child: ReviewGift(),
-              ),
-              SliverToBoxAdapter(
-                child: ReviewSampling(),
-              )
-            ],
-          )),
+          Expanded(child: ExchangeDetail()),
           Container(
             decoration: BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(

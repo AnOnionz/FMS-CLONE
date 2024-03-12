@@ -17,4 +17,6 @@ class Routes {
   static const String redeemGift = '/redeem_gift';
   static const String congratulation = '/congratulation';
   static const String statistic = '/statistic';
+  static const String historyExchange = '/history_exchange';
+  static const String historyExchangeDetail = '/history_exchange_detail';
 }
