@@ -5,6 +5,9 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/statistic/presentation/widgets/statistic_product.dart';
 
+import '../widgets/statistic_gift.dart';
+import '../widgets/statistic_sampling.dart';
+
 class StatisticPage extends StatefulWidget {
   const StatisticPage({super.key});
 
@@ -12,78 +15,84 @@ class StatisticPage extends StatefulWidget {
   State<StatisticPage> createState() => _StatisticPageState();
 }
 
-class _StatisticPageState extends State<StatisticPage> {
+class _StatisticPageState extends State<StatisticPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController = TabController(vsync: this, length: 4);
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: 1,
-      length: 4,
-      child: Scaffold(
-        appBar: DefaultAppBar(title: 'Thống kê'),
-        body: Padding(
-          padding: EdgeInsets.only(
-            top: 30.h,
-          ),
-          child: Column(
-            children: [
-              TabBar(
-                indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: AppColors.orange,
-                indicator: UnderlineTabIndicator(
-                    borderRadius: BorderRadius.circular(8.squared),
-                    borderSide: BorderSide(color: AppColors.orange, width: 4.h),
-                    insets: EdgeInsets.fromLTRB(0, 0, 0, -1.5)),
-                labelColor: AppColors.orange,
-                unselectedLabelColor: 'CCC6D9'.toColor(),
-                overlayColor: MaterialStatePropertyAll(AppColors.transparent),
-                dividerColor: 'FCD8DF'.toColor(),
-                tabs: <Widget>[
-                  Tab(
-                    icon: Text(
-                      'Tổng quan',
-                      style: context.textTheme.caption1,
-                    ),
+    return Scaffold(
+      appBar: DefaultAppBar(title: 'Thống kê'),
+      body: Padding(
+        padding: EdgeInsets.only(
+          top: 30.h,
+        ),
+        child: Column(
+          children: [
+            TabBar(
+              controller: _tabController,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: AppColors.orange,
+              indicator: UnderlineTabIndicator(
+                  borderRadius: BorderRadius.circular(8.squared),
+                  borderSide: BorderSide(color: AppColors.orange, width: 4.h),
+                  insets: EdgeInsets.fromLTRB(0, 0, 0, -1.5)),
+              labelColor: AppColors.orange,
+              unselectedLabelColor: 'CCC6D9'.toColor(),
+              overlayColor: MaterialStatePropertyAll(AppColors.transparent),
+              dividerColor: 'FCD8DF'.toColor(),
+              physics: RangeMaintainingScrollPhysics(
+                  parent: ClampingScrollPhysics()),
+              splashFactory: NoSplash.splashFactory,
+              tabs: <Widget>[
+                Tab(
+                  icon: Text(
+                    'Tổng quan',
+                    style: context.textTheme.caption1,
                   ),
-                  Tab(
-                    icon: Text(
-                      'Sản phẩm',
-                      style: context.textTheme.caption1,
-                    ),
+                ),
+                Tab(
+                  icon: Text(
+                    'Sản phẩm',
+                    style: context.textTheme.caption1,
                   ),
-                  Tab(
-                    icon: Text(
-                      'Quà tặng',
-                      style: context.textTheme.caption1,
-                    ),
+                ),
+                Tab(
+                  icon: Text(
+                    'Quà tặng',
+                    style: context.textTheme.caption1,
                   ),
-                  Tab(
-                    icon: Text(
-                      'Sampling',
-                      style: context.textTheme.caption1,
-                    ),
+                ),
+                Tab(
+                  icon: Text(
+                    'Sampling',
+                    style: context.textTheme.caption1,
                   ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                physics: RangeMaintainingScrollPhysics(
+                    parent: ClampingScrollPhysics()),
+                children: <Widget>[
+                  Center(
+                    child: Text("It's cloudy here"),
+                  ),
+                  StatisticProduct(),
+                  StatisticGift(),
+                  StatisticSampling(),
                 ],
               ),
-              Expanded(
-                child: TabBarView(
-                  physics: RangeMaintainingScrollPhysics(
-                      parent: ClampingScrollPhysics()),
-                  children: <Widget>[
-                    Center(
-                      child: Text("It's cloudy here"),
-                    ),
-                    StatisticProduct(),
-                    Center(
-                      child: Text("It's sunny here"),
-                    ),
-                    Center(
-                      child: Text("It's sunny here"),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

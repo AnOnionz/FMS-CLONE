@@ -23,7 +23,7 @@ class ReviewSampling extends StatelessWidget {
             SizedBox(
               height: 14.h,
             ),
-            for (int x in [1, 2, 3]) _SamplingInfoItem(),
+            for (final int x in [1, 2, 3]) _SamplingInfoItem(),
             SizedBox(
               height: 6.h,
             ),
