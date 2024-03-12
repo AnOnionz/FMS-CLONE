@@ -2,14 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/redeem_gift/presentation/widgets/review/review_gift.dart';
-import 'package:fms/features/redeem_gift/presentation/widgets/review/review_product.dart';
-import 'package:fms/features/redeem_gift/presentation/widgets/review/review_sampling.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../widgets/exchange_detail.dart';
-import '../widgets/review/review_customer.dart';
 
 class RedeemGiftReviewPage extends StatefulWidget {
   final VoidCallback onNext;
