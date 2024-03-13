@@ -19,6 +19,7 @@ class AppIcons {
 
   static const IconData next = AppIconData(0xe900);
   static String back = 'back'.icon.svg;
+  static String closeDrawer = 'close_drawer'.icon.svg;
   static String document = 'document'.icon.svg;
   static String qr = 'qr'.icon.svg;
   static String location = 'location'.icon.svg;

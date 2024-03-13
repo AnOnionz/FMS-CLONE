@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +22,7 @@ final class MediaService {
         maxHeight: maxHeight,
         imageQuality: quality,
       );
+
       return pickedFile;
     } catch (e) {
       Fx.log(e.toString());
