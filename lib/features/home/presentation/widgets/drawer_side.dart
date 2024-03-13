@@ -15,6 +15,7 @@ class DrawerSide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         ClipRect(
           child: BackdropFilter(
@@ -150,14 +151,37 @@ class DrawerSide extends StatelessWidget {
                 )),
           ),
         ),
-        Positioned(left: -10, child: CircleAvatar())
+        Positioned(
+            top: 40.h,
+            left: -20.h,
+            child: GestureDetector(
+              onTap: () => Scaffold.of(context).closeEndDrawer(),
+              child: Container(
+                height: 47.h,
+                width: 47.h,
+                child: Center(
+                    child: SvgPicture.asset(
+                  AppIcons.closeDrawer,
+                  height: 24.h,
+                )),
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(-4, 0),
+                          blurRadius: 60,
+                          color: AppColors.black.withOpacity(0.2))
+                    ]),
+              ),
+            ))
       ],
     );
   }
 
   Widget rowInfo(BuildContext context, String left, String right) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

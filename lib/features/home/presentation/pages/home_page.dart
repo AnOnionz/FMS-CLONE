@@ -50,15 +50,15 @@ class HomePage extends StatelessWidget {
           children: [
             _title(context, 'Thông tin chung'),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
+                padding: EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
                 child: CommonInfo()),
             _title(context, 'Chức năng hỗ trợ'),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
+                padding: EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
                 child: CommonFeature()),
             _title(context, 'Danh sách công việc'),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
+                padding: EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
                 child: Tasks()),
           ],
         ),
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
       padding: EdgeInsets.only(left: 24.w),
       child: Text(
         name,
-        style: context.textTheme.h2,
+        style: context.textTheme.h3,
       ),
     );
   }
