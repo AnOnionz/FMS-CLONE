@@ -2,6 +2,8 @@ class Routes {
   static const String root = '/';
   static const String admin = '/admin';
   static const String login = '/login';
+  static const String camera = '/camera';
+  static const String photoView = '/photo_view';
   static const String workForce = '/work_force';
   static const String projectSelection = '/project_selection';
   static const String outletSelection = '/outlet_selection';

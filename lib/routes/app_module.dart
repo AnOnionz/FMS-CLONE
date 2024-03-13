@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/widgets/camera_custom.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/history_exchange.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
@@ -9,6 +10,7 @@ import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 import 'package:fms/features/statistic/presentation/pages/statistic_page.dart';
 import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
 import 'package:fms/features/workForce/presentation/pages/outlet_selection_page.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../features/authentication/domain/usecases/login_usecase.dart';
 import '../../features/authentication/presentation/pages/login_page.dart';
@@ -64,6 +66,10 @@ class AppModule extends Module {
         child: (_) => HomePage(), transition: TransitionType.fadeIn);
     r.child(Routes.login,
         child: (_) => const LoginPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.camera, child: (_) => CameraCustom());
+    r.child(Routes.photoView,
+        child: (context) => PhotoView(file: r.args.data as XFile),
+        transition: TransitionType.leftToRightWithFade);
     r.child(Routes.workForce,
         child: (_) => const WorkForcePage(), transition: TransitionType.fadeIn);
     r.child(Routes.projectSelection,

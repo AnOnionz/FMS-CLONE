@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
@@ -14,8 +16,15 @@ import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/take_image_list.dart';
 import '../widgets/time_box.dart';
 
-class AttendancePage extends StatelessWidget {
+class AttendancePage extends StatefulWidget {
   const AttendancePage({super.key});
+
+  @override
+  State<AttendancePage> createState() => _AttendancePageState();
+}
+
+class _AttendancePageState extends State<AttendancePage> {
+  final List<File> files = [];
 
   void _showSheetHistory(BuildContext context) {
     OverlayManager.showSheet(
@@ -75,7 +84,7 @@ class AttendancePage extends StatelessWidget {
                     SizedBox(height: 14.h),
                     TakeImageList(
                       limit: 5,
-                      images: [],
+                      images: files,
                     ),
                   ],
                 ),
