@@ -25,6 +25,7 @@ class SettingItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool _value = switchValue ?? false;
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
       decoration: BoxDecoration(
@@ -63,9 +64,7 @@ class SettingItem extends StatelessWidget {
                 value: _value,
                 activeColor: AppColors.orange,
                 onChanged: (bool? value) {
-                  setState(() {
-                    _value = value ?? false;
-                  });
+                  onTap();
                 },
               );
             }),

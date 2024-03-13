@@ -48,7 +48,9 @@ final class Database {
   T? getObject<T>({int? id}) {
     T? obj;
     if (id == null) {
-      obj = isar?.collection<T>().where().findAllSync().last;
+      final listObj = isar?.collection<T>().where().findAllSync();
+      if (listObj != null && listObj.isNotEmpty) return listObj.last;
+      return null;
     } else {
       obj = isar?.collection<T>().getSync(id);
     }

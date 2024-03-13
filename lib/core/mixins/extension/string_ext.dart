@@ -378,6 +378,11 @@ extension StringExtension on String {
 extension VxNullableStringIsEmptyOrNullExtension on String? {
   /// Returns `true` if the String is either null or empty.
   bool get isEmptyOrNull => this?.isEmpty ?? true;
+
+  int? get toIntOrNull => this == null ? null : int.tryParse(this ?? 'null');
+  double? get toDoubleOrNull =>
+      this == null ? null : double.tryParse(this ?? 'null');
+  bool? get toBoolOrNull => this == null ? null : bool.tryParse(this ?? 'null');
 }
 
 extension VxNullableStringIsNotEmptyAndNotNullExtension on String? {

@@ -29,6 +29,7 @@ import '../features/leave/presentation/pages/leave_page.dart';
 import '../features/normal_splash_page.dart';
 
 import '../features/redeem_gift/presentation/pages/history_exchange_detail.dart';
+import '../features/setting/presentation/cubit/setting_cubit.dart';
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
 import '../features/workForce/presentation/pages/project_selection_page.dart';
 import '../features/workForce/presentation/pages/work_force_page.dart';
@@ -48,7 +49,10 @@ class AppModule extends Module {
     i.add<LoginUsecase>(LoginUsecase.new);
     i.add<LogoutUsecase>(LogoutUsecase.new);
     i.add<SignBloc>(SignBloc.new);
+    //attendance
     i.add<LocateCubit>(LocateCubit.new);
+    //setting
+    i.addSingleton<SettingCubit>(SettingCubit.new);
   }
 
   @override
@@ -80,7 +84,7 @@ class AppModule extends Module {
     r.child(Routes.leave,
         child: (_) => const LeavePage(), transition: TransitionType.fadeIn);
     r.child(Routes.setting,
-        child: (_) => const SettingPage(), transition: TransitionType.fadeIn);
+        child: (_) => SettingPage(), transition: TransitionType.fadeIn);
     r.child(Routes.appLock,
         child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
     r.child(Routes.appLock,
