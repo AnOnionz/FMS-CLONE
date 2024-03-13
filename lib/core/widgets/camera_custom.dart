@@ -1,9 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/constant/colors.dart';
 import 'package:fms/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -20,64 +20,62 @@ class _CameraCustomState extends State<CameraCustom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
         body: CameraAwesomeBuilder.awesome(
-          saveConfig: SaveConfig.photo(),
-          topActionsBuilder: (state) => AwesomeTopActions(
-            padding: EdgeInsets.zero,
-            state: state,
-            children: [
-              SizedBox(
-                width: 50.0,
-              ),
-              if (state is PhotoCameraState)
-                AwesomeAspectRatioButton(state: state),
-              AwesomeFlashButton(state: state),
-            ],
+      saveConfig: SaveConfig.photo(),
+      topActionsBuilder: (state) => AwesomeTopActions(
+        padding: EdgeInsets.zero,
+        state: state,
+        children: [
+          SizedBox(
+            width: 50.0,
           ),
-          middleContentBuilder: (state) => Container(),
-          onMediaTap: (p0) {
-            final file = p0.captureRequest.when(single: (single) {
-              return XFile(single.file!.path);
-            });
-            Modular.to.pushNamed(Routes.photoView, arguments: file);
-          },
-          bottomActionsBuilder: (state) {
-            return AwesomeBottomActions(
-                state: state,
-                left: AwesomeCameraSwitchButton(
-                  state: state,
-                  scale: 1.0,
-                  onSwitchTap: (state) {
-                    state.switchCameraSensor(
-                      aspectRatio: state.sensorConfig.aspectRatio,
-                    );
-                  },
-                ),
-                right: StreamBuilder<MediaCapture?>(
-                  stream: state.captureState$,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox(width: 60, height: 60);
-                    }
-                    return SizedBox(
-                      width: 60,
-                      child: AwesomeMediaPreview(
-                        mediaCapture: snapshot.requireData,
-                        onMediaTap: (mediaCapture) {
-                          final file = mediaCapture.captureRequest.when(
-                              single: (single) {
-                            return XFile(single.file!.path);
-                          });
-                          Modular.to
-                              .pushNamed(Routes.photoView, arguments: file);
-                        },
-                      ),
-                    );
-                  },
-                ));
-          },
-        ));
+          if (state is PhotoCameraState) AwesomeAspectRatioButton(state: state),
+          AwesomeFlashButton(state: state),
+        ],
+      ),
+      theme: AwesomeTheme(bottomActionsBackgroundColor: AppColors.black),
+      middleContentBuilder: (state) => Container(),
+      onMediaTap: (p0) {
+        final file = p0.captureRequest.when(single: (single) {
+          return XFile(single.file!.path);
+        });
+        Modular.to.pushNamed(Routes.photoView, arguments: file);
+      },
+      bottomActionsBuilder: (state) {
+        return AwesomeBottomActions(
+            state: state,
+            left: AwesomeCameraSwitchButton(
+              state: state,
+              scale: 1.0,
+              onSwitchTap: (state) {
+                state.switchCameraSensor(
+                  aspectRatio: state.sensorConfig.aspectRatio,
+                );
+              },
+            ),
+            right: StreamBuilder<MediaCapture?>(
+              stream: state.captureState$,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox(width: 60, height: 60);
+                }
+                return SizedBox(
+                  width: 60,
+                  child: AwesomeMediaPreview(
+                    mediaCapture: snapshot.requireData,
+                    onMediaTap: (mediaCapture) {
+                      final file =
+                          mediaCapture.captureRequest.when(single: (single) {
+                        return XFile(single.file!.path);
+                      });
+                      Modular.to.pushNamed(Routes.photoView, arguments: file);
+                    },
+                  ),
+                );
+              },
+            ));
+      },
+    ));
   }
 }
 

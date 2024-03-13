@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
