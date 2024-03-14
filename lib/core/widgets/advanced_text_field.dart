@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-import '../../../../core/constant/colors.dart';
+import '../constant/colors.dart';
 
 class AdvancedTextField extends StatefulWidget {
   final TextEditingController controller;

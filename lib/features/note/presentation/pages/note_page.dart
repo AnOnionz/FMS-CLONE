@@ -1,10 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/button/flat.dart';
-import 'package:fms/features/note/presentation/widgets/note_item.dart';
+import 'dart:math';
 
-import '../../../../core/widgets/app_bar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/report/presentation/widgets/report_item.dart';
+
+import '../../../../core/constant/colors.dart';
+import '../../../../core/widgets/button/flat.dart';
+import '../widgets/note_item.dart';
 
 class NotePage extends StatelessWidget {
   const NotePage({super.key});
@@ -12,49 +16,48 @@ class NotePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(
-          title: 'Giá bán sản phẩm', action: SearchButton(onPressed: () {})),
-      body: GestureDetector(
-        onTap: () {
-          final FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Padding(
-          padding: EdgeInsets.only(top: 30.h),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverList.builder(
-                      itemCount: 5,
-                      itemBuilder: (context, index) => NoteItem(),
-                    )
-                  ],
-                ),
+      appBar: DefaultAppBar(title: 'Ghi chú'),
+      body: Padding(
+        padding: EdgeInsets.only(top: 26.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomScrollView(
+                physics: RangeMaintainingScrollPhysics(
+                    parent: ClampingScrollPhysics()),
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 5.h),
+                    sliver: SliverList.builder(
+                      itemCount: 3,
+                      itemBuilder: (context, index) => NoteItem(
+                        name: 'Ghi chú A',
+                        canNote: Random().nextBool(),
+                        canTakeImge: true,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Flexible(
-                  child: Container(
-                decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0, -2),
-                      blurRadius: 25,
-                      color: AppColors.black.withOpacity(0.15))
-                ]),
-                padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
-                child: FlatButton(
-                  onPressed: () {},
-                  text: 'Lưu',
-                  color: AppColors.orange,
-                  disableColor: AppColors.potPourri,
-                  disableTextColor: AppColors.delRio,
-                ),
-              ))
-            ],
-          ),
+            ),
+            Container(
+              decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+                BoxShadow(
+                    offset: Offset(0, -2),
+                    blurRadius: 25,
+                    color: AppColors.black.withOpacity(0.15))
+              ]),
+              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
+              child: FlatButton(
+                onPressed: () {},
+                text: 'Lưu',
+                color: AppColors.orange,
+                disableColor: AppColors.potPourri,
+                disableTextColor: AppColors.delRio,
+              ),
+            )
+          ],
         ),
       ),
     );
