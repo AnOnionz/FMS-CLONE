@@ -1,13 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/widgets/camera_custom.dart';
+import 'package:fms/features/crawl/presentation/pages/crawl_page.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/history_exchange.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
+import 'package:fms/features/report/presentation/pages/report_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
 import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 import 'package:fms/features/statistic/presentation/pages/statistic_page.dart';
+import 'package:fms/features/sync/presentation/pages/sync_page.dart';
 import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
 import 'package:fms/features/workForce/presentation/pages/outlet_selection_page.dart';
 import 'package:image_picker/image_picker.dart';
@@ -99,6 +102,10 @@ class AppModule extends Module {
         child: (_) => const UrgencyPage(), transition: TransitionType.fadeIn);
     r.child(Routes.note,
         child: (_) => const NotePage(), transition: TransitionType.fadeIn);
+    r.child(Routes.crawl,
+        child: (_) => const CrawlPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.report,
+        child: (_) => const ReportPage(), transition: TransitionType.fadeIn);
     r.child(Routes.redeemGift,
         child: (_) => const RedeemGiftPage(),
         transition: TransitionType.fadeIn);
@@ -112,6 +119,8 @@ class AppModule extends Module {
     r.child(Routes.historyExchangeDetail,
         child: (_) => const HistoryExchangeDetailPage(),
         transition: TransitionType.fadeIn);
+    r.child(Routes.sync,
+        child: (_) => const SyncPage(), transition: TransitionType.fadeIn);
   }
 
   BindConfig<T> blocConfig<T extends Bloc<dynamic, dynamic>>() {
