@@ -7,6 +7,8 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
+import '../../../../core/widgets/take_image_list.dart';
+
 class ReportItem extends StatefulWidget {
   final String name;
   final int min;
@@ -50,19 +52,10 @@ class _ReportItemState extends State<ReportItem> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h),
-            child: Container(
-              height: 100.h,
-              width: 100.h,
-              child: Center(
-                child: SvgPicture.asset(
-                  AppIcons.camera,
-                  height: 50.h,
-                  width: 50.h,
-                ),
-              ),
-              decoration: BoxDecoration(
-                  color: AppColors.aliceBlue,
-                  borderRadius: BorderRadius.circular(13.33.squared)),
+            child: TakeImage(
+              images: [],
+              limit: widget.max,
+              isCarousel: true,
             ),
           ),
           Padding(

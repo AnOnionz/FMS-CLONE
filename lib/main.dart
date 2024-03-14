@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/database/file_metadata.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
 import '/app_widget.dart';
@@ -17,8 +18,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   AppConfig.initialFlavor();
-  await Database.open([LocalValueSchema, UserEntitySchema, SettingAppSchema]);
+  await Database.open([
+    LocalValueSchema,
+    UserEntitySchema,
+    SettingAppSchema,
+    FileWithMetaDataSchema
+  ]);
   Bloc.observer = SimpleBlocObserver();
+
   runApp(ModularApp(
       module: AppModule(),
       child: FlexibleBuilder(designSize: Size(430, 934), child: const App())));

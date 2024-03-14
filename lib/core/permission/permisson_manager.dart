@@ -18,12 +18,14 @@ class PermissionManager {
   Future<ph.PermissionStatus?> requestPermission(
       ph.Permission permission) async {
     if (canRequestPermisson(permission)) {
-      final status = await permission.request();
-      Fx.log('$permission : ${status.name}');
-      if (status == ph.PermissionStatus.granted) {
-        _permissions.add(permission);
-      }
-      return status;
+      try {
+        final status = await permission.request();
+        if (status == ph.PermissionStatus.granted) {
+          _permissions.add(permission);
+        }
+        Fx.log('$permission : ${status.name}');
+        return status;
+      } catch (e) {}
     }
 
     return null;

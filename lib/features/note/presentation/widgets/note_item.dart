@@ -9,6 +9,7 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/widgets/take_image_list.dart';
 import 'note_text_field.dart';
 
 class NoteItem extends StatefulWidget {
@@ -55,19 +56,10 @@ class _NoteItemState extends State<NoteItem> {
           widget.canTakeImge
               ? Padding(
                   padding: EdgeInsets.only(top: 16.h),
-                  child: Container(
-                    height: 100.h,
-                    width: 100.h,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        AppIcons.camera,
-                        height: 50.h,
-                        width: 50.h,
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                        color: AppColors.aliceBlue,
-                        borderRadius: BorderRadius.circular(13.33.squared)),
+                  child: TakeImage(
+                    images: [],
+                    limit: 5,
+                    isCarousel: true,
                   ),
                 )
               : const SizedBox(),

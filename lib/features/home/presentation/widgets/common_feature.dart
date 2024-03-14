@@ -15,7 +15,7 @@ class CommonFeature extends StatelessWidget {
         FeatureBox(
           name: 'Đồng bộ',
           icon: AppIcons.sync,
-          onPressed: () => context.nextRoute(Routes.sync),
+          onPressed: () => context.nextRoute(Routes.report),
         ),
         FeatureBox(
           name: 'Thống kê',
