@@ -1,4 +1,7 @@
 PODS:
+  - camerawesome (0.0.1):
+    - Flutter
+    - JPSVolumeButtonHandler
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
@@ -22,6 +25,7 @@ PODS:
     - Flutter
   - isar_flutter_libs (1.0.0):
     - Flutter
+  - JPSVolumeButtonHandler (1.0.5)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -33,6 +37,7 @@ PODS:
   - Toast (4.0.0)
 
 DEPENDENCIES:
+  - camerawesome (from `.symlinks/plugins/camerawesome/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
@@ -48,9 +53,12 @@ SPEC REPOS:
   trunk:
     - FMDB
     - GoogleMaps
+    - JPSVolumeButtonHandler
     - Toast
 
 EXTERNAL SOURCES:
+  camerawesome:
+    :path: ".symlinks/plugins/camerawesome/ios"
   Flutter:
     :path: Flutter
   fluttertoast:
@@ -73,6 +81,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  camerawesome: 1e06540f60158809bc70f398ed1ac2cf93fe4188
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -82,6 +91,7 @@ SPEC CHECKSUMS:
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
+  JPSVolumeButtonHandler: 53110330c9168ed325def93eabff39f0fe3e8082
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a

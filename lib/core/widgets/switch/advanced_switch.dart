@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:fms/core/constant/colors.dart';
 
 class AdvancedSwitch extends StatefulWidget {
   const AdvancedSwitch({
@@ -174,19 +175,19 @@ class _AdvancedSwitchState extends State<AdvancedSwitch>
                     maxWidth: containerSize,
                     minHeight: widget.height,
                     maxHeight: widget.height,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconTheme(
-                          data: const IconThemeData(
-                            color: Color(0xFFFFFFFF),
-                            size: 20,
-                          ),
-                          child: DefaultTextStyle(
-                            style: const TextStyle(
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconTheme(
+                            data: const IconThemeData(
                               color: Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
+                              size: 20,
                             ),
                             child: Container(
                               width: labelSize,
@@ -195,36 +196,29 @@ class _AdvancedSwitchState extends State<AdvancedSwitch>
                               child: widget.activeChild,
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(2),
-                          width: _thumbSize - 4,
-                          height: _thumbSize - 4,
-                          child: widget.thumb ??
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: widget.borderRadius
-                                      .subtract(BorderRadius.circular(1)),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0x42000000),
-                                      blurRadius: 8,
-                                    ),
-                                  ],
+                          Container(
+                            margin: const EdgeInsets.all(2),
+                            width: _thumbSize - 4,
+                            height: _thumbSize - 4,
+                            child: widget.thumb ??
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFFFFF),
+                                    borderRadius: widget.borderRadius
+                                        .subtract(BorderRadius.circular(1)),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color(0x42000000),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                        ),
-                        IconTheme(
-                          data: const IconThemeData(
-                            color: Color(0xFFFFFFFF),
-                            size: 20,
                           ),
-                          child: DefaultTextStyle(
-                            style: const TextStyle(
+                          IconTheme(
+                            data: const IconThemeData(
                               color: Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
+                              size: 20,
                             ),
                             child: Container(
                               width: labelSize,
@@ -233,8 +227,8 @@ class _AdvancedSwitchState extends State<AdvancedSwitch>
                               child: widget.inactiveChild,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
