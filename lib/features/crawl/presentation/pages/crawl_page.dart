@@ -3,7 +3,6 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/crawl/presentation/widgets/crawl_item.dart';
-import 'package:fms/features/note/presentation/widgets/note_item.dart';
 
 import '../../../../core/widgets/app_bar.dart';
 

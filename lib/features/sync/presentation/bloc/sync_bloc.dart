@@ -6,8 +6,6 @@ part 'sync_state.dart';
 
 class SyncBloc extends Bloc<SyncEvent, SyncState> {
   SyncBloc() : super(SyncInitial()) {
-    on<SyncEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<SyncEvent>((event, emit) {});
   }
 }
