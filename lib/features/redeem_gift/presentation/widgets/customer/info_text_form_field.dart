@@ -45,6 +45,9 @@ class _InfoTextFormFieldState extends State<InfoTextFormField> {
         }
         return null;
       },
+      style: context.textTheme.body1,
+      cursorHeight: 16.sp,
+      cursorColor: AppColors.summerSky,
       decoration: InputDecoration(
           label: RichText(
               text: TextSpan(
