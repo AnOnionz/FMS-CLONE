@@ -112,12 +112,11 @@ class DioClient extends ApiService {
           e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.badCertificate) {
         throw SocketException(e.message, e, s);
-      }
-      if (e.type == DioExceptionType.sendTimeout ||
+      } else if (e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
         throw TimeoutException(e.message, e, s);
       } else {
-        throw BadRequestException(e.message, e, s);
+        throw SocketException(e.message, e, s);
       }
     } catch (e, s) {
       if (retries > 1) {
