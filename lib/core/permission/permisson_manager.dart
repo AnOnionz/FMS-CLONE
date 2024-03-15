@@ -19,12 +19,14 @@ class PermissionManager {
       ph.Permission permission) async {
     if (canRequestPermisson(permission)) {
       try {
-        final status = await permission.request();
-        if (status == ph.PermissionStatus.granted) {
-          _permissions.add(permission);
+        if (!await permission.isGranted) {
+          final status = await permission.request();
+          if (status == ph.PermissionStatus.granted) {
+            _permissions.add(permission);
+          }
+          Fx.log('$permission : ${status.name}');
+          return status;
         }
-        Fx.log('$permission : ${status.name}');
-        return status;
       } catch (e) {}
     }
 

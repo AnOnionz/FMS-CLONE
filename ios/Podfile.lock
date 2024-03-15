@@ -3,8 +3,6 @@ PODS:
     - Flutter
     - JPSVolumeButtonHandler
   - Flutter (1.0.0)
-  - flutter_media_metadata (0.0.1):
-    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -41,7 +39,6 @@ PODS:
 DEPENDENCIES:
   - camerawesome (from `.symlinks/plugins/camerawesome/ios`)
   - Flutter (from `Flutter`)
-  - flutter_media_metadata (from `.symlinks/plugins/flutter_media_metadata/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
@@ -64,8 +61,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camerawesome/ios"
   Flutter:
     :path: Flutter
-  flutter_media_metadata:
-    :path: ".symlinks/plugins/flutter_media_metadata/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   geocoding_ios:
@@ -88,7 +83,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   camerawesome: 1e06540f60158809bc70f398ed1ac2cf93fe4188
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_media_metadata: 9db7298c789a54da26e0d2f6f808fa39bfd9bcd7
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geocoding_ios: a389ea40f6f548de6e63006a2e31bf66ff80769a
