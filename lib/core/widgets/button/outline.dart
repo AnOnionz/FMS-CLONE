@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 class OutlineButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget? icon;
   final String name;
   final Color color;
@@ -23,16 +24,23 @@ class OutlineButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            icon ?? SizedBox(),
-            SizedBox(width: icon != null ? 4.w : 0),
-            Text(
-              textScaler: TextScaler.linear(1),
-              name,
-              style: context.textTheme.button2?.copyWith(color: color),
+            icon == null
+                ? SizedBox()
+                : Padding(
+                    padding: EdgeInsets.only(right: 4.w),
+                    child: icon!,
+                  ),
+            Flexible(
+              child: Text(
+                textScaler: TextScaler.linear(1),
+                name,
+                style: context.textTheme.button2?.copyWith(color: color),
+              ),
             ),
           ],
         ),
         style: ButtonStyle(
+          padding: MaterialStatePropertyAll(EdgeInsets.zero),
           side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: color)),
           shape: MaterialStatePropertyAll<OutlinedBorder>(
               RoundedRectangleBorder(

@@ -97,25 +97,35 @@ class DrawerSide extends StatelessWidget {
                                     // SizedBox(height: 200.h),
                                     Spacer(),
                                     Padding(
-                                      padding: EdgeInsets.only(bottom: 20.h),
-                                      child: SizedBox(
-                                        width: 185.w,
-                                        height: 56.h,
-                                        child: TextButton(
-                                          onPressed: () => context.pop(),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 11.h),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Image.asset(
-                                                  AppImages.logout,
-                                                  height: 34.h,
-                                                ),
-                                                SizedBox(width: 16.w),
-                                                Text(
+                                      padding: EdgeInsets.only(
+                                        bottom: 20.h,
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () => context.pop(),
+                                        child: Container(
+                                          height: 56.h,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 11.h),
+                                          decoration: BoxDecoration(
+                                              color: AppColors.orange,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      50.squared)),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 11.h),
+                                                child: SvgPicture.asset(
+                                                    AppIcons.logout),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: 24.w, left: 21.w),
+                                                child: Text(
                                                   'ĐĂNG XUẤT',
                                                   style: context
                                                       .textTheme.button1
@@ -123,19 +133,9 @@ class DrawerSide extends StatelessWidget {
                                                           color:
                                                               AppColors.white),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                          style: ButtonStyle(
-                                              shape: MaterialStatePropertyAll<
-                                                      OutlinedBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50.squared))),
-                                              backgroundColor:
-                                                  MaterialStatePropertyAll<
-                                                      Color>(AppColors.orange)),
                                         ),
                                       ),
                                     ),

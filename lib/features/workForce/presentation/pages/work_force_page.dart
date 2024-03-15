@@ -104,7 +104,9 @@ class WorkForcePage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 16.w),
+                                  SizedBox(
+                                    width: 16.w,
+                                  ),
                                   Expanded(
                                       child: OutlineButton(
                                           name: 'QR Booth',

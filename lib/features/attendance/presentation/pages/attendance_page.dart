@@ -15,6 +15,7 @@ import 'package:fms/routes/routes.dart';
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/take_image_list.dart';
+import '../widgets/notification.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
@@ -141,7 +142,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                 ),
               ),
-              _actionButton(type, action: () => showNotification(context))
+              _actionButton(type, action: () => showSuccess(context))
             ],
           ),
         )
@@ -182,24 +183,5 @@ class _AttendancePageState extends State<AttendancePage> {
         bottom: context.screenHeight -
             placeHolder -
             (context.screenHeight / 2 - placeHolder));
-  }
-
-  void showNotification(BuildContext context) {
-    OverlayManager.showSheet(
-        body: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 30.h, bottom: 45.h),
-          child: Text('Chấm công thành công',
-              style:
-                  context.textTheme.h2?.copyWith(color: AppColors.nightRider)),
-        ),
-        OutlineButton(
-            onPressed: () => context.popUtil(Routes.home),
-            name: 'Về trang chủ',
-            color: AppColors.orange)
-      ],
-    ));
   }
 }
