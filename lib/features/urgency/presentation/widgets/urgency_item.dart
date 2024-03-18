@@ -54,7 +54,7 @@ class _UrgencyItemState extends State<UrgencyItem> {
               });
               context.pop();
             },
-            text: 'Xác nhận',
+            name: 'Xác nhận',
             color: '#327CF9'.toColor())
       ],
     ));
@@ -84,7 +84,7 @@ class _UrgencyItemState extends State<UrgencyItem> {
               });
               context.pop();
             },
-            text: 'Kết thúc',
+            name: 'Kết thúc',
             color: AppColors.orange)
       ],
     ));

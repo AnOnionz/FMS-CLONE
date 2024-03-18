@@ -50,7 +50,10 @@ void showRequiredSync(BuildContext context) {
           title: 'Chấm công thất bại',
           message: 'Yêu cầu đồng bộ dữ liệu trước khi chấm công ra',
           action: OutlineButton(
-              onPressed: () => context.nextRoute(Routes.sync),
+              onPressed: () {
+                context.pop();
+                context.nextRoute(Routes.sync);
+              },
               name: 'Đến trang đồng bộ',
               color: AppColors.orange)));
 }

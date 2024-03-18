@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:fms/routes/routes.dart';
 
 class DrawerSide extends StatelessWidget {
@@ -69,7 +69,7 @@ class DrawerSide extends StatelessWidget {
                                       height: 8.h,
                                     ),
                                     rowFeature(AppIcons.about,
-                                        'Thông tin outlet', () {}),
+                                        'Thông tin và ứng dụng', () {}),
                                     SizedBox(
                                       height: 8.h,
                                     ),
@@ -101,7 +101,7 @@ class DrawerSide extends StatelessWidget {
                                         bottom: 20.h,
                                       ),
                                       child: GestureDetector(
-                                        onTap: () => context.pop(),
+                                        onTap: () => showRequiredTask(context),
                                         child: Container(
                                           height: 56.h,
                                           padding: EdgeInsets.symmetric(

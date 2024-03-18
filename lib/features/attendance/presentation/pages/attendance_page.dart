@@ -11,7 +11,7 @@ import 'package:fms/features/attendance/presentation/widgets/attendance_history.
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/take_image_list.dart';
-import '../widgets/notification.dart';
+import '../widgets/notifications.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
@@ -153,7 +153,7 @@ class _AttendancePageState extends State<AttendancePage> {
   Widget _actionButton(AttendanceType type, {VoidCallback? action}) {
     return FlatButton(
       onPressed: action,
-      text: type.name.toUpperCase(),
+      name: type.name.toUpperCase(),
       color: type == AttendanceType.CheckIn
           ? AppColors.royalBlue
           : AppColors.orange,

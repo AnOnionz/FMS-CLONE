@@ -95,7 +95,7 @@ class WorkForcePage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: FlatButton(
-                                      text: 'Chọn dự án',
+                                      name: 'Chọn dự án',
                                       color: AppColors.orange,
                                       onPressed: () => context
                                           .nextRoute(Routes.projectSelection),

@@ -78,7 +78,7 @@ class SelectProduct extends StatelessWidget {
             ),
           ),
         ),
-        FlatButton(onPressed: () {}, text: 'OK', color: AppColors.orange)
+        FlatButton(onPressed: () {}, name: 'OK', color: AppColors.orange)
       ],
     );
   }

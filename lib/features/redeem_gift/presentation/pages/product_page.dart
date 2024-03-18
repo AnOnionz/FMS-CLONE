@@ -178,7 +178,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: FlatButton(
                   onPressed: widget.onNext,
-                  text: 'Tiếp tục',
+                  name: 'Tiếp tục',
                   color: AppColors.orange,
                   disableTextColor: AppColors.delRio,
                   disableColor: AppColors.potPourri,

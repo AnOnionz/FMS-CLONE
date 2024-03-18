@@ -7,7 +7,7 @@ import '../../constant/colors.dart';
 class FlatButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget? icon;
-  final String text;
+  final String name;
   final Color? textColor;
   final Color color;
   final Color? disableColor;
@@ -16,7 +16,7 @@ class FlatButton extends StatelessWidget {
       {super.key,
       required this.onPressed,
       this.icon,
-      required this.text,
+      required this.name,
       this.textColor = AppColors.white,
       required this.color,
       this.disableColor,
@@ -40,7 +40,7 @@ class FlatButton extends StatelessWidget {
             icon ?? SizedBox(),
             SizedBox(width: icon != null ? 4.w : 0),
             Text(
-              text,
+              name,
               style: context.textTheme.button2
                   ?.copyWith(color: enabled ? textColor : disableTextColor),
             ),

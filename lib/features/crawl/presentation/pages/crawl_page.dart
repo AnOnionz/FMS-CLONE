@@ -50,7 +50,7 @@ class CrawlPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
                 child: FlatButton(
                   onPressed: () {},
-                  text: 'Lưu',
+                  name: 'Lưu',
                   color: AppColors.orange,
                   disableColor: AppColors.potPourri,
                   disableTextColor: AppColors.delRio,

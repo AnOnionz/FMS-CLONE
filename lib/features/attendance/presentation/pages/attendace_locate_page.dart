@@ -124,7 +124,7 @@ class AttendanceLocatePage extends StatelessWidget {
                               onPressed: () {
                                 context.nextReplacementRoute(Routes.attendance);
                               },
-                              text: 'Tiếp tục',
+                              name: 'Tiếp tục',
                               color: AppColors.orange),
                         );
                       }

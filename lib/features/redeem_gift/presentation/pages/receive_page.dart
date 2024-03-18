@@ -51,7 +51,7 @@ class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
         ),
         FlatButton(
             onPressed: () => context.pop(),
-            text: 'Xác nhận',
+            name: 'Xác nhận',
             color: AppColors.orange)
       ],
     ));
@@ -145,7 +145,7 @@ class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: FlatButton(
               onPressed: widget.onNext,
-              text: 'Tiếp tục',
+              name: 'Tiếp tục',
               color: AppColors.orange,
               disableTextColor: AppColors.delRio,
               disableColor: AppColors.potPourri,

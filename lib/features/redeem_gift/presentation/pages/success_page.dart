@@ -44,7 +44,7 @@ class SuccessPage extends StatelessWidget {
                         child: FlatButton(
                             onPressed: () => context
                                 .nextAndRemoveUntilRoute(Routes.redeemGift),
-                            text: 'Tiếp tục đổi quà',
+                            name: 'Tiếp tục đổi quà',
                             color: AppColors.orange),
                       ),
                     ],

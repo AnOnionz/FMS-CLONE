@@ -117,7 +117,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                   widget.onNext();
                 }
               },
-              text: 'Tiếp tục',
+              name: 'Tiếp tục',
               color: AppColors.orange,
               disableTextColor: AppColors.delRio,
               disableColor: AppColors.potPourri,
