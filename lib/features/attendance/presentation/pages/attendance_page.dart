@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
@@ -8,9 +6,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-import 'package:fms/core/widgets/button/outline.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
-import 'package:fms/routes/routes.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
@@ -142,7 +138,11 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                 ),
               ),
-              _actionButton(type, action: () => showSuccess(context))
+              _actionButton(type,
+                  action: () => showRequiredTask(
+                        context,
+                        () {},
+                      ))
             ],
           ),
         )

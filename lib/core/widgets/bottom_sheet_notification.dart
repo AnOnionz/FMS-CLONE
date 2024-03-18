@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../constant/colors.dart';
-import 'button/outline.dart';
 
 class BottomSheetNotification extends StatelessWidget {
   final Widget icon;
@@ -35,6 +33,7 @@ class BottomSheetNotification extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 32.h),
                 child: Text(
                   message!,
+                  textAlign: TextAlign.center,
                   style:
                       context.textTheme.body1?.copyWith(color: AppColors.nero),
                 ),
