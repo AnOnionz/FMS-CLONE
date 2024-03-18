@@ -44,7 +44,7 @@ dependencies:
   table_calendar: ^3.1.0
   stop_watch_timer: ^3.1.1
   camerawesome: ^2.0.1-dev.1
-
+  flutter_typeahead: ^5.2.0
   
   #tool
   flutter_flavor: ^3.1.1
@@ -58,6 +58,8 @@ dependencies:
   animate_do: ^3.3.4
   random_string: ^2.3.1
   card_swiper: ^3.0.1
+  simple_progress_indicators: ^0.2.0
+
 
 
   

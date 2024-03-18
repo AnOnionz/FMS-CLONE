@@ -6,13 +6,11 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-import 'package:fms/core/widgets/item_container.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/product/concur_product.dart';
 import 'package:fms/features/redeem_gift/presentation/widgets/product/select_product.dart';
 
-import '../../../../core/constant/images.dart';
-import '../widgets/input_quantity.dart';
+import '../widgets/product/selected_product.dart';
 
 class RedeemGiftProductPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -52,13 +50,50 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(child: SearchTextField()),
-                  SizedBox(width: 14.w),
+                  Flexible(
+                      child: SearchTextField<int>(
+                    label: 'Nhập mã barcode',
+                    itemBuilder: (context, value) => Material(
+                      type: MaterialType.transparency,
+                      child: ListTile(
+                        focusColor: '#FBF6F4'.toColor(),
+                        hoverColor: '#FBF6F4'.toColor(),
+                        splashColor: '#FBF6F4'.toColor(),
+                        selectedColor: '#FBF6F4'.toColor(),
+                        selectedTileColor: '#FBF6F4'.toColor(),
+                        title: Text(
+                          'Tên sản phẩm 1',
+                          style: context.textTheme.caption1,
+                        ),
+                        trailing: Text('MA0001223',
+                            style: context.textTheme.caption2
+                                ?.copyWith(color: AppColors.nobel)),
+                      ),
+                    ),
+                    suggestionsCallback: (search) async {
+                      if (search.isEmpty || search == '') {
+                        return [];
+                      }
+                      return await Future<List<int>>.value([
+                        1,
+                        2,
+                        3,
+                      ]);
+                    },
+                    onSelected: (value) {
+                      print('Selected suggestion: $value');
+                    },
+                  )),
+                  SizedBox(width: 4.w),
                   IconButton(
+                      style: IconButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                       onPressed: () => _showSheetConcurProduct(context),
                       icon: SvgPicture.asset(AppIcons.barcode)),
-                  SizedBox(width: 6.w),
+                  SizedBox(width: 0.w),
                   IconButton(
+                      style: IconButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                       onPressed: () => _showSheetSelectProduct(context),
                       icon: SvgPicture.asset(AppIcons.hamburger)),
                 ],
@@ -88,57 +123,9 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
                       ),
                     ),
                     Flexible(
-                      child: CustomScrollView(
-                        shrinkWrap: true,
-                        physics: RangeMaintainingScrollPhysics(
-                            parent: ClampingScrollPhysics()),
-                        slivers: [
-                          SliverList.separated(
-                            itemCount: items.length,
-                            separatorBuilder: (context, index) => SizedBox(
-                              height: 22.h,
-                            ),
-                            itemBuilder: (context, index) {
-                              final item = items[index];
-                              return Dismissible(
-                                key: Key(item.toString()),
-                                onDismissed: (direction) {
-                                  setState(() {
-                                    items.removeAt(index);
-                                  });
-                                },
-                                child: ItemContainer(
-                                    titleFlexible: false,
-                                    leading: Image.asset(AppImages.loginBanner),
-                                    title: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Tên sản phẩm',
-                                          style: context.textTheme.caption1,
-                                        ),
-                                        Text(
-                                          'MA0001223',
-                                          style: context.textTheme.caption2
-                                              ?.copyWith(
-                                                  color: AppColors.nobel),
-                                        ),
-                                        Text(
-                                          '200.000 vnd / thùng',
-                                          style: context.textTheme.caption2,
-                                        )
-                                      ],
-                                    ),
-                                    trailing: InputQuantity(
-                                      max: 100,
-                                    )),
-                              );
-                            },
-                          )
-                        ],
+                      child: SelectedProduct(
+                        state: this,
+                        items: [],
                       ),
                     )
                   ],

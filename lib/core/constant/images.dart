@@ -12,4 +12,5 @@ sealed class AppImages {
   static String locationLoad = 'location_load'.image.png;
   static String congratulation = 'congratulation'.image.png;
   static String success = 'success'.image.png;
+  static String empty = 'empty_box'.image.png;
 }

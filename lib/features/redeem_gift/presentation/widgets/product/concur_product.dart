@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -5,11 +6,18 @@ import 'package:fms/core/responsive/responsive.dart';
 import '../../../../../core/constant/colors.dart';
 import '../../../../../core/constant/images.dart';
 import '../../../../../core/widgets/button/flat.dart';
+import '../../../../../core/widgets/custom_checkbox.dart';
 import '../../../../../core/widgets/item_container.dart';
 
-class ConcurProduct extends StatelessWidget {
+class ConcurProduct extends StatefulWidget {
   const ConcurProduct({super.key});
 
+  @override
+  State<ConcurProduct> createState() => _ConcurProductState();
+}
+
+class _ConcurProductState extends State<ConcurProduct> {
+  final Map<int, bool> _data = {};
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,11 +48,13 @@ class ConcurProduct extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
                     child: ItemContainer(
                       titleFlexible: false,
-                      trailing: Radio(
-                        value: false,
-                        groupValue: true,
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        onChanged: (value) {},
+                      trailing: CustomCheckbox(
+                        value: _data[index] ?? false,
+                        onChanged: (value) {
+                          setState(() {
+                            _data[index] = value;
+                          });
+                        },
                       ),
                       leading: Image.asset(AppImages.loginBanner),
                       title: Column(

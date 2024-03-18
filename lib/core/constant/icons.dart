@@ -58,4 +58,5 @@ class AppIcons {
   static String success = 'success'.icon.svg;
   static String failure = 'failure'.icon.svg;
   static String logout = 'logout'.icon.svg;
+  static String upload = 'upload'.icon.svg;
 }

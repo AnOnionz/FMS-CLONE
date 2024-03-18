@@ -53,7 +53,7 @@ class _InputQuantityState extends State<InputQuantity> {
       children: [
         _buttonQuantity(icon: AppIcons.remove, onPressed: _decrease),
         Padding(
-          padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 12.w),
+          padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 6.w),
           child: SizedBox(
             width: 32.w,
             height: 24.h,
