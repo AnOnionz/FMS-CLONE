@@ -36,7 +36,7 @@ class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
               text: TextSpan(
                   text: 'Khách hàng có thể đổi tối đa ',
                   style: context.textTheme.body1
-                      ?.copyWith(color: '#252837'.toColor()),
+                      ?.copyWith(color: AppColors.midnightExpress),
                   children: [
                 TextSpan(
                     text: '5',
@@ -46,7 +46,7 @@ class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
                 TextSpan(
                     text: ' quà',
                     style: context.textTheme.body1
-                        ?.copyWith(color: '#252837'.toColor()))
+                        ?.copyWith(color: AppColors.midnightExpress))
               ])),
         ),
         FlatButton(
@@ -112,7 +112,7 @@ class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
                               ])),
                         ),
                         Divider(
-                          color: 'EBEBEB'.toColor(),
+                          color: AppColors.whisper,
                         )
                       ],
                     ),
@@ -125,7 +125,7 @@ class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
                         onLimitGift: () => _showSheetLimitGift(context),
                       ),
                       separatorBuilder: (context, index) => Divider(
-                        color: 'EBEBEB'.toColor(),
+                        color: AppColors.whisper,
                       ),
                     ),
                   )

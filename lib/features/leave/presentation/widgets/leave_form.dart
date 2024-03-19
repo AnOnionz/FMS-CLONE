@@ -20,8 +20,7 @@ class LeaveForm extends StatefulWidget {
 class _LeaveFormState extends State<LeaveForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late final TextEditingController reasonController =
-      TextEditingController(text: 'Lý do');
+  late final TextEditingController reasonController = TextEditingController();
 
   late final TextEditingController startController = TextEditingController(
       text: DateFormat('HH:mm').format(widget.model.project.start));
@@ -110,7 +109,10 @@ class _LeaveFormState extends State<LeaveForm> {
       controller: reasonController,
       style: context.textTheme.body1,
       maxLines: 4,
+      cursorHeight: 19.2.sp,
       decoration: InputDecoration(
+          hintText: 'Lý do',
+          hintStyle: context.textTheme.body1,
           contentPadding: EdgeInsets.all(16.h),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.squared),
