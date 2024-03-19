@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -17,6 +19,28 @@ class SyncPage extends StatefulWidget {
 }
 
 class _SyncPageState extends State<SyncPage> {
+  late StreamController<int> _progressController = StreamController.broadcast();
+
+  int countData = 24;
+
+  Duration delay = 1.seconds;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Stream<int> addStream() async* {
+    int count = 0;
+    yield count;
+    while (count < countData) {
+      await Future.delayed(delay);
+      yield count += 1;
+    }
+    await Future.delayed(delay);
+    yield countData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,22 +113,77 @@ class _SyncPageState extends State<SyncPage> {
                                     style: context.textTheme.caption2,
                                   )
                                 ])),
-                            Text('65%')
+                            SizedBox(height: 8.h),
+                            StreamBuilder<int>(
+                                stream: _progressController.stream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Text(
+                                      '0',
+                                      style: context.textTheme.caption1
+                                          ?.copyWith(color: AppColors.nobel),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    final value = snapshot.data! / countData;
+                                    return Text(
+                                      '${(value * 100).toStringAsFixed(0)} %',
+                                      style: context.textTheme.caption1
+                                          ?.copyWith(color: AppColors.orange),
+                                    );
+                                  }
+
+                                  return SizedBox(
+                                    height: 16.8.sp,
+                                  );
+                                })
                           ],
                         ),
                         SizedBox(height: 8.h),
-                        ProgressBar(
-                          value: 1,
-                          width: context.screenWidth,
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppColors.orange,
-                              AppColors.orange.withOpacity(0.8)
-                            ],
-                          ),
-                        )
+                        StreamBuilder<int>(
+                            stream: _progressController.stream,
+                            initialData: 0,
+                            builder: (context, snapshot) {
+                              double value = 1;
+
+                              if (snapshot.hasData) {
+                                value =
+                                    (countData - snapshot.data!) / countData;
+
+                                return AnimatedProgressBar(
+                                  value: value,
+                                  width: context.screenWidth,
+                                  backgroundColor: 'E4EAF0'.toColor(),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      AppColors.orange,
+                                      AppColors.orange.withOpacity(0.8)
+                                    ],
+                                  ),
+                                  duration: snapshot.data == 0
+                                      ? Duration.zero
+                                      : delay,
+                                );
+                              }
+
+                              return AnimatedProgressBar(
+                                value: 0,
+                                width: context.screenWidth,
+                                backgroundColor: 'E4EAF0'.toColor(),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    AppColors.orange,
+                                    AppColors.orange.withOpacity(0.8)
+                                  ],
+                                ),
+                                duration: delay,
+                              );
+                            })
                       ],
                     ),
                   )
@@ -119,12 +198,18 @@ class _SyncPageState extends State<SyncPage> {
             decoration: BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(
                   offset: Offset(0, -2),
-                  blurRadius: 25,
+                  blurRadius: 25.squared,
                   color: AppColors.black.withOpacity(0.15))
             ]),
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
             child: FlatButton(
-              onPressed: () {},
+              onPressed: () async {
+                setState(() {
+                  _progressController = StreamController.broadcast();
+                });
+                await _progressController.addStream(addStream());
+                _progressController.close();
+              },
               name: 'Đồng bộ',
               color: AppColors.orange,
               disableColor: AppColors.potPourri,
