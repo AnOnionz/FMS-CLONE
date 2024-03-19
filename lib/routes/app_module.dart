@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/widgets/camera_custom.dart';
+import 'package:fms/features/app_information/presentation/pages/app_information_page.dart';
 import 'package:fms/features/crawl/presentation/pages/crawl_page.dart';
 import 'package:fms/features/note/presentation/pages/note_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/history_exchange.dart';
@@ -92,8 +93,7 @@ class AppModule extends Module {
         transition: TransitionType.fadeIn);
     r.child(Routes.leave,
         child: (_) => const LeavePage(), transition: TransitionType.fadeIn);
-    r.child(Routes.setting,
-        child: (_) => SettingPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.setting, child: (_) => SettingPage());
     r.child(Routes.appLock,
         child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
     r.child(Routes.appLock,
@@ -119,6 +119,7 @@ class AppModule extends Module {
     r.child(Routes.historyExchangeDetail,
         child: (_) => const HistoryExchangeDetailPage(),
         transition: TransitionType.fadeIn);
+    r.child(Routes.appInformation, child: (_) => const AppInformationPage());
     r.child(Routes.sync,
         child: (_) => const SyncPage(), transition: TransitionType.fadeIn);
   }

@@ -39,4 +39,6 @@ sealed class AppColors {
   static const Color lavenderBlue = Color(0xFFCBD6FF);
   static const Color summerSky = Color(0xFF27A9E0);
   static const Color fireBrick = Color(0xFFB3261E);
+  static const Color whisper = Color(0xFFEBEBEB);
+  static const Color midnightExpress = Color(0xFF252837);
 }

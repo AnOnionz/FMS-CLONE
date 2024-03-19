@@ -63,20 +63,30 @@ class DrawerSide extends StatelessWidget {
                                           ?.copyWith(color: AppColors.nobel),
                                     ),
                                     SizedBox(height: 48.h),
-                                    rowFeature(AppIcons.notification,
-                                        'Thông báo', () {}),
+                                    _rowFeature(
+                                      context,
+                                      AppIcons.notification,
+                                      'Thông báo',
+                                      Routes.notification,
+                                    ),
                                     SizedBox(
                                       height: 8.h,
                                     ),
-                                    rowFeature(AppIcons.about,
-                                        'Thông tin và ứng dụng', () {}),
+                                    _rowFeature(
+                                      context,
+                                      AppIcons.about,
+                                      'Thông tin và ứng dụng',
+                                      Routes.appInformation,
+                                    ),
                                     SizedBox(
                                       height: 8.h,
                                     ),
-                                    rowFeature(AppIcons.config, 'Cài đặt', () {
-                                      context.nextRoute(Routes.setting);
-                                      Scaffold.of(context).closeEndDrawer();
-                                    }),
+                                    _rowFeature(
+                                      context,
+                                      AppIcons.config,
+                                      'Cài đặt',
+                                      Routes.setting,
+                                    ),
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 30.h),
@@ -85,16 +95,15 @@ class DrawerSide extends StatelessWidget {
                                         endIndent: 30.w,
                                       ),
                                     ),
-                                    rowInfo(context, 'Ứng dụng', 'FMS 2023'),
+                                    _rowInfo(context, 'Ứng dụng', 'FMS 2023'),
                                     SizedBox(
                                       height: 8.h,
                                     ),
-                                    rowInfo(context, 'Dự án', 'CellphoneS'),
+                                    _rowInfo(context, 'Dự án', 'CellphoneS'),
                                     SizedBox(
                                       height: 8.h,
                                     ),
-                                    rowInfo(context, 'Phiên bản', '2.0.1'),
-                                    // SizedBox(height: 200.h),
+                                    _rowInfo(context, 'Phiên bản', '2.0.1'),
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
@@ -179,7 +188,7 @@ class DrawerSide extends StatelessWidget {
     );
   }
 
-  Widget rowInfo(BuildContext context, String left, String right) {
+  Widget _rowInfo(BuildContext context, String left, String right) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
       child: Row(
@@ -195,9 +204,13 @@ class DrawerSide extends StatelessWidget {
     );
   }
 
-  Widget rowFeature(String icon, String name, VoidCallback onPressed) {
+  Widget _rowFeature(
+      BuildContext context, String icon, String name, String route) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () {
+        context.nextRoute(route);
+        Scaffold.of(context).closeEndDrawer();
+      },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
         child: Row(

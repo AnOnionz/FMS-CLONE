@@ -13,4 +13,7 @@ sealed class AppImages {
   static String congratulation = 'congratulation'.image.png;
   static String success = 'success'.image.png;
   static String empty = 'empty_box'.image.png;
+  static String outlet = 'outlet'.image.png;
+  static String employee = 'employee'.image.png;
+  static String application = 'application'.image.png;
 }

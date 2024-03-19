@@ -23,5 +23,7 @@ class Routes {
   static const String historyExchangeDetail = '/history_exchange_detail';
   static const String crawl = '/crawl';
   static const String report = '/report';
+  static const String appInformation = '/app_information';
+  static const String notification = '/notification';
   static const String sync = '/sync';
 }
