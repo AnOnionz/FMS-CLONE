@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../core/constant/colors.dart';
-import '../../../../core/constant/icons.dart';
 import '../../../../core/widgets/take_image_list.dart';
 import 'note_text_field.dart';
 

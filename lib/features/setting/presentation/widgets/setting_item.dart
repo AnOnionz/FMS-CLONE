@@ -13,19 +13,17 @@ class SettingItem extends StatelessWidget {
   final String? name;
   final SettingType type;
   final VoidCallback onTap;
-  final bool? switchValue;
+  final bool switchValue;
   const SettingItem(
       {super.key,
       this.icon,
       this.name,
       required this.type,
       required this.onTap,
-      this.switchValue});
+      this.switchValue = false});
 
   @override
   Widget build(BuildContext context) {
-    bool _value = switchValue ?? false;
-
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
       decoration: BoxDecoration(
@@ -61,7 +59,7 @@ class SettingItem extends StatelessWidget {
         trailing: switch (type) {
           SettingType.toggle => StatefulBuilder(builder: (context, setState) {
               return CupertinoSwitch(
-                value: _value,
+                value: switchValue,
                 activeColor: AppColors.orange,
                 onChanged: (bool? value) {
                   onTap();

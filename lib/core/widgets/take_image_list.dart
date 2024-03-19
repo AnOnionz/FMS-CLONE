@@ -12,7 +12,6 @@ import 'package:fms/core/permission/permisson_manager.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/services/media/media_service.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../constant/colors.dart';
