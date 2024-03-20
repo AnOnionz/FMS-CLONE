@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/database/file_metadata.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/permission/permisson_manager.dart';
@@ -184,18 +185,20 @@ class ImageDetail extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12.squared)),
             child: Column(
               children: [
-                Expanded(
-                  flex: 65,
+                SizedBox(
+                  height: 70.h,
+                  width: 100.h,
                   child: Image.memory(
                     Uint8List.fromList(image.rawPath),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitWidth,
                   ),
                 ),
-                Expanded(
-                  flex: 35,
+                SizedBox(
+                  height: 30.h,
+                  width: 100.h,
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 4.h, horizontal: 7.w),
+                        EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

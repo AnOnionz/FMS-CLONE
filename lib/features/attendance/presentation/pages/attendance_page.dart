@@ -22,6 +22,7 @@ class AttendancePage extends StatefulWidget {
 }
 
 class _AttendancePageState extends State<AttendancePage> {
+  bool isMapLoading = true;
   final List<FileWithMetaData> files = [];
 
   void _showSheetHistory(BuildContext context) {

@@ -110,6 +110,7 @@ class _LeaveFormState extends State<LeaveForm> {
       style: context.textTheme.body1,
       maxLines: 4,
       cursorHeight: 19.2.sp,
+      textInputAction: TextInputAction.done,
       decoration: InputDecoration(
           hintText: 'Lý do',
           hintStyle: context.textTheme.body1,

@@ -73,7 +73,7 @@ class AppModule extends Module {
     r.child(Routes.camera, child: (_) => CameraCustom());
     r.child(Routes.photoView,
         child: (context) => PhotoView(file: r.args.data as XFile),
-        transition: TransitionType.leftToRightWithFade);
+        transition: TransitionType.noTransition);
     r.child(Routes.workForce,
         child: (_) => const WorkForcePage(), transition: TransitionType.fadeIn);
     r.child(Routes.projectSelection,

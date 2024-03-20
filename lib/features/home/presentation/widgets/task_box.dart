@@ -8,7 +8,9 @@ import 'package:fms/core/responsive/utilities/flex_extention.dart';
 import 'package:fms/routes/routes.dart';
 
 class TaskBox extends StatefulWidget {
-  const TaskBox({super.key});
+  final String name;
+  final VoidCallback onPressed;
+  const TaskBox({super.key, required this.name, required this.onPressed});
 
   @override
   State<TaskBox> createState() => _TaskBoxState();
@@ -40,7 +42,7 @@ class _TaskBoxState extends State<TaskBox> {
           Align(
             alignment: Alignment.bottomCenter,
             child: GestureDetector(
-              onTap: () => context.nextRoute(Routes.locate),
+              onTap: widget.onPressed,
               child: DecoratedBox(
                 key: _key,
                 decoration: BoxDecoration(
@@ -55,7 +57,7 @@ class _TaskBoxState extends State<TaskBox> {
                   child: Center(
                     heightFactor: 1,
                     child: Text(
-                      'Chấm công',
+                      widget.name,
                       textAlign: TextAlign.center,
                       style: context.textTheme.subtitle1
                           ?.copyWith(color: AppColors.white),

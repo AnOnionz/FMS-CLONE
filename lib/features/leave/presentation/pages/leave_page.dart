@@ -80,26 +80,29 @@ class _LeavePageState extends State<LeavePage> {
     OverlayManager.showSheet(
         body: Padding(
       padding: EdgeInsets.only(top: 20.h),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Tạo đơn nghỉ phép',
-              style: context.textTheme.h2,
+      child: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Tạo đơn nghỉ phép',
+                style: context.textTheme.h2,
+              ),
             ),
-          ),
-          SizedBox(height: 26.h),
-          LeaveForm(
-            date: _focusedDay.value,
-            model: Leave(project: p),
-          ),
-          FlatButton(
-              onPressed: () {},
-              name: 'Tạo Đơn Nghỉ Phép',
-              color: AppColors.orange)
-        ],
+            SizedBox(height: 26.h),
+            LeaveForm(
+              date: _focusedDay.value,
+              model: Leave(project: p),
+            ),
+            FlatButton(
+                onPressed: () {},
+                name: 'Tạo Đơn Nghỉ Phép',
+                color: AppColors.orange)
+          ],
+        ),
       ),
     ));
   }
@@ -132,6 +135,7 @@ class _LeavePageState extends State<LeavePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: DefaultAppBar(
         title: 'Xin nghỉ phép',
         action: HistoryButton(onPressed: () => _showSheetHistoryLeave()),
