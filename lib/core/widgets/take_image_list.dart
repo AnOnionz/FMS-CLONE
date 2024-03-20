@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/database/file_metadata.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/permission/permisson_manager.dart';

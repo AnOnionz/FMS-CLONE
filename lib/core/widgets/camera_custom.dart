@@ -4,7 +4,6 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
 
