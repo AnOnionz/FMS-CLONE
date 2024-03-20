@@ -4,6 +4,7 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../../core/constant/colors.dart';
 import '../../../../../core/constant/images.dart';
+import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/item_container.dart';
 import '../input_quantity.dart';
 
@@ -20,7 +21,7 @@ class SelectedProduct extends StatelessWidget {
     } else {
       return CustomScrollView(
         shrinkWrap: true,
-        physics: RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+        physics: kPhysics,
         slivers: [
           SliverList.separated(
             itemCount: items.length,

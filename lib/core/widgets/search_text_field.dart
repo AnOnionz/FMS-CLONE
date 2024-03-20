@@ -8,6 +8,8 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
+import '../styles/theme.dart';
+
 class SearchTextField<T> extends StatefulWidget {
   final String label;
   final FutureOr<List<T>?> Function(String search) suggestionsCallback;
@@ -42,7 +44,7 @@ class _SearchTextFieldState<T> extends State<SearchTextField<T>> {
       hideOnEmpty: true,
       listBuilder: (context, children) => CustomScrollView(
         shrinkWrap: true,
-        physics: RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+        physics: kPhysics,
         slivers: [
           SliverList.builder(
             itemCount: children.length,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../constant/colors.dart';
 import '../constant/text_styles.dart';
-import '/core/responsive/utilities/flex_extention.dart';
 
 enum ThemeEnum {
   light(),
@@ -28,10 +27,10 @@ extension ThemeEnumExtension on ThemeEnum {
   }
 }
 
-BorderRadius kBorderRadius = BorderRadius.all(Radius.circular(10.sp));
 const Duration kDialogTransitionDuration = Duration(milliseconds: 300);
 const Duration kScrollTransitionDuration = Duration(milliseconds: 50);
-const Size kDialogSize = Size(300, 170);
+const ScrollPhysics kPhysics =
+    RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics());
 
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,

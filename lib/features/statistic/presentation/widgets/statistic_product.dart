@@ -5,6 +5,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/item_container.dart';
 
 import '../../../../core/constant/images.dart';
+import '../../../../core/styles/theme.dart';
 
 class StatisticProduct extends StatelessWidget {
   const StatisticProduct({super.key});
@@ -29,8 +30,7 @@ class StatisticProduct extends StatelessWidget {
           ),
           Expanded(
               child: ListView.builder(
-            physics:
-                RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+            physics: kPhysics,
             itemCount: 20,
             itemBuilder: (context, index) => Container(
               padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),

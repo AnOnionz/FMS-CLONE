@@ -6,6 +6,7 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../../core/constant/colors.dart';
 import '../../../../../core/constant/images.dart';
+import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/button/flat.dart';
 import '../../../../../core/widgets/custom_checkbox.dart';
 import '../../../../../core/widgets/item_container.dart';
@@ -49,8 +50,7 @@ class _SelectProductState extends State<SelectProduct> {
         Flexible(
           child: CustomScrollView(
             shrinkWrap: true,
-            physics:
-                RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+            physics: kPhysics,
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(top: 8.h, bottom: 16.h),

@@ -4,6 +4,7 @@ import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/app_information/presentation/widgets/row_info.dart';
 
 import '../../../../core/constant/images.dart';
+import '../../../../core/styles/theme.dart';
 import '../widgets/information_box.dart';
 
 class AppInformationPage extends StatelessWidget {
@@ -15,7 +16,7 @@ class AppInformationPage extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(title: 'Thông tin và ứng dụng'),
       body: SingleChildScrollView(
-        physics: RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+        physics: kPhysics,
         child: Column(
           children: [
             SizedBox(

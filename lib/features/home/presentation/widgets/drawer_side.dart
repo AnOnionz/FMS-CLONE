@@ -67,7 +67,7 @@ class DrawerSide extends StatelessWidget {
                                       context,
                                       AppIcons.notification,
                                       'Thông báo',
-                                      Routes.notification,
+                                      Routes.setting,
                                     ),
                                     SizedBox(
                                       height: 8.h,
@@ -211,16 +211,19 @@ class DrawerSide extends StatelessWidget {
         context.nextRoute(route);
         Scaffold.of(context).closeEndDrawer();
       },
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
-        child: Row(
-          children: [
-            SvgPicture.asset(icon),
-            SizedBox(
-              width: 16.w,
-            ),
-            Text(name)
-          ],
+      child: ColoredBox(
+        color: AppColors.transparent,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
+          child: Row(
+            children: [
+              SvgPicture.asset(icon),
+              SizedBox(
+                width: 16.w,
+              ),
+              Text(name)
+            ],
+          ),
         ),
       ),
     );

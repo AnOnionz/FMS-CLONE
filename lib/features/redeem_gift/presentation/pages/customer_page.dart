@@ -6,6 +6,7 @@ import 'package:fms/core/widgets/take_image_list.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/styles/theme.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../widgets/customer/info_form.dart';
 
@@ -30,40 +31,42 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
     return Column(
       children: [
         Expanded(
-            child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-              margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(10.squared)),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Thông tin mua hàng',
-                          style: context.textTheme.subtitle1,
-                        ),
-                        SvgPicture.asset(AppIcons.barcode)
-                      ],
+            child: CustomScrollView(
+          physics: kPhysics,
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+                margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(10.squared)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 20.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Thông tin mua hàng',
+                            style: context.textTheme.subtitle1,
+                          ),
+                          SvgPicture.asset(AppIcons.barcode)
+                        ],
+                      ),
                     ),
-                  ),
-                  InfomationForm(
-                    formKey: _formKey,
-                    customerNameController: _customerNameController,
-                    phoneNumberController: _phoneNumberController,
-                    invoiceCodeController: _invoiceCodeController,
-                  ),
-                ],
+                    InfomationForm(
+                      formKey: _formKey,
+                      customerNameController: _customerNameController,
+                      phoneNumberController: _phoneNumberController,
+                      invoiceCodeController: _invoiceCodeController,
+                    ),
+                  ],
+                ),
               ),
             ),
-            Flexible(
+            SliverToBoxAdapter(
               child: Container(
                 padding: EdgeInsets.all(24.h),
                 margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -99,9 +102,83 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                   ],
                 ),
               ),
-            ),
+            )
           ],
-        )),
+        )
+
+            //     Column(
+            //   mainAxisSize: MainAxisSize.min,
+            //   children: [
+            //     Container(
+            //       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+            //       margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
+            //       decoration: BoxDecoration(
+            //           color: AppColors.white,
+            //           borderRadius: BorderRadius.circular(10.squared)),
+            //       child: Column(
+            //         children: [
+            //           Padding(
+            //             padding: EdgeInsets.only(bottom: 20.h),
+            //             child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: [
+            //                 Text(
+            //                   'Thông tin mua hàng',
+            //                   style: context.textTheme.subtitle1,
+            //                 ),
+            //                 SvgPicture.asset(AppIcons.barcode)
+            //               ],
+            //             ),
+            //           ),
+            //           InfomationForm(
+            //             formKey: _formKey,
+            //             customerNameController: _customerNameController,
+            //             phoneNumberController: _phoneNumberController,
+            //             invoiceCodeController: _invoiceCodeController,
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //     Flexible(
+            //       child: Container(
+            //         padding: EdgeInsets.all(24.h),
+            //         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            //         decoration: BoxDecoration(
+            //             color: AppColors.white,
+            //             borderRadius: BorderRadius.circular(10.squared)),
+            //         child: Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Text(
+            //               'Chụp hình hóa đơn',
+            //               style: context.textTheme.subtitle1,
+            //             ),
+            //             Padding(
+            //               padding: EdgeInsets.symmetric(vertical: 20.h),
+            //               child: TakeImage(
+            //                 limit: 5,
+            //                 images: [],
+            //               ),
+            //             ),
+            //             Text(
+            //               'Chụp hình đổi quà',
+            //               style: context.textTheme.subtitle1,
+            //             ),
+            //             Padding(
+            //               padding: EdgeInsets.only(top: 20.h),
+            //               child: TakeImage(
+            //                 limit: 5,
+            //                 images: [],
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // )
+            ),
         Container(
           decoration: BoxDecoration(color: AppColors.white, boxShadow: [
             BoxShadow(

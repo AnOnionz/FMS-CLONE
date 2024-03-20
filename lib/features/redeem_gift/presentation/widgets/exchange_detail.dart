@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../../../core/styles/theme.dart';
 import 'review/review_customer.dart';
 import 'review/review_gift.dart';
 import 'review/review_product.dart';
@@ -11,7 +12,7 @@ class ExchangeDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      physics: RangeMaintainingScrollPhysics(parent: ClampingScrollPhysics()),
+      physics: kPhysics,
       slivers: [
         SliverToBoxAdapter(
           child: ReviewCustomer(),
