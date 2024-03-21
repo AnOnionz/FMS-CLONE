@@ -82,7 +82,7 @@ class _AttendancePageState extends State<AttendancePage> {
                     ),
                     SizedBox(height: 14.h),
                     TakeImage(
-                      limit: 5,
+                      max: 5,
                       images: files,
                     ),
                   ],

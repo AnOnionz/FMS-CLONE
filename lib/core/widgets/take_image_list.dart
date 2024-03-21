@@ -19,12 +19,16 @@ import '../constant/icons.dart';
 
 class TakeImage extends StatefulWidget {
   final List<FileWithMetaData> images;
-  final int limit;
+  final int max;
+  final int? min;
+  final bool isRequiredQuantity;
   final bool isCarousel;
   const TakeImage(
       {super.key,
       required this.images,
-      required this.limit,
+      required this.max,
+      this.min,
+      this.isRequiredQuantity = false,
       this.isCarousel = false});
 
   @override
@@ -36,7 +40,7 @@ class _TakeImageState extends State<TakeImage> {
   late final _images = widget.images;
 
   Future<void> takeImage() async {
-    if (widget.images.length < widget.limit) {
+    if (widget.images.length < widget.max) {
       final file = await _service.pickImage(720, 1280, 90);
       if (file != null) {
         final bytes = await file.readAsBytes();

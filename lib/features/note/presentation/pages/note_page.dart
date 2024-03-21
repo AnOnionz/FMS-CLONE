@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 
@@ -29,7 +30,7 @@ class NotePage extends StatelessWidget {
                       parent: ClampingScrollPhysics()),
                   slivers: [
                     SliverPadding(
-                      padding: MediaQuery.of(context).viewInsets,
+                      padding: context.viewInsets,
                       sliver: SliverList.builder(
                         itemCount: 3,
                         itemBuilder: (context, index) => NoteItem(

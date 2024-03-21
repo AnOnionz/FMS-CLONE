@@ -19,7 +19,7 @@ class CustomBottomSheet extends StatelessWidget {
         }
       },
       child: Padding(
-        padding: MediaQuery.of(context).viewInsets,
+        padding: context.viewInsets,
         child: Stack(
           alignment: Alignment.center,
           clipBehavior: Clip.none,

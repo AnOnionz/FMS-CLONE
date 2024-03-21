@@ -49,6 +49,7 @@ class SettingItem extends StatelessWidget {
             name != null
                 ? Text(
                     name!,
+                    softWrap: true,
                     overflow: TextOverflow.clip,
                     style: context.textTheme.subtitle1
                         ?.copyWith(color: AppColors.nero),

@@ -56,7 +56,7 @@ class _NoteItemState extends State<NoteItem> {
                   padding: EdgeInsets.only(top: 16.h),
                   child: TakeImage(
                     images: [],
-                    limit: 5,
+                    max: 5,
                     isCarousel: true,
                   ),
                 )

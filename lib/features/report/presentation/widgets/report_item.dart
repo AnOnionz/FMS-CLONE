@@ -52,7 +52,7 @@ class _ReportItemState extends State<ReportItem> {
             padding: EdgeInsets.symmetric(vertical: 16.h),
             child: TakeImage(
               images: [],
-              limit: widget.max,
+              max: widget.max,
               isCarousel: true,
             ),
           ),

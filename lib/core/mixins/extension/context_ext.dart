@@ -57,6 +57,9 @@ extension ContextExtensions on BuildContext {
   /// Get MediaQuery Screen Padding
   EdgeInsets get screenPadding => mq.padding;
 
+  /// Get MediaQuery Screen Padding
+  EdgeInsets get viewInsets => mq.viewInsets;
+
   /// Get MediaQuery Screen Width
   double get screenWidth => mq.size.width;
 

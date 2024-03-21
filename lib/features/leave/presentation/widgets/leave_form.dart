@@ -168,8 +168,7 @@ class _LeaveFormState extends State<LeaveForm> {
                   data: TimePickerTheme.of(context)
                       .copyWith(backgroundColor: AppColors.aliceBlue),
                   child: MediaQuery(
-                    data: MediaQuery.of(context)
-                        .copyWith(alwaysUse24HourFormat: true),
+                    data: context.mq.copyWith(alwaysUse24HourFormat: true),
                     child: child!,
                   ),
                 );
