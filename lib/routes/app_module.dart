@@ -50,7 +50,11 @@ class AppModule extends Module {
   void binds(i) {
     i.add<UserLocalDataSource>(UserLocalDataSourceImpl.new);
     i.add<UserRemoteDataSource>(UserRemoteDataSourceImpl.new);
-    i.addSingleton<UserRepository>(UserRepositoryImpl.new);
+    i.addSingleton<UserRepository>(UserRepositoryImpl.new,
+        config: BindConfig(
+          notifier: (listenable) => listenable,
+          onDispose: (listenable) => listenable.dispose(),
+        ));
     i.addSingleton<AuthenticationBloc>(AuthenticationBloc.new);
     i.add<LoginUsecase>(LoginUsecase.new);
     i.add<LogoutUsecase>(LogoutUsecase.new);
