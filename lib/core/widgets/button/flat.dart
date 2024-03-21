@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -39,10 +41,16 @@ class FlatButton extends StatelessWidget {
           children: [
             icon ?? SizedBox(),
             SizedBox(width: icon != null ? 4.w : 0),
-            Text(
-              name,
-              style: context.textTheme.button2
-                  ?.copyWith(color: enabled ? textColor : disableTextColor),
+            Flexible(
+              child: FittedBox(
+                child: Text(
+                  name,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.textTheme.button2
+                      ?.copyWith(color: enabled ? textColor : disableTextColor),
+                ),
+              ),
             ),
           ],
         ),

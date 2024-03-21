@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 
 import 'leave_history_item.dart';
 
@@ -13,7 +14,7 @@ class LeaveHistory extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.h),
       child: CustomScrollView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(parent: ClampingScrollPhysics()),
+        physics: kPhysics,
         slivers: [
           SliverList.separated(
             itemCount: 4,

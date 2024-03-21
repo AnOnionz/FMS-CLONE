@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/button/flat.dart';
@@ -221,29 +223,35 @@ class _LeavePageState extends State<LeavePage> {
                 builder: (context, projects, _) {
                   return Row(
                     children: [
-                      Column(
-                        children: [
-                          Text(DateFormat.EEEE().format(_focusedDay.value)),
-                          Container(
-                            height: 35.h,
-                            width: 35.h,
-                            decoration: BoxDecoration(
-                                color: AppColors.roseWhite,
-                                borderRadius:
-                                    BorderRadius.circular(20.squared)),
-                            child: Center(
-                              child: Text(
-                                _focusedDay.value.day.toString(),
-                                style: context.textTheme.h2,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
                       Expanded(
+                        flex: 5,
+                        child: Column(
+                          children: [
+                            Text(DateFormat.EEEE().format(_focusedDay.value)),
+                            Container(
+                              height: 35.w,
+                              width: 35.w,
+                              decoration: BoxDecoration(
+                                  color: AppColors.roseWhite,
+                                  borderRadius:
+                                      BorderRadius.circular(20.squared)),
+                              child: Center(
+                                child: FittedBox(
+                                  child: Text(
+                                    _focusedDay.value.day.toString(),
+                                    style: context.textTheme.h2,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      // list project available
+                      Expanded(
+                        flex: 22,
                         child: ListView.builder(
-                          physics: BouncingScrollPhysics(
-                              parent: ClampingScrollPhysics()),
+                          physics: kPhysics,
                           itemCount: projects.length,
                           itemBuilder: (context, index) {
                             return ProjectAvailable(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/date_picker.dart';
 
@@ -24,6 +25,7 @@ class HistoryExchangePage extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               itemCount: 8,
+              physics: kPhysics,
               itemBuilder: (context, index) => HistoryExchangeReduceItem(),
             ),
           )

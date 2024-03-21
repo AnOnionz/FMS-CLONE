@@ -72,7 +72,7 @@ class StepContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      padding: EdgeInsets.symmetric(horizontal: 5.w),
       child: Column(
         children: [
           isComplete
@@ -86,7 +86,7 @@ class StepContainer extends StatelessWidget {
                   child: Icon(
                     Icons.done,
                     color: AppColors.white,
-                    size: 14,
+                    size: 14.w,
                   ))
               : Container(
                   height: 18.h,

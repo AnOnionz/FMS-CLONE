@@ -68,30 +68,7 @@ class LoginPage extends StatelessWidget {
                 child: FlatButton(
                     onPressed: () => context.nextRoute(Routes.workForce),
                     name: context.language.loginButtonText,
-                    color: AppColors.orange)
-                // TextButton(
-                //   onPressed: () {
-                //     context.nextRoute(Routes.workForce);
-                //   },
-                //   child: Padding(
-                //     padding: Fx.pV16,
-                //     child: Text(
-                //       textScaler: TextScaler.linear(1),
-                //       context.language.loginButtonText,
-                //       style: context.textTheme.button2
-                //           ?.copyWith(color: AppColors.white),
-                //     ),
-                //   ),
-                //   style: ButtonStyle(
-                //       shape: MaterialStatePropertyAll<OutlinedBorder>(
-                //           RoundedRectangleBorder(
-                //               borderRadius:
-                //                   BorderRadius.circular(50.squared))),
-                //       backgroundColor:
-                //           MaterialStatePropertyAll<Color>(AppColors.orange)),
-                // ),
-
-                ),
+                    color: AppColors.orange)),
           )
         ],
       ),

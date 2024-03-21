@@ -5,6 +5,7 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
@@ -45,22 +46,28 @@ class HomePage extends StatelessWidget {
           )),
       body: Padding(
         padding: EdgeInsets.only(top: 30.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _title(context, 'Thông tin chung'),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
-                child: CommonInfo()),
-            _title(context, 'Chức năng hỗ trợ'),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
-                child: CommonFeature()),
-            _title(context, 'Danh sách công việc'),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
-                child: Tasks()),
-          ],
+        child: SingleChildScrollView(
+          physics: kPhysics,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _title(context, 'Thông tin chung'),
+              Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
+                  child: CommonInfo()),
+              _title(context, 'Chức năng hỗ trợ'),
+              Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
+                  child: CommonFeature()),
+              _title(context, 'Danh sách công việc'),
+              Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
+                  child: Tasks()),
+            ],
+          ),
         ),
       ),
     );

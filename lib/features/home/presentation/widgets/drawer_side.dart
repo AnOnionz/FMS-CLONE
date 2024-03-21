@@ -6,6 +6,7 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:fms/routes/routes.dart';
 
@@ -30,8 +31,7 @@ class DrawerSide extends StatelessWidget {
                   child: Stack(
                     children: [
                       CustomScrollView(
-                        physics: BouncingScrollPhysics(
-                            parent: ClampingScrollPhysics()),
+                        physics: kPhysics,
                         slivers: [
                           SliverList.list(children: [
                             SizedBox(

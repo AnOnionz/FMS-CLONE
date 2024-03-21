@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/workForce/presentation/widgets/booth_item.dart';
 
@@ -23,8 +24,7 @@ class BoothSelectionPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: CustomScrollView(
-                    physics:
-                        BouncingScrollPhysics(parent: ClampingScrollPhysics()),
+                    physics: kPhysics,
                     slivers: [
                       SliverList.builder(
                         itemCount: 5,

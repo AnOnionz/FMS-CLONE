@@ -6,6 +6,7 @@ import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/routes/routes.dart';
 
 import '../../../../core/widgets/button/flat.dart';
@@ -62,9 +63,10 @@ class WorkForcePage extends StatelessWidget {
               ),
               Flexible(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 22.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 16.h),
                   child: DecoratedBox(
                       child: SingleChildScrollView(
+                        physics: kPhysics,
                         child: Column(children: [
                           Padding(
                             padding: EdgeInsets.only(top: 27.h),

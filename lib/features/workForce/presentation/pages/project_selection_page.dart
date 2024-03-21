@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 
 import '../../../../core/widgets/app_bar.dart';
 import '../widgets/project_item.dart';
@@ -24,8 +25,7 @@ class ProjectSelectionPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: CustomScrollView(
-                    physics:
-                        BouncingScrollPhysics(parent: ClampingScrollPhysics()),
+                    physics: kPhysics,
                     slivers: [
                       SliverList.builder(
                         itemCount: 5,
