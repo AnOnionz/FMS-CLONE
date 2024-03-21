@@ -5,7 +5,7 @@ import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-import 'package:fms/routes/routes.dart';
+import '../../../../routes/routes.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

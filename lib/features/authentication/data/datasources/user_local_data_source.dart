@@ -17,6 +17,7 @@ sealed class UserLocalDataSource {
 class UserLocalDataSourceImpl implements UserLocalDataSource {
   @override
   bool get isLogin => getUserFromLocal() != null;
+
   final database = Database();
 
   @override

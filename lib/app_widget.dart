@@ -34,20 +34,23 @@ class App extends StatelessWidget {
         supportedLocales: L.delegate.supportedLocales,
         routerConfig: Modular.routerConfig,
         builder: (context, child) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            bloc: Modular.get<AuthenticationBloc>(),
-            listener: (context, state) {
-              switch (state.status) {
-                case AuthenticationStatus.authenticated:
-                  context.nextAndRemoveUntilRoute(Routes.home,
-                      arguments: state.user);
-                case AuthenticationStatus.unauthenticated:
-                  context.nextAndRemoveUntilRoute(Routes.login);
-                case AuthenticationStatus.unknown:
-                  break;
-              }
-            },
-            child: child,
+          return RepositoryProvider(
+            create: (context) => Modular.get<UserRepository>(),
+            child: BlocListener<AuthenticationBloc, AuthenticationState>(
+              bloc: Modular.get<AuthenticationBloc>(),
+              listener: (context, state) {
+                switch (state.status) {
+                  case AuthenticationStatus.authenticated:
+                    context.nextAndRemoveUntilRoute(Routes.home,
+                        arguments: state.user);
+                  case AuthenticationStatus.unauthenticated:
+                    context.nextAndRemoveUntilRoute(Routes.login);
+                  case AuthenticationStatus.unknown:
+                    break;
+                }
+              },
+              child: child,
+            ),
           );
         },
       ),

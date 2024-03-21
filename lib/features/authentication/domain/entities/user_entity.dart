@@ -18,3 +18,7 @@ base class UserEntity {
   @override
   String toString() => 'UserEntity(id: $id)';
 }
+
+final class Anonymous extends UserEntity {
+  Anonymous() : super(id: '0');
+}

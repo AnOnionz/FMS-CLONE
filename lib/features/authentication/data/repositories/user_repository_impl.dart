@@ -10,8 +10,10 @@ import '/features/authentication/domain/entities/user_entity.dart';
 import '/features/authentication/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
+  final anonymous = Anonymous();
+
   @override
-  UserEntity? get user => _user;
+  UserEntity get user => _user ?? anonymous;
 
   UserRepositoryImpl(
       {required UserRemoteDataSource remote,
