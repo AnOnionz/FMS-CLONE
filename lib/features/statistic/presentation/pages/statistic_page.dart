@@ -50,30 +50,19 @@ class _StatisticPageState extends State<StatisticPage>
               physics: RangeMaintainingScrollPhysics(
                   parent: ClampingScrollPhysics()),
               splashFactory: NoSplash.splashFactory,
+              labelStyle: context.textTheme.caption1,
               tabs: <Widget>[
                 Tab(
-                  icon: Text(
-                    'Tổng quan',
-                    style: context.textTheme.caption1,
-                  ),
+                  text: 'Tổng quan',
                 ),
                 Tab(
-                  icon: Text(
-                    'Sản phẩm',
-                    style: context.textTheme.caption1,
-                  ),
+                  text: 'Sản phẩm',
                 ),
                 Tab(
-                  icon: Text(
-                    'Quà tặng',
-                    style: context.textTheme.caption1,
-                  ),
+                  text: 'Quà tặng',
                 ),
                 Tab(
-                  icon: Text(
-                    'Sampling',
-                    style: context.textTheme.caption1,
-                  ),
+                  text: 'Sampling',
                 ),
               ],
             ),
