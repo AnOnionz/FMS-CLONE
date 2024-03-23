@@ -1,5 +1,8 @@
 abstract final class Keys {
   static const String ENV = 'env';
+  static const String AUTH0_DOMAIN = 'AUTH0_DOMAIN';
+  static const String AUTH0_CLIENT_ID = 'AUTH0_CLIENT_ID';
+  static const String AUTH0_CUSTOM_SCHEME = 'AUTH0_CUSTOM_SCHEME';
   static const String BASE_URL = 'apiUrl';
   static const String APP_NAME = 'appname';
   static const String LOCALE = 'locale';

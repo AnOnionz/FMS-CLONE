@@ -10,6 +10,8 @@ class SignInitial extends SignState {}
 
 class SignProgress extends SignState {}
 
+class SignCancel extends SignState {}
+
 class SignSuccess extends SignState {
   final SignStatus status;
 

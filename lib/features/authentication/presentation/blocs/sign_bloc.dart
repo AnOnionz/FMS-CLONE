@@ -23,10 +23,14 @@ class SignBloc extends Bloc<SignEvent, SignState> {
     Emitter<SignState> emit,
   ) async {
     emit(SignProgress());
-    final execute = await loginUsecase(
-        LoginParams(username: event.username, password: event.password));
-    execute.fold((fail) => emit(SignFailure(fail)),
-        (success) => emit(SignSuccess(status: SignStatus.logged)));
+    final execute = await loginUsecase(NoParams());
+    execute.fold((fail) => emit(SignFailure(fail)), (success) {
+      if (success) {
+        emit(SignSuccess(status: SignStatus.logged));
+      } else {
+        emit(SignCancel());
+      }
+    });
   }
 
   Future<void> _onSignOut(

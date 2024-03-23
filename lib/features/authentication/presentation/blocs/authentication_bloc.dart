@@ -40,7 +40,7 @@ class AuthenticationBloc
         final user = _userRepository.user;
 
         return emit(
-          user is! Anonymous
+          user != null
               ? AuthenticationState.authenticated(user)
               : const AuthenticationState.unauthenticated(),
         );

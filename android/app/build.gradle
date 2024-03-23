@@ -51,22 +51,44 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders += [auth0Domain: "$System.env.AUTH0_DOMAIN",
+                                auth0Scheme: "$System.env.AUTH0_CUSTOM_SCHEME"]
     }
 
-    flavorDimensions "mode"
+    flavorDimensions "default"
 
     productFlavors {
-        dev {}
-        staging{}
-        prod {}
+        dev { dimension "default"
+            manifestPlaceholders['auth0Domain'] = "$System.env.AUTH0_DOMAIN"
+            manifestPlaceholders['auth0Scheme'] = "$System.env.AUTH0_CUSTOM_SCHEME"}
+        staging{ dimension "default"
+           manifestPlaceholders['auth0Domain'] = "$System.env.AUTH0_DOMAIN"
+            manifestPlaceholders['auth0Scheme'] = "$System.env.AUTH0_CUSTOM_SCHEME"}
+        prod { dimension "default"
+            manifestPlaceholders['auth0Domain'] = "$System.env.AUTH0_DOMAIN"
+            manifestPlaceholders['auth0Scheme'] = "$System.env.AUTH0_CUSTOM_SCHEME"}
+    }
+
+    buildFeatures {
+        buildConfig true
+       
     }
 
     buildTypes {
-
+        
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
+            universalApk true
         }
     }
 }
@@ -77,6 +99,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+   
 }
 
 

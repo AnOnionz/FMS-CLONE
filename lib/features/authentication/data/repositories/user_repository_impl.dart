@@ -10,10 +10,8 @@ import '/features/authentication/domain/entities/user_entity.dart';
 import '/features/authentication/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  final anonymous = Anonymous();
-
   @override
-  UserEntity get user => _user ?? anonymous;
+  UserEntity? get user => _user;
 
   UserRepositoryImpl(
       {required UserRemoteDataSource remote,
@@ -24,16 +22,19 @@ class UserRepositoryImpl implements UserRepository {
         _client = client;
 
   @override
-  Future<Result<bool>> loginWithUsernameAndPassword(
-      {required String username, required String password}) async {
+  Future<Result<bool>> loginWithAuth0() async {
     return todo(() async {
       final user = await _remote.loginWithUsernameAndPassword();
-      _user = user;
-      _local.cacheUserData(user);
-      _local.cacheToken('token');
-      _client.setBearerAuth(token: 'token');
-      await Future.delayed(const Duration(milliseconds: 222),
-          () => _controller.add(AuthenticationStatus.authenticated));
+      if (user != null) {
+        _user = user;
+        _local.cacheUserData(user);
+        _local.cacheToken(user.accessToken);
+        _client.setBearerAuth(token: user.tokenType + user.accessToken);
+        await Future.delayed(const Duration(milliseconds: 111),
+            () => _controller.add(AuthenticationStatus.authenticated));
+      } else {
+        return Right(false);
+      }
       return Right(true);
     });
   }

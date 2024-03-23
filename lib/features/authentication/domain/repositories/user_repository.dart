@@ -9,12 +9,11 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 abstract class UserRepository {
   Stream<AuthenticationStatus> get status;
-  UserEntity get user;
+  UserEntity? get user;
   bool get isLogged;
   Future<Result<bool>> registerWithUsernameAndPassword(
       {required String username, required String password});
-  Future<Result<bool>> loginWithUsernameAndPassword(
-      {required String username, required String password});
+  Future<Result<bool>> loginWithAuth0();
   Future<Result<bool>> logout();
   void dispose();
 }

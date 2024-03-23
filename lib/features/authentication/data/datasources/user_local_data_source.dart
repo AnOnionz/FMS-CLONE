@@ -1,10 +1,12 @@
+import 'package:fms/features/authentication/data/models/user_model.dart';
+
 import '/core/constant/keys.dart';
 import '/core/database/database.dart';
 import '/features/authentication/domain/entities/user_entity.dart';
 
 sealed class UserLocalDataSource {
   bool get isLogin;
-  void cacheUserData(UserEntity user);
+  void cacheUserData(UserModel user);
   void clearUserData();
   void cacheToken(String token);
   void clearToken();
@@ -26,14 +28,14 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
   UserEntity? getUserFromLocal() {
     final id = database.getValue(Keys.CURRENT_USER_ID);
     if (id == null) return null;
-    final UserEntity? user = database.getObject(id: int.parse(id));
+    final UserEntity? user = database.getObject<UserModel>(id: int.parse(id));
 
     return user;
   }
 
   @override
-  void cacheUserData(UserEntity user) {
-    final id = database.addObject(user);
+  void cacheUserData(UserModel user) {
+    final id = database.addObject<UserModel>(user);
     database.setValue(Keys.CURRENT_USER_ID, id.toString());
   }
 

@@ -1,14 +1,28 @@
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-import '../../../../routes/routes.dart';
+import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  Credentials? _credentials;
+  final _bloc = Modular.get<SignBloc>();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +80,7 @@ class LoginPage extends StatelessWidget {
             child: SizedBox(
                 width: context.screenSize.width,
                 child: FlatButton(
-                    onPressed: () => context.nextRoute(Routes.workForce),
+                    onPressed: () async => _bloc.add(SignIn()),
                     name: context.language.loginButtonText,
                     color: AppColors.orange)),
           )

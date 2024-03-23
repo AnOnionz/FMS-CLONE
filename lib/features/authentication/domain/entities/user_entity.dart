@@ -1,24 +1,60 @@
-import 'package:isar/isar.dart';
+import '../../data/models/user_model.dart';
 
-import '/core/utilities/parser.dart';
-
-part 'user_entity.g.dart';
-
-@collection
 base class UserEntity {
-  Id get isarId => fastHash(id);
+  final String idToken;
+  final String accessToken;
+  final String? refreshToken;
+  final DateTime expiresAt;
+  final List<String> scopes;
+  final String tokenType;
 
-  /// this is primary key
-  final String id;
+  final String sub;
 
-  const UserEntity({
-    required this.id,
+  String? email;
+
+  DateTime? updatedAt;
+
+  String? name;
+
+  CustomUri? profileUrl;
+
+  String? preferredUsername;
+
+  String? gender;
+
+  String? birthdate;
+
+  String? zoneinfo;
+
+  String? locale;
+
+  String? phoneNumber;
+
+  String? address;
+
+  UserEntity({
+    required this.idToken,
+    required this.accessToken,
+    required this.sub,
+    this.scopes = const [],
+    required this.tokenType,
+    this.refreshToken,
+    required this.expiresAt,
+    this.name,
+    this.preferredUsername,
+    this.profileUrl,
+    this.email,
+    this.gender,
+    this.birthdate,
+    this.zoneinfo,
+    this.locale,
+    this.phoneNumber,
+    this.address,
+    this.updatedAt,
   });
 
   @override
-  String toString() => 'UserEntity(id: $id)';
-}
-
-final class Anonymous extends UserEntity {
-  Anonymous() : super(id: '0');
+  String toString() {
+    return 'UserEntity(refreshToken: $refreshToken, expiresAt: $expiresAt, scopes: $scopes, tokenType: $tokenType, sub: $sub, email: $email, updatedAt: $updatedAt, name: $name, profileUrl: $profileUrl, preferredUsername: $preferredUsername, gender: $gender, birthdate: $birthdate, zoneinfo: $zoneinfo, locale: $locale, phoneNumber: $phoneNumber, address: $address)';
+  }
 }

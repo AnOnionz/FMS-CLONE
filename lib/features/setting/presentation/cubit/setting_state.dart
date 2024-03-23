@@ -10,7 +10,7 @@ class SettingState extends Equatable {
     final settingApp = database.getObject<SettingApp>();
     if (settingApp == null) {
       final s = SettingApp();
-      database.addObject(s);
+      database.addObject<SettingApp>(s);
       return SettingState(settings: s);
     }
 
@@ -19,7 +19,7 @@ class SettingState extends Equatable {
 
   SettingState cameraToggle() {
     final newSettings = settings.copyWith(cameraCustom: !settings.cameraCustom);
-    database.addObject(newSettings);
+    database.addObject<SettingApp>(newSettings);
     return copyWith(settings: newSettings);
   }
 
