@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../data/models/user_model.dart';
 
 base class UserEntity {
@@ -7,7 +9,6 @@ base class UserEntity {
   final DateTime expiresAt;
   final List<String> scopes;
   final String tokenType;
-
   final String sub;
 
   String? email;
@@ -52,6 +53,15 @@ base class UserEntity {
     this.address,
     this.updatedAt,
   });
+
+  DateTime get realexpiresDate {
+    if (Platform.isIOS) {
+      return expiresAt.toLocal();
+    } else {
+      return DateTime.utc(expiresAt.year, expiresAt.month, expiresAt.day,
+          expiresAt.hour, expiresAt.minute, expiresAt.second);
+    }
+  }
 
   @override
   String toString() {

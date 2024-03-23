@@ -78,33 +78,38 @@ const UserModelSchema = CollectionSchema(
       type: IsarType.object,
       target: r'CustomUri',
     ),
-    r'refreshToken': PropertySchema(
+    r'realexpiresDate': PropertySchema(
       id: 12,
+      name: r'realexpiresDate',
+      type: IsarType.dateTime,
+    ),
+    r'refreshToken': PropertySchema(
+      id: 13,
       name: r'refreshToken',
       type: IsarType.string,
     ),
     r'scopes': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'scopes',
       type: IsarType.stringList,
     ),
     r'sub': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'sub',
       type: IsarType.string,
     ),
     r'tokenType': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'tokenType',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'updatedAt',
       type: IsarType.dateTime,
     ),
     r'zoneinfo': PropertySchema(
-      id: 17,
+      id: 18,
       name: r'zoneinfo',
       type: IsarType.string,
     )
@@ -234,12 +239,13 @@ void _userModelSerialize(
     CustomUriSchema.serialize,
     object.profileUrl,
   );
-  writer.writeString(offsets[12], object.refreshToken);
-  writer.writeStringList(offsets[13], object.scopes);
-  writer.writeString(offsets[14], object.sub);
-  writer.writeString(offsets[15], object.tokenType);
-  writer.writeDateTime(offsets[16], object.updatedAt);
-  writer.writeString(offsets[17], object.zoneinfo);
+  writer.writeDateTime(offsets[12], object.realexpiresDate);
+  writer.writeString(offsets[13], object.refreshToken);
+  writer.writeStringList(offsets[14], object.scopes);
+  writer.writeString(offsets[15], object.sub);
+  writer.writeString(offsets[16], object.tokenType);
+  writer.writeDateTime(offsets[17], object.updatedAt);
+  writer.writeString(offsets[18], object.zoneinfo);
 }
 
 UserModel _userModelDeserialize(
@@ -265,12 +271,12 @@ UserModel _userModelDeserialize(
       CustomUriSchema.deserialize,
       allOffsets,
     ),
-    refreshToken: reader.readStringOrNull(offsets[12]),
-    scopes: reader.readStringList(offsets[13]) ?? const [],
-    sub: reader.readString(offsets[14]),
-    tokenType: reader.readString(offsets[15]),
-    updatedAt: reader.readDateTimeOrNull(offsets[16]),
-    zoneinfo: reader.readStringOrNull(offsets[17]),
+    refreshToken: reader.readStringOrNull(offsets[13]),
+    scopes: reader.readStringList(offsets[14]) ?? const [],
+    sub: reader.readString(offsets[15]),
+    tokenType: reader.readString(offsets[16]),
+    updatedAt: reader.readDateTimeOrNull(offsets[17]),
+    zoneinfo: reader.readStringOrNull(offsets[18]),
   );
   return object;
 }
@@ -311,16 +317,18 @@ P _userModelDeserializeProp<P>(
         allOffsets,
       )) as P;
     case 12:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 13:
-      return (reader.readStringList(offset) ?? const []) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 14:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? const []) as P;
     case 15:
       return (reader.readString(offset)) as P;
     case 16:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 17:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 18:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1996,6 +2004,62 @@ extension UserModelQueryFilter
   }
 
   QueryBuilder<UserModel, UserModel, QAfterFilterCondition>
+      realexpiresDateEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'realexpiresDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModel, UserModel, QAfterFilterCondition>
+      realexpiresDateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'realexpiresDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModel, UserModel, QAfterFilterCondition>
+      realexpiresDateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'realexpiresDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModel, UserModel, QAfterFilterCondition>
+      realexpiresDateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'realexpiresDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModel, UserModel, QAfterFilterCondition>
       refreshTokenIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2999,6 +3063,18 @@ extension UserModelQuerySortBy on QueryBuilder<UserModel, UserModel, QSortBy> {
     });
   }
 
+  QueryBuilder<UserModel, UserModel, QAfterSortBy> sortByRealexpiresDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'realexpiresDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModel, UserModel, QAfterSortBy> sortByRealexpiresDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'realexpiresDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserModel, UserModel, QAfterSortBy> sortByRefreshToken() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'refreshToken', Sort.asc);
@@ -3207,6 +3283,18 @@ extension UserModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<UserModel, UserModel, QAfterSortBy> thenByRealexpiresDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'realexpiresDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModel, UserModel, QAfterSortBy> thenByRealexpiresDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'realexpiresDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserModel, UserModel, QAfterSortBy> thenByRefreshToken() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'refreshToken', Sort.asc);
@@ -3347,6 +3435,12 @@ extension UserModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<UserModel, UserModel, QDistinct> distinctByRealexpiresDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'realexpiresDate');
+    });
+  }
+
   QueryBuilder<UserModel, UserModel, QDistinct> distinctByRefreshToken(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -3466,6 +3560,13 @@ extension UserModelQueryProperty
   QueryBuilder<UserModel, CustomUri?, QQueryOperations> profileUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'profileUrl');
+    });
+  }
+
+  QueryBuilder<UserModel, DateTime, QQueryOperations>
+      realexpiresDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'realexpiresDate');
     });
   }
 

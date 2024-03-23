@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:auth0_flutter_platform_interface/src/user_profile.dart';
+import 'package:fms/features/authentication/data/models/user_model.dart';
+
 import '../datasources/user_local_data_source.dart';
 import '../datasources/user_remote_data_source.dart';
 import '/core/client/dio_client.dart';
@@ -24,7 +27,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Result<bool>> loginWithAuth0() async {
     return todo(() async {
-      final user = await _remote.loginWithUsernameAndPassword();
+      final user = await _remote.loginWithAuth0();
       if (user != null) {
         _user = user;
         _local.cacheUserData(user);
@@ -40,11 +43,22 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<Result<bool>> renew() async {
+    return todo(() async {
+      final user = await _remote.renew(_user!.refreshToken!);
+      if (user != null) {
+        _user = user;
+        _updateUser(user);
+        return Right(true);
+      }
+      return Right(false);
+    });
+  }
+
+  @override
   Future<Result<bool>> logout() async {
     _user = null;
-    _local.clearUserData();
-    _local.clearToken();
-    _client.clearBearerAuth();
+    _updateUser(null);
     _controller.add(AuthenticationStatus.unauthenticated);
     return Right(true);
   }
@@ -53,9 +67,21 @@ class UserRepositoryImpl implements UserRepository {
   Future<Result<bool>> registerWithUsernameAndPassword(
       {required String username, required String password}) async {
     return todo(() async {
-      await _remote.registerWithUsernameAndPassword();
+      await _remote.register();
       return Right(true);
     });
+  }
+
+  _updateUser(UserModel? user) {
+    if (user == null) {
+      _local.clearUserData();
+      _local.clearToken();
+      _client.clearBearerAuth();
+    } else {
+      _local.cacheUserData(user);
+      _local.cacheToken(user.accessToken);
+      _client.setBearerAuth(token: user.tokenType + user.accessToken);
+    }
   }
 
   @override

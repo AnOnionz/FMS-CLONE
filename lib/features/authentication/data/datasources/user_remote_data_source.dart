@@ -5,8 +5,9 @@ import '../../../../core/constant/keys.dart';
 import '/features/authentication/data/models/user_model.dart';
 
 sealed class UserRemoteDataSource {
-  Future<bool> registerWithUsernameAndPassword();
-  Future<UserModel?> loginWithUsernameAndPassword();
+  Future<bool> register();
+  Future<UserModel?> loginWithAuth0();
+  Future<UserModel?> renew(String refreshToken);
   Future<bool> logout();
 }
 
@@ -14,7 +15,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final auth0 =
       Auth0(dotenv.env[Keys.AUTH0_DOMAIN]!, dotenv.env[Keys.AUTH0_CLIENT_ID]!);
   @override
-  Future<UserModel?> loginWithUsernameAndPassword() async {
+  Future<UserModel?> loginWithAuth0() async {
     try {
       final credentials = await auth0
           .webAuthentication(scheme: dotenv.env[Keys.AUTH0_CUSTOM_SCHEME]!)
@@ -31,7 +32,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<bool> registerWithUsernameAndPassword() async {
+  Future<bool> register() async {
     return true;
   }
 
@@ -44,6 +45,17 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       return true;
     } on WebAuthenticationException catch (_) {
       return false;
+    }
+  }
+
+  @override
+  Future<UserModel?> renew(String refreshToken) async {
+    try {
+      final credentials =
+          await auth0.api.renewCredentials(refreshToken: refreshToken);
+      return UserModel.fromCredentials(credentials);
+    } on WebAuthenticationException catch (_) {
+      return null;
     }
   }
 }
