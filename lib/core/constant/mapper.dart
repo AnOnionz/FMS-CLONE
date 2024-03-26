@@ -5,20 +5,34 @@ import '/core/errors/failure.dart';
 final class Mapper {
   static Failure errorToFailure(Object e, StackTrace s) {
     return switch (e) {
-      SocketException =>
-        SocketFailure((e as SocketException).message, e.error, e.stackTrace),
+      SocketException => SocketFailure(
+          message: (e as SocketException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       ServerDownException => ServerDownFailure(
-          (e as ServerDownException).message, e.error, e.stackTrace),
+          message: (e as ServerDownException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       BadRequestException => BadRequestFailure(
-          (e as BadRequestException).message, e.error, e.stackTrace),
+          message: (e as BadRequestException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       InternalException => BadRequestFailure(
-          (e as BadRequestException).message, e.error, e.stackTrace),
+          message: (e as BadRequestException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       NotFoundException => NotFoundFailure(
-          (e as NotFoundException).message, e.error, e.stackTrace),
+          message: (e as NotFoundException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       TimeoutException => RequestTimeoutFailure(
-          (e as TimeoutException).message, e.error, e.stackTrace),
+          message: (e as TimeoutException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       UnAuthorizedException => UnAuthenticatedFailure(
-          (e as UnAuthorizedException).message, e.error, e.stackTrace),
+          message: (e as UnAuthorizedException).message,
+          error: e.error,
+          stackTrace: e.stackTrace),
       UnknowException =>
         UnknowFailure((e as UnknowException).error, e.stackTrace),
       _ => UnknowFailure(e, s),

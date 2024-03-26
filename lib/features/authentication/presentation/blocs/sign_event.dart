@@ -11,8 +11,8 @@ class SignUp extends SignEvent {
   SignUp({required this.username, required this.password});
 }
 
-class SignIn extends SignEvent {
-  SignIn();
-}
+class SignIn extends SignEvent {}
+
+class ChangePass extends SignEvent {}
 
 class SignOut extends SignEvent {}

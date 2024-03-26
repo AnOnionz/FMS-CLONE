@@ -35,7 +35,9 @@ const ScrollPhysics kPhysics =
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(
-        background: AppColors.aliceBlue, primary: AppColors.blackRussian),
+      background: AppColors.aliceBlue,
+      primary: AppColors.blackRussian,
+    ),
     visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
     extensions: [AppTextTheme.fallback()]);
 

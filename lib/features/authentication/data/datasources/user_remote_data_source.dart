@@ -7,6 +7,7 @@ import '/features/authentication/data/models/user_model.dart';
 sealed class UserRemoteDataSource {
   Future<bool> register();
   Future<UserModel?> loginWithAuth0();
+  Future<void> changePassword(String email);
   Future<UserModel?> renew(String refreshToken);
   Future<bool> logout();
 }
@@ -24,7 +25,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
               parameters: {
                 'prompt': 'login',
               },
-              useEphemeralSession: true);
+              useEphemeralSession: true)
+          .then<Credentials>((value) {
+        print(value);
+        return value;
+      });
       return UserModel.fromCredentials(credentials);
     } on WebAuthenticationException catch (_) {
       return null;
@@ -57,5 +62,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     } on WebAuthenticationException catch (_) {
       return null;
     }
+  }
+
+  @override
+  Future<void> changePassword(String email) async {
+    await auth0.api.resetPassword(
+        email: email, connection: 'Username-Password-Authentication');
   }
 }

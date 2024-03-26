@@ -85,6 +85,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                       padding: EdgeInsets.symmetric(vertical: 20.h),
                       child: TakeImage(
                         max: 5,
+                        min: 1,
                         images: [],
                       ),
                     ),
@@ -96,6 +97,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                       padding: EdgeInsets.only(top: 20.h),
                       child: TakeImage(
                         max: 5,
+                        min: 1,
                         images: [],
                       ),
                     ),

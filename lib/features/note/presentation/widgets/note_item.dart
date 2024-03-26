@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/take_image_list.dart';
@@ -26,7 +27,7 @@ class NoteItem extends StatefulWidget {
 
 class _NoteItemState extends State<NoteItem> {
   final TextEditingController _controller = TextEditingController();
-  final List<File> _image = [];
+  final List<XFile> _image = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +56,9 @@ class _NoteItemState extends State<NoteItem> {
               ? Padding(
                   padding: EdgeInsets.only(top: 16.h),
                   child: TakeImage(
-                    images: [],
+                    images: _image,
                     max: 5,
+                    min: 1,
                     isCarousel: true,
                   ),
                 )

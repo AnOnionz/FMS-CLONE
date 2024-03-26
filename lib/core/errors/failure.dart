@@ -1,3 +1,5 @@
+import 'package:fms/core/errors/app_exception.dart';
+
 abstract class Failure {
   final String? _message;
   final Object? _error;
@@ -22,51 +24,53 @@ class UnknowFailure extends Failure {
 }
 
 class MessageFailure extends Failure {
-  const MessageFailure(String? message, Object? error, StackTrace? stackTrace)
+  const MessageFailure({String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class InternalFailure extends Failure {
-  const InternalFailure(String? message, Object? error, StackTrace? stackTrace)
+  const InternalFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class UnAuthenticatedFailure extends Failure {
   const UnAuthenticatedFailure(
-      String? message, Object? error, StackTrace? stackTrace)
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class UpdateAppRequiredFailure extends Failure {
   const UpdateAppRequiredFailure(
-      String? message, Object? error, StackTrace? stackTrace)
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class RequestTimeoutFailure extends Failure {
   const RequestTimeoutFailure(
-      String? message, Object? error, StackTrace? stackTrace)
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class NotFoundFailure extends Failure {
-  const NotFoundFailure(String? message, Object? error, StackTrace? stackTrace)
+  const NotFoundFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class SocketFailure extends Failure {
-  const SocketFailure(String? message, Object? error, StackTrace? stackTrace)
+  const SocketFailure({String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class BadRequestFailure extends Failure {
   const BadRequestFailure(
-      String? message, Object? error, StackTrace? stackTrace)
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
 
 class ServerDownFailure extends Failure {
   const ServerDownFailure(
-      String? message, Object? error, StackTrace? stackTrace)
+      {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/report/presentation/widgets/report_item.dart';
 
@@ -20,8 +21,7 @@ class ReportPage extends StatelessWidget {
           children: [
             Expanded(
               child: CustomScrollView(
-                physics: RangeMaintainingScrollPhysics(
-                    parent: ClampingScrollPhysics()),
+                physics: kPhysics,
                 slivers: [
                   SliverPadding(
                       padding: EdgeInsets.only(bottom: 5.h),

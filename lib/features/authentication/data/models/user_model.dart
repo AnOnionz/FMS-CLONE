@@ -10,7 +10,6 @@ part 'user_model.g.dart';
 
 @collection
 final class UserModel extends UserEntity {
-  @Index()
   Id get isarId => fastHash(sub);
 
   UserModel({

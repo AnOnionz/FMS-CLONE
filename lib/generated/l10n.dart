@@ -80,10 +80,10 @@ class L {
     );
   }
 
-  /// `Đăng nhập bằng tài khoản outcome`
+  /// `Đăng nhập bằng tài khoản được cung cấp`
   String get loginButtonText {
     return Intl.message(
-      'Đăng nhập bằng tài khoản outcome',
+      'Đăng nhập bằng tài khoản được cung cấp',
       name: 'loginButtonText',
       desc: '',
       args: [],

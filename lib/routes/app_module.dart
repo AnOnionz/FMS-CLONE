@@ -9,6 +9,7 @@ import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dar
 import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
 import 'package:fms/features/report/presentation/pages/report_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
+import 'package:fms/features/setting/presentation/pages/change_password_page.dart';
 import 'package:fms/features/setting/presentation/pages/setting_page.dart';
 import 'package:fms/features/statistic/presentation/pages/statistic_page.dart';
 import 'package:fms/features/sync/presentation/pages/sync_page.dart';
@@ -27,6 +28,7 @@ import '../features/attendance/presentation/pages/attendance_page.dart';
 import '../features/authentication/data/datasources/user_local_data_source.dart';
 import '../features/authentication/data/datasources/user_remote_data_source.dart';
 import '../features/authentication/domain/repositories/user_repository.dart';
+import '../features/authentication/domain/usecases/change_pass_usecase.dart';
 import '../features/authentication/domain/usecases/logout_usecase.dart';
 import '../features/authentication/presentation/blocs/authentication_bloc.dart';
 import '../features/authentication/presentation/blocs/sign_bloc.dart';
@@ -58,6 +60,7 @@ class AppModule extends Module {
     i.addSingleton<AuthenticationBloc>(AuthenticationBloc.new);
     i.add<LoginUsecase>(LoginUsecase.new);
     i.add<LogoutUsecase>(LogoutUsecase.new);
+    i.add<ChangePassUsecase>(ChangePassUsecase.new);
     i.add<SignBloc>(SignBloc.new);
     //attendance
     i.add<LocateCubit>(LocateCubit.new);
@@ -100,8 +103,9 @@ class AppModule extends Module {
     r.child(Routes.setting, child: (_) => SettingPage());
     r.child(Routes.appLock,
         child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.appLock,
-        child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.changePass,
+        child: (_) => const ChangePassWordPage(),
+        transition: TransitionType.fadeIn);
     r.child(Routes.urgency,
         child: (_) => const UrgencyPage(), transition: TransitionType.fadeIn);
     r.child(Routes.note,

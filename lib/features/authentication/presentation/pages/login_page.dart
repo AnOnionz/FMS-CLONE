@@ -8,6 +8,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
+import 'package:fms/routes/routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,7 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Credentials? _credentials;
   final _bloc = Modular.get<SignBloc>();
   @override
   void initState() {
@@ -81,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: context.screenSize.width,
                 child: FlatButton(
                     onPressed: () async => _bloc.add(SignIn()),
+                    // onPressed: () => context.nextRoute(Routes.projectSelection),
                     name: context.language.loginButtonText,
                     color: AppColors.orange)),
           )

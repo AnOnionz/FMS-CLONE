@@ -1,8 +1,9 @@
 import 'dart:async';
-
-import 'package:auth0_flutter_platform_interface/src/user_profile.dart';
+import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:fms/core/errors/app_exception.dart';
 import 'package:fms/features/authentication/data/models/user_model.dart';
 
+import '../../../../core/errors/failure.dart';
 import '../datasources/user_local_data_source.dart';
 import '../datasources/user_remote_data_source.dart';
 import '/core/client/dio_client.dart';
@@ -72,7 +73,19 @@ class UserRepositoryImpl implements UserRepository {
     });
   }
 
-  _updateUser(UserModel? user) {
+  @override
+  Future<Result<bool>> changePasswordWithAuth0() {
+    return todo(() async {
+      if (_user!.email == null) {
+        return Left(
+            MessageFailure(message: 'Tài khoản chưa được cập nhật email'));
+      }
+      await _remote.changePassword(_user!.email!);
+      return Right(true);
+    });
+  }
+
+  void _updateUser(UserModel? user) {
     if (user == null) {
       _local.clearUserData();
       _local.clearToken();

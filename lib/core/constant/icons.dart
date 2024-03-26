@@ -39,6 +39,7 @@ class AppIcons {
   static String clock = 'clock'.icon.svg;
   static String calendar = 'calendar'.icon.svg;
   static String lock = 'lock'.icon.svg;
+  static String lockOrange = 'lock_orange'.icon.svg;
   static String trash = 'trash'.icon.svg;
   static String cameraOrange = 'camera_orange'.icon.svg;
   static String fingerprint = 'fingerprint'.icon.svg;

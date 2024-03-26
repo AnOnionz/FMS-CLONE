@@ -11,6 +11,7 @@ class ReportItem extends StatefulWidget {
   final String name;
   final int min;
   final int max;
+
   final String description;
   const ReportItem(
       {super.key,
@@ -25,6 +26,8 @@ class ReportItem extends StatefulWidget {
 
 class _ReportItemState extends State<ReportItem> {
   final List<File> _image = [];
+
+  late final bool _isRequire = widget.min == widget.max;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,12 +42,13 @@ class _ReportItemState extends State<ReportItem> {
           RichText(
             text: TextSpan(
                 text: '${widget.name} ',
-                style: context.textTheme.h3?.copyWith(color: AppColors.black),
+                style: context.textTheme.subtitle1
+                    ?.copyWith(color: AppColors.black),
                 children: [
                   TextSpan(
-                    text: getLimit(),
-                    style:
-                        context.textTheme.h3?.copyWith(color: AppColors.orange),
+                    text: getDescription(),
+                    style: context.textTheme.subtitle1
+                        ?.copyWith(color: AppColors.orange),
                   )
                 ]),
           ),
@@ -53,6 +57,7 @@ class _ReportItemState extends State<ReportItem> {
             child: TakeImage(
               images: [],
               max: widget.max,
+              min: widget.min,
               isCarousel: true,
             ),
           ),
@@ -68,11 +73,12 @@ class _ReportItemState extends State<ReportItem> {
     );
   }
 
-  String getLimit() {
+  String getDescription() {
+    final text = _isRequire ? 'bắt buộc chụp' : 'chụp từ';
     if (widget.min <= 0) {
-      return '( ${widget.max} hình )';
+      return '($text ${widget.max} hình)';
     } else {
-      return '( ${widget.min}-${widget.max} hình )';
+      return '($text ${widget.min}-${widget.max} hình)';
     }
   }
 }

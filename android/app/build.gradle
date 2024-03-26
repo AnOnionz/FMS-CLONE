@@ -1,3 +1,4 @@
+def appApplicationId = 'vn.imark.fms'
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -28,7 +29,9 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
-
+    if (project.android.hasProperty("namespace")) {
+        namespace appApplicationId
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -44,29 +47,23 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "vn.imark.fms"
+        applicationId appApplicationId
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders += [auth0Domain: "$System.env.AUTH0_DOMAIN",
-                                auth0Scheme: "$System.env.AUTH0_CUSTOM_SCHEME"]
+        multiDexEnabled true
+         manifestPlaceholders += [auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]
     }
 
     flavorDimensions "default"
 
     productFlavors {
-        dev { dimension "default"
-            manifestPlaceholders['auth0Domain'] = "$System.env.AUTH0_DOMAIN"
-            manifestPlaceholders['auth0Scheme'] = "$System.env.AUTH0_CUSTOM_SCHEME"}
-        staging{ dimension "default"
-           manifestPlaceholders['auth0Domain'] = "$System.env.AUTH0_DOMAIN"
-            manifestPlaceholders['auth0Scheme'] = "$System.env.AUTH0_CUSTOM_SCHEME"}
-        prod { dimension "default"
-            manifestPlaceholders['auth0Domain'] = "$System.env.AUTH0_DOMAIN"
-            manifestPlaceholders['auth0Scheme'] = "$System.env.AUTH0_CUSTOM_SCHEME"}
+        dev { dimension "default"}
+        staging{ dimension "default"}
+        prod { dimension "default"}
     }
 
     buildFeatures {
@@ -98,6 +95,7 @@ flutter {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
    
 }

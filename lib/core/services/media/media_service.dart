@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
 import 'package:fms/routes/routes.dart';
 import 'package:image/image.dart' as img;
@@ -108,18 +109,18 @@ final class MediaService {
 
   Future<XFile> addWatermark(XFile image, {Color? color}) async {
     final locationService = LocationService();
-    final address = locationService.placeString();
+    final address = await locationService.placeString();
     final time = fWatermark.format(DateTime.now());
 
     final imgBytes = await image.readAsBytes();
     final painterDesc =
-        WatermarkPainter('${time}\n${address}', 28.0, color: color);
+        WatermarkPainter('${time}\n${address}', 18.0.sp, color: color);
     final imageDesc = await painterDesc.toImageData();
     final decoded = await decodeImageFromList(imgBytes);
     final newImage = img.compositeImage(img.decodeImage(imgBytes)!,
         img.decodeImage(imageDesc!.buffer.asUint8List())!,
-        dstX: 5,
-        dstY: decoded.height - 115,
+        dstX: 8,
+        dstY: decoded.height - 56,
         dstW: painterDesc.pictureW.toInt(),
         dstH: painterDesc.pictureH.toInt());
     final file = File(image.path);

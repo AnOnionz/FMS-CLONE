@@ -41,7 +41,7 @@ class SettingPage extends StatelessWidget {
                     icon: SvgPicture.asset(AppIcons.lock),
                     name: 'Đổi mật khẩu tài khoản',
                     type: SettingType.transfer,
-                    onTap: () {}),
+                    onTap: () => context.nextRoute(Routes.changePass)),
                 SettingItem(
                     icon: SvgPicture.asset(AppIcons.trash),
                     name: 'Xóa data app',

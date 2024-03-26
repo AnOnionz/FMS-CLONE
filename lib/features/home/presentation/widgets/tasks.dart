@@ -25,8 +25,8 @@ class Tasks extends StatelessWidget {
         SizedBox(width: 16.w),
         Expanded(
             child: TaskBox(
-                name: 'Ghi chú',
-                onPressed: () => context.nextRoute(Routes.note)))
+                name: 'Báo cáo',
+                onPressed: () => context.nextRoute(Routes.report)))
       ],
     );
   }

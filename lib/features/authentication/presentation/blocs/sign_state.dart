@@ -1,6 +1,6 @@
 part of 'sign_bloc.dart';
 
-enum SignStatus { initial, logged, loggedOut }
+enum SignStatus { initial, logged, loggedOut, passwordChangeRequestSent }
 
 sealed class SignState {
   const SignState();

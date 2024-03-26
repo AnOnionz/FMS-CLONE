@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
@@ -7,6 +9,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
@@ -23,7 +26,7 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   bool isMapLoading = true;
-  final List<FileWithMetaData> files = [];
+  final List<XFile> files = [];
 
   void _showSheetHistory(BuildContext context) {
     OverlayManager.showSheet(
@@ -83,6 +86,7 @@ class _AttendancePageState extends State<AttendancePage> {
                     SizedBox(height: 14.h),
                     TakeImage(
                       max: 5,
+                      min: 1,
                       images: files,
                     ),
                   ],
