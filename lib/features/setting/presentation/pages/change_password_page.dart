@@ -83,14 +83,14 @@ class ChangePassWordPage extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16.squared)),
+                  borderRadius: BorderRadius.circular(16.sqr)),
             ),
           ),
           Container(
             decoration: BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(
                   offset: Offset(0, -2),
-                  blurRadius: 25.squared,
+                  blurRadius: 25.sqr,
                   color: AppColors.black.withOpacity(0.15))
             ]),
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),

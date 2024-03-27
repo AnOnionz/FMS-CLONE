@@ -53,10 +53,10 @@ class _DatePickerState extends State<DatePicker> {
             ),
           ),
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40.squared),
+              borderRadius: BorderRadius.circular(40.sqr),
               borderSide: BorderSide(color: '#EA9567'.toColor())),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40.squared),
+              borderRadius: BorderRadius.circular(40.sqr),
               borderSide: BorderSide(color: '#EA9567'.toColor()))),
     );
   }

@@ -16,8 +16,7 @@ class ReviewContainer extends StatelessWidget {
       margin: margin,
       width: context.screenWidth,
       decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(10.squared)),
+          color: AppColors.white, borderRadius: BorderRadius.circular(10.sqr)),
       child: child,
     );
   }

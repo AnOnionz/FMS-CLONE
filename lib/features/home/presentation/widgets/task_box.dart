@@ -47,10 +47,10 @@ class _TaskBoxState extends State<TaskBox> {
                 decoration: BoxDecoration(
                     color: 'FF0014'.toColor(0.5),
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5.squared),
-                        topRight: Radius.circular(60.squared),
-                        bottomLeft: Radius.circular(5.squared),
-                        bottomRight: Radius.circular(5.squared))),
+                        topLeft: Radius.circular(5.sqr),
+                        topRight: Radius.circular(60.sqr),
+                        bottomLeft: Radius.circular(5.sqr),
+                        bottomRight: Radius.circular(5.sqr))),
                 child: Padding(
                   padding: EdgeInsets.only(top: 60.h, bottom: 30.h),
                   child: Center(

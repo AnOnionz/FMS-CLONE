@@ -39,6 +39,7 @@ import '../features/normal_splash_page.dart';
 
 import '../features/redeem_gift/presentation/pages/history_exchange_detail.dart';
 import '../features/setting/presentation/cubit/setting_cubit.dart';
+import '../features/statistic/presentation/pages/statistic_sup_page.dart';
 import '../features/workForce/presentation/pages/booth_selection_page.dart';
 import '../features/workForce/presentation/pages/project_selection_page.dart';
 import '../features/workForce/presentation/pages/work_force_page.dart';
@@ -125,6 +126,18 @@ class AppModule extends Module {
         child: (_) => const SuccessPage(), transition: TransitionType.fadeIn);
     r.child(Routes.statistic,
         child: (_) => const StatisticPage(), transition: TransitionType.fadeIn);
+    r.child(Routes.statisticSup,
+        child: (_) => const StatisticSupPage(),
+        transition: TransitionType.fadeIn);
+    r.child(Routes.statisticOutlet,
+        child: (_) => const StatisticOutletPage(),
+        transition: TransitionType.fadeIn);
+    r.child(Routes.statisticBooth,
+        child: (_) => const StatisticBoothPage(),
+        transition: TransitionType.fadeIn);
+    r.child(Routes.statisticEmployee,
+        child: (_) => const StatisticEmployeePage(),
+        transition: TransitionType.fadeIn);
     r.child(Routes.historyExchange,
         child: (_) => const HistoryExchangePage(),
         transition: TransitionType.fadeIn);

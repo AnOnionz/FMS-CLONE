@@ -19,8 +19,7 @@ class InformationBox extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
       padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
       decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16.squared)),
+          color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

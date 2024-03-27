@@ -18,7 +18,7 @@ class HistoryExchangeReduceItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
         decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16.squared)),
+            borderRadius: BorderRadius.circular(16.sqr)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

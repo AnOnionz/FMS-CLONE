@@ -37,7 +37,7 @@ class StatisticSampling extends StatelessWidget {
               margin: EdgeInsets.symmetric(vertical: 4.h),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(16.squared),
+                borderRadius: BorderRadius.circular(16.sqr),
               ),
               child: ItemContainer(
                   leading: Image.asset(AppImages.loginBanner),

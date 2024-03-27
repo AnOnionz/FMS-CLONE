@@ -20,8 +20,7 @@ class CrawlItem extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
       padding: EdgeInsets.all(15.h),
       decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16.squared)),
+          color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
       child: ItemContainer(
           leading: Image.asset(AppImages.loginBanner),
           title: Column(

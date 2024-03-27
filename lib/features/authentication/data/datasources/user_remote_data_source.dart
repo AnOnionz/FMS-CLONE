@@ -21,17 +21,14 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final credentials = await auth0
           .webAuthentication(scheme: dotenv.env[Keys.AUTH0_CUSTOM_SCHEME]!)
           .login(
-              useHTTPS: true,
+              // useHTTPS: true,
               parameters: {
-                'prompt': 'login',
-              },
-              useEphemeralSession: true)
-          .then<Credentials>((value) {
-        print(value);
-        return value;
-      });
+            'prompt': 'login',
+          },
+              useEphemeralSession: true);
       return UserModel.fromCredentials(credentials);
-    } on WebAuthenticationException catch (_) {
+    } on WebAuthenticationException catch (e) {
+      print(e);
       return null;
     }
   }

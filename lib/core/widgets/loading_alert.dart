@@ -11,7 +11,7 @@ class LoadingAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.squared),
+        borderRadius: BorderRadius.circular(8.sqr),
       ),
       elevation: 0.0,
       backgroundColor: Colors.white,

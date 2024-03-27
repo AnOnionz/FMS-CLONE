@@ -28,8 +28,8 @@ class _RedeemGiftSamplingPageState extends State<RedeemGiftSamplingPage>
           decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.squared),
-                  topRight: Radius.circular(10.squared))),
+                  topLeft: Radius.circular(10.sqr),
+                  topRight: Radius.circular(10.sqr))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

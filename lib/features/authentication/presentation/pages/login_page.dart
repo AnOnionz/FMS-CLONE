@@ -1,4 +1,3 @@
-import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
@@ -8,7 +7,6 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
-import 'package:fms/routes/routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -81,7 +79,6 @@ class _LoginPageState extends State<LoginPage> {
                 width: context.screenSize.width,
                 child: FlatButton(
                     onPressed: () async => _bloc.add(SignIn()),
-                    // onPressed: () => context.nextRoute(Routes.projectSelection),
                     name: context.language.loginButtonText,
                     color: AppColors.orange)),
           )

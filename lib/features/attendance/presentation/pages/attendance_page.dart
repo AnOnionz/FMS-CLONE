@@ -75,7 +75,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
                 decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(10.squared)),
+                    borderRadius: BorderRadius.circular(10.sqr)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,7 +96,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.squared)),
+                      borderRadius: BorderRadius.circular(10.sqr)),
                   child: Padding(
                     padding: EdgeInsets.all(24.h),
                     child: Column(

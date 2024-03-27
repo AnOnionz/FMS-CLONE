@@ -160,7 +160,7 @@ class _LeavePageState extends State<LeavePage> {
               padding: EdgeInsets.all(15.h),
               decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16.squared),
+                  borderRadius: BorderRadius.circular(16.sqr),
                   boxShadow: [
                     BoxShadow(
                         color: AppColors.black.withOpacity(0.05),
@@ -213,7 +213,7 @@ class _LeavePageState extends State<LeavePage> {
                 width: 28.w,
                 decoration: BoxDecoration(
                     color: '#CED3DE'.toColor(0.5),
-                    borderRadius: BorderRadius.circular(4.squared)),
+                    borderRadius: BorderRadius.circular(4.sqr)),
               ),
             ),
             Expanded(
@@ -232,8 +232,7 @@ class _LeavePageState extends State<LeavePage> {
                               width: 35.w,
                               decoration: BoxDecoration(
                                   color: AppColors.roseWhite,
-                                  borderRadius:
-                                      BorderRadius.circular(20.squared)),
+                                  borderRadius: BorderRadius.circular(20.sqr)),
                               child: Center(
                                 child: FittedBox(
                                   child: Text(

@@ -99,7 +99,7 @@ class _UrgencyItemState extends State<UrgencyItem> {
         margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
         decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(52.squared),
+            borderRadius: BorderRadius.circular(52.sqr),
             boxShadow: [
               BoxShadow(
                   color: '#8A959E'.toColor(0.25),
@@ -135,7 +135,7 @@ class _UrgencyItemState extends State<UrgencyItem> {
                         width: 40.h,
                         decoration: BoxDecoration(
                             color: AppColors.white,
-                            borderRadius: BorderRadius.circular(20.squared),
+                            borderRadius: BorderRadius.circular(20.sqr),
                             border: Border.all(
                                 color: AppColors.black.withOpacity(0.04)),
                             boxShadow: [
@@ -165,7 +165,7 @@ class _UrgencyItemState extends State<UrgencyItem> {
                       );
                     },
                   ),
-                  borderRadius: BorderRadius.circular(26.squared),
+                  borderRadius: BorderRadius.circular(26.sqr),
                   width: 30.wPerc,
                 ),
               ),

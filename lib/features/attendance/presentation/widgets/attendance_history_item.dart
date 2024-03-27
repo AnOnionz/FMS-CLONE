@@ -73,7 +73,7 @@ class AttendanceHistoryItem extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 24.h, bottom: 10.h),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.squared),
+            borderRadius: BorderRadius.circular(16.sqr),
             child: ColoredBox(
               color: Colors.amber,
               child: Image.asset(

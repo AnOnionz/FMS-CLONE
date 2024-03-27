@@ -8,3 +8,5 @@ enum AttendanceType {
 }
 
 enum SettingType { none, toggle, transfer }
+
+enum StatisticType { def, outlet, booth, employee }

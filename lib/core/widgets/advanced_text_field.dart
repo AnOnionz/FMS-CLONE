@@ -37,10 +37,10 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
 
   final activeBorder = OutlineInputBorder(
       borderSide: BorderSide(color: AppColors.orange, width: 0.54),
-      borderRadius: BorderRadius.circular(8.squared));
+      borderRadius: BorderRadius.circular(8.sqr));
   final inActiveBorder = OutlineInputBorder(
       borderSide: BorderSide(color: AppColors.nobel, width: 0.54),
-      borderRadius: BorderRadius.circular(8.squared));
+      borderRadius: BorderRadius.circular(8.sqr));
 
   @override
   Widget build(BuildContext context) {

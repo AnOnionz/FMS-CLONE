@@ -2,20 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/statistic/presentation/widgets/statistic_product.dart';
 
+import '../../../../core/constant/enum.dart';
+import '../widgets/statistic_genaral.dart';
 import '../widgets/statistic_gift.dart';
 import '../widgets/statistic_sampling.dart';
 
-class StatisticPage extends StatefulWidget {
-  const StatisticPage({super.key});
-
-  @override
-  State<StatisticPage> createState() => _StatisticPageState();
+class StatisticPage extends StatisticDefaultPage {
+  const StatisticPage() : super(type: StatisticType.def);
 }
 
-class _StatisticPageState extends State<StatisticPage>
+class StatisticOutletPage extends StatisticDefaultPage {
+  const StatisticOutletPage() : super(type: StatisticType.outlet);
+}
+
+class StatisticBoothPage extends StatisticDefaultPage {
+  const StatisticBoothPage() : super(type: StatisticType.booth);
+}
+
+class StatisticEmployeePage extends StatisticDefaultPage {
+  const StatisticEmployeePage() : super(type: StatisticType.employee);
+}
+
+class StatisticDefaultPage extends StatefulWidget {
+  final StatisticType type;
+  const StatisticDefaultPage({super.key, required this.type});
+
+  @override
+  State<StatisticDefaultPage> createState() => _StatisticDefaultPageState();
+}
+
+class _StatisticDefaultPageState extends State<StatisticDefaultPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController = TabController(vsync: this, length: 4);
 
@@ -28,7 +48,7 @@ class _StatisticPageState extends State<StatisticPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Thống kê'),
+      appBar: DefaultAppBar(title: title),
       body: Padding(
         padding: EdgeInsets.only(
           top: 30.h,
@@ -40,40 +60,30 @@ class _StatisticPageState extends State<StatisticPage>
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: AppColors.orange,
               indicator: UnderlineTabIndicator(
-                  borderRadius: BorderRadius.circular(8.squared),
+                  borderRadius: BorderRadius.circular(8.sqr),
                   borderSide: BorderSide(color: AppColors.orange, width: 4.h),
                   insets: EdgeInsets.fromLTRB(0, 0, 0, -1.5)),
-              labelColor: AppColors.orange,
-              unselectedLabelColor: 'CCC6D9'.toColor(),
               overlayColor: MaterialStatePropertyAll(AppColors.transparent),
               dividerColor: 'FCD8DF'.toColor(),
-              physics: RangeMaintainingScrollPhysics(
-                  parent: ClampingScrollPhysics()),
+              physics: kPhysics,
               splashFactory: NoSplash.splashFactory,
+              labelColor: AppColors.orange,
+              unselectedLabelColor: 'CCC6D9'.toColor(),
               labelStyle: context.textTheme.caption1,
               tabs: <Widget>[
-                Tab(
-                  text: 'Tổng quan',
-                ),
-                Tab(
-                  text: 'Sản phẩm',
-                ),
-                Tab(
-                  text: 'Quà tặng',
-                ),
-                Tab(
-                  text: 'Sampling',
-                ),
+                Tab(child: FittedBox(child: Text('Tổng quan'))),
+                Tab(child: FittedBox(child: Text('Sản phẩm'))),
+                Tab(child: FittedBox(child: Text('Quà tặng'))),
+                Tab(child: FittedBox(child: Text('Sampling'))),
               ],
             ),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                physics: RangeMaintainingScrollPhysics(
-                    parent: ClampingScrollPhysics()),
+                physics: kPhysics,
                 children: <Widget>[
-                  Center(
-                    child: Text("It's cloudy here"),
+                  StatisticGenaral(
+                    type: widget.type,
                   ),
                   StatisticProduct(),
                   StatisticGift(),
@@ -85,5 +95,14 @@ class _StatisticPageState extends State<StatisticPage>
         ),
       ),
     );
+  }
+
+  String get title {
+    return switch (widget.type) {
+      StatisticType.outlet => 'Thống kê theo outlet',
+      StatisticType.booth => 'Thống kê theo booth',
+      StatisticType.employee => 'Thống kê theo nhân sự',
+      _ => 'Thống kê',
+    };
   }
 }

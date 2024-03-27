@@ -43,7 +43,7 @@ class OutlineButton extends StatelessWidget {
           side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: color)),
           shape: MaterialStatePropertyAll<OutlinedBorder>(
               RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.squared))),
+                  borderRadius: BorderRadius.circular(50.sqr))),
         ),
       ),
     );

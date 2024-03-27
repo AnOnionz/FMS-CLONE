@@ -29,7 +29,7 @@ class ItemContainer extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                         color: AppColors.roseWhite.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(15.squared)),
+                        borderRadius: BorderRadius.circular(15.sqr)),
                   ),
                   Align(alignment: Alignment.centerLeft, child: leading),
                 ],

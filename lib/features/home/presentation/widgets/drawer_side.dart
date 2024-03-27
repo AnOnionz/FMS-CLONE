@@ -9,12 +9,18 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
+import 'package:fms/features/authentication/domain/entities/user_entity.dart';
+import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
 import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
 import 'package:fms/routes/routes.dart';
 
+import '../../../../core/widgets/image_profile.dart';
+
 class DrawerSide extends StatelessWidget {
   const DrawerSide({super.key});
+
+  UserEntity get user => Modular.get<UserRepository>().user!;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class DrawerSide extends StatelessWidget {
             child: Drawer(
                 backgroundColor: AppColors.white.withOpacity(0.56),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.squared),
+                    borderRadius: BorderRadius.circular(20.sqr),
                     side: BorderSide(color: AppColors.white.withOpacity(0.4))),
                 shadowColor: AppColors.black.withOpacity(0.2),
                 child: SafeArea(
@@ -46,26 +52,45 @@ class DrawerSide extends StatelessWidget {
                                     .copyWith(color: AppColors.blackRussian),
                                 child: Column(
                                   children: [
-                                    FlutterLogo(size: 60),
+                                    ImageProfile(user: user),
                                     SizedBox(height: 20.h),
-                                    Text(
-                                      'Trần Nhật Tường',
-                                      style: context.textTheme.subtitle1
-                                          ?.copyWith(color: AppColors.black),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    Text(
-                                      'trannhattuong@gmail.com',
-                                      style: context.textTheme.body1
-                                          ?.copyWith(color: AppColors.nobel),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    Text(
-                                      'manv001',
-                                      style: context.textTheme.body1
-                                          ?.copyWith(color: AppColors.nobel),
-                                    ),
-                                    SizedBox(height: 48.h),
+                                    (user.name != null)
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 8.h),
+                                            child: Text(
+                                              user.name!,
+                                              style: context.textTheme.subtitle1
+                                                  ?.copyWith(
+                                                      color: AppColors.black),
+                                            ),
+                                          )
+                                        : SizedBox.shrink(),
+                                    (user.email != null)
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 8.h),
+                                            child: Text(
+                                              user.email!,
+                                              style: context.textTheme.body1
+                                                  ?.copyWith(
+                                                      color: AppColors.nobel),
+                                            ),
+                                          )
+                                        : SizedBox.shrink(),
+                                    (user.zoneinfo != null)
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 8.h),
+                                            child: Text(
+                                              user.zoneinfo!,
+                                              style: context.textTheme.body1
+                                                  ?.copyWith(
+                                                      color: AppColors.nobel),
+                                            ),
+                                          )
+                                        : SizedBox.shrink(),
+                                    SizedBox(height: 40.h),
                                     _rowFeature(
                                       context,
                                       AppIcons.notification,

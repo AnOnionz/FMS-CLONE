@@ -11,6 +11,7 @@ class CachedImage extends StatelessWidget {
   final Color? color;
   final BlendMode? colorBlendMode;
   final Widget Function(BuildContext, String)? placeholder;
+  final Widget Function(BuildContext, String, Object)? errorWidget;
   final bool useOldImageOnUrlChange;
   final bool useFade;
   final BoxFit? fit;
@@ -26,6 +27,7 @@ class CachedImage extends StatelessWidget {
     this.useFade = true,
     this.useOldImageOnUrlChange = false,
     this.fit,
+    this.errorWidget,
   }) : super(key: key);
 
   @override
@@ -46,6 +48,7 @@ class CachedImage extends StatelessWidget {
       fadeInCurve: Curves.easeOut,
       fadeOutCurve: Curves.easeIn,
       fit: fit,
+      errorWidget: errorWidget,
     );
   }
 }

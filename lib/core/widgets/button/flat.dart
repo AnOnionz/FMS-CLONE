@@ -55,7 +55,7 @@ class FlatButton extends StatelessWidget {
         style: ButtonStyle(
             shape: MaterialStatePropertyAll<OutlinedBorder>(
                 RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.squared))),
+                    borderRadius: BorderRadius.circular(50.sqr))),
             backgroundColor: MaterialStatePropertyAll<Color>(
                 enabled ? color : disableColor!)),
       ),

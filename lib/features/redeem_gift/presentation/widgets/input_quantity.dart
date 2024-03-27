@@ -82,7 +82,7 @@ class _InputQuantityState extends State<InputQuantity> {
         width: 30.h,
         decoration: BoxDecoration(
             color: _value > 0 ? '#FFF2CF'.toColor() : '#F3F3F3'.toColor(),
-            borderRadius: BorderRadius.circular(8.squared)),
+            borderRadius: BorderRadius.circular(8.sqr)),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: SvgPicture.asset(

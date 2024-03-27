@@ -30,7 +30,7 @@ class WorkForcePage extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16.squared)),
+                        borderRadius: BorderRadius.circular(16.sqr)),
                     child: Padding(
                       padding: EdgeInsets.all(8.h),
                       child: GestureDetector(
@@ -195,8 +195,8 @@ class WorkForcePage extends StatelessWidget {
                                     shape: MaterialStatePropertyAll<
                                             OutlinedBorder>(
                                         RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                50.squared))),
+                                            borderRadius:
+                                                BorderRadius.circular(50.sqr))),
                                     backgroundColor:
                                         MaterialStatePropertyAll<Color>(
                                             AppColors.solitude)),
@@ -207,7 +207,7 @@ class WorkForcePage extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(8.squared))),
+                          borderRadius: BorderRadius.circular(8.sqr))),
                 ),
               ),
             ],

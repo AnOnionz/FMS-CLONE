@@ -16,10 +16,10 @@ class CommonInfo extends StatelessWidget {
       decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5.squared),
-              topRight: Radius.circular(60.squared),
-              bottomLeft: Radius.circular(5.squared),
-              bottomRight: Radius.circular(5.squared)),
+              topLeft: Radius.circular(5.sqr),
+              topRight: Radius.circular(60.sqr),
+              bottomLeft: Radius.circular(5.sqr),
+              bottomRight: Radius.circular(5.sqr)),
           boxShadow: [
             BoxShadow(
               offset: Offset(0, 5),

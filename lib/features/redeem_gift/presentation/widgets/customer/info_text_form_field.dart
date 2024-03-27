@@ -71,16 +71,16 @@ class _InfoTextFormFieldState extends State<InfoTextFormField> {
           suffixIconConstraints: BoxConstraints(),
           hintStyle: context.textTheme.body1?.copyWith(color: AppColors.nobel),
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.squared),
+              borderRadius: BorderRadius.circular(8.sqr),
               borderSide: BorderSide(color: AppColors.nobel)),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.squared),
+              borderRadius: BorderRadius.circular(8.sqr),
               borderSide: BorderSide(color: AppColors.summerSky, width: 2.h)),
           errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.squared),
+              borderRadius: BorderRadius.circular(8.sqr),
               borderSide: BorderSide(color: AppColors.fireBrick, width: 2.h)),
           focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.squared),
+              borderRadius: BorderRadius.circular(8.sqr),
               borderSide: BorderSide(color: AppColors.summerSky, width: 2.h))),
     );
   }

@@ -21,12 +21,12 @@ class NoteTextField extends StatelessWidget {
             borderSide: BorderSide(
               color: AppColors.gainsboro,
             ),
-            borderRadius: BorderRadius.circular(13.33.squared)),
+            borderRadius: BorderRadius.circular(13.33.sqr)),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: AppColors.gainsboro,
             ),
-            borderRadius: BorderRadius.circular(13.33.squared)),
+            borderRadius: BorderRadius.circular(13.33.sqr)),
       ),
     );
   }

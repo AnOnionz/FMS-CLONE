@@ -28,7 +28,7 @@ class _LeaveFormState extends State<LeaveForm> {
       text: DateFormat('HH:mm').format(widget.model.project.end));
 
   final _border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.squared),
+      borderRadius: BorderRadius.circular(8.sqr),
       borderSide: BorderSide(color: AppColors.gainsboro));
 
   bool inValidTime(DateTime start, DateTime end) {
@@ -116,7 +116,7 @@ class _LeaveFormState extends State<LeaveForm> {
           hintStyle: context.textTheme.body1,
           contentPadding: EdgeInsets.all(16.h),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.squared),
+              borderRadius: BorderRadius.circular(6.sqr),
               borderSide: BorderSide(color: AppColors.gainsboro)),
           enabledBorder: _border),
     );
@@ -199,10 +199,10 @@ class _LeaveFormState extends State<LeaveForm> {
             enabledBorder: _border,
             disabledBorder: _border,
             focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.squared),
+                borderRadius: BorderRadius.circular(8.sqr),
                 borderSide: BorderSide(color: AppColors.brickRed)),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.squared),
+                borderRadius: BorderRadius.circular(8.sqr),
                 borderSide: BorderSide(color: AppColors.brickRed))));
   }
 }

@@ -46,7 +46,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
               margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
               decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(10.squared)),
+                  borderRadius: BorderRadius.circular(10.sqr)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -105,7 +105,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
                 margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                 decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(10.squared)),
+                    borderRadius: BorderRadius.circular(10.sqr)),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

@@ -16,7 +16,7 @@ class OutletItem extends StatelessWidget {
         width: context.screenWidth,
         decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16.squared),
+            borderRadius: BorderRadius.circular(16.sqr),
             boxShadow: [
               BoxShadow(
                 offset: Offset(0, 4),

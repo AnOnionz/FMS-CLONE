@@ -50,7 +50,9 @@ final class UserModel extends UserEntity {
         email: credentials.user.email,
         locale: credentials.user.locale,
         phoneNumber: credentials.user.phoneNumber,
-        profileUrl: CustomUri.fromUri(credentials.user.profileUrl),
+        profileUrl: credentials.user.profileUrl != null
+            ? CustomUri.fromUri(credentials.user.profileUrl)
+            : null,
         updatedAt: credentials.user.updatedAt,
         zoneinfo: credentials.user.zoneinfo);
   }
@@ -87,12 +89,15 @@ class CustomUri {
         pathSegments: uri?.pathSegments,
         port: uri?.port,
         query: uri?.query,
-        queryParameters: jsonEncode(uri?.queryParameters ?? '{}'),
+        queryParameters: uri?.queryParameters == null
+            ? null
+            : jsonEncode(uri?.queryParameters),
         scheme: uri?.scheme,
         userInfo: uri?.userInfo);
   }
 
   Uri toUri() {
+    print(this);
     return Uri(
         fragment: fragment,
         host: host,
@@ -100,7 +105,9 @@ class CustomUri {
         pathSegments: pathSegments,
         port: port,
         query: query,
-        queryParameters: jsonEncode(queryParameters) as Map<String, dynamic>,
+        queryParameters: queryParameters == null
+            ? null
+            : jsonDecode(queryParameters!) as Map<String, dynamic>?,
         scheme: scheme,
         userInfo: userInfo);
   }

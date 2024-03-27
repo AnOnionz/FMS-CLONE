@@ -28,7 +28,7 @@ class SettingItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
       decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16.squared),
+          borderRadius: BorderRadius.circular(16.sqr),
           boxShadow: [
             BoxShadow(
                 color: '#3151CF'.toColor(0.25),
@@ -37,7 +37,7 @@ class SettingItem extends StatelessWidget {
           ]),
       child: ListTile(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.squared),
+          borderRadius: BorderRadius.circular(16.sqr),
         ),
         leading: Row(
           mainAxisSize: MainAxisSize.min,

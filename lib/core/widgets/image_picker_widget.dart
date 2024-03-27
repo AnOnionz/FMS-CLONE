@@ -127,7 +127,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   padding: EdgeInsets.all(15.h),
                   decoration: BoxDecoration(
                       color: AppColors.solitude,
-                      borderRadius: BorderRadius.circular(6.squared)),
+                      borderRadius: BorderRadius.circular(6.sqr)),
                   child: SvgPicture.asset(
                     AppIcons.camera,
                     height: 30.h,
@@ -158,7 +158,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                           return GestureDetector(
                             onTap: () => _imagePreview(image),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(6.squared),
+                              borderRadius: BorderRadius.circular(6.sqr),
                               child: image,
                             ),
                           );
@@ -194,7 +194,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ),
                 decoration: BoxDecoration(
                     color: AppColors.aliceBlue,
-                    borderRadius: BorderRadius.circular(13.33.squared)),
+                    borderRadius: BorderRadius.circular(13.33.sqr)),
               ),
             ),
           ),
@@ -244,11 +244,11 @@ class ImageDetail extends StatelessWidget {
               fit: BoxFit.contain,
             )),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.squared),
+              borderRadius: BorderRadius.circular(12.sqr),
               child: Container(
                 // decoration: BoxDecoration(
                 //     color: AppColors.white,
-                //     borderRadius: BorderRadius.circular(12.squared)),
+                //     borderRadius: BorderRadius.circular(12.sqr)),
                 child: Column(
                   children: [
                     SizedBox(

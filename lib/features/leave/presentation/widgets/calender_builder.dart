@@ -92,7 +92,7 @@ class _CalendarWidgetState<T> extends State<CalendarWidget<T>> {
                 width: 150,
                 decoration: BoxDecoration(
                     color: AppColors.orange,
-                    borderRadius: BorderRadius.circular(12.squared)),
+                    borderRadius: BorderRadius.circular(12.sqr)),
                 child: Center(
                     child: Text(
                   day.day.toString(),
@@ -146,7 +146,7 @@ class _MarkerBuilder extends StatelessWidget {
       height: 4.w,
       width: 4.w,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4.squared), color: colors[index]),
+          borderRadius: BorderRadius.circular(4.sqr), color: colors[index]),
     );
   }
 }

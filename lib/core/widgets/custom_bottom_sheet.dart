@@ -30,8 +30,8 @@ class CustomBottomSheet extends StatelessWidget {
               decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(18.squared),
-                      topRight: Radius.circular(18.squared))),
+                      topLeft: Radius.circular(18.sqr),
+                      topRight: Radius.circular(18.sqr))),
               child: child,
             ),
             Positioned(
@@ -53,7 +53,7 @@ class CustomBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: AppColors.white,
                         border: Border.all(color: '#F2F2F2'.toColor()),
-                        borderRadius: BorderRadius.circular(30.squared)),
+                        borderRadius: BorderRadius.circular(30.sqr)),
                     child: Padding(
                       padding: EdgeInsets.all(10.w),
                       child: GestureDetector(

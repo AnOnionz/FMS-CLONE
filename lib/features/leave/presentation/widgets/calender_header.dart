@@ -30,7 +30,7 @@ class CalendarHeader extends StatelessWidget {
             width: 30.h,
             decoration: BoxDecoration(
                 border: Border.all(color: '#CED3DE'.toColor()),
-                borderRadius: BorderRadius.circular(8.squared)),
+                borderRadius: BorderRadius.circular(8.sqr)),
             child: Center(
                 child: Icon(
               Icons.chevron_left,
@@ -66,7 +66,7 @@ class CalendarHeader extends StatelessWidget {
             width: 30.h,
             decoration: BoxDecoration(
                 border: Border.all(color: '#CED3DE'.toColor()),
-                borderRadius: BorderRadius.circular(8.squared)),
+                borderRadius: BorderRadius.circular(8.sqr)),
             child: Center(
                 child: Icon(
               Icons.chevron_right,

@@ -18,7 +18,7 @@ class ProjectItem extends StatelessWidget {
         width: context.screenWidth,
         decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16.squared),
+            borderRadius: BorderRadius.circular(16.sqr),
             boxShadow: [
               BoxShadow(
                 offset: Offset(0, 4),
@@ -33,7 +33,7 @@ class ProjectItem extends StatelessWidget {
               child: DecoratedBox(
                   decoration: BoxDecoration(
                       color: AppColors.aliceBlue,
-                      borderRadius: BorderRadius.circular(16.squared)),
+                      borderRadius: BorderRadius.circular(16.sqr)),
                   child: Padding(
                     padding: Fx.p16,
                     child: SvgPicture.asset(

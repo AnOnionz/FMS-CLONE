@@ -18,8 +18,7 @@ class ReportItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16.squared)),
+          color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

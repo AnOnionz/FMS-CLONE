@@ -18,7 +18,7 @@ class FeatureBox extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(10.squared),
+            borderRadius: BorderRadius.circular(10.sqr),
             boxShadow: [
               BoxShadow(
                   offset: Offset(0, 6),
