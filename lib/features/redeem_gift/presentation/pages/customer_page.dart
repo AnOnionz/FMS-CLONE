@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/take_image_list.dart';
+import 'package:fms/core/widgets/image_picker_widget.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -83,9 +83,8 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: TakeImage(
+                      child: ImagePickerWidget(
                         max: 5,
-                        min: 1,
                         images: [],
                       ),
                     ),
@@ -95,9 +94,8 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child: TakeImage(
+                      child: ImagePickerWidget(
                         max: 5,
-                        min: 1,
                         images: [],
                       ),
                     ),

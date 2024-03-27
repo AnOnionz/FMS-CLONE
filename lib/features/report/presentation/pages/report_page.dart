@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/report/presentation/widgets/report_item.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
+import '../../domain/entities/report_entity.dart';
 
 class ReportPage extends StatelessWidget {
-  const ReportPage({super.key});
+  final List<ReportEntity> reportList;
+  const ReportPage({super.key, required this.reportList});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +29,9 @@ class ReportPage extends StatelessWidget {
                   SliverPadding(
                       padding: EdgeInsets.only(bottom: 5.h),
                       sliver: SliverList.builder(
-                        itemCount: 3,
+                        itemCount: reportList.length,
                         itemBuilder: (context, index) => ReportItem(
-                          name: 'Hình tổng quan',
-                          max: 5,
-                          min: 3,
-                          description:
-                              'Hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình ',
+                          entity: reportList[index],
                         ),
                       ))
                 ],
@@ -47,7 +46,16 @@ class ReportPage extends StatelessWidget {
               ]),
               padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  reportList.any((report) {
+                    if (!report.validate()) {
+                      OverlayManager.showSnackbar(
+                          snackbar: SnackBar(content: Text(report.name)));
+                      return true;
+                    }
+                    return false;
+                  });
+                },
                 name: 'Lưu',
                 color: AppColors.orange,
                 disableColor: AppColors.potPourri,

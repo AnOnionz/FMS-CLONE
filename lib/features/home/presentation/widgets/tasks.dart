@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/home/presentation/widgets/task_box.dart';
+import 'package:fms/features/report/domain/entities/report_entity.dart';
 
 import '../../../../routes/routes.dart';
 
@@ -26,7 +27,32 @@ class Tasks extends StatelessWidget {
         Expanded(
             child: TaskBox(
                 name: 'Báo cáo',
-                onPressed: () => context.nextRoute(Routes.report)))
+                onPressed: () {
+                  final reports = [
+                    ReportEntity(
+                        name: 'Hình tổng quan',
+                        min: 3,
+                        max: 5,
+                        description:
+                            'Hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình ',
+                        files: []),
+                    ReportEntity(
+                        name: 'Hình POSM',
+                        min: 3,
+                        max: 3,
+                        description:
+                            'Hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình ',
+                        files: []),
+                    ReportEntity(
+                        name: 'Hình POSM',
+                        min: 3,
+                        max: 3,
+                        description:
+                            'Hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình hướng dẫn chụp hình ',
+                        files: [])
+                  ];
+                  context.nextRoute(Routes.report, arguments: reports);
+                }))
       ],
     );
   }

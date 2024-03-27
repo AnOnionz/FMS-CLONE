@@ -8,7 +8,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
-import '../../../../core/widgets/take_image_list.dart';
+import '../../../../core/widgets/image_picker_widget.dart';
 import 'note_text_field.dart';
 
 class NoteItem extends StatefulWidget {
@@ -55,10 +55,9 @@ class _NoteItemState extends State<NoteItem> {
           widget.canTakeImge
               ? Padding(
                   padding: EdgeInsets.only(top: 16.h),
-                  child: TakeImage(
+                  child: ImagePickerWidget(
                     images: _image,
                     max: 5,
-                    min: 1,
                     isCarousel: true,
                   ),
                 )

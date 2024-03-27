@@ -7,6 +7,7 @@ import 'package:fms/features/note/presentation/pages/note_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/history_exchange.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
+import 'package:fms/features/report/domain/entities/report_entity.dart';
 import 'package:fms/features/report/presentation/pages/report_page.dart';
 import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
 import 'package:fms/features/setting/presentation/pages/change_password_page.dart';
@@ -79,7 +80,7 @@ class AppModule extends Module {
         child: (_) => const LoginPage(), transition: TransitionType.fadeIn);
     r.child(Routes.camera, child: (_) => CameraCustom());
     r.child(Routes.photoView,
-        child: (context) => PhotoView(file: r.args.data as XFile),
+        child: (_) => PhotoView(file: r.args.data as XFile),
         transition: TransitionType.noTransition);
     r.child(Routes.workForce,
         child: (_) => const WorkForcePage(), transition: TransitionType.fadeIn);
@@ -113,7 +114,10 @@ class AppModule extends Module {
     r.child(Routes.crawl,
         child: (_) => const CrawlPage(), transition: TransitionType.fadeIn);
     r.child(Routes.report,
-        child: (_) => const ReportPage(), transition: TransitionType.fadeIn);
+        child: (_) => ReportPage(
+              reportList: r.args.data as List<ReportEntity>,
+            ),
+        transition: TransitionType.fadeIn);
     r.child(Routes.redeemGift,
         child: (_) => const RedeemGiftPage(),
         transition: TransitionType.fadeIn);

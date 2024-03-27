@@ -11,27 +11,25 @@ import 'package:image_picker/image_picker.dart';
 import '../constant/colors.dart';
 import '../constant/icons.dart';
 
-class TakeImage extends StatefulWidget {
+class ImagePickerWidget extends StatefulWidget {
   final List<XFile> images;
   final int max;
-  final int min;
   final bool isCarousel;
   final bool isWaterMark;
   final ValueNotifier<bool>? isWaterMarking;
-  const TakeImage(
+  const ImagePickerWidget(
       {super.key,
       required this.images,
       required this.max,
-      required this.min,
       this.isCarousel = false,
       this.isWaterMark = true,
       this.isWaterMarking});
 
   @override
-  State<TakeImage> createState() => _TakeImageState();
+  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
 }
 
-class _TakeImageState extends State<TakeImage> {
+class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final MediaService _service = MediaService();
   late final _images = widget.images;
 
@@ -47,8 +45,6 @@ class _TakeImageState extends State<TakeImage> {
         setState(() {
           _images.add(file);
         });
-
-        print(widget.images.length);
 
         if (widget.isWaterMark) {
           widget.isWaterMarking?.value = true;

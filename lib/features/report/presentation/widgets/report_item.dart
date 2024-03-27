@@ -1,33 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/report/domain/entities/report_entity.dart';
 
-import '../../../../core/widgets/take_image_list.dart';
+import '../../../../core/widgets/image_picker_widget.dart';
 
-class ReportItem extends StatefulWidget {
-  final String name;
-  final int min;
-  final int max;
+class ReportItem extends StatelessWidget {
+  final ReportEntity entity;
+  const ReportItem({super.key, required this.entity});
 
-  final String description;
-  const ReportItem(
-      {super.key,
-      required this.name,
-      required this.min,
-      required this.max,
-      required this.description});
+  bool get _isRequire => entity.min == entity.max;
 
-  @override
-  State<ReportItem> createState() => _ReportItemState();
-}
-
-class _ReportItemState extends State<ReportItem> {
-  final List<File> _image = [];
-
-  late final bool _isRequire = widget.min == widget.max;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,12 +25,12 @@ class _ReportItemState extends State<ReportItem> {
         children: [
           RichText(
             text: TextSpan(
-                text: '${widget.name} ',
+                text: '${entity.name} ',
                 style: context.textTheme.subtitle1
                     ?.copyWith(color: AppColors.black),
                 children: [
                   TextSpan(
-                    text: getDescription(),
+                    text: _optinal(),
                     style: context.textTheme.subtitle1
                         ?.copyWith(color: AppColors.orange),
                   )
@@ -54,17 +38,16 @@ class _ReportItemState extends State<ReportItem> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h),
-            child: TakeImage(
-              images: [],
-              max: widget.max,
-              min: widget.min,
+            child: ImagePickerWidget(
+              images: entity.files,
+              max: entity.max,
               isCarousel: true,
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 4.h),
             child: Text(
-              widget.description,
+              entity.description,
               style: context.textTheme.caption2,
             ),
           )
@@ -73,12 +56,10 @@ class _ReportItemState extends State<ReportItem> {
     );
   }
 
-  String getDescription() {
-    final text = _isRequire ? 'bắt buộc chụp' : 'chụp từ';
-    if (widget.min <= 0) {
-      return '($text ${widget.max} hình)';
-    } else {
-      return '($text ${widget.min}-${widget.max} hình)';
-    }
+  String _optinal() {
+    return switch (_isRequire) {
+      true => '(bắt buộc chụp ${entity.max} hình)',
+      false => '(chụp từ ${entity.min}-${entity.max} hình)',
+    };
   }
 }

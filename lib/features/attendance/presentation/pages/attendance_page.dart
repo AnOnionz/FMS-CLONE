@@ -13,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
-import '../../../../core/widgets/take_image_list.dart';
+import '../../../../core/widgets/image_picker_widget.dart';
 import '../widgets/notifications.dart';
 import '../widgets/time_box.dart';
 
@@ -84,9 +84,8 @@ class _AttendancePageState extends State<AttendancePage> {
                       style: context.textTheme.subtitle1,
                     ),
                     SizedBox(height: 14.h),
-                    TakeImage(
+                    ImagePickerWidget(
                       max: 5,
-                      min: 1,
                       images: files,
                     ),
                   ],
