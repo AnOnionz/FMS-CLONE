@@ -1,28 +1,26 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/image_profile.dart';
-import 'package:fms/features/authentication/domain/entities/user_entity.dart';
 import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
-import 'package:fms/features/workForce/domain/entities/booth_entity.dart';
-import 'package:fms/features/workForce/domain/entities/outlet_entity.dart';
+import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
+import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
 import '../../../../core/constant/enum.dart';
 import '../../../../core/styles/theme.dart';
-import '../../../../routes/routes.dart';
 import '../../../app_information/presentation/widgets/row_info.dart';
+import '../../statistic_module.dart';
 import 'statistic_type_item.dart';
 
 class StatisticGenaral extends StatelessWidget {
   const StatisticGenaral({super.key, required this.type});
 
   final StatisticType type;
-  UserEntity get user => Modular.get<UserRepository>().user!;
+  Credentials get credentials => Modular.get<UserRepository>().user!;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +38,10 @@ class StatisticGenaral extends StatelessWidget {
             children: [
               switch (type) {
                 StatisticType.outlet =>
-                  OutletInfo(outlet: OutletEntity(name: 'name', code: 'code')),
-                StatisticType.booth => BoothInfo(
-                    booth: BoothEntity(name: 'name', address: 'address')),
-                _ => EmployeeInfo(user: user)
+                  OutletInfo(outlet: OutletEntity(1, true, 'name', 'code')),
+                StatisticType.booth =>
+                  BoothInfo(booth: BoothEntity(1, true, 'name', 'description')),
+                _ => EmployeeInfo(credentials: credentials)
               },
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -88,27 +86,27 @@ class StatisticGenaral extends StatelessWidget {
 }
 
 class EmployeeInfo extends StatelessWidget {
-  final UserEntity user;
-  const EmployeeInfo({super.key, required this.user});
+  final Credentials credentials;
+  const EmployeeInfo({super.key, required this.credentials});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ImageProfile(
-          user: user,
+          credentials: credentials,
           size: Size(80, 80),
         ),
-        (user.name != null)
+        (credentials.user.name != null)
             ? Padding(
                 padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
-                child: Text(user.name!,
+                child: Text(credentials.user.name!,
                     style:
                         context.textTheme.h3?.copyWith(color: AppColors.black)),
               )
             : SizedBox.shrink(),
-        (user.zoneinfo != null)
-            ? Text(user.zoneinfo!,
+        (credentials.user.zoneinfo != null)
+            ? Text(credentials.user.zoneinfo!,
                 style:
                     context.textTheme.body1?.copyWith(color: AppColors.nobel))
             : SizedBox.shrink(),
@@ -167,7 +165,7 @@ class BoothsOfOutlet extends StatelessWidget {
                 sliver: SliverList.builder(
                   itemCount: 5,
                   itemBuilder: (context, index) => StatisticTypeItem(
-                    onPressed: () => context.nextRoute(Routes.statisticBooth),
+                    onPressed: () => context.nextRoute(StatisticModule.booth),
                     title: 'Booth A',
                   ),
                 ),
@@ -197,7 +195,7 @@ class BoothInfo extends StatelessWidget {
           ),
         ),
         Text(
-          booth.address,
+          booth.description ?? 'description',
           style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
         ),
       ],
@@ -230,7 +228,7 @@ class EmployeesOfBooth extends StatelessWidget {
                   itemCount: 5,
                   itemBuilder: (context, index) => StatisticTypeItem(
                     onPressed: () =>
-                        context.nextRoute(Routes.statisticEmployee),
+                        context.nextRoute(StatisticModule.employee),
                     title: 'Nguyễn Quốc An',
                     subTitle: 'ma00001',
                   ),

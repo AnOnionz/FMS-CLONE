@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:isar/isar.dart';
 import 'package:isar/src/isar_connect_api.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+
 import '../constant/keys.dart';
 import '/core/database/local_value.dart';
 import '/core/environment/config.dart';
 
 final class Database {
   static final instance = Database._();
-  static Isar? isar;
+
+  static Isar? _isar;
 
   Database._();
 
@@ -15,58 +20,82 @@ final class Database {
 
   static Future<void> open(List<CollectionSchema<dynamic>> schemas) async {
     final dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open(schemas,
-        directory: dir.path, name: AppConfig.variables[Keys.APP_NAME]!);
+    _isar = await Isar.open(schemas, directory: dir.path, inspector: false);
   }
 
   void deleteDatabase<T>() {
-    isar?.writeTxnSync(() {
-      isar?.clearSync();
+    _isar?.writeTxnSync(() {
+      _isar?.clearSync();
     });
   }
 
   void deleteCollection<T>() {
-    isar?.writeTxnSync(() {
-      isar?.collection<T>().clearSync();
+    _isar?.writeTxnSync(() {
+      _isar?.collection<T>().clearSync();
     });
+  }
+
+  Future<void> createBackUp() async {
+    final backUpDir = await getApplicationSupportDirectory();
+
+    final File backUpFile = File('${backUpDir.path}/backup_db.isar');
+    if (await backUpFile.exists()) {
+      await backUpFile.delete();
+    }
+
+    await _isar?.copyToFile('${backUpDir.path}/backup_db.isar');
+  }
+
+  Future<void> restoreDB() async {
+    final dbDirectory = await getApplicationDocumentsDirectory();
+    final backupDirectory = await getApplicationSupportDirectory();
+
+    await _isar?.close();
+
+    final dbFile = File('${backupDirectory.path}/backup_db.isar');
+    final dbPath = p.join(dbDirectory.path, 'default.isar');
+
+    if (await dbFile.exists()) {
+      await dbFile.copy(dbPath);
+    }
   }
 
   List<T> where<T>(
       QueryBuilder<T, T, QAfterWhereClause> Function(
               QueryBuilder<T, T, QWhere> where)
           func) {
-    return func(isar!.collection<T>().where()).findAllSync();
+    return func(_isar!.collection<T>().where()).findAllSync();
   }
 
   List<T> filter<T>(
       QueryBuilder<T, T, QAfterFilterCondition> Function(
               QueryBuilder<T, T, QFilterCondition> filter)
           func) {
-    return func(isar!.collection<T>().filter()).findAllSync();
+    return func(_isar!.collection<T>().filter()).findAllSync();
   }
 
   T? getObject<T>({int? id}) {
     T? obj;
     if (id == null) {
-      final listObj = isar?.collection<T>().where().findAllSync();
+      final listObj = _isar?.collection<T>().where().findAllSync();
       if (listObj != null && listObj.isNotEmpty) return listObj.last;
       return null;
     } else {
-      obj = isar?.collection<T>().getSync(id);
+      obj = _isar?.collection<T>().getSync(id);
     }
     return obj;
   }
 
   List<T> getObjects<T>() {
-    final objs = isar!.collection<T>().where().findAllSync();
+    final objs = _isar!.collection<T>().where().findAllSync();
 
     return objs;
   }
 
   int? addObject<T>(T obj) {
     int? id;
-    isar?.writeTxnSync(() {
-      id = isar?.collection<T>().putSync(obj);
+    _isar?.writeTxnSync(() {
+      id = _isar?.collection<T>().putSync(obj);
     });
 
     return id;
@@ -74,40 +103,40 @@ final class Database {
 
   List<int>? addObjects<T>(List<T> objects) {
     List<int>? id;
-    isar?.writeTxnSync(() {
-      id = isar?.collection<T>().putAllSync(objects);
+    _isar?.writeTxnSync(() {
+      id = _isar?.collection<T>().putAllSync(objects);
     });
 
     return id;
   }
 
   void deleteObject<T>({required int id}) {
-    isar?.writeTxnSync(() async {
-      isar?.collection<T>().deleteSync(id);
+    _isar?.writeTxnSync(() async {
+      _isar?.collection<T>().deleteSync(id);
     });
   }
 
   /// get value by key
   String? getValue(String key) {
     final localValue =
-        isar?.localValues.filter().keyEqualTo(key).findFirstSync();
+        _isar?.localValues.filter().keyEqualTo(key).findFirstSync();
 
     return localValue?.value;
   }
 
   void setValue(String key, String? value) {
     final LocalValue? localValue =
-        isar?.localValues.filter().keyEqualTo(key).findFirstSync();
+        _isar?.localValues.filter().keyEqualTo(key).findFirstSync();
     if (localValue != null) {
-      isar?.writeTxnSync(() {
-        isar?.localValues.putSync(localValue..value = value);
+      _isar?.writeTxnSync(() {
+        _isar?.localValues.putSync(localValue..value = value);
       });
     } else {
       final object = LocalValue()
         ..key = key
         ..value = value;
-      isar?.writeTxnSync(() {
-        isar?.localValues.putSync(object);
+      _isar?.writeTxnSync(() {
+        _isar?.localValues.putSync(object);
       });
     }
   }
@@ -115,7 +144,7 @@ final class Database {
   List<Map<String, dynamic>> exportJson<T>() {
     final params = {
       'instance': AppConfig.variables[Keys.APP_NAME],
-      'collection': isar?.collection<T>().name,
+      'collection': _isar?.collection<T>().name,
       'filter': {'type': 0, 'filters': []}
     };
 
@@ -124,5 +153,5 @@ final class Database {
     return query.exportJsonSync();
   }
 
-  bool get isOpen => isar != null;
+  bool get isOpen => _isar != null;
 }

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/home/presentation/widgets/feature_box.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/leave/leave_module.dart';
+import 'package:fms/features/statistic/statistic_module.dart';
+import 'package:fms/features/sync/sync_module.dart';
+import 'package:fms/features/urgency/urgency_module.dart';
 
 class CommonFeature extends StatelessWidget {
   const CommonFeature({super.key});
@@ -15,22 +18,22 @@ class CommonFeature extends StatelessWidget {
         FeatureBox(
           name: 'Đồng bộ',
           icon: AppIcons.sync,
-          onPressed: () => context.nextRoute(Routes.sync),
+          onPressed: () => context.nextRoute(SyncModule.route),
         ),
         FeatureBox(
           name: 'Thống kê',
           icon: AppIcons.statistic,
-          onPressed: () => context.nextRoute(Routes.statisticSup),
+          onPressed: () => context.nextRoute(StatisticModule.route),
         ),
         FeatureBox(
           name: 'Báo khẩn',
           icon: AppIcons.report,
-          onPressed: () => context.nextRoute(Routes.urgency),
+          onPressed: () => context.nextRoute(UgrencyModule.route),
         ),
         FeatureBox(
           name: 'Nghỉ phép',
           icon: AppIcons.report,
-          onPressed: () => context.nextRoute(Routes.leave),
+          onPressed: () => context.nextRoute(LeaveModule.route),
         )
       ],
     );

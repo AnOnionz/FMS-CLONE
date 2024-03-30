@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -7,7 +6,6 @@ import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
-import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';

@@ -1,5 +1,3 @@
-import 'package:fms/core/errors/app_exception.dart';
-
 abstract class Failure {
   final String? _message;
   final Object? _error;

@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -95,9 +91,7 @@ class ChangePassWordPage extends StatelessWidget {
             ]),
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
             child: FlatButton(
-              onPressed: () async {
-                Modular.get<SignBloc>().add(ChangePass());
-              },
+              onPressed: () async {},
               name: 'Yêu cầu đổi mật khẩu',
               color: AppColors.orange,
               disableColor: AppColors.potPourri,

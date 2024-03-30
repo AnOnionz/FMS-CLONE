@@ -1,21 +1,40 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/sign/sign_module.dart';
+import 'package:fms/features/work_place/work_place_module.dart';
 
 import '/core/constant/keys.dart';
 import '/core/environment/config.dart';
 import '/core/mixins/fx.dart';
 import '/generated/l10n.dart';
-import '/routes/routes.dart';
-import 'features/authentication/domain/repositories/user_repository.dart';
+import 'features/app/presentation/bloc/app_bloc.dart';
 import 'features/authentication/presentation/blocs/authentication_bloc.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final appBloc = Modular.get<AppBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    appBloc.add(AppStarted());
+  }
+
+  @override
+  void dispose() {
+    appBloc.add(AppStarted());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,35 +53,23 @@ class App extends StatelessWidget {
         supportedLocales: L.delegate.supportedLocales,
         routerConfig: Modular.routerConfig,
         builder: (context, child) {
-          return RepositoryProvider(
-            create: (context) => Modular.get<UserRepository>(),
-            child: BlocListener<AuthenticationBloc, AuthenticationState>(
-              bloc: Modular.get<AuthenticationBloc>(),
-              listener: (context, state) {
-                switch (state.status) {
-                  case AuthenticationStatus.authenticated:
-                    context.nextAndRemoveUntilRoute(Routes.home,
-                        arguments: state.user);
-                  case AuthenticationStatus.unauthenticated:
-                    context.nextAndRemoveUntilRoute(Routes.login);
-                  case AuthenticationStatus.unknown:
-                    break;
-                }
-              },
-              child: child,
-            ),
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            bloc: Modular.get<AuthenticationBloc>(),
+            listener: (context, state) {
+              switch (state.status) {
+                case AuthenticationStatus.authenticated:
+                  context.nextAndRemoveUntilRoute(WorkPlaceModule.route,
+                      arguments: state.credentials!);
+                case AuthenticationStatus.unauthenticated:
+                  context.nextAndRemoveUntilRoute(SignModule.route);
+                case AuthenticationStatus.unknown:
+                  break;
+              }
+            },
+            child: child,
           );
         },
       ),
     );
-  }
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }

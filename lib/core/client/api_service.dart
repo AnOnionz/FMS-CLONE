@@ -7,7 +7,6 @@ Duration kTimeOutDuration = 60.seconds;
 
 abstract class ApiService {
   static String apiBaseUrl = config.variables[Keys.BASE_URL] as String;
-  static String apiPath = config.variables[Keys.BASE_URL] as String;
 
   void setBearerAuth({required String token});
 

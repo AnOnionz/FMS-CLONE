@@ -70,9 +70,18 @@ extension DateTimeExtension on DateTime {
   }
 }
 
-extension DateTime1Extension on String {
+extension DateTime1Extension on String? {
+  static final format = DateFormat('dd/MM/yyyy');
+
+  String datetimeFormatString() {
+    if (this == null) {
+      return '';
+    }
+    return format.format(dateTimeFromTimeZone(DateFormat('yyyy-MM-dd')));
+  }
+
   DateTime dateTimeFromTimeStamp() {
-    final timeStamp = int.tryParse(this);
+    final timeStamp = int.tryParse(this!);
     if (timeStamp != null) {
       return DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
     }
@@ -82,7 +91,7 @@ extension DateTime1Extension on String {
   DateTime dateTimeFromTimeZone([DateFormat? format]) {
     try {
       final DateFormat dateFormat = format ?? DateFormat('dd-MM-yyyy HH:mm');
-      return dateFormat.parse(this);
+      return dateFormat.parse(this!);
     } catch (_) {
       rethrow;
     }

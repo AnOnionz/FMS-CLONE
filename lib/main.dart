@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,7 +15,7 @@ import 'core/utilities/bloc_obsever.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = MyHttpOverrides();
+
   AppConfig.initialFlavor();
   await dotenv.load(fileName: '.env/.env');
   await Database.open([

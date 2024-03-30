@@ -7,8 +7,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/adaptive_indicator.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/attendance/attendance_module.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/outline.dart';
@@ -54,8 +53,8 @@ class AttendanceLocatePage extends StatelessWidget {
                             child: BlocConsumer<LocateCubit, LocateState>(
                               listener: (context, state) {
                                 if (state is LocateSuccess) {
-                                  context
-                                      .nextReplacementRoute(Routes.attendance);
+                                  context.nextReplacementRoute(
+                                      AttendanceModule.attendance);
                                 }
                               },
                               builder: (context, state) {
@@ -122,7 +121,9 @@ class AttendanceLocatePage extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 16.h),
                           child: FlatButton(
                               onPressed: () {
-                                context.nextReplacementRoute(Routes.attendance);
+                                context.nextReplacementRoute(
+                                    AttendanceModule.route +
+                                        AttendanceModule.attendance);
                               },
                               name: 'Tiếp tục',
                               color: AppColors.orange),

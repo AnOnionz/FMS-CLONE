@@ -3,11 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/widgets/bottom_sheet_notification.dart';
+import 'package:fms/features/home/home_module.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/button/outline.dart';
-import '../../../../routes/routes.dart';
 
 void showSuccess(BuildContext context) {
   OverlayManager.showSheet(
@@ -15,7 +15,7 @@ void showSuccess(BuildContext context) {
           icon: SvgPicture.asset(AppIcons.success),
           title: 'Chấm công thành công',
           action: OutlineButton(
-              onPressed: () => context.popUtil(Routes.home),
+              onPressed: () => context.popUtil(HomeModule.route),
               name: 'Về trang chủ',
               color: AppColors.royalBlue)));
 }
@@ -27,7 +27,7 @@ void showFailure(BuildContext context) {
           title: 'Chấm công thất bại',
           message: 'Phát sinh lỗi trong quá trình chấm công',
           action: OutlineButton(
-              onPressed: () => context.popUtil(Routes.home),
+              onPressed: () => context.popUtil(HomeModule.route),
               name: 'Thử lại',
               color: AppColors.orange)));
 }
@@ -52,7 +52,7 @@ void showRequiredSync(BuildContext context) {
           action: OutlineButton(
               onPressed: () {
                 context.pop();
-                context.nextRoute(Routes.sync);
+                context.nextRoute(HomeModule.route);
               },
               name: 'Đến trang đồng bộ',
               color: AppColors.orange)));
@@ -66,7 +66,7 @@ void showRequiredTask(BuildContext context, VoidCallback onRetry) {
           message:
               'Yêu cầu hoàn thành tất cả công việc bắt buộc trong ngày trước khi chấm công ra',
           action: OutlineButton(
-              onPressed: () => context.popUtil(Routes.home),
+              onPressed: () => context.popUtil(HomeModule.route),
               name: 'Về trang chủ',
               color: AppColors.orange)));
 }

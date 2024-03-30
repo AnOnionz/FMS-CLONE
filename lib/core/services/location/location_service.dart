@@ -23,7 +23,7 @@ final class LocationService extends ChangeNotifier {
   // Keep track of current Location
   Position? _currentLocation;
 
-  Database database = Database();
+  Database database = Database.instance;
 
   bool _serviceEnabled = false;
 
@@ -93,7 +93,6 @@ final class LocationService extends ChangeNotifier {
         permission = await requestPermission();
         if (permission == LocationPermission.denied) {
           // show dialog
-
           subscription?.resume();
           return false;
         }

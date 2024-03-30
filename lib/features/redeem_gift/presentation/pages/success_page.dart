@@ -5,7 +5,8 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/core/widgets/button/outline.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/home/home_module.dart';
+import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
@@ -35,15 +36,15 @@ class SuccessPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: OutlineButton(
-                            onPressed: () => context.popUtil(Routes.home),
+                            onPressed: () => context.popUtil(HomeModule.route),
                             name: 'Trang chủ',
                             color: AppColors.orange),
                       ),
                       SizedBox(width: 16.w),
                       Expanded(
                         child: FlatButton(
-                            onPressed: () => context
-                                .nextAndRemoveUntilRoute(Routes.redeemGift),
+                            onPressed: () => context.nextAndRemoveUntilRoute(
+                                RedeemGiftModule.route),
                             name: 'Tiếp tục đổi quà',
                             color: AppColors.orange),
                       ),

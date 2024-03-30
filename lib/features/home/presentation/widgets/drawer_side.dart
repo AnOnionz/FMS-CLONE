@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
@@ -9,18 +9,17 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
-import 'package:fms/features/authentication/domain/entities/user_entity.dart';
+import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
-import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/setting/setting_module.dart';
 
 import '../../../../core/widgets/image_profile.dart';
 
 class DrawerSide extends StatelessWidget {
   const DrawerSide({super.key});
 
-  UserEntity get user => Modular.get<UserRepository>().user!;
+  Credentials? get credentials => Modular.get<UserRepository>().user;
 
   @override
   Widget build(BuildContext context) {
@@ -52,50 +51,66 @@ class DrawerSide extends StatelessWidget {
                                     .copyWith(color: AppColors.blackRussian),
                                 child: Column(
                                   children: [
-                                    ImageProfile(user: user),
-                                    SizedBox(height: 20.h),
-                                    (user.name != null)
-                                        ? Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 8.h),
-                                            child: Text(
-                                              user.name!,
-                                              style: context.textTheme.subtitle1
-                                                  ?.copyWith(
-                                                      color: AppColors.black),
-                                            ),
+                                    (credentials != null)
+                                        ? Column(
+                                            children: [
+                                              ImageProfile(
+                                                  credentials: credentials!),
+                                              SizedBox(height: 20.h),
+                                              (credentials!.user.name != null)
+                                                  ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 8.h),
+                                                      child: Text(
+                                                        credentials!.user.name!,
+                                                        style: context
+                                                            .textTheme.subtitle1
+                                                            ?.copyWith(
+                                                                color: AppColors
+                                                                    .black),
+                                                      ),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              (credentials!.user.email != null)
+                                                  ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 8.h),
+                                                      child: Text(
+                                                        credentials!
+                                                            .user.email!,
+                                                        style: context
+                                                            .textTheme.body1
+                                                            ?.copyWith(
+                                                                color: AppColors
+                                                                    .nobel),
+                                                      ),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              (credentials!.user.zoneinfo !=
+                                                      null)
+                                                  ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 8.h),
+                                                      child: Text(
+                                                        credentials!
+                                                            .user.zoneinfo!,
+                                                        style: context
+                                                            .textTheme.body1
+                                                            ?.copyWith(
+                                                                color: AppColors
+                                                                    .nobel),
+                                                      ),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(height: 40.h),
+                                            ],
                                           )
                                         : SizedBox.shrink(),
-                                    (user.email != null)
-                                        ? Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 8.h),
-                                            child: Text(
-                                              user.email!,
-                                              style: context.textTheme.body1
-                                                  ?.copyWith(
-                                                      color: AppColors.nobel),
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    (user.zoneinfo != null)
-                                        ? Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 8.h),
-                                            child: Text(
-                                              user.zoneinfo!,
-                                              style: context.textTheme.body1
-                                                  ?.copyWith(
-                                                      color: AppColors.nobel),
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    SizedBox(height: 40.h),
                                     _rowFeature(
                                       context,
                                       AppIcons.notification,
                                       'Thông báo',
-                                      Routes.setting,
+                                      SettingModule.route,
                                     ),
                                     SizedBox(
                                       height: 8.h,
@@ -104,7 +119,7 @@ class DrawerSide extends StatelessWidget {
                                       context,
                                       AppIcons.about,
                                       'Thông tin và ứng dụng',
-                                      Routes.appInformation,
+                                      AppInfomationModule.route,
                                     ),
                                     SizedBox(
                                       height: 8.h,
@@ -113,7 +128,7 @@ class DrawerSide extends StatelessWidget {
                                       context,
                                       AppIcons.config,
                                       'Cài đặt',
-                                      Routes.setting,
+                                      SettingModule.route,
                                     ),
                                     Padding(
                                       padding:
@@ -137,12 +152,8 @@ class DrawerSide extends StatelessWidget {
                                       padding: EdgeInsets.only(
                                         bottom: 20.h,
                                       ),
-                                      child: BlocProvider(
-                                        create: (context) =>
-                                            Modular.get<SignBloc>(),
-                                        child: LogoutButton(
-                                          validate: () => true,
-                                        ),
+                                      child: LogoutButton(
+                                        validate: () => true,
                                       ),
                                     ),
                                   ],

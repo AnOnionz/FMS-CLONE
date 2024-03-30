@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
 
 import '../../../../../core/constant/colors.dart';
 
@@ -12,7 +12,7 @@ class HistoryExchangeReduceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.nextRoute(Routes.historyExchangeDetail),
+      onTap: () => context.nextRoute(RedeemGiftModule.historyDetail),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
         padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),

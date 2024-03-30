@@ -9,7 +9,7 @@ class SettingState extends Equatable {
   factory SettingState.initial() {
     final settingApp = database.getObject<SettingApp>();
     if (settingApp == null) {
-      final s = SettingApp();
+      final s = SettingApp(appLock: AppLock());
       database.addObject<SettingApp>(s);
       return SettingState(settings: s);
     }
@@ -18,7 +18,7 @@ class SettingState extends Equatable {
   }
 
   SettingState cameraToggle() {
-    final newSettings = settings.copyWith(cameraCustom: !settings.cameraCustom);
+    final newSettings = settings.copyWith(cameraCustom: !settings.useCameraZ);
     database.addObject<SettingApp>(newSettings);
     return copyWith(settings: newSettings);
   }

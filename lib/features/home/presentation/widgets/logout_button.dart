@@ -3,21 +3,33 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/authentication/presentation/blocs/sign_bloc.dart';
+import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
 
-class LogoutButton extends StatelessWidget {
+class LogoutButton extends StatefulWidget {
   final bool Function() validate;
   const LogoutButton({super.key, required this.validate});
+
+  @override
+  State<LogoutButton> createState() => _LogoutButtonState();
+}
+
+class _LogoutButtonState extends State<LogoutButton> {
+  final bloc = Modular.get<SignBloc>();
+  @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (validate()) {
-          context.read<SignBloc>().add(SignOut());
+        if (widget.validate()) {
+          bloc.add(SignOutButtonPressed());
         }
       },
       child: Container(

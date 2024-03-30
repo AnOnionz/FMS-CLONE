@@ -1,25 +1,29 @@
 /// Try parse [object] from json data
 T? parseJson<T>(
     ({
-      T? Function(Map<String, dynamic>?) fromJson,
+      T Function(Map<String, dynamic>) fromJson,
       Map<String, dynamic>? json,
     }) model) {
   if (model.json == null) return null;
-  return model.fromJson(model.json);
+  return model.fromJson(model.json!);
 }
 
 /// Try parse [List Object] from json list data
 ///
 /// 	Return [] when json = null
-List<T?> parseListJson<T>(
+List<T> parseListJson<T>(
     ({
-      T? Function(Map<String, dynamic>?) fromJson,
-      List<Map<String, dynamic>>? listJson
+      T Function(Map<String, dynamic>) fromJson,
+      List<dynamic>? listJson
     }) model) {
   if (model.listJson == null) {
     return [];
   }
-  return model.listJson!.map((json) => model.fromJson(json)).toList();
+
+  return model.listJson!
+      .cast<Map<String, dynamic>>()
+      .map((json) => model.fromJson(json))
+      .toList();
 }
 
 /// FNV-1a 64bit hash algorithm

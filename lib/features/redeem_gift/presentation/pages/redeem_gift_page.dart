@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/product_page.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
 
 import '../widgets/custom_stepper.dart';
 import 'customer_page.dart';
@@ -40,7 +41,7 @@ class _RedeemGiftPageState extends State<RedeemGiftPage> {
     ),
     RedeemGiftReviewPage(
       key: PageStorageKey('review'),
-      onNext: () => context.nextRoute(Routes.congratulation),
+      onNext: () => context.nextRoute(RedeemGiftModule.success),
     )
   ];
 
@@ -69,7 +70,7 @@ class _RedeemGiftPageState extends State<RedeemGiftPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: DefaultAppBar(
-          onBack: () => context.navigate(Routes.home),
+          onBack: () => context.navigate(HomeModule.route),
           title: 'Ghi nhận thông tin khách hàng',
         ),
         body: Column(

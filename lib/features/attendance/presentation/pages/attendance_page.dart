@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/database/file_metadata.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';

@@ -1,0 +1,245 @@
+import 'dart:async';
+import 'dart:ui';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/sign/sign_module.dart';
+import 'package:fms/features/work_place/work_place_module.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../../../../core/mixins/common.dart';
+import '../../../../core/services/internet_conection/internet_connection_service.dart';
+import '../../../../core/services/network_time/network_time_service.dart';
+import '../../../authentication/presentation/blocs/authentication_bloc.dart';
+
+part 'app_event.dart';
+part 'app_state.dart';
+
+class AppBloc extends Bloc<AppEvent, AppState> {
+  final AuthenticationBloc _authenticationBloc;
+  final InternetConnectionService _internetConnectionService;
+  final NetworkTimeService _networkTimeService;
+
+  final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
+  StreamSubscription<AuthenticationState>? _authenticationSubscription;
+
+  AppBloc(this._authenticationBloc, this._internetConnectionService,
+      this._networkTimeService)
+      : super(const AppInitial()) {
+    _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
+
+    on<AppStarted>(_onAppStarted);
+    on<AppLocked>(_onAppLocked);
+    on<AppUnlocked>(_onAppUnlocked);
+    on<AppLifecycleChanged>(_onAppLifeCycleChanged);
+    on<AppAuthenticationSubscribed>(_onAppAuthenticationSubscribed);
+    on<AppAuthenticationUnsubscribed>(_onAppAuthenticationUnsubscribed);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+  }
+
+  @override
+  void onChange(Change<AppState> change) {
+    super.onChange(change);
+    final nextState = change.nextState;
+    if (nextState is AppSuccess) {
+      // _checkLockStatus(nextState);
+    }
+  }
+
+  void _checkLockStatus(AppSuccess appState) {
+    final navigationHistory = Modular.to.navigateHistory;
+    bool isLockedRoute = false;
+
+    if (navigationHistory.isNotEmpty) {
+      final lastRoute = navigationHistory.last;
+      isLockedRoute = lastRoute.name.startsWith('/lock/');
+    }
+
+    if (appState.isLocked && !isLockedRoute) {
+      Modular.to.pushNamed('/lock/', arguments: false, forRoot: true);
+    } else if (!appState.isLocked && isLockedRoute) {
+      Modular.to.pop();
+    }
+  }
+
+  /// Checks the authentication status and performs navigation based on it.
+  ///
+  /// If the user is authenticated, it navigates to the profile page.
+  /// If the user is unauthenticated, it navigates to the login page.
+  void _checkAuthenticationStatus(AuthenticationStatus status) {
+    if (status == AuthenticationStatus.authenticated) {
+      // If the user is authenticated, navigate to the profile page.
+      Modular.to.navigate(WorkPlaceModule.route);
+    } else if (status == AuthenticationStatus.unauthenticated) {
+      // If the user is unauthenticated, navigate to the login page.
+      Modular.to.navigate(SignModule.route);
+    }
+  }
+
+  /// Initializes the local data source for the app.
+  ///
+  /// This function initializes the local database using Isar and binds it to the app's database module.
+  Future<void> _initializeLocalDataSource() async {}
+
+  /// Starts the network time service.
+  ///
+  /// Returns a [Future] that completes with a boolean value indicating whether
+  /// the network time service was successfully started.
+  Future<bool> _startNetworkTimeService() async {
+    return _networkTimeService.startup(
+      lookUpAddress: 'time.google.com',
+      locationName: 'Asia/Ho_Chi_Minh',
+      timeout: const Duration(seconds: 6),
+    );
+  }
+
+  /// Starts the internet connection service.
+  ///
+  /// Returns a [Future] that completes with a [bool] value indicating whether the service was successfully started or not.
+  Future<bool> _startInternetConnectionService() async {
+    return _internetConnectionService.startup(
+      checkTimeout: const Duration(seconds: 10),
+      checkInterval: const Duration(seconds: 10),
+    );
+  }
+
+  /// Callback function when an [AppStarted] event is emitted.
+  Future<void> _onAppStarted(AppStarted event, Emitter<AppState> emit) async {
+    emit(const AppLoading());
+
+    try {
+      await Future.wait([
+        _startInternetConnectionService(),
+        _startNetworkTimeService(),
+      ]);
+
+      await Future.wait([
+        _internetConnectionService.runner.hasConnection,
+        _networkTimeService.runner.now(),
+      ]);
+    } catch (error) {
+      return emit(const AppFailure());
+    }
+
+    _internetConnectionService.runner.onConnectedChange.listen((isConnected) {
+      Fx.log('Internet connected: $isConnected');
+      if (isConnected && _networkTimeService.isRunning) {
+        _networkTimeService.runner.refresh();
+      }
+    });
+
+    await _initializeLocalDataSource();
+
+    _authenticationBloc.add(AuthenticationStarted());
+    // _settingsBloc.add(const SettingsStarted());
+
+    final results = await Future.wait([
+      _authenticationBloc.stream.first,
+      // _settingsBloc.stream.first,
+    ]);
+
+    final authState = results[0];
+    // final settingsState = results[1] as SettingsState;
+
+    // if (settingsState is SettingsFailure) {
+    //   final settings = Settings(
+    //     appearance: SettingsAppearance(),
+    //     security: SettingsSecurity()
+    //       ..autoLock = AutoLockType.immediately
+    //       ..enableBiometrics = true
+    //       ..enablePasscode = true
+    //       ..passcodeDigits = 4,
+    //     storage: SettingsStorage(),
+    //   );
+    //   _settingsBloc.add(SettingsUpdated(settings));
+    // }
+
+    // if (settingsState is SettingsSuccess) {
+    //   print(settingsState.settings.isarId.toInt());
+    // }
+
+    // print(settingsState);
+
+    final isAuthenticated =
+        authState.status == AuthenticationStatus.authenticated;
+
+    emit(AppSuccess(isLocked: isAuthenticated));
+  }
+
+  /// Callback function when an [AppLocked] event is emitted.
+  ///
+  /// The function updates the state of the app to set `isLocked` to `true` if the current state is [AppSuccess].
+  void _onAppLocked(AppLocked event, Emitter<AppState> emit) {
+    final currentState = state;
+    if (currentState is AppSuccess) {
+      emit(currentState.copyWith(isLocked: true));
+    }
+  }
+
+  /// Callback function when an [AppUnlocked] event is emitted.
+  ///
+  /// The function updates the state of the app to set `isLocked` to `false` if the current state is [AppSuccess].
+  void _onAppUnlocked(AppUnlocked event, Emitter<AppState> emit) {
+    final currentState = state;
+    if (currentState is AppSuccess) {
+      emit(currentState.copyWith(isLocked: false));
+    }
+  }
+
+  /// Callback function when an [AppLifecycleChanged] event is emitted.
+  ///
+  /// This function is called when the lifecycle state of the app changes.
+  /// It checks if the app has resumed and triggers the [AuthenticationStarted] event in the [AuthenticationBloc].
+  /// It also refreshes the network time if it is currently running.
+  void _onAppLifeCycleChanged(
+    AppLifecycleChanged event,
+    Emitter<AppState> emit,
+  ) {
+    if (event.state == AppLifecycleState.resumed) {
+      // Trigger the AuthenticationStarted event in the AuthenticationBloc
+      _authenticationBloc.add(AuthenticationStarted());
+
+      // Check if the network time is running and refresh it if necessary
+      if (_networkTimeService.isRunning) {
+        _networkTimeService.runner.refresh();
+      }
+    }
+  }
+
+  /// Callback function when an [AppAuthenticationSubscribed] event is emitted.
+  ///
+  /// Subscribes to the [_authenticationBehaviorSubject] stream and listens for changes in authentication state.
+  void _onAppAuthenticationSubscribed(
+    AppAuthenticationSubscribed event,
+    Emitter<AppState> emit,
+  ) {
+    _authenticationSubscription =
+        _authenticationBehaviorSubject.stream.distinct().listen((authState) {
+      _checkAuthenticationStatus(authState.status);
+    });
+  }
+
+  /// Callback function for when an [AppAuthenticationUnsubscribed] event is emitted.
+  ///
+  /// It cancels the authentication subscription and sets it to null.
+  void _onAppAuthenticationUnsubscribed(
+    AppAuthenticationUnsubscribed event,
+    Emitter<AppState> emit,
+  ) {
+    _authenticationSubscription?.cancel();
+    _authenticationSubscription = null;
+  }
+
+  @override
+  Future<void> close() async {
+    await _authenticationSubscription?.cancel();
+    await _authenticationBloc.close();
+    return super.close();
+  }
+}

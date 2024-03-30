@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/camera/camera_module.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
-import 'package:fms/routes/routes.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 
@@ -15,16 +15,15 @@ import '/core/mixins/common.dart';
 import 'painter/watermark_painter.dart';
 
 final class MediaService {
-  static ImagePicker _picker = ImagePicker();
-  static Database database = Database();
-  final settings = database.getObject<SettingApp>();
+  ImagePicker _picker = ImagePicker();
+  final settings = Database.instance.getObject<SettingApp>();
 
   Future<XFile?> pickImage(double? maxWidth, double? maxHeight, int? quality,
       {ImageSource source = ImageSource.camera}) async {
     try {
       final XFile? pickedFile;
-      if (settings?.cameraCustom ?? false) {
-        pickedFile = await Modular.to.pushNamed(Routes.camera);
+      if (settings?.useCameraZ ?? false) {
+        pickedFile = await Modular.to.pushNamed(CameraModule.route);
       } else {
         pickedFile = await _picker.pickImage(
           source: source,

@@ -33,6 +33,7 @@ class SelectedProduct extends StatelessWidget {
               return Dismissible(
                 key: Key(item.toString()),
                 onDismissed: (direction) {
+                  // ignore: invalid_use_of_protected_member
                   state.setState(() {
                     items.removeAt(index);
                   });

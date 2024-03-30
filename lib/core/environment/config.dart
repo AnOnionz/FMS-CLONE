@@ -14,6 +14,10 @@ class AppConfig {
     Keys.BASE_URL: _baseURL,
   };
 
+  AppConfig() {
+    FlavorConfig(name: _env, variables: variables);
+  }
+
   static FlavorConfig initialFlavor() {
     return FlavorConfig(name: _env, variables: variables);
   }

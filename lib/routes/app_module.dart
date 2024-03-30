@@ -1,158 +1,71 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/widgets/camera_custom.dart';
-import 'package:fms/features/app_information/presentation/pages/app_information_page.dart';
-import 'package:fms/features/crawl/presentation/pages/crawl_page.dart';
-import 'package:fms/features/note/presentation/pages/note_page.dart';
-import 'package:fms/features/redeem_gift/presentation/pages/history_exchange.dart';
-import 'package:fms/features/redeem_gift/presentation/pages/redeem_gift_page.dart';
-import 'package:fms/features/redeem_gift/presentation/pages/success_page.dart';
-import 'package:fms/features/report/domain/entities/report_entity.dart';
-import 'package:fms/features/report/presentation/pages/report_page.dart';
-import 'package:fms/features/setting/presentation/pages/app_lock_page.dart';
-import 'package:fms/features/setting/presentation/pages/change_password_page.dart';
-import 'package:fms/features/setting/presentation/pages/setting_page.dart';
-import 'package:fms/features/statistic/presentation/pages/statistic_page.dart';
-import 'package:fms/features/sync/presentation/pages/sync_page.dart';
-import 'package:fms/features/urgency/presentation/pages/urgency_page.dart';
-import 'package:fms/features/workForce/presentation/pages/outlet_selection_page.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:fms/core/environment/config.dart';
+import 'package:fms/features/app/presentation/pages/app_page.dart';
+import 'package:fms/features/app_information/app_infomation_module.dart';
+import 'package:fms/features/attendance/attendance_module.dart';
+import 'package:fms/features/authentication/authentication_module.dart';
+import 'package:fms/features/crawl/crawl.module.dart';
+import 'package:fms/features/home/home_module.dart';
+import 'package:fms/features/lock/lock_module.dart';
+import 'package:fms/features/note/note_module.dart';
+import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
+import 'package:fms/features/report/report_module.dart';
+import 'package:fms/features/setting/setting_module.dart';
+import 'package:fms/features/sign/sign_module.dart';
+import 'package:fms/features/statistic/statistic_module.dart';
+import 'package:fms/features/urgency/urgency_module.dart';
 
-import '../../features/authentication/domain/usecases/login_usecase.dart';
-import '../../features/authentication/presentation/pages/login_page.dart';
 import '../../routes/admin_module.dart';
 import '../../routes/routes.dart';
-import '../features/attendance/presentation/blocs/locate/cubit/locate_cubit.dart';
-import '../features/attendance/presentation/pages/attendace_locate_page.dart';
-
-import '../features/attendance/presentation/pages/attendance_page.dart';
-import '../features/authentication/data/datasources/user_local_data_source.dart';
-import '../features/authentication/data/datasources/user_remote_data_source.dart';
-import '../features/authentication/domain/repositories/user_repository.dart';
-import '../features/authentication/domain/usecases/change_pass_usecase.dart';
-import '../features/authentication/domain/usecases/logout_usecase.dart';
-import '../features/authentication/presentation/blocs/authentication_bloc.dart';
-import '../features/authentication/presentation/blocs/sign_bloc.dart';
-import '../features/home/presentation/pages/home_page.dart';
-import '../features/leave/presentation/pages/leave_page.dart';
-import '../features/normal_splash_page.dart';
-
-import '../features/redeem_gift/presentation/pages/history_exchange_detail.dart';
-import '../features/setting/presentation/cubit/setting_cubit.dart';
-import '../features/statistic/presentation/pages/statistic_sup_page.dart';
-import '../features/workForce/presentation/pages/booth_selection_page.dart';
-import '../features/workForce/presentation/pages/project_selection_page.dart';
-import '../features/workForce/presentation/pages/work_force_page.dart';
+import '../features/app/presentation/bloc/app_bloc.dart';
+import '../features/leave/leave_module.dart';
+import '../features/sync/sync_module.dart';
+import '../features/work_place/work_place_module.dart';
 import 'core_module.dart';
 
 class AppModule extends Module {
   @override
-  List<Module> get imports => [
-        CoreModule(),
-      ];
+  List<Module> get imports => [CoreModule(), AuthenticationModule()];
   @override
   void binds(i) {
-    i.add<UserLocalDataSource>(UserLocalDataSourceImpl.new);
-    i.add<UserRemoteDataSource>(UserRemoteDataSourceImpl.new);
-    i.addSingleton<UserRepository>(UserRepositoryImpl.new,
-        config: BindConfig(
-          notifier: (listenable) => listenable,
-          onDispose: (listenable) => listenable.dispose(),
-        ));
-    i.addSingleton<AuthenticationBloc>(AuthenticationBloc.new);
-    i.add<LoginUsecase>(LoginUsecase.new);
-    i.add<LogoutUsecase>(LogoutUsecase.new);
-    i.add<ChangePassUsecase>(ChangePassUsecase.new);
-    i.add<SignBloc>(SignBloc.new);
-    //attendance
-    i.add<LocateCubit>(LocateCubit.new);
-    //setting
-    i.addSingleton<SettingCubit>(SettingCubit.new);
+    i.addLazySingleton(AppBloc.new);
+    i.addSingleton(AppConfig.new);
   }
 
   @override
   void routes(r) {
     r.child(Routes.root,
-        child: (_) => const SplashPage(), transition: TransitionType.fadeIn);
-    r.module(Routes.admin, module: AdminModule());
-    r.child(Routes.home,
-        child: (_) => HomePage(), transition: TransitionType.fadeIn);
-    r.child(Routes.login,
-        child: (_) => const LoginPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.camera, child: (_) => CameraCustom());
-    r.child(Routes.photoView,
-        child: (_) => PhotoView(file: r.args.data as XFile),
-        transition: TransitionType.noTransition);
-    r.child(Routes.workForce,
-        child: (_) => const WorkForcePage(), transition: TransitionType.fadeIn);
-    r.child(Routes.projectSelection,
-        child: (_) => const ProjectSelectionPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.outletSelection,
-        child: (_) => const OutletSelectionPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.boothSelection,
-        child: (_) => const BoothSelectionPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.locate,
-        child: (_) => const AttendanceLocatePage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.attendance,
-        child: (_) => const AttendancePage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.leave,
-        child: (_) => const LeavePage(), transition: TransitionType.fadeIn);
-    r.child(Routes.setting, child: (_) => SettingPage());
-    r.child(Routes.appLock,
-        child: (_) => const AppLockPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.changePass,
-        child: (_) => const ChangePassWordPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.urgency,
-        child: (_) => const UrgencyPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.note,
-        child: (_) => const NotePage(), transition: TransitionType.fadeIn);
-    r.child(Routes.crawl,
-        child: (_) => const CrawlPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.report,
-        child: (_) => ReportPage(
-              reportList: r.args.data as List<ReportEntity>,
-            ),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.redeemGift,
-        child: (_) => const RedeemGiftPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.congratulation,
-        child: (_) => const SuccessPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.statistic,
-        child: (_) => const StatisticPage(), transition: TransitionType.fadeIn);
-    r.child(Routes.statisticSup,
-        child: (_) => const StatisticSupPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.statisticOutlet,
-        child: (_) => const StatisticOutletPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.statisticBooth,
-        child: (_) => const StatisticBoothPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.statisticEmployee,
-        child: (_) => const StatisticEmployeePage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.historyExchange,
-        child: (_) => const HistoryExchangePage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.historyExchangeDetail,
-        child: (_) => const HistoryExchangeDetailPage(),
-        transition: TransitionType.fadeIn);
-    r.child(Routes.appInformation, child: (_) => const AppInformationPage());
-    r.child(Routes.sync,
-        child: (_) => const SyncPage(), transition: TransitionType.fadeIn);
-  }
-
-  BindConfig<T> blocConfig<T extends Bloc<dynamic, dynamic>>() {
-    return BindConfig(
-      notifier: (bloc) => bloc.stream,
-      onDispose: (bloc) => bloc.close(),
-    );
+        child: (_) => const AppPage(), transition: TransitionType.fadeIn);
+    r.module(Routes.admin,
+        module: AdminModule(), transition: TransitionType.fadeIn);
+    r.module(SignModule.route, module: SignModule());
+    r.module(WorkPlaceModule.route,
+        module: WorkPlaceModule(), transition: TransitionType.fadeIn);
+    r.module(HomeModule.route,
+        module: HomeModule(), transition: TransitionType.fadeIn);
+    r.module(AppInfomationModule.route,
+        module: AppInfomationModule(), transition: TransitionType.fadeIn);
+    r.module(AttendanceModule.route,
+        module: AttendanceModule(), transition: TransitionType.fadeIn);
+    r.module(CrawlModule.route,
+        module: CrawlModule(), transition: TransitionType.fadeIn);
+    r.module(LeaveModule.route,
+        module: LeaveModule(), transition: TransitionType.fadeIn);
+    r.module(NoteModule.route,
+        module: NoteModule(), transition: TransitionType.fadeIn);
+    r.module(RedeemGiftModule.route,
+        module: RedeemGiftModule(), transition: TransitionType.fadeIn);
+    r.module(ReportModule.route,
+        module: ReportModule(), transition: TransitionType.fadeIn);
+    r.module(SettingModule.route,
+        module: SettingModule(), transition: TransitionType.fadeIn);
+    r.module(SyncModule.route,
+        module: SyncModule(), transition: TransitionType.fadeIn);
+    r.module(UgrencyModule.route,
+        module: UgrencyModule(), transition: TransitionType.fadeIn);
+    r.module(StatisticModule.route,
+        module: StatisticModule(), transition: TransitionType.fadeIn);
+    r.module(LockModule.route,
+        module: LockModule(), transition: TransitionType.fadeIn);
   }
 }

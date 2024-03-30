@@ -196,6 +196,8 @@ extension ContextExtensions on BuildContext {
   ///
   void pop<T>([T? result]) => Modular.to.pop(result);
 
+  void popIfCan<T>([T? result]) => _popIfCan(result);
+
   ///
   /// Calls pop repeatedly on the navigator that most tightly encloses the given context until the predicate returns true.
   ///
@@ -304,3 +306,7 @@ Future<T?> _nextAndRemoveUntilPage<T extends Object?>(
 
 void _popUntil<T extends Object?>(String page) =>
     Modular.to.popUntil(ModalRoute.withName(page));
+
+void _popIfCan<T>([T? result]) {
+  if (Modular.to.canPop()) Modular.to.pop();
+}

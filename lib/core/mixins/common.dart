@@ -4,6 +4,9 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fms/core/mixins/fx.dart';
+
+import '../errors/app_exception.dart';
 
 /// Mixin [Fx] provides basic operations and utilities
 mixin Fx {
@@ -672,6 +675,29 @@ mixin Fx {
       debugPrint(
           '👆🏻└------------------------------------------------------------------------------👨🏻‍💻');
     }
+  }
+
+  static void logException(AppException e) {
+    print(e);
+    String line(String text, String fill) {
+      final fillCount =
+          max(25.generate((index) => index).toString().length - text.length, 0);
+      final left = List.filled(fillCount ~/ 2, fill);
+      final right = List.filled(fillCount - left.length, fill);
+      return left.join() + text + right.join();
+    }
+
+    dev.log('\x1B[33m' '╔${line('', '═')}╗' '\x1B[0m');
+    dev.log('\x1B[33m' '║${line('${e.runtimeType}', ' ')}║' '\x1B[0m');
+    dev.log('\x1B[33m' '╟${line('⇑', '─')}╢' '\x1B[0m');
+    dev.log('\x1B[33m' '║${line('${e.error.runtimeType}', ' ')}║' '\x1B[0m');
+    dev.log('\x1B[33m' '╟${line('⇑', '─')}╢' '\x1B[0m');
+    dev.log('\x1B[33m'
+        '║${line(e.error.toString().replaceAll('${e.error.runtimeType}', '').replaceAll('\n', ' '), ' ')}║'
+        '\x1B[0m');
+    dev.log('\x1B[33m' '╚${line('', '═')}╝' '\x1B[0m');
+    dev.log('\n');
+    debugPrintStack(stackTrace: e.stackTrace);
   }
 
   /// Send a reference to [object] to any attached debuggers.

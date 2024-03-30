@@ -3,9 +3,8 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/statistic/statistic_module.dart';
 
-import '../../../workForce/presentation/widgets/outlet_item.dart';
 import '../widgets/statistic_type_item.dart';
 
 class StatisticSupPage extends StatefulWidget {
@@ -47,7 +46,7 @@ class _StatisticSupPageState extends State<StatisticSupPage> {
                     itemCount: 5,
                     itemBuilder: (context, index) => StatisticTypeItem(
                       onPressed: () =>
-                          context.nextRoute(Routes.statisticOutlet),
+                          context.nextRoute(StatisticModule.outlet),
                       title: 'Outlet Emart Trường Chinh',
                       subTitle: 'ma0001',
                     ),

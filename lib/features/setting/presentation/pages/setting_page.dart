@@ -8,7 +8,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/setting/presentation/cubit/setting_cubit.dart';
 import 'package:fms/features/setting/presentation/widgets/setting_item.dart';
-import 'package:fms/routes/routes.dart';
+import 'package:fms/features/setting/setting_module.dart';
 
 class SettingPage extends StatelessWidget {
   SettingPage({super.key});
@@ -30,18 +30,18 @@ class SettingPage extends StatelessWidget {
                     icon: SvgPicture.asset(AppIcons.cameraOrange),
                     name: 'Camera thay thế',
                     type: SettingType.toggle,
-                    switchValue: state.settings.cameraCustom,
+                    switchValue: state.settings.useCameraZ,
                     onTap: () => cubit.cameraToggle()),
                 SettingItem(
                     icon: SvgPicture.asset(AppIcons.fingerprint),
                     name: 'Khóa app',
                     type: SettingType.transfer,
-                    onTap: () => context.nextRoute(Routes.appLock)),
+                    onTap: () => context.nextRoute(SettingModule.appLock)),
                 SettingItem(
                     icon: SvgPicture.asset(AppIcons.lock),
                     name: 'Đổi mật khẩu tài khoản',
                     type: SettingType.transfer,
-                    onTap: () => context.nextRoute(Routes.changePass)),
+                    onTap: () => context.nextRoute(SettingModule.changePass)),
                 SettingItem(
                     icon: SvgPicture.asset(AppIcons.trash),
                     name: 'Xóa data app',

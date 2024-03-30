@@ -1,9 +1,8 @@
 import 'dart:async';
-// import 'dart:io';
+import 'dart:io';
 
 // import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-// import 'package:dio/io.dart';
 
 import '/core/client/api_service.dart';
 import '/core/errors/app_exception.dart';
@@ -15,25 +14,26 @@ class DioClient extends ApiService {
   // final fingerprint =
   //     'ee5ce1dfa7a53657c545c62b65802e4272878dabd65c0aadcf85783ebb0b4d5c';
 
-  final Dio http = Dio(
+  final Dio _http = Dio(
     BaseOptions(
-      baseUrl: '${ApiService.apiBaseUrl}${ApiService.apiPath}',
+      baseUrl: '${ApiService.apiBaseUrl}',
       connectTimeout: kTimeOutDuration,
       receiveTimeout: kTimeOutDuration,
       sendTimeout: kTimeOutDuration,
       contentType: Headers.formUrlEncodedContentType,
+      validateStatus: (int? status) => status != null,
     ),
   );
 
   DioClient() {
-    if (http.interceptors.isEmpty) {
-      http.interceptors.add(
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ),
-      );
-    }
+    HttpOverrides.global = MyHttpOverrides();
+
+    _http.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ),
+    );
     // http.httpClientAdapter = IOHttpClientAdapter(
     //   createHttpClient: () {
     //     final client = HttpClient(
@@ -64,7 +64,7 @@ class DioClient extends ApiService {
       Map<String, dynamic>? queryParameters}) async {
     return await _request(
         retries: retries,
-        http.get(path,
+        _http.get(path,
             queryParameters: queryParameters,
             data: data,
             cancelToken: cancelToken));
@@ -78,7 +78,7 @@ class DioClient extends ApiService {
       Map<String, dynamic>? queryParameters}) async {
     return await _request(
         retries: retries,
-        http.post(path,
+        _http.post(path,
             queryParameters: queryParameters,
             data: data,
             cancelToken: cancelToken));
@@ -92,7 +92,7 @@ class DioClient extends ApiService {
       Map<String, dynamic>? queryParameters}) async {
     return await _request(
         retries: retries,
-        http.put(path,
+        _http.put(path,
             queryParameters: queryParameters,
             data: data,
             cancelToken: cancelToken));
@@ -118,11 +118,6 @@ class DioClient extends ApiService {
       } else {
         throw SocketException(e.message, e, s);
       }
-    } catch (e, s) {
-      if (retries > 1) {
-        return _request(retries: retries - 1, method);
-      }
-      throw BadRequestException(null, e, s);
     }
   }
 
@@ -130,9 +125,10 @@ class DioClient extends ApiService {
     String? message;
 
     if (response.data != null && response.data is Map) {
-      message = (response.data as Map)['error']?['message'] as String?;
+      message = (response.data as Map)['message'] as String?;
     }
-    final Exception e = Exception('Transform Response Exception');
+    final Exception e =
+        Exception(response.data ?? 'Dio client transform response');
 
     return switch (response.statusCode) {
       StatusCode.OK || StatusCode.CREATED => response.data,
@@ -150,31 +146,41 @@ class DioClient extends ApiService {
 
   @override
   void setFormData() {
-    http.options.contentType = Headers.formUrlEncodedContentType;
+    _http.options.contentType = Headers.formUrlEncodedContentType;
   }
 
   @override
   void setBaseUrl(String url) {
-    http.options.baseUrl = url;
+    _http.options.baseUrl = url;
   }
 
   @override
   void setBearerAuth({required String token}) {
-    http.options.headers.addAll({'Authorization': token});
+    _http.options.headers.addAll({'Authorization': token});
+    print(token);
   }
 
   @override
   void clearBearerAuth() {
-    http.options.headers.remove('Authorization');
+    _http.options.headers.remove('Authorization');
   }
 
   @override
   void addInterceptor(Interceptor interceptor) {
-    http.interceptors.add(interceptor);
+    _http.interceptors.add(interceptor);
   }
 
   @override
   void setValidateStatus(ValidateStatus validateStatus) {
-    http.options.validateStatus = validateStatus;
+    _http.options.validateStatus = validateStatus;
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

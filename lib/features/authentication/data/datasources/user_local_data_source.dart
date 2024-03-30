@@ -17,10 +17,9 @@ sealed class UserLocalDataSource {
 }
 
 class UserLocalDataSourceImpl implements UserLocalDataSource {
+  final database = Database.instance;
   @override
   bool get isLogin => getUserFromLocal() != null;
-
-  final database = Database();
 
   @override
 

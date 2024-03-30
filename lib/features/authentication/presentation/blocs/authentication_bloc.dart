@@ -1,51 +1,60 @@
-import 'dart:async';
-
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../domain/repositories/user_repository.dart';
-import '/features/authentication/domain/entities/user_entity.dart';
+import 'package:fms/core/errors/failure.dart';
+import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
+import 'package:fms/features/authentication/domain/usecases/logout_usecase.dart';
+import '../../domain/usecases/get_credentials_usecase.dart';
+import '../../domain/usecases/has_valid_credentials_usecase.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({required UserRepository userRepository})
-      : _userRepository = userRepository,
-        super(AuthenticationState.unknown()) {
-    on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
-    _authenticationStatusSubscription = _userRepository.status.listen(
-      (status) => add(_AuthenticationStatusChanged(status)),
+  AuthenticationBloc({
+    required LogoutUsecase logoutUsecase,
+    required LoginUsecase loginUsecase,
+    required HasValidCredentialsUsecase hasValidCredentialsUsecase,
+    required GetCredentialsUsecase getCredentialsUsecase,
+  }) : super(const AuthenticationState.unknown()) {
+    on<AuthenticationStarted>(
+      (event, emit) async {
+        bool hasValidCredentials = false;
+
+        await hasValidCredentialsUsecase()
+          ..fold(
+              (fail) async => emit(const AuthenticationState.unauthenticated()),
+              (success) {
+            hasValidCredentials = true;
+          });
+
+        if (hasValidCredentials) {
+          await getCredentialsUsecase()
+            ..fold((fail) => emit(const AuthenticationState.unauthenticated()),
+                (success) => emit(AuthenticationState.authenticated(success)));
+        }
+      },
+      transformer: droppable(),
     );
-  }
-  final UserRepository _userRepository;
-  late StreamSubscription<AuthenticationStatus>
-      _authenticationStatusSubscription;
 
-  @override
-  Future<void> close() {
-    _authenticationStatusSubscription.cancel();
-    return super.close();
-  }
+    on<AuthenticationLoginRequested>(
+      (event, emit) async {
+        final login = await loginUsecase();
+        login.fold((fail) => emit(AuthenticationState.failure(fail)),
+            (success) => emit(AuthenticationState.authenticated(success!)));
+      },
+      transformer: droppable(),
+    );
 
-  Future<void> _onAuthenticationStatusChanged(
-    _AuthenticationStatusChanged event,
-    Emitter<AuthenticationState> emit,
-  ) async {
-    switch (event.status) {
-      case AuthenticationStatus.unauthenticated:
-        return emit(const AuthenticationState.unauthenticated());
-      case AuthenticationStatus.authenticated:
-        final user = _userRepository.user;
-
-        return emit(
-          user != null
-              ? AuthenticationState.authenticated(user)
-              : const AuthenticationState.unauthenticated(),
-        );
-      case AuthenticationStatus.unknown:
-        return emit(const AuthenticationState.unknown());
-    }
+    on<AuthenticationLogoutRequested>(
+      (event, emit) async {
+        final logout = await logoutUsecase();
+        logout.fold((fail) => emit(AuthenticationState.failure(fail)),
+            (success) => emit(const AuthenticationState.unauthenticated()));
+      },
+      transformer: droppable(),
+    );
   }
 }
