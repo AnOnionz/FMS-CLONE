@@ -536,6 +536,9 @@ extension AssetsExtension on String {
   /// 	String is a Icon
   String get icon => 'assets/icons/$this';
 
+  /// 	String is a Rive file
+  String get rive => 'assets/rives/$this';
+
   /// 	File extension is PNG
   String get png => padRight(length + 1, '.png');
 
@@ -544,4 +547,7 @@ extension AssetsExtension on String {
 
   /// 	File extension is SVG
   String get svg => padRight(length + 1, '.svg');
+
+  /// 	File extension is RIV
+  String get riv => padRight(length + 1, '.riv');
 }

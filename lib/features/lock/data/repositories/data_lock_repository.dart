@@ -5,7 +5,7 @@ import '../../../../core/usecase/either.dart';
 import '../../domain/repositories/lock_repository.dart';
 import '../datasources/lock_local_datasource.dart';
 
-class DataLockRepository extends LockRepository {
+class DataLockRepository extends Repository implements LockRepository {
   final _lockLocalDatasource = LockLocalDatasource();
 
   @override
@@ -13,7 +13,7 @@ class DataLockRepository extends LockRepository {
     return todo(() async {
       await _lockLocalDatasource.deletePasscode();
       return Right(null);
-    });
+    }, useInternet: false);
   }
 
   @override
@@ -21,7 +21,7 @@ class DataLockRepository extends LockRepository {
     return todo(() async {
       final hasPasscode = await _lockLocalDatasource.hasPasscode();
       return Right(hasPasscode);
-    });
+    }, useInternet: false);
   }
 
   @override
@@ -29,7 +29,7 @@ class DataLockRepository extends LockRepository {
     return todo(() async {
       await _lockLocalDatasource.savePasscode(passcode);
       return Right(null);
-    });
+    }, useInternet: false);
   }
 
   @override
@@ -37,6 +37,6 @@ class DataLockRepository extends LockRepository {
     return todo(() async {
       final validate = await _lockLocalDatasource.validatePasscode(passcode);
       return Right(validate);
-    });
+    }, useInternet: false);
   }
 }

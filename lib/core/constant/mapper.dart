@@ -3,10 +3,10 @@ import '/core/errors/app_exception.dart';
 import '/core/errors/failure.dart';
 
 final class Mapper {
-  static Failure errorToFailure(Object e, StackTrace s) {
-    return switch (e) {
-      SocketException => SocketFailure(
-          message: (e as SocketException).message,
+  static Failure errorToFailure(Object e, StackTrace? s) {
+    return switch (e.runtimeType) {
+      InternetException => SocketFailure(
+          message: (e as InternetException).message,
           error: e.error,
           stackTrace: e.stackTrace),
       ServerDownException => ServerDownFailure(
@@ -17,8 +17,8 @@ final class Mapper {
           message: (e as BadRequestException).message,
           error: e.error,
           stackTrace: e.stackTrace),
-      InternalException => BadRequestFailure(
-          message: (e as BadRequestException).message,
+      InternalException => InternalFailure(
+          message: (e as InternalException).message,
           error: e.error,
           stackTrace: e.stackTrace),
       NotFoundException => NotFoundFailure(

@@ -690,7 +690,7 @@ mixin Fx {
     dev.log('\x1B[33m' '╔${line('', '═')}╗' '\x1B[0m');
     dev.log('\x1B[33m' '║${line('${e.runtimeType}', ' ')}║' '\x1B[0m');
     dev.log('\x1B[33m' '╟${line('⇑', '─')}╢' '\x1B[0m');
-    dev.log('\x1B[33m' '║${line('${e.error.runtimeType}', ' ')}║' '\x1B[0m');
+    dev.log('\x1B[33m' '║${line('${e.message}', ' ')}║' '\x1B[0m');
     dev.log('\x1B[33m' '╟${line('⇑', '─')}╢' '\x1B[0m');
     dev.log('\x1B[33m'
         '║${line(e.error.toString().replaceAll('${e.error.runtimeType}', '').replaceAll('\n', ' '), ' ')}║'

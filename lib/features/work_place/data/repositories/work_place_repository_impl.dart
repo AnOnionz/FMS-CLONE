@@ -1,7 +1,6 @@
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
-import 'package:fms/features/work_place/domain/entities/config.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
@@ -10,7 +9,8 @@ import '../../domain/entities/project_entity.dart';
 import '../../domain/repositories/work_place_repository.dart';
 import '../datasources/work_place_datasource.dart';
 
-class WorkPlaceRepositoryImpl implements WorkPlaceRepository {
+class WorkPlaceRepositoryImpl extends Repository
+    implements WorkPlaceRepository {
   final WorkPlaceDatasource dataSource;
 
   WorkPlaceRepositoryImpl(this.dataSource);
@@ -20,15 +20,6 @@ class WorkPlaceRepositoryImpl implements WorkPlaceRepository {
     return todo(() async {
       final booths = await dataSource.getBoothsOfOutlet(model);
       return Right(booths);
-    });
-  }
-
-  @override
-  Future<Result<ConfigEntity?>> getConfigs(WorkPlaceEntity model) {
-    return todo(() async {
-      final config = await dataSource.getConfigs(model);
-      print(config);
-      return Right(config);
     });
   }
 

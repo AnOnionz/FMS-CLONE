@@ -9,7 +9,8 @@ import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
-import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
+import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 
 import '../../../../core/widgets/button/flat.dart';
@@ -23,7 +24,9 @@ class WorkPlacePage extends StatefulWidget {
 }
 
 class _WorkPlacePageState extends State<WorkPlacePage> {
-  final Credentials credentials = Modular.get<UserRepository>().user!;
+  final Credentials credentials =
+      Modular.get<AuthenticationRepository>().credentials!;
+  final _signBloc = Modular.get<SignBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
                     child: Padding(
                       padding: EdgeInsets.all(8.h),
                       child: GestureDetector(
-                          onTap: () => context.popIfCan(),
+                          onTap: () => _signBloc.add(SignOutButtonPressed()),
                           child: SvgPicture.asset(
                             AppIcons.back,
                           )),

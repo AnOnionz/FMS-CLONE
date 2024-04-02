@@ -6,9 +6,10 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/work_place/domain/entities/project_entity.dart';
 import 'package:fms/features/work_place/presentation/bloc/work_place_bloc.dart';
-import 'package:fms/features/work_place/work_place_module.dart';
 
 import '../../../../core/widgets/app_bar.dart';
+import '../../../../core/widgets/app_indicator.dart';
+import '../../../../core/widgets/data_load_error_widget.dart';
 import '../bloc/fetch_work_place_bloc.dart';
 import '../widgets/project_item.dart';
 
@@ -30,47 +31,52 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
         appBar: DefaultAppBar(title: 'Chọn dự án'),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Danh sách dự án',
-                  style: context.textTheme.h3,
-                ),
-                Expanded(
-                  child: BlocBuilder<FetchWorkPlaceBloc, FetchWorkPlaceState>(
-                    bloc: bloc,
-                    builder: (context, state) {
-                      if (state is FetchWorkPlaceSuccess<ProjectEntity>) {
-                        return CustomScrollView(
-                          physics: kPhysics,
-                          slivers: [
-                            SliverList.builder(
-                              itemCount: state.data.length,
-                              itemBuilder: (context, index) {
-                                final project = state.data[index];
-                                return Padding(
-                                  padding: EdgeInsets.only(top: 16.h),
-                                  child: ProjectItem(
-                                    onPressed: () {
-                                      _workPlaceBloc.add(ApplyProject(project));
-                                    },
-                                    project: project,
-                                  ),
-                                );
-                              },
-                            )
-                          ],
-                        );
-                      }
-                      return SizedBox.shrink();
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
+              padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Danh sách dự án',
+                      style: context.textTheme.h3,
+                    ),
+                    Expanded(
+                        child: BlocBuilder<FetchWorkPlaceBloc,
+                            FetchWorkPlaceState>(
+                      bloc: bloc,
+                      builder: (context, state) {
+                        if (state is FetchWorkPlaceSuccess<ProjectEntity>) {
+                          return CustomScrollView(
+                            physics: kPhysics,
+                            slivers: [
+                              SliverList.builder(
+                                itemCount: state.data.length,
+                                itemBuilder: (context, index) {
+                                  final project = state.data[index];
+                                  return Padding(
+                                    padding: EdgeInsets.only(top: 16.h),
+                                    child: ProjectItem(
+                                      onPressed: () {
+                                        _workPlaceBloc
+                                            .add(ApplyProject(project));
+                                      },
+                                      project: project,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          );
+                        }
+                        if (state is FetchWorkPlaceFailure) {
+                          return Center(
+                            child: DataLoadErrorWidget(
+                                onPressed: () => bloc.add(FetchProjects())),
+                          );
+                        }
+                        return Center(child: AppIndicator());
+                      },
+                    ))
+                  ])),
         ));
   }
 }

@@ -4,8 +4,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/adaptive_indicator.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/attendance/attendance_module.dart';
 
@@ -71,9 +71,7 @@ class AttendanceLocatePage extends StatelessWidget {
                                       SizedBox(
                                         height: 20.h,
                                       ),
-                                      AdaptiveIndicator(
-                                        color: '#ABEFFF'.toColor(),
-                                      )
+                                      AppIndicator()
                                     ],
                                   );
                                 }

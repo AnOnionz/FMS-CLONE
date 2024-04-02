@@ -30,5 +30,5 @@ abstract class Either<L, R>
     implements TraversableMonadOps<Either<L, dynamic>, R> {
   const Either();
 
-  B fold<B>(B Function(L fail) ifLeft, B Function(R success) ifRight);
+  B fold<B>(B Function(L failure) ifLeft, B Function(R data) ifRight);
 }

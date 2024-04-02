@@ -6,7 +6,7 @@ import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/image_profile.dart';
-import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
+import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
@@ -20,7 +20,8 @@ class StatisticGenaral extends StatelessWidget {
   const StatisticGenaral({super.key, required this.type});
 
   final StatisticType type;
-  Credentials get credentials => Modular.get<UserRepository>().user!;
+  Credentials get credentials =>
+      Modular.get<AuthenticationRepository>().credentials!;
 
   @override
   Widget build(BuildContext context) {

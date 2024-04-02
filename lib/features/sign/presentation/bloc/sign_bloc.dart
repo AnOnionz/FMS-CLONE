@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 
 part 'sign_event.dart';
@@ -17,6 +19,8 @@ class SignBloc extends Bloc<SignEvent, SignState> {
 
     on<SignInButtonPressed>(_onSignInButtonPressed);
     on<SignOutButtonPressed>(_onSignOutButtonPressed);
+    on<RequestChangePassworkButtonPressed>(
+        _onRequestChangePassworkButtonPressed);
     on<SignStatusResponded>(_onSignStatusResponded);
   }
 
@@ -35,13 +39,21 @@ class SignBloc extends Bloc<SignEvent, SignState> {
   void _onSignInButtonPressed(
       SignInButtonPressed event, Emitter<SignState> emit) {
     emit(const SignLoading());
-    _authenticationBloc.add(const AuthenticationLoginRequested());
+    _authenticationBloc.add(AuthenticationLoginRequested());
   }
 
   void _onSignOutButtonPressed(
       SignOutButtonPressed event, Emitter<SignState> emit) {
     emit(const SignLoading());
-    _authenticationBloc.add(const AuthenticationLogoutRequested());
+    _authenticationBloc.add(AuthenticationLogoutRequested());
+  }
+
+  void _onRequestChangePassworkButtonPressed(
+      RequestChangePassworkButtonPressed event, Emitter<SignState> emit) {
+    emit(const SignLoading());
+    _authenticationBloc.add(AuthenticationChangePasswordRequested());
+    OverlayManager.showSnackbar(
+        snackbar: SnackBar(content: Text('Yêu cầu đã được gửi')));
   }
 
   void _onSignStatusResponded(

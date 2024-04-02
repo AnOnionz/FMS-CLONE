@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -5,21 +7,46 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/config/presentation/bloc/config_bloc.dart';
 import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
-import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 import 'package:fms/features/work_place/presentation/widgets/booth_item.dart';
 
+import '../../../../core/widgets/app_indicator.dart';
+import '../../../../core/widgets/data_load_error_widget.dart';
 import '../bloc/fetch_work_place_bloc.dart';
 import '../bloc/work_place_bloc.dart';
 
-class BoothSelectionPage extends StatelessWidget {
+class BoothSelectionPage extends StatefulWidget {
   BoothSelectionPage({super.key});
 
+  @override
+  State<BoothSelectionPage> createState() => _BoothSelectionPageState();
+}
+
+class _BoothSelectionPageState extends State<BoothSelectionPage> {
   late final WorkPlaceBloc _workPlaceBloc = Modular.get();
+
+  late final ConfigBloc _configBloc = Modular.get();
 
   late final FetchWorkPlaceBloc _fetchWorkPlaceBloc =
       Modular.get<FetchWorkPlaceBloc>()
         ..add(FetchBooths(workPlace: _workPlaceBloc.state.entity));
+
+  late StreamSubscription<WorkPlaceState> _workPlaceSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _workPlaceSubscription = _workPlaceBloc.stream.listen((event) {
+      _configBloc.add(FetchConfig(workPlace: _workPlaceBloc.state.entity));
+    });
+  }
+
+  @override
+  void dispose() {
+    _workPlaceSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +88,15 @@ class BoothSelectionPage extends StatelessWidget {
                         ],
                       );
                     }
-                    return SizedBox.shrink();
+                    if (state is FetchWorkPlaceFailure) {
+                      return Center(
+                        child: DataLoadErrorWidget(
+                            onPressed: () => _fetchWorkPlaceBloc.add(
+                                FetchBooths(
+                                    workPlace: _workPlaceBloc.state.entity))),
+                      );
+                    }
+                    return Center(child: AppIndicator());
                   },
                 ))
               ],

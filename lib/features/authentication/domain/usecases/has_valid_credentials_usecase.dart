@@ -1,9 +1,9 @@
+import '../repositories/authentication_repository.dart';
 import '/core/constant/type_def.dart';
 import '/core/usecase/usecase.dart';
-import '/features/authentication/domain/repositories/user_repository.dart';
 
 class HasValidCredentialsUsecase extends UseCase<bool, void> {
-  final UserRepository repository;
+  final AuthenticationRepository repository;
 
   HasValidCredentialsUsecase({required this.repository});
   @override

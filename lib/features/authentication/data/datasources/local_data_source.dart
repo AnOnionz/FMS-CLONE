@@ -4,19 +4,19 @@ import '/core/constant/keys.dart';
 import '/core/database/database.dart';
 import '/features/authentication/domain/entities/user_entity.dart';
 
-sealed class UserLocalDataSource {
+sealed class AuthenticationLocalDataSource {
   bool get isLogin;
   void cacheUserData(UserModel user);
   void clearUserData();
-  void cacheToken(String token);
+  void cacheRefreshToken(String token);
   void clearToken();
   UserEntity? getUserFromLocal();
-  String? getTokenFromLocal();
+  String? getRefreshTokenFromLocal();
   List<UserEntity> getAllUserData();
   void clearAllUserData();
 }
 
-class UserLocalDataSourceImpl implements UserLocalDataSource {
+class UserLocalDataSourceImpl implements AuthenticationLocalDataSource {
   final database = Database.instance;
   @override
   bool get isLogin => getUserFromLocal() != null;
@@ -39,13 +39,13 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
   }
 
   @override
-  void cacheToken(String token) {
-    database.setValue(Keys.TOKEN, token);
+  void cacheRefreshToken(String token) {
+    database.setValue(Keys.REFRESH_TOKEN, token);
   }
 
   @override
-  String? getTokenFromLocal() {
-    return database.getValue(Keys.TOKEN);
+  String? getRefreshTokenFromLocal() {
+    return database.getValue(Keys.REFRESH_TOKEN);
   }
 
   @override
@@ -65,6 +65,6 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
 
   @override
   void clearToken() {
-    database.setValue(Keys.TOKEN, null);
+    database.setValue(Keys.REFRESH_TOKEN, null);
   }
 }

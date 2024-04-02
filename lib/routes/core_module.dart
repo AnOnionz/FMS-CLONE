@@ -5,7 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../core/client/dio_client.dart';
 import '../core/localization/locale_manager.dart';
 import '../core/permission/permisson_manager.dart';
-import '../core/services/internet_conection/internet_connection_service.dart';
+import '../core/services/connectivity/connectivity_service.dart';
 import '../core/services/location/location_service.dart';
 import '../core/services/network_time/network_time_service.dart';
 import '../core/styles/theme_manager.dart';
@@ -19,19 +19,8 @@ class CoreModule extends Module {
     i.addSingleton<ThemeManager>(ThemeManager.new, config: listenConfig());
     i.addSingleton<LocaleManager>(LocaleManager.new, config: listenConfig());
     i.addSingleton<PermissionManager>(PermissionManager.new);
-    i.addLazySingleton(
-      InternetConnectionService.new,
-      config: BindConfig(
-        onDispose: (InternetConnectionService internetConnection) =>
-            internetConnection.shutdown(),
-      ),
-    );
-    i.addLazySingleton(
-      NetworkTimeService.new,
-      config: BindConfig(
-        onDispose: (NetworkTimeService networkTime) => networkTime.shutdown(),
-      ),
-    );
+    i.addSingleton(ConnectivityService.new);
+    i.addSingleton(NetworkTimeService.new);
   }
 }
 

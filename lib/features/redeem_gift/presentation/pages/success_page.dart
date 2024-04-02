@@ -43,8 +43,10 @@ class SuccessPage extends StatelessWidget {
                       SizedBox(width: 16.w),
                       Expanded(
                         child: FlatButton(
-                            onPressed: () => context.nextAndRemoveUntilRoute(
-                                RedeemGiftModule.route),
+                            onPressed: () {
+                              context.popUtil(HomeModule.route);
+                              context.nextRoute(RedeemGiftModule.route);
+                            },
                             name: 'Tiếp tục đổi quà',
                             color: AppColors.orange),
                       ),

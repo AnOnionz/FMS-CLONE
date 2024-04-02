@@ -1,5 +1,8 @@
 {
-    "appname": "[Dev] FMS",
+    "appname": "[Dev]FMS",
     "env": "Test",
-    "baseURL": "https://api-staging-fms.outcome.asia"
+    "baseURL": "https://api-staging-fms.outcome.asia",
+    "AUTH0_DOMAIN":"demo-nest.jp.auth0.com",
+    "AUTH0_CLIENT_ID":"GHA3DLZC4iTWWxmNfWWTS6W9nyB09n8I",
+    "AUTH0_CUSTOM_SCHEME":"demo"
 }

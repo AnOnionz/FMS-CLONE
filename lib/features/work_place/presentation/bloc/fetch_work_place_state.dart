@@ -20,4 +20,7 @@ final class FetchWorkPlaceFailure extends FetchWorkPlaceState {
   final Failure failure;
 
   FetchWorkPlaceFailure(this.failure);
+
+  @override
+  List<Object> get props => [failure];
 }

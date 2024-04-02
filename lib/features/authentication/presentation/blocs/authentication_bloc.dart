@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/errors/failure.dart';
+import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/get_credentials_usecase.dart';
@@ -13,12 +14,13 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({
-    required LogoutUsecase logoutUsecase,
-    required LoginUsecase loginUsecase,
-    required HasValidCredentialsUsecase hasValidCredentialsUsecase,
-    required GetCredentialsUsecase getCredentialsUsecase,
-  }) : super(const AuthenticationState.unknown()) {
+  AuthenticationBloc(
+      {required LogoutUsecase logoutUsecase,
+      required LoginUsecase loginUsecase,
+      required HasValidCredentialsUsecase hasValidCredentialsUsecase,
+      required GetCredentialsUsecase getCredentialsUsecase,
+      required ChangePassUsecase changePassword})
+      : super(const AuthenticationState.unknown()) {
     on<AuthenticationStarted>(
       (event, emit) async {
         bool hasValidCredentials = false;
@@ -53,6 +55,12 @@ class AuthenticationBloc
         final logout = await logoutUsecase();
         logout.fold((fail) => emit(AuthenticationState.failure(fail)),
             (success) => emit(const AuthenticationState.unauthenticated()));
+      },
+      transformer: droppable(),
+    );
+    on<AuthenticationChangePasswordRequested>(
+      (event, emit) async {
+        await changePassword();
       },
       transformer: droppable(),
     );

@@ -7,6 +7,8 @@ import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
+import '../../../../core/widgets/app_indicator.dart';
+import '../../../../core/widgets/data_load_error_widget.dart';
 import '../bloc/fetch_work_place_bloc.dart';
 import '../bloc/work_place_bloc.dart';
 import '../widgets/outlet_item.dart';
@@ -60,7 +62,15 @@ class OutletSelectionPage extends StatelessWidget {
                         ],
                       );
                     }
-                    return SizedBox.shrink();
+                    if (state is FetchWorkPlaceFailure) {
+                      return Center(
+                        child: DataLoadErrorWidget(
+                            onPressed: () => _fetchWorkPlaceBloc.add(
+                                FetchOutlets(
+                                    workPlace: _workPlaceBloc.state.entity))),
+                      );
+                    }
+                    return Center(child: AppIndicator());
                   },
                 ))
               ],

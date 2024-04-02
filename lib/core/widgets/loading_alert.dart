@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/utilities/flex_extention.dart';
-import 'package:fms/core/widgets/adaptive_indicator.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 
 class LoadingAlert extends StatelessWidget {
   final String message;
@@ -13,16 +13,21 @@ class LoadingAlert extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.sqr),
       ),
-      elevation: 0.0,
+      elevation: 5.0,
+      insetPadding: EdgeInsets.symmetric(horizontal: 8.w),
       backgroundColor: Colors.white,
       child: SizedBox(
-        height: 80,
+        height: 200.h,
+        width: 80.w,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            AdaptiveIndicator(),
-            SizedBox(height: 8),
+            AppIndicator(
+              height: 50,
+              width: 50,
+            ),
+            SizedBox(height: 16.h),
             Text(
               message,
               style: context.textTheme.subtitle1,

@@ -6,8 +6,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../constant/keys.dart';
+import '../environment/env.dart';
 import '/core/database/local_value.dart';
-import '/core/environment/config.dart';
 
 final class Database {
   static final instance = Database._();
@@ -18,7 +18,7 @@ final class Database {
 
   factory Database() => instance;
 
-  static Future<void> open(List<CollectionSchema<dynamic>> schemas) async {
+  Future<void> open(List<CollectionSchema<dynamic>> schemas) async {
     final dir = await getApplicationDocumentsDirectory();
     _isar = await Isar.open(schemas, directory: dir.path, inspector: false);
   }
@@ -143,7 +143,7 @@ final class Database {
 
   List<Map<String, dynamic>> exportJson<T>() {
     final params = {
-      'instance': AppConfig.variables[Keys.APP_NAME],
+      'instance': env.variables[Keys.APP_NAME],
       'collection': _isar?.collection<T>().name,
       'filter': {'type': 0, 'filters': []}
     };

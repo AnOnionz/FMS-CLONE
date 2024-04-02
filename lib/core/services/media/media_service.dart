@@ -107,7 +107,7 @@ final class MediaService {
   }
 
   Future<XFile> addWatermark(XFile image, {Color? color}) async {
-    final locationService = LocationService();
+    final locationService = Modular.get<LocationService>();
     final address = await locationService.placeString();
     final time = fWatermark.format(DateTime.now());
 

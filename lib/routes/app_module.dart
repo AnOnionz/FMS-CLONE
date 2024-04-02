@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/environment/config.dart';
+import 'package:fms/core/environment/env.dart';
 import 'package:fms/features/app/presentation/pages/app_page.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/attendance/attendance_module.dart';
@@ -17,8 +17,13 @@ import 'package:fms/features/urgency/urgency_module.dart';
 
 import '../../routes/admin_module.dart';
 import '../../routes/routes.dart';
+import '../core/database/database.dart';
+import '../core/database/file_metadata.dart';
+import '../core/database/local_value.dart';
 import '../features/app/presentation/bloc/app_bloc.dart';
+import '../features/authentication/data/models/user_model.dart';
 import '../features/leave/leave_module.dart';
+import '../features/setting/domain/entities/setting_app.dart';
 import '../features/sync/sync_module.dart';
 import '../features/work_place/work_place_module.dart';
 import 'core_module.dart';
@@ -28,8 +33,14 @@ class AppModule extends Module {
   List<Module> get imports => [CoreModule(), AuthenticationModule()];
   @override
   void binds(i) {
+    AppConfig();
+    Database().open([
+      LocalValueSchema,
+      UserModelSchema,
+      SettingAppSchema,
+      FileWithMetaDataSchema
+    ]);
     i.addLazySingleton(AppBloc.new);
-    i.addSingleton(AppConfig.new);
   }
 
   @override

@@ -28,12 +28,12 @@ class DioClient extends ApiService {
   DioClient() {
     HttpOverrides.global = MyHttpOverrides();
 
-    _http.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ),
-    );
+    // _http.interceptors.add(
+    //   LogInterceptor(
+    //     requestBody: true,
+    //     responseBody: true,
+    //   ),
+    // );
     // http.httpClientAdapter = IOHttpClientAdapter(
     //   createHttpClient: () {
     //     final client = HttpClient(
@@ -62,7 +62,7 @@ class DioClient extends ApiService {
       int retries = 1,
       FormData? data,
       Map<String, dynamic>? queryParameters}) async {
-    return await _request(
+    return _request(
         retries: retries,
         _http.get(path,
             queryParameters: queryParameters,
@@ -76,7 +76,7 @@ class DioClient extends ApiService {
       int retries = 1,
       FormData? data,
       Map<String, dynamic>? queryParameters}) async {
-    return await _request(
+    return _request(
         retries: retries,
         _http.post(path,
             queryParameters: queryParameters,
@@ -90,7 +90,7 @@ class DioClient extends ApiService {
       int retries = 1,
       FormData? data,
       Map<String, dynamic>? queryParameters}) async {
-    return await _request(
+    return _request(
         retries: retries,
         _http.put(path,
             queryParameters: queryParameters,
@@ -111,13 +111,16 @@ class DioClient extends ApiService {
       if (e.type == DioExceptionType.connectionError ||
           e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.badCertificate) {
-        throw SocketException(e.message, e, s);
+        throw InternetException(e.message, e, s);
       } else if (e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
         throw TimeoutException(e.message, e, s);
-      } else {
-        throw SocketException(e.message, e, s);
       }
+      throw InternetException(e.message, e, s);
+    } on SocketException catch (e, s) {
+      throw InternetException(e.message, e, s);
+    } catch (e) {
+      return null;
     }
   }
 
@@ -157,7 +160,6 @@ class DioClient extends ApiService {
   @override
   void setBearerAuth({required String token}) {
     _http.options.headers.addAll({'Authorization': token});
-    print(token);
   }
 
   @override

@@ -1,9 +1,9 @@
 import '../../../../core/constant/type_def.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../repositories/user_repository.dart';
+import '../repositories/authentication_repository.dart';
 
 class ChangePassUsecase extends UseCase<void, void> {
-  final UserRepository repository;
+  final AuthenticationRepository repository;
 
   ChangePassUsecase({required this.repository});
   @override

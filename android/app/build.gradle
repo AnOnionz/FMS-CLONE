@@ -6,6 +6,11 @@ if (localPropertiesFile.exists()) {
         localProperties.load(reader)
     }
 }
+def keystoreProperties = new Properties()
+   def keystorePropertiesFile = rootProject.file('key.properties')
+   if (keystorePropertiesFile.exists()) {
+       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+   }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
@@ -61,33 +66,40 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        dev { dimension "default"}
-        staging{ dimension "default"}
-        prod { dimension "default"}
+        dev {  manifestPlaceholders+=[applabel: "[DEV]FMS"]}
+        stag{  manifestPlaceholders+=[applabel: "[STAGING]FMS"]}
+        prod {  manifestPlaceholders+=[applabel: "FMS"]}
     }
 
     buildFeatures {
         buildConfig true
        
     }
-
+    signingConfigs {
+       release {
+           keyAlias keystoreProperties['keyAlias']
+           keyPassword keystoreProperties['keyPassword']
+           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+           storePassword keystoreProperties['storePassword']
+       }
+    }
     buildTypes {
         
+        
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            
+            signingConfig signingConfigs.release
         }
     }
 
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
-            universalApk true
-        }
-    }
+    // splits {
+    //     abi {
+    //         enable true
+    //         reset()
+    //         include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
+    //         universalApk true
+    //     }
+    // }
 }
 
 flutter {
@@ -95,6 +107,7 @@ flutter {
 }
 
 dependencies {
+    implementation "androidx.core:core-ktx:1.6.0"
     implementation 'com.android.support:multidex:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
    

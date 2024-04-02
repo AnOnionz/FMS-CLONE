@@ -5,18 +5,14 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../widgets/custom_bottom_sheet.dart';
+import '../widgets/custom_toast.dart';
 import '/core/widgets/loading_alert.dart';
 
-class OverlayManager {
+final class OverlayManager {
   static BuildContext? get currentContext =>
       Modular.routerDelegate.navigatorKey.currentContext;
 
-  late FToast fToast;
-
-  OverlayManager({required BuildContext context}) {
-    fToast = FToast();
-    fToast.init(context);
-  }
+  OverlayManager._();
 
   static void hide() => Modular.to.pop();
 
@@ -24,7 +20,7 @@ class OverlayManager {
     await showAppDialog(
       barrierDismissible: false,
       builder: (context) => LoadingAlert(
-        message: message ?? 'Loading',
+        message: message ?? 'Vui lòng đợi...',
       ),
     );
   }
@@ -59,29 +55,23 @@ class OverlayManager {
     ScaffoldMessenger.of(currentContext!).showSnackBar(snackbar);
   }
 
-  Future<void> showToast({required String msg}) async {
-    final Widget toast = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: Colors.greenAccent,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.check),
-          SizedBox(
-            width: 12.0,
-          ),
-          Text(msg),
-        ],
-      ),
-    );
-
+  static Future<void> showToast(
+      {required String msg, required BuildContext context}) async {
+    final fToast = FToast();
+    fToast.init(context);
+    fToast.removeCustomToast();
     fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 2),
-    );
+        child: CustomToast(
+          message: msg,
+        ),
+        gravity: ToastGravity.TOP,
+        toastDuration: Duration(seconds: 2),
+        positionedToastBuilder: (context, child) {
+          return Positioned(
+            child: child,
+            top: 30.h,
+            left: 32.w,
+          );
+        });
   }
 }

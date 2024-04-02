@@ -5,12 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/mixins/common.dart';
-import '../../../../core/services/internet_conection/internet_connection_service.dart';
+import '../../../../core/services/connectivity/connectivity_service.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 
@@ -19,13 +21,13 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationBloc _authenticationBloc;
-  final InternetConnectionService _internetConnectionService;
+  final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
 
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
 
-  AppBloc(this._authenticationBloc, this._internetConnectionService,
+  AppBloc(this._authenticationBloc, this._connectivityService,
       this._networkTimeService)
       : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
@@ -68,10 +70,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  /// Checks the authentication status and performs navigation based on it.
-  ///
-  /// If the user is authenticated, it navigates to the profile page.
-  /// If the user is unauthenticated, it navigates to the login page.
   void _checkAuthenticationStatus(AuthenticationStatus status) {
     if (status == AuthenticationStatus.authenticated) {
       // If the user is authenticated, navigate to the profile page.
@@ -82,30 +80,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  /// Initializes the local data source for the app.
-  ///
-  /// This function initializes the local database using Isar and binds it to the app's database module.
-  Future<void> _initializeLocalDataSource() async {}
-
   /// Starts the network time service.
-  ///
-  /// Returns a [Future] that completes with a boolean value indicating whether
-  /// the network time service was successfully started.
-  Future<bool> _startNetworkTimeService() async {
-    return _networkTimeService.startup(
-      lookUpAddress: 'time.google.com',
-      locationName: 'Asia/Ho_Chi_Minh',
-      timeout: const Duration(seconds: 6),
-    );
+
+  void _startNetworkTimeService() {
+    return _networkTimeService.startup();
   }
 
   /// Starts the internet connection service.
-  ///
-  /// Returns a [Future] that completes with a [bool] value indicating whether the service was successfully started or not.
-  Future<bool> _startInternetConnectionService() async {
-    return _internetConnectionService.startup(
-      checkTimeout: const Duration(seconds: 10),
-      checkInterval: const Duration(seconds: 10),
+
+  Future<void> _startInternetConnectionService() async {
+    return _connectivityService.startup(
+      timeout: const Duration(seconds: 10),
+      interval: const Duration(seconds: 10),
     );
   }
 
@@ -113,28 +99,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> _onAppStarted(AppStarted event, Emitter<AppState> emit) async {
     emit(const AppLoading());
 
-    try {
-      await Future.wait([
-        _startInternetConnectionService(),
-        _startNetworkTimeService(),
-      ]);
+    _startInternetConnectionService();
+    _startNetworkTimeService();
 
-      await Future.wait([
-        _internetConnectionService.runner.hasConnection,
-        _networkTimeService.runner.now(),
-      ]);
-    } catch (error) {
-      return emit(const AppFailure());
-    }
-
-    _internetConnectionService.runner.onConnectedChange.listen((isConnected) {
-      Fx.log('Internet connected: $isConnected');
-      if (isConnected && _networkTimeService.isRunning) {
-        _networkTimeService.runner.refresh();
+    _connectivityService.onConnectionChange.listen((status) async {
+      Fx.log('Internet status: $status');
+      if (status == InternetStatus.connected) {
+      } else {
+        if (OverlayManager.currentContext != null) {
+          OverlayManager.showToast(
+              msg: 'NO INTERNET', context: OverlayManager.currentContext!);
+        }
       }
     });
-
-    await _initializeLocalDataSource();
 
     _authenticationBloc.add(AuthenticationStarted());
     // _settingsBloc.add(const SettingsStarted());
@@ -206,9 +183,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       _authenticationBloc.add(AuthenticationStarted());
 
       // Check if the network time is running and refresh it if necessary
-      if (_networkTimeService.isRunning) {
-        _networkTimeService.runner.refresh();
-      }
+      // if (_networkTimeService.isRunning) {
+      //   _networkTimeService.runner.refresh();
+      // }
     }
   }
 

@@ -10,7 +10,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
-import 'package:fms/features/authentication/domain/repositories/user_repository.dart';
+import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
 import 'package:fms/features/setting/setting_module.dart';
 
@@ -19,7 +19,8 @@ import '../../../../core/widgets/image_profile.dart';
 class DrawerSide extends StatelessWidget {
   const DrawerSide({super.key});
 
-  Credentials? get credentials => Modular.get<UserRepository>().user;
+  Credentials? get credentials =>
+      Modular.get<AuthenticationRepository>().credentials;
 
   @override
   Widget build(BuildContext context) {

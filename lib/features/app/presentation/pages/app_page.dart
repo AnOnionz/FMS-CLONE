@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/constant/colors.dart';
 
 import '../bloc/app_bloc.dart';
 import 'app_splash_screen.dart';
@@ -21,14 +22,12 @@ class _AppPageState extends State<AppPage> {
   @override
   void initState() {
     super.initState();
-
     appBlocSubscription = appBloc.stream.listen(onAppStateChanged);
   }
 
   @override
   void dispose() {
     appBlocSubscription.cancel();
-
     super.dispose();
   }
 
@@ -39,9 +38,8 @@ class _AppPageState extends State<AppPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: AppSplashScreen(),
-      ),
+      backgroundColor: AppColors.black,
+      body: AppSplashScreen(),
     );
   }
 }

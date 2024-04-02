@@ -3,31 +3,39 @@ import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:fms/core/client/dio_client.dart';
 
 import '../../../../core/errors/failure.dart';
-import '../datasources/user_remote_data_source.dart';
+import '../../domain/repositories/authentication_repository.dart';
+import '../datasources/local_data_source.dart';
+import '../datasources/remote_data_source.dart';
 import '/core/constant/type_def.dart';
 import '/core/repository/repository.dart';
 import '/core/usecase/either.dart';
-import '/features/authentication/domain/repositories/user_repository.dart';
 
-class UserRepositoryImpl implements UserRepository {
-  UserRepositoryImpl(
-      {required UserRemoteDataSource remote, required DioClient dio})
+class AuthenticationRepositoryImpl extends Repository
+    implements AuthenticationRepository {
+  AuthenticationRepositoryImpl(
+      {required AuthenticationRemoteDataSource remote,
+      required AuthenticationLocalDataSource local,
+      required DioClient dio})
       : _remote = remote,
+        _local = local,
         _dio = dio;
 
   @override
-  Credentials? get user => _credentials;
+  Credentials? get credentials => _credentials;
 
   @override
   Future<Result<Credentials?>> login() async {
     return todo(() async {
       final credentials = await _remote.login();
       _credentials = credentials;
-      _dio.setBearerAuth(
-          token: credentials!.tokenType +
-              ' ' +
-              credentials.accessToken.toString());
-      return Right(user);
+      if (credentials != null) {
+        _local.cacheRefreshToken(credentials.refreshToken!);
+        _dio.setBearerAuth(
+            token: credentials.tokenType +
+                ' ' +
+                credentials.accessToken.toString());
+      }
+      return Right(credentials);
     });
   }
 
@@ -64,20 +72,26 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  bool get isLogged => _credentials != null;
-
-  final UserRemoteDataSource _remote;
-  final DioClient _dio;
-  Credentials? _credentials;
-
-  @override
-  Future<Result<Credentials>> credentials() {
+  Future<Result<Credentials>> getCredentials() {
     return todo(() async {
-      final credentials = await _remote.credentials();
-      _credentials = credentials;
-      _dio.setBearerAuth(
-          token: credentials.tokenType + ' ' + credentials.accessToken);
-      return Right(credentials);
+      try {
+        final credentials = await _remote.credentials();
+        _credentials = credentials;
+        _dio.setBearerAuth(
+            token: credentials.tokenType + ' ' + credentials.accessToken);
+        return Right(credentials);
+      } on CredentialsManagerException catch (_) {
+        final refreshToken = _local.getRefreshTokenFromLocal();
+        if (refreshToken != null) {
+          final newCredentials = await _remote.renewCredentials(refreshToken);
+          _credentials = newCredentials;
+          _dio.setBearerAuth(
+              token:
+                  newCredentials.tokenType + ' ' + newCredentials.accessToken);
+          return Right(newCredentials);
+        }
+        rethrow;
+      }
     });
   }
 
@@ -96,4 +110,12 @@ class UserRepositoryImpl implements UserRepository {
       return Right(userProfile);
     });
   }
+
+  @override
+  bool get isLogged => _credentials != null;
+
+  final AuthenticationRemoteDataSource _remote;
+  final AuthenticationLocalDataSource _local;
+  final DioClient _dio;
+  Credentials? _credentials;
 }
