@@ -14,20 +14,19 @@ class LoadingAlert extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.sqr),
       ),
       elevation: 5.0,
-      insetPadding: EdgeInsets.symmetric(horizontal: 8.w),
+      insetPadding: EdgeInsets.zero,
       backgroundColor: Colors.white,
       child: SizedBox(
-        height: 200.h,
-        width: 80.w,
+        height: 150.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             AppIndicator(
-              height: 50,
-              width: 50,
+              height: 60.h,
+              width: 60.h,
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 18.h),
             Text(
               message,
               style: context.textTheme.subtitle1,

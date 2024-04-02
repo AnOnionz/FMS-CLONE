@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 
 import '../bloc/lock_bloc.dart';
 
@@ -38,10 +38,7 @@ class _LockScreenCreatePageState extends State<LockScreenCreatePage> {
         builder: (context, state) {
           if (state is LockLoading) {
             return Center(
-              child: LoadingAnimationWidget.threeRotatingDots(
-                color: Colors.white,
-                size: 200,
-              ),
+              child: AppIndicator(),
             );
           }
           return ScreenLock.create(

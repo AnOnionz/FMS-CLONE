@@ -11,8 +11,8 @@ class AppIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 24.w,
-      width: width ?? 24.w,
+      height: height ?? 4.hPerc,
+      width: width ?? 4.hPerc,
       child: RiveAnimation.asset(
         'loading'.rive.riv,
         fit: BoxFit.contain,

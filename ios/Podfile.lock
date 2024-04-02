@@ -11,9 +11,15 @@ PODS:
   - camerawesome (0.0.1):
     - Flutter
     - JPSVolumeButtonHandler
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
+  - flutter_kronos (0.0.1):
+    - Flutter
+    - Kronos (= 4.1.0)
   - flutter_native_splash (0.0.1):
     - Flutter
   - flutter_secure_storage (6.0.0):
@@ -42,6 +48,7 @@ PODS:
     - Flutter
   - JPSVolumeButtonHandler (1.0.5)
   - JWTDecode (3.1.0)
+  - Kronos (4.1.0)
   - local_auth_darwin (0.0.1):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -50,6 +57,9 @@ PODS:
   - permission_handler_apple (9.1.1):
     - Flutter
   - pointer_interceptor_ios (0.0.1):
+    - Flutter
+  - ReachabilitySwift (5.2.1)
+  - rive_common (0.0.1):
     - Flutter
   - SimpleKeychain (1.1.0)
   - sqflite (0.0.3):
@@ -60,8 +70,10 @@ PODS:
 DEPENDENCIES:
   - auth0_flutter (from `.symlinks/plugins/auth0_flutter/darwin`)
   - camerawesome (from `.symlinks/plugins/camerawesome/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
+  - flutter_kronos (from `.symlinks/plugins/flutter_kronos/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -74,6 +86,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
+  - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
@@ -83,6 +96,8 @@ SPEC REPOS:
     - GoogleMaps
     - JPSVolumeButtonHandler
     - JWTDecode
+    - Kronos
+    - ReachabilitySwift
     - SimpleKeychain
     - Toast
 
@@ -91,10 +106,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/auth0_flutter/darwin"
   camerawesome:
     :path: ".symlinks/plugins/camerawesome/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
+  flutter_kronos:
+    :path: ".symlinks/plugins/flutter_kronos/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_secure_storage:
@@ -119,6 +138,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   pointer_interceptor_ios:
     :path: ".symlinks/plugins/pointer_interceptor_ios/ios"
+  rive_common:
+    :path: ".symlinks/plugins/rive_common/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
 
@@ -126,8 +147,10 @@ SPEC CHECKSUMS:
   Auth0: 9cdb51adf6d348353e44bca03f9eb6080a58fdf1
   auth0_flutter: b3c3a62694f526fbc810b0ed0f228d342f4b3608
   camerawesome: 1e06540f60158809bc70f398ed1ac2cf93fe4188
+  connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
+  flutter_kronos: c322b87c805240e8a6ba9d4203cb5c2c174912d1
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
@@ -140,10 +163,13 @@ SPEC CHECKSUMS:
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
   JPSVolumeButtonHandler: 53110330c9168ed325def93eabff39f0fe3e8082
   JWTDecode: 3eaab1e06b6f4dcbdd6716aff09ba4c2104ca8b7
+  Kronos: d67579565469f57fae67ac7985c3881738f02075
   local_auth_darwin: c7e464000a6a89e952235699e32b329457608d98
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   pointer_interceptor_ios: 9280618c0b2eeb80081a343924aa8ad756c21375
+  ReachabilitySwift: 5ae15e16814b5f9ef568963fb2c87aeb49158c66
+  rive_common: c537b4eed761e903a9403d93c347b69bd7a4762f
   SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
