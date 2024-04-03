@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -75,6 +76,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   Future<void> _imagePreview(Image image) async {
+    // showImageViewer(context, image.image, onViewerDismissed: () {
+    //   print("dismissed");
+    // });
+
     await OverlayManager.showAppDialog(
         builder: (context) => SimpleDialog(
               alignment: Alignment.center,
@@ -152,14 +157,13 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                           final image = Image.memory(
                             snapshot.data!,
                             fit: BoxFit.cover,
-                            height: 60.h,
-                            width: 60.h,
                           );
                           return GestureDetector(
                             onTap: () => _imagePreview(image),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(6.sqr),
-                              child: image,
+                              child: SizedBox(
+                                  height: 60.h, width: 60.h, child: image),
                             ),
                           );
                         }

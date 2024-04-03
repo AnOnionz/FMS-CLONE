@@ -212,14 +212,17 @@ final class LocationService extends ChangeNotifier {
     if (_localPosition == null) {
       return 'Vị trí không xác định';
     } else {
-      final placemarks = await placemarkFromCoordinates(
-          _localPosition.latitude, _localPosition.longitude);
-      final Placemark place = placemarks.first;
+      try {
+        final placemarks = await placemarkFromCoordinates(
+            _localPosition.latitude, _localPosition.longitude);
+        final Placemark place = placemarks.first;
+        final locationStr =
+            '${place.street}, ${place.subLocality} ${place.subAdministrativeArea}, ${place.administrativeArea}';
 
-      final locationStr =
-          '${place.street}, ${place.subLocality} ${place.subAdministrativeArea}, ${place.administrativeArea}';
-
-      return locationStr;
+        return locationStr;
+      } catch (e) {
+        return 'Vị trí không xác định';
+      }
     }
   }
 
