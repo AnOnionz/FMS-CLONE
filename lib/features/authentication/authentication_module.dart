@@ -22,12 +22,12 @@ class AuthenticationModule extends Module {
     i.add<AuthenticationLocalDataSource>(UserLocalDataSourceImpl.new);
     i.add<AuthenticationRemoteDataSource>(UserRemoteDataSourceImpl.new);
     i.addSingleton<AuthenticationRepository>(AuthenticationRepositoryImpl.new);
-    i.addLazySingleton<AuthenticationBloc>(AuthenticationBloc.new,
-        config: blocConfig());
     i.addLazySingleton<LoginUsecase>(LoginUsecase.new);
     i.addLazySingleton<LogoutUsecase>(LogoutUsecase.new);
     i.addLazySingleton<ChangePassUsecase>(ChangePassUsecase.new);
     i.addLazySingleton(HasValidCredentialsUsecase.new);
     i.addLazySingleton(GetCredentialsUsecase.new);
+    i.addLazySingleton<AuthenticationBloc>(AuthenticationBloc.new,
+        config: blocConfig());
   }
 }

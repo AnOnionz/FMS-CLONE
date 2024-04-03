@@ -1,5 +1,5 @@
 import 'package:fms/core/utilities/parser.dart';
-import 'package:fms/features/work_place/domain/entities/config.dart';
+import 'package:fms/features/config/domain/entities/config.dart';
 
 import '../../../../core/data_source/remote_datasource.dart';
 import '../../../work_place/domain/entities/work_place_entity.dart';

@@ -15,18 +15,19 @@ import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/statistic/statistic_module.dart';
 import 'package:fms/features/urgency/urgency_module.dart';
 
-import '../../routes/admin_module.dart';
-import '../../routes/routes.dart';
-import '../core/database/database.dart';
-import '../core/database/file_metadata.dart';
-import '../core/database/local_value.dart';
-import '../features/app/presentation/bloc/app_bloc.dart';
-import '../features/authentication/data/models/user_model.dart';
-import '../features/leave/leave_module.dart';
-import '../features/setting/domain/entities/setting_app.dart';
-import '../features/sync/sync_module.dart';
-import '../features/work_place/work_place_module.dart';
-import 'core_module.dart';
+import '../../../routes/admin_module.dart';
+import '../../../routes/routes.dart';
+import '../../core/database/database.dart';
+import '../../core/database/file_metadata.dart';
+import '../../core/database/local_value.dart';
+import '../../routes/core_module.dart';
+import '../attendance_report/attendance_report_module.dart';
+import '../authentication/data/models/user_model.dart';
+import '../leave/leave_module.dart';
+import '../setting/domain/entities/setting_app.dart';
+import '../sync/sync_module.dart';
+import '../work_place/work_place_module.dart';
+import 'presentation/bloc/app_bloc.dart';
 
 class AppModule extends Module {
   @override
@@ -58,6 +59,8 @@ class AppModule extends Module {
         module: AppInfomationModule(), transition: TransitionType.fadeIn);
     r.module(AttendanceModule.route,
         module: AttendanceModule(), transition: TransitionType.fadeIn);
+    r.module(AttendanceReportModule.route,
+        module: AttendanceReportModule(), transition: TransitionType.fadeIn);
     r.module(CrawlModule.route,
         module: CrawlModule(), transition: TransitionType.fadeIn);
     r.module(LeaveModule.route,

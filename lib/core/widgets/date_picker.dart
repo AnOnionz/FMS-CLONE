@@ -36,9 +36,8 @@ class _DatePickerState extends State<DatePicker> {
       controller: controller,
       readOnly: true,
       onTap: () => selectDay(context),
+      style: context.textTheme.body1,
       decoration: InputDecoration(
-          filled: true,
-          fillColor: widget.fillColor ?? AppColors.white,
           hintText: 'Chọn ngày',
           hintStyle: context.textTheme.subtitle1,
           contentPadding:

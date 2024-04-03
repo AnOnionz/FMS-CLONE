@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/config/domain/usecases/get_config_usecase.dart';
-import 'package:fms/features/config/presentation/bloc/config_bloc.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/work_place/data/datasources/work_place_datasource.dart';
 import 'package:fms/features/work_place/data/repositories/work_place_repository_impl.dart';
@@ -10,6 +9,7 @@ import 'package:fms/features/work_place/presentation/bloc/fetch_work_place_bloc.
 import 'package:fms/features/work_place/presentation/bloc/work_place_bloc.dart';
 import 'package:fms/features/work_place/presentation/pages/load_config_page.dart';
 import 'package:fms/features/work_place/presentation/pages/work_place_page.dart';
+import 'package:fms/routes/core_module.dart';
 
 import '../../routes/routes.dart';
 import '../config/config_module.dart';
@@ -38,7 +38,6 @@ class WorkPlaceModule extends Module {
     i.add(GetBoothsUsecase.new);
     i.addSingleton(WorkPlaceBloc.new);
     i.add(FetchWorkPlaceBloc.new);
-    i.add(ConfigBloc.new);
   }
 
   @override

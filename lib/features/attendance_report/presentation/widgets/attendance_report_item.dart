@@ -40,8 +40,21 @@ class AttendanceReportItem extends StatelessWidget {
                     child: Text('maoutlet001', style: context.textTheme.body1)),
                 Padding(
                     padding: EdgeInsets.only(top: 6.h),
-                    child:
-                        Text('Chấm công: 6/10', style: context.textTheme.body1))
+                    child: RichText(
+                        text: TextSpan(
+                            text: 'Chấm công: ',
+                            style: context.textTheme.body1
+                                ?.copyWith(color: AppColors.black),
+                            children: [
+                          TextSpan(
+                              text: '6',
+                              style: context.textTheme.body1
+                                  ?.copyWith(color: AppColors.orange)),
+                          TextSpan(
+                            text: '/10',
+                            style: context.textTheme.body1,
+                          )
+                        ])))
               ],
             ),
             Icon(

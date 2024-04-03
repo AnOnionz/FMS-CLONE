@@ -22,6 +22,7 @@ class _AppPageState extends State<AppPage> {
   @override
   void initState() {
     super.initState();
+    appBloc.add(AppAuthenticationSubscribed());
     appBlocSubscription = appBloc.stream.listen(onAppStateChanged);
   }
 

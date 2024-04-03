@@ -9,9 +9,9 @@ import 'package:fms/features/work_place/work_place_module.dart';
 import '/core/constant/keys.dart';
 import '/core/mixins/fx.dart';
 import '/generated/l10n.dart';
-import 'core/environment/env.dart';
-import 'features/app/presentation/bloc/app_bloc.dart';
-import 'features/authentication/presentation/blocs/authentication_bloc.dart';
+import '../../../../core/environment/env.dart';
+import '../bloc/app_bloc.dart';
+import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -56,22 +56,7 @@ class _AppState extends State<App> {
             initialEntries: [
               if (child != null) ...[
                 OverlayEntry(
-                  builder: (context) =>
-                      BlocListener<AuthenticationBloc, AuthenticationState>(
-                    bloc: Modular.get<AuthenticationBloc>(),
-                    listener: (context, state) {
-                      switch (state.status) {
-                        case AuthenticationStatus.authenticated:
-                          context.nextAndRemoveUntilRoute(WorkPlaceModule.route,
-                              arguments: state.credentials!);
-                        case AuthenticationStatus.unauthenticated:
-                          context.nextAndRemoveUntilRoute(SignModule.route);
-                        case AuthenticationStatus.unknown:
-                          break;
-                      }
-                    },
-                    child: child,
-                  ),
+                  builder: (context) => child,
                 ),
               ],
             ],

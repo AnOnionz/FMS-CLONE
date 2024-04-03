@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/attendance_report/attendance_report_module.dart';
 import 'package:fms/features/attendance_report/presentation/widgets/attendance_report_item.dart';
 
 import '../../../../core/styles/theme.dart';
@@ -12,7 +13,7 @@ class AttendanceReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Thống kê'),
+      appBar: DefaultAppBar(title: 'Báo cáo chấm công'),
       body: Padding(
         padding: EdgeInsets.only(
           top: 27.h,
@@ -23,7 +24,7 @@ class AttendanceReportPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(bottom: 8.h, left: 16.w),
               child: Text(
-                'Danh sách Outlet',
+                'Danh sách outlet quản lý',
                 style: context.textTheme.h3,
               ),
             ),
@@ -31,10 +32,14 @@ class AttendanceReportPage extends StatelessWidget {
               child: CustomScrollView(
                 physics: kPhysics,
                 slivers: [
-                  SliverList.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) => AttendanceReportItem(
-                      onPressed: () {},
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 14.h),
+                    sliver: SliverList.builder(
+                      itemCount: 7,
+                      itemBuilder: (context, index) => AttendanceReportItem(
+                        onPressed: () =>
+                            context.nextRoute(AttendanceReportModule.detail),
+                      ),
                     ),
                   )
                 ],

@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/home/home_module.dart';
-import 'package:fms/features/work_place/domain/entities/config.dart';
+import 'package:fms/features/config/domain/entities/config.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
 import '../../../../core/errors/failure.dart';
