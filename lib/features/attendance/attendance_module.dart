@@ -16,7 +16,7 @@ class AttendanceModule extends Module {
 
   @override
   void binds(Injector i) {
-    i.add<LocateCubit>(LocateCubit.new);
+    i.add<LocateCubit>(LocateCubit.new, config: blocConfig());
   }
 
   @override

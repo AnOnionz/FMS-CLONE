@@ -15,14 +15,20 @@ class LocateCubit extends Cubit<LocateState> {
     try {
       final position = await locationService.getCurrentPosition();
       if (position == null) {
-        emit(LocateFailue(
-            error:
-                MessageFailure(message: 'Không định vị được vị trí của bạn')));
+        if (!isClosed) {
+          emit(LocateFailue(
+              error: MessageFailure(
+                  message: 'Không định vị được vị trí của bạn')));
+        }
       } else {
-        emit(LocateSuccess(position: position));
+        if (!this.isClosed) {
+          emit(LocateSuccess(position: position));
+        }
       }
     } catch (e) {
-      emit(LocateFailue(error: UnknowFailure(e, null)));
+      if (!this.isClosed) {
+        emit(LocateFailue(error: UnknowFailure(e, null)));
+      }
     }
   }
 }
