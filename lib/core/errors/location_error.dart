@@ -21,6 +21,6 @@ class LocationErrorServiceDisabled extends LocationError {
       : super._('The location service on the device is disabled');
 }
 
-class LocationErrorLoadFailure extends LocationError {
-  const LocationErrorLoadFailure() : super._('Something wrong.');
+class LocationLoadError extends LocationError {
+  const LocationLoadError() : super._('Something wrong.');
 }

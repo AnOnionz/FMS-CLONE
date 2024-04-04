@@ -166,7 +166,7 @@ final class LocationService extends ChangeNotifier {
       if (currentLocation != null) {
         return currentLocation;
       } else {
-        return Future.error(LocationErrorLoadFailure());
+        return Future.error(LocationLoadError());
       }
     }
   }
@@ -175,7 +175,7 @@ final class LocationService extends ChangeNotifier {
     try {
       return await _geolocator.getLastKnownPosition();
     } catch (_) {
-      return Future.error(LocationErrorLoadFailure());
+      return Future.error(LocationLoadError());
     }
   }
 
