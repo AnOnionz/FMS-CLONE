@@ -3,13 +3,11 @@ import 'package:fms/features/config/domain/usecases/get_config_usecase.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/work_place/data/datasources/work_place_datasource.dart';
 import 'package:fms/features/work_place/data/repositories/work_place_repository_impl.dart';
-import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 import 'package:fms/features/work_place/domain/usecases/get_projects_usecase.dart';
 import 'package:fms/features/work_place/presentation/bloc/fetch_work_place_bloc.dart';
 import 'package:fms/features/work_place/presentation/bloc/work_place_bloc.dart';
-import 'package:fms/features/work_place/presentation/pages/load_config_page.dart';
+
 import 'package:fms/features/work_place/presentation/pages/work_place_page.dart';
-import 'package:fms/routes/core_module.dart';
 
 import '../../routes/routes.dart';
 import '../config/config_module.dart';
@@ -57,12 +55,6 @@ class WorkPlaceModule extends Module {
     r.child(
       Routes.root + selectBooth,
       child: (_) => BoothSelectionPage(),
-    );
-    r.child(
-      Routes.root + config,
-      child: (_) => LoadConfigPage(
-        entity: r.args.data as WorkPlaceEntity,
-      ),
     );
   }
 }

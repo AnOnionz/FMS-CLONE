@@ -56,7 +56,22 @@ class _AppState extends State<App> {
             initialEntries: [
               if (child != null) ...[
                 OverlayEntry(
-                  builder: (context) => child,
+                  builder: (context) =>
+                      BlocListener<AuthenticationBloc, AuthenticationState>(
+                    bloc: Modular.get<AuthenticationBloc>(),
+                    listener: (context, state) {
+                      switch (state.status) {
+                        case AuthenticationStatus.authenticated:
+                          context.nextAndRemoveUntilRoute(WorkPlaceModule.route,
+                              arguments: state.credentials!);
+                        case AuthenticationStatus.unauthenticated:
+                          context.nextAndRemoveUntilRoute(SignModule.route);
+                        case AuthenticationStatus.unknown:
+                          break;
+                      }
+                    },
+                    child: child,
+                  ),
                 ),
               ],
             ],

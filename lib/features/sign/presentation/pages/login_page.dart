@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 
@@ -77,10 +79,20 @@ class _LoginPageState extends State<LoginPage> {
             padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 24.h),
             child: SizedBox(
                 width: context.screenSize.width,
-                child: FlatButton(
-                    onPressed: () async => _bloc.add(SignInButtonPressed()),
-                    name: context.language.loginButtonText,
-                    color: AppColors.orange)),
+                child: BlocListener<SignBloc, SignState>(
+                  bloc: _bloc,
+                  listener: (context, state) {
+                    if (state is SignLoading) {
+                      OverlayManager.showLoading();
+                    } else {
+                      OverlayManager.hide();
+                    }
+                  },
+                  child: FlatButton(
+                      onPressed: () async => _bloc.add(SignInButtonPressed()),
+                      name: context.language.loginButtonText,
+                      color: AppColors.orange),
+                )),
           )
         ],
       ),

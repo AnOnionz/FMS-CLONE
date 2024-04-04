@@ -15,5 +15,5 @@ abstract class AuthenticationRepository {
   Future<Result<UserProfile>> userProfile(String accessToken);
   Future<Result<Credentials>> getCredentials();
   Future<Result<bool>> hasValidCredentials();
-  Future<Result<void>> logout();
+  Future<Result<bool>> logout();
 }

@@ -1,75 +1,79 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/utilities/overlay.dart';
+import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
+import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
+import '../../../authentication/domain/usecases/logout_usecase.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 
 part 'sign_event.dart';
 part 'sign_state.dart';
 
 class SignBloc extends Bloc<SignEvent, SignState> {
+  final LoginUsecase _login;
+  final LogoutUsecase _logout;
+  final ChangePassUsecase _changePass;
   late final AuthenticationBloc _authenticationBloc;
-  late final StreamSubscription<AuthenticationState>
-      _authenticationSubscription;
 
-  SignBloc(this._authenticationBloc) : super(const SignInitial()) {
-    _authenticationSubscription =
-        _authenticationBloc.stream.listen(_onAuthenticationStateChanged);
-
-    on<SignInButtonPressed>(_onSignInButtonPressed);
-    on<SignOutButtonPressed>(_onSignOutButtonPressed);
+  SignBloc(
+      this._authenticationBloc, this._login, this._logout, this._changePass)
+      : super(const SignInitial()) {
+    on<SignInButtonPressed>(
+      _onSignInButtonPressed,
+      transformer: droppable(),
+    );
+    on<SignOutButtonPressed>(
+      _onSignOutButtonPressed,
+      transformer: droppable(),
+    );
     on<RequestChangePassworkButtonPressed>(
-        _onRequestChangePassworkButtonPressed);
-    on<SignStatusResponded>(_onSignStatusResponded);
-  }
-
-  void _onAuthenticationStateChanged(AuthenticationState authState) {
-    add(
-      SignStatusResponded(
-        authState.failure != null
-            ? SignStatus.failure
-            : authState.status == AuthenticationStatus.unauthenticated
-                ? SignStatus.loggedOut
-                : SignStatus.logged,
-      ),
+      _onRequestChangePassworkButtonPressed,
+      transformer: droppable(),
     );
   }
 
-  void _onSignInButtonPressed(
-      SignInButtonPressed event, Emitter<SignState> emit) {
+  Future<void> _onSignInButtonPressed(
+      SignInButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
-    _authenticationBloc.add(AuthenticationLoginRequested());
+    final execute = await _login();
+    execute.fold((fail) => emit(SignFailure(fail)), (credentials) {
+      if (credentials == null) {
+        return emit(SignCancel());
+      } else {
+        _authenticationBloc.add(AuthenticationLoginSuccess(credentials));
+        return emit(SignSuccess(SignStatus.logged));
+      }
+    });
   }
 
-  void _onSignOutButtonPressed(
-      SignOutButtonPressed event, Emitter<SignState> emit) {
+  Future<void> _onSignOutButtonPressed(
+      SignOutButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
-    _authenticationBloc.add(AuthenticationLogoutRequested());
+    final execute = await _logout();
+    execute.fold((fail) => emit(SignFailure(fail)), (success) {
+      if (success) {}
+      _authenticationBloc.add(AuthenticationLogoutSuccess());
+      return emit(SignSuccess(SignStatus.loggedOut));
+    });
   }
 
-  void _onRequestChangePassworkButtonPressed(
-      RequestChangePassworkButtonPressed event, Emitter<SignState> emit) {
+  Future<void> _onRequestChangePassworkButtonPressed(
+      RequestChangePassworkButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
-    _authenticationBloc.add(AuthenticationChangePasswordRequested());
-    OverlayManager.showSnackbar(
-        snackbar: SnackBar(content: Text('Yêu cầu đã được gửi')));
-  }
-
-  void _onSignStatusResponded(
-    SignStatusResponded event,
-    Emitter<SignState> emit,
-  ) {
-    return switch (event.status) {
-      SignStatus.failure => emit(SignFailure()),
-      SignStatus.logCancel => emit(SignCancel()),
-      _ => emit(SignSuccess(event.status)),
-    };
-  }
-
-  @override
-  Future<void> close() async {
-    _authenticationSubscription.cancel();
-    return super.close();
+    final execute = await _changePass();
+    execute.fold((fail) {
+      OverlayManager.showSnackbar(
+          snackbar:
+              SnackBar(content: Text(fail.message ?? 'Gửi yêu cầu thất bại')));
+      return emit(SignFailure(fail));
+    }, (success) {
+      OverlayManager.showSnackbar(
+          snackbar: SnackBar(content: Text('Yêu cầu đã được gửi')));
+      return emit(SignSuccess(SignStatus.passwordChanged));
+    });
   }
 }

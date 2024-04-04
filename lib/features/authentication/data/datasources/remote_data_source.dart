@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auth0_flutter/auth0_flutter.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -6,7 +8,7 @@ import '../../../../core/environment/env.dart';
 
 sealed class AuthenticationRemoteDataSource {
   Future<Credentials?> login();
-  Future<void> logout();
+  Future<bool> logout();
   Future<UserProfile> userProfile(String accessToken);
   Future<Credentials> renewCredentials(String refreshToken);
   Future<Credentials> credentials();
@@ -57,9 +59,8 @@ class UserRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
           parameters: {
             'prompt': 'login',
           },
-          useEphemeralSession: true);
+          useEphemeralSession: Platform.isIOS);
 
-      await auth0.credentialsManager.storeCredentials(credentials);
       return credentials;
     } on WebAuthenticationException catch (_) {
       return null;
@@ -70,7 +71,7 @@ class UserRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
   Future<Credentials> renewCredentials(String refreshToken) async {
     final newCredentials =
         await auth0.api.renewCredentials(refreshToken: refreshToken);
-    await auth0.credentialsManager.storeCredentials(newCredentials);
+
     return newCredentials;
   }
 

@@ -42,8 +42,6 @@ class Config {
   final bool isActive;
   final String createdAt;
   final String updatedAt;
-  final int projectComponentId;
-  final int projectId;
   final String name;
   final String type;
   final int ordinal;
@@ -62,8 +60,6 @@ class Config {
     required this.isActive,
     required this.createdAt,
     required this.updatedAt,
-    required this.projectComponentId,
-    required this.projectId,
     required this.name,
     required this.type,
     required this.ordinal,
@@ -84,8 +80,6 @@ class Config {
       'isActive': isActive,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'projectComponentId': projectComponentId,
-      'projectId': projectId,
       'name': name,
       'type': type,
       'ordinal': ordinal,
@@ -107,8 +101,6 @@ class Config {
       isActive: map['isActive'] as bool,
       createdAt: map['createdAt'] as String,
       updatedAt: map['updatedAt'] as String,
-      projectComponentId: map['projectComponentId'] as int,
-      projectId: map['projectId'] as int,
       name: map['name'] as String,
       type: map['type'] as String,
       ordinal: map['ordinal'] as int,
@@ -140,7 +132,7 @@ class Config {
 
   @override
   String toString() {
-    return 'Config(id: $id, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, projectComponentId: $projectComponentId, projectId: $projectId, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatures: $dependentOnFeatures, featureAttendance: $featureAttendance, featurePhotos: $featurePhotos, featureMultimedias: $featureMultimedias, featureQuantities: $featureQuantities, featureOrder: $featureOrder, featureSchemes: $featureSchemes, featureCustomers: $featureCustomers, featureSamplings: $featureSamplings)';
+    return 'Config(id: $id, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt,  name: $name, type: $type, ordinal: $ordinal, dependentOnFeatures: $dependentOnFeatures, featureAttendance: $featureAttendance, featurePhotos: $featurePhotos, featureMultimedias: $featureMultimedias, featureQuantities: $featureQuantities, featureOrder: $featureOrder, featureSchemes: $featureSchemes, featureCustomers: $featureCustomers, featureSamplings: $featureSamplings)';
   }
 }
 

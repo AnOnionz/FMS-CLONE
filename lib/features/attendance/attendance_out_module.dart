@@ -1,13 +1,14 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import '../../core/constant/enum.dart';
 import '../../routes/core_module.dart';
 import '../../routes/routes.dart';
-import 'presentation/blocs/locate/cubit/locate_cubit.dart';
+import 'presentation/bloc/locate_cubit.dart';
 import 'presentation/pages/attendace_locate_page.dart';
 import 'presentation/pages/attendance_page.dart';
 
-class AttendanceModule extends Module {
-  static const String route = '/timekeeping/';
-  static const String attendance = 'attendance';
+class AttendanceOutModule extends Module {
+  static const String route = '/attendance_out/';
+  static const String attendance = 'form';
 
   @override
   List<Module> get imports => [
@@ -27,7 +28,7 @@ class AttendanceModule extends Module {
     );
     r.child(
       Routes.root + attendance,
-      child: (_) => const AttendancePage(),
+      child: (_) => const AttendancePage(type: AttendanceType.CheckOut),
     );
   }
 }

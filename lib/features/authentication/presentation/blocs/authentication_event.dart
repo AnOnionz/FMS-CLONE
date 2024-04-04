@@ -4,8 +4,10 @@ sealed class AuthenticationEvent {}
 
 class AuthenticationStarted extends AuthenticationEvent {}
 
-final class AuthenticationLogoutRequested extends AuthenticationEvent {}
+final class AuthenticationLogoutSuccess extends AuthenticationEvent {}
 
-final class AuthenticationChangePasswordRequested extends AuthenticationEvent {}
+final class AuthenticationLoginSuccess extends AuthenticationEvent {
+  final Credentials credentials;
 
-final class AuthenticationLoginRequested extends AuthenticationEvent {}
+  AuthenticationLoginSuccess(this.credentials);
+}

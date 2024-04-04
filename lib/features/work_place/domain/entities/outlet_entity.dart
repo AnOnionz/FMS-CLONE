@@ -7,7 +7,12 @@ class OutletEntity {
   final String code;
   final String name;
 
-  OutletEntity(this.id, this.isActive, this.name, this.code);
+  OutletEntity(
+    this.id,
+    this.isActive,
+    this.code,
+    this.name,
+  );
 
   OutletEntity copyWith({
     int? id,

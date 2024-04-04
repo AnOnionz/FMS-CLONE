@@ -28,12 +28,12 @@ class DioClient extends ApiService {
   DioClient() {
     HttpOverrides.global = MyHttpOverrides();
 
-    // _http.interceptors.add(
-    //   LogInterceptor(
-    //     requestBody: true,
-    //     responseBody: true,
-    //   ),
-    // );
+    _http.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ),
+    );
     // http.httpClientAdapter = IOHttpClientAdapter(
     //   createHttpClient: () {
     //     final client = HttpClient(

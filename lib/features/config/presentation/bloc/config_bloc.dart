@@ -20,8 +20,12 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       emit(ConfigLoading());
       OverlayManager.showLoading();
       final execute = await getConfig(WorkPlaceParams(enitty: event.workPlace));
-      OverlayManager.hide();
-      execute.fold((fail) => emit(ConfigFailure(fail)), (config) {
+      execute.fold((fail) {
+        OverlayManager.hide();
+        //dialog
+        emit(ConfigFailure(fail));
+      }, (config) {
+        OverlayManager.hide();
         Modular.to.pushNamed(HomeModule.route);
         emit(ConfigSuccess(config));
       });

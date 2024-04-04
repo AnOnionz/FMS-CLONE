@@ -2,7 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/environment/env.dart';
 import 'package:fms/features/app/presentation/pages/app_page.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
-import 'package:fms/features/attendance/attendance_module.dart';
+import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
 import 'package:fms/features/crawl/crawl.module.dart';
 import 'package:fms/features/home/home_module.dart';
@@ -21,6 +21,7 @@ import '../../core/database/database.dart';
 import '../../core/database/file_metadata.dart';
 import '../../core/database/local_value.dart';
 import '../../routes/core_module.dart';
+import '../attendance/attendance_in_module.dart';
 import '../attendance_report/attendance_report_module.dart';
 import '../authentication/data/models/user_model.dart';
 import '../leave/leave_module.dart';
@@ -57,8 +58,10 @@ class AppModule extends Module {
         module: HomeModule(), transition: TransitionType.fadeIn);
     r.module(AppInfomationModule.route,
         module: AppInfomationModule(), transition: TransitionType.fadeIn);
-    r.module(AttendanceModule.route,
-        module: AttendanceModule(), transition: TransitionType.fadeIn);
+    r.module(AttendanceInModule.route,
+        module: AttendanceInModule(), transition: TransitionType.fadeIn);
+    r.module(AttendanceOutModule.route,
+        module: AttendanceOutModule(), transition: TransitionType.fadeIn);
     r.module(AttendanceReportModule.route,
         module: AttendanceReportModule(), transition: TransitionType.fadeIn);
     r.module(CrawlModule.route,

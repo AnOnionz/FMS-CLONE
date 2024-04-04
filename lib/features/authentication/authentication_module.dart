@@ -27,7 +27,6 @@ class AuthenticationModule extends Module {
     i.addLazySingleton<ChangePassUsecase>(ChangePassUsecase.new);
     i.addLazySingleton(HasValidCredentialsUsecase.new);
     i.addLazySingleton(GetCredentialsUsecase.new);
-    i.addLazySingleton<AuthenticationBloc>(AuthenticationBloc.new,
-        config: blocConfig());
+    i.addLazySingleton<AuthenticationBloc>(AuthenticationBloc.new);
   }
 }

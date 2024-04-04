@@ -2,7 +2,6 @@ import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fms/core/errors/failure.dart';
 import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/logout_usecase.dart';
@@ -41,26 +40,16 @@ class AuthenticationBloc
       transformer: droppable(),
     );
 
-    on<AuthenticationLoginRequested>(
+    on<AuthenticationLoginSuccess>(
       (event, emit) async {
-        final login = await loginUsecase();
-        login.fold((fail) => emit(AuthenticationState.failure(fail)),
-            (success) => emit(AuthenticationState.authenticated(success!)));
+        emit(AuthenticationState.authenticated(event.credentials));
       },
       transformer: droppable(),
     );
 
-    on<AuthenticationLogoutRequested>(
+    on<AuthenticationLogoutSuccess>(
       (event, emit) async {
-        final logout = await logoutUsecase();
-        logout.fold((fail) => emit(AuthenticationState.failure(fail)),
-            (success) => emit(const AuthenticationState.unauthenticated()));
-      },
-      transformer: droppable(),
-    );
-    on<AuthenticationChangePasswordRequested>(
-      (event, emit) async {
-        await changePassword();
+        emit(const AuthenticationState.unauthenticated());
       },
       transformer: droppable(),
     );

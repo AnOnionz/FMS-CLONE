@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
@@ -16,7 +15,8 @@ import '../widgets/notifications.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
-  const AttendancePage({super.key});
+  final AttendanceType type;
+  const AttendancePage({super.key, required this.type});
 
   @override
   State<AttendancePage> createState() => _AttendancePageState();
@@ -53,7 +53,6 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final type = AttendanceType.CheckIn;
     final GoogleMapService _mapService = GoogleMapService();
     _mapService.padding = paddingBottom(context);
 
@@ -140,7 +139,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                 ),
               ),
-              _actionButton(type,
+              _actionButton(widget.type,
                   action: () => showRequiredTask(
                         context,
                         () {},

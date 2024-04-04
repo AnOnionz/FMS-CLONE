@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/app_lifecycle/app_lifecycle.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
-import 'package:fms/features/attendance/attendance_module.dart';
+import 'package:fms/features/attendance/attendance_out_module.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/outline.dart';
-import '../blocs/locate/cubit/locate_cubit.dart';
+import '../bloc/locate_cubit.dart';
 
 class AttendanceLocatePage extends StatefulWidget {
   const AttendanceLocatePage({super.key});
@@ -72,7 +71,7 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           listener: (context, state) {
                             if (state is LocateSuccess) {
                               context.nextReplacementRoute(
-                                  AttendanceModule.attendance);
+                                  AttendanceOutModule.attendance);
                             }
                           },
                           builder: (context, state) {
@@ -136,8 +135,8 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           child: FlatButton(
                               onPressed: () {
                                 context.nextReplacementRoute(
-                                    AttendanceModule.route +
-                                        AttendanceModule.attendance);
+                                    AttendanceOutModule.route +
+                                        AttendanceOutModule.attendance);
                               },
                               name: 'Tiếp tục',
                               color: AppColors.orange),

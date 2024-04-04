@@ -66,9 +66,9 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        dev {  manifestPlaceholders+=[applabel: "[DEV]FMS"]}
-        stag{  manifestPlaceholders+=[applabel: "[STAGING]FMS"]}
-        prod {  manifestPlaceholders+=[applabel: "FMS"]}
+        dev {  manifestPlaceholders+=[applabel: "[DEV]FMS", auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
+        stag{  manifestPlaceholders+=[applabel: "[STAGING]FMS",auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
+        prod {  manifestPlaceholders+=[applabel: "FMS",auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
     }
 
     buildFeatures {
@@ -84,10 +84,7 @@ android {
        }
     }
     buildTypes {
-        
-        
         release {
-            
             signingConfig signingConfigs.release
         }
     }

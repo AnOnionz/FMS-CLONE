@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -11,20 +10,21 @@ import 'package:image_picker/image_picker.dart';
 
 import '../constant/colors.dart';
 import '../constant/icons.dart';
+import 'app_indicator.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final List<XFile> images;
   final int max;
   final bool isCarousel;
-  final bool isWaterMark;
-  final ValueNotifier<bool>? isWaterMarking;
-  const ImagePickerWidget(
-      {super.key,
-      required this.images,
-      required this.max,
-      this.isCarousel = false,
-      this.isWaterMark = true,
-      this.isWaterMarking});
+  final bool isWatermarkRequired;
+
+  const ImagePickerWidget({
+    super.key,
+    required this.images,
+    required this.max,
+    this.isCarousel = false,
+    this.isWatermarkRequired = true,
+  });
 
   @override
   State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
@@ -33,6 +33,8 @@ class ImagePickerWidget extends StatefulWidget {
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final MediaService _service = MediaService();
   late final _images = widget.images;
+
+  ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
   Future<void> _takeImage() async {
     if (widget.images.length < widget.max) {
@@ -47,14 +49,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           _images.add(file);
         });
 
-        if (widget.isWaterMark) {
-          widget.isWaterMarking?.value = true;
+        if (widget.isWatermarkRequired) {
+          isWatermarking.value = true;
           final fileWithWatermark = await _service.addWatermark(file);
-          widget.isWaterMarking?.value = false;
 
           setState(() {
             _images.last = fileWithWatermark;
           });
+          isWatermarking.value = false;
         }
         // setState(() {
         //   _images.add(FileWithMetaData(
@@ -115,11 +117,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (!widget.isCarousel)
       return SizedBox(
@@ -150,27 +147,36 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         width: 12.h,
                       ),
                   itemBuilder: (context, index) {
-                    return FutureBuilder(
-                      future: _images[index].readAsBytes(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final image = Image.memory(
-                            snapshot.data!,
-                            fit: BoxFit.cover,
-                          );
-                          return GestureDetector(
-                            onTap: () => _imagePreview(image),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(6.sqr),
-                              child: SizedBox(
-                                  height: 60.h, width: 60.h, child: image),
-                            ),
-                          );
+                    return ListenableBuilder(
+                      listenable: isWatermarking,
+                      builder: (context, child) {
+                        if (index == _images.length - 1 &&
+                            isWatermarking.value == true) {
+                          return AppIndicator(height: 30.h, width: 30.h);
                         }
-                        return SizedBox(
-                          height: 60.h,
-                          width: 60.h,
-                          child: Icon(Icons.broken_image_outlined),
+                        return FutureBuilder(
+                          future: _images[index].readAsBytes(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final image = Image.memory(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                              );
+                              return GestureDetector(
+                                onTap: () => _imagePreview(image),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6.sqr),
+                                  child: SizedBox(
+                                      height: 60.h, width: 60.h, child: image),
+                                ),
+                              );
+                            }
+                            return SizedBox(
+                              height: 60.h,
+                              width: 60.h,
+                              child: AppIndicator(height: 30.h, width: 30.h),
+                            );
+                          },
                         );
                       },
                     );

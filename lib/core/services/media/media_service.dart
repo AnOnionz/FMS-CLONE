@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../database/database.dart';
 import '../datetime/date_time.dart';
 import '../location/location_service.dart';
+import '../network_time/network_time_service.dart';
 import '/core/mixins/common.dart';
 import 'painter/watermark_painter.dart';
 
@@ -108,8 +109,10 @@ final class MediaService {
 
   Future<XFile> addWatermark(XFile image, {Color? color}) async {
     final locationService = Modular.get<LocationService>();
+    final _networkTime = Modular.get<NetworkTimeService>();
     final address = await locationService.placeString();
-    final time = fWatermark.format(DateTime.now());
+    final ntpTime = await _networkTime.ntpDateTime();
+    final time = fWatermark.format(ntpTime);
 
     final imgBytes = await image.readAsBytes();
     final painterDesc =

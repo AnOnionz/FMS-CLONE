@@ -7,6 +7,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/widgets/empty_widget.dart';
 import 'package:fms/features/config/presentation/bloc/config_bloc.dart';
 import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/work_place/presentation/widgets/booth_item.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/attendance/attendance_module.dart';
+import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/home/presentation/widgets/task_box.dart';
 import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
 import 'package:fms/features/report/domain/entities/report_entity.dart';
@@ -17,7 +17,7 @@ class Tasks extends StatelessWidget {
         Expanded(
             child: TaskBox(
           name: 'Chấm công',
-          onPressed: () => context.nextRoute(AttendanceModule.route),
+          onPressed: () => context.nextRoute(AttendanceOutModule.route),
         )),
         SizedBox(width: 16.w),
         Expanded(
