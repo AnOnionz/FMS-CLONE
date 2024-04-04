@@ -4,8 +4,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
+import '../app_lifecycle/app_lifecycle.dart';
+import '../constant/colors.dart';
 import '../widgets/custom_bottom_sheet.dart';
-import '../widgets/custom_toast.dart';
 import '/core/widgets/loading_alert.dart';
 
 final class OverlayManager {
@@ -50,6 +51,20 @@ final class OverlayManager {
     );
   }
 
+  static Future<void> showServiceDialog({
+    required String message,
+    VoidCallback? solution,
+  }) async {
+    await showAppDialog(
+      barrierDismissible: false,
+      builder: (context) => ServiceDialog(
+        message: message,
+        onSolution: solution,
+        onClose: () => hide(),
+      ),
+    );
+  }
+
   static Future<void> showSnackbar({required SnackBar snackbar}) async {
     ScaffoldMessenger.of(currentContext!).clearSnackBars();
     ScaffoldMessenger.of(currentContext!).showSnackBar(snackbar);
@@ -73,5 +88,58 @@ final class OverlayManager {
             left: 32.w,
           );
         });
+  }
+}
+
+class CustomToast extends StatelessWidget {
+  final String message;
+  const CustomToast({super.key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: context.screenWidth - 64.w,
+      padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: AppColors.nobel,
+      ),
+      child: Center(
+        child: Text(message,
+            style:
+                context.textTheme.subtitle1?.copyWith(color: AppColors.orange)),
+      ),
+    );
+  }
+}
+
+class ServiceDialog extends StatelessWidget {
+  final String message;
+  final VoidCallback? onSolution;
+  final VoidCallback onClose;
+  const ServiceDialog(
+      {super.key,
+      required this.message,
+      required this.onSolution,
+      required this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog.adaptive(
+      content: Text(message),
+      actions: [
+        ...onSolution != null
+            ? [
+                TextButton(
+                    onPressed: () {
+                      onClose();
+                      onSolution?.call();
+                    },
+                    child: Text('Cài đặt'))
+              ]
+            : [],
+        ...[TextButton(onPressed: onClose, child: Text('Đóng'))]
+      ],
+    );
   }
 }

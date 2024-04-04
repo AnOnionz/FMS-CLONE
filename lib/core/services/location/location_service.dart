@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -92,7 +93,9 @@ final class LocationService extends ChangeNotifier {
       try {
         permission = await requestPermission();
         if (permission == LocationPermission.denied) {
-          // show dialog
+          OverlayManager.showServiceDialog(
+              message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
+              solution: () => openLocationSettings());
           subscription?.resume();
           return false;
         }
@@ -103,8 +106,10 @@ final class LocationService extends ChangeNotifier {
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      // show dialog
-
+      OverlayManager.showServiceDialog(
+        message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
+        solution: () => openLocationSettings(),
+      );
       subscription?.resume();
       return false;
     }
@@ -143,7 +148,7 @@ final class LocationService extends ChangeNotifier {
 
   Future<Position?> getCurrentPosition() async {
     try {
-      final hasPermission = await _handlePermission().timeout(60.seconds);
+      final hasPermission = await _handlePermission().timeout(10.seconds);
 
       if (!hasPermission) {
         return null;
@@ -151,15 +156,18 @@ final class LocationService extends ChangeNotifier {
 
       final userLocation = await _geolocator
           .getCurrentPosition(locationSettings: _getLocationSettings())
-          .timeout(60.seconds);
+          .timeout(10.seconds);
 
       positionUpdate(userLocation);
       return _currentLocation;
     } catch (e, s) {
       print(e.runtimeType);
       print(s);
-
-      return Future.error(LocationErrorLoadFailure());
+      if (currentLocation != null) {
+        return currentLocation;
+      } else {
+        return Future.error(LocationErrorLoadFailure());
+      }
     }
   }
 

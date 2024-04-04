@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
@@ -61,7 +62,7 @@ class _AttendancePageState extends State<AttendancePage> {
           title: 'Chấm công',
           action: HistoryButton(onPressed: () => _showSheetHistory(context))),
       body: Stack(children: [
-        _mapService.mapWidget,
+        RepaintBoundary(child: _mapService.mapWidget),
         Padding(
           padding: EdgeInsets.only(bottom: 24.h, left: 16.w, right: 16.w),
           child: Column(

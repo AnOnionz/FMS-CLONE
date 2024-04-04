@@ -12,7 +12,6 @@ class LocateCubit extends Cubit<LocateState> {
 
   Future<void> getLocation() async {
     emit(LocateInProgress());
-
     try {
       final position = await locationService.getCurrentPosition();
       if (position == null) {
