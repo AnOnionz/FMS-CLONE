@@ -1,13 +1,14 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/config/domain/usecases/get_config_usecase.dart';
 import 'package:fms/features/config/presentation/bloc/config_bloc.dart';
+import 'package:fms/features/general/general_module.dart';
 
 import 'data/datasources/config_datasource.dart';
 import 'data/repositories/config_repository_impl.dart';
 
 class ConfigModule extends Module {
   @override
-  List<Module> get imports => [];
+  List<Module> get imports => [GeneralModule()];
 
   @override
   void binds(Injector i) {

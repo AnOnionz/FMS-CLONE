@@ -5,6 +5,7 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entities/project_entity.dart';
 
@@ -16,6 +17,8 @@ class ProjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final format = DateFormat('dd/MM/yyyy');
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -62,7 +65,7 @@ class ProjectItem extends StatelessWidget {
                   height: 6.h,
                 ),
                 Text(
-                    '${project.startDate.datetimeFormatString()} - ${project.startDate.datetimeFormatString()}',
+                    '${project.startDate.formatBy(format)} - ${project.startDate.formatBy(format)}',
                     style: context.textTheme.caption1
                         ?.copyWith(color: AppColors.dimGray))
               ],

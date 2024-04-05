@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/general/general_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 
 import '../../routes/routes.dart';
@@ -8,7 +9,7 @@ import 'presentation/pages/home_page.dart';
 class HomeModule extends Module {
   static const String route = '/home/';
   @override
-  List<Module> get imports => [SignModule(), ConfigModule()];
+  List<Module> get imports => [SignModule(), ConfigModule(), GeneralModule()];
 
   @override
   void binds(Injector i) {}

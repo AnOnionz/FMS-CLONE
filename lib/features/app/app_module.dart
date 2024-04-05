@@ -24,6 +24,7 @@ import '../../routes/core_module.dart';
 import '../attendance/attendance_in_module.dart';
 import '../attendance_report/attendance_report_module.dart';
 import '../authentication/data/models/user_model.dart';
+import '../general/general_module.dart';
 import '../leave/leave_module.dart';
 import '../setting/domain/entities/setting_app.dart';
 import '../sync/sync_module.dart';
@@ -32,7 +33,8 @@ import 'presentation/bloc/app_bloc.dart';
 
 class AppModule extends Module {
   @override
-  List<Module> get imports => [CoreModule(), AuthenticationModule()];
+  List<Module> get imports =>
+      [CoreModule(), AuthenticationModule(), GeneralModule()];
   @override
   void binds(i) {
     AppConfig();

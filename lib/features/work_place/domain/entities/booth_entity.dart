@@ -2,11 +2,11 @@ import 'dart:convert';
 
 class BoothEntity {
   final int id;
-  final bool isActive;
+
   final String name;
   final String? description;
 
-  BoothEntity(this.id, this.isActive, this.name, this.description);
+  BoothEntity(this.id, this.name, this.description);
 
   BoothEntity copyWith({
     int? id,
@@ -16,7 +16,6 @@ class BoothEntity {
   }) {
     return BoothEntity(
       id ?? this.id,
-      isActive ?? this.isActive,
       name ?? this.name,
       description ?? this.description,
     );
@@ -25,7 +24,6 @@ class BoothEntity {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'isActive': isActive,
       'name': name,
       'description': description,
     };
@@ -34,7 +32,6 @@ class BoothEntity {
   factory BoothEntity.fromMap(Map<String, dynamic> map) {
     return BoothEntity(
       map['id'] as int,
-      map['isActive'] as bool,
       map['name'] as String,
       map['description'] != null ? map['description'] as String : null,
     );
@@ -47,6 +44,6 @@ class BoothEntity {
 
   @override
   String toString() {
-    return 'BoothEntity(id: $id, isActive: $isActive, name: $name, description: $description)';
+    return 'BoothEntity(id: $id, name: $name, description: $description)';
   }
 }

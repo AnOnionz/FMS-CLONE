@@ -77,7 +77,7 @@ extension DateTime1Extension on String? {
     if (this == null) {
       return '';
     }
-    return format.format(dateTimeFromTimeZone(DateFormat('yyyy-MM-dd')));
+    return format.format(DateTime.parse(this!));
   }
 
   DateTime dateTimeFromTimeStamp() {
@@ -86,15 +86,6 @@ extension DateTime1Extension on String? {
       return DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
     }
     throw FormatException("Can't parse $this to DateTime");
-  }
-
-  DateTime dateTimeFromTimeZone([DateFormat? format]) {
-    try {
-      final DateFormat dateFormat = format ?? DateFormat('dd-MM-yyyy HH:mm');
-      return dateFormat.parse(this!);
-    } catch (_) {
-      rethrow;
-    }
   }
 }
 

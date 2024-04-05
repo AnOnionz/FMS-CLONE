@@ -1,30 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/image_picker_widget.dart';
-import '../widgets/notifications.dart';
+
+import '../../../home/home_module.dart';
+import '../../domain/entities/feature_entity.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
+  final FeatureEntity entity;
   final AttendanceType type;
-  const AttendancePage({super.key, required this.type});
+
+  const AttendancePage({super.key, required this.type, required this.entity});
 
   @override
   State<AttendancePage> createState() => _AttendancePageState();
 }
 
 class _AttendancePageState extends State<AttendancePage> {
+  final bloc = Modular.get<AttendanceBloc>();
+
   bool isMapLoading = true;
   final List<XFile> files = [];
+
+  bool get isPhotoRequired =>
+      widget.entity.feature.featureAttendance!.isPhotoRequired;
 
   void _showSheetHistory(BuildContext context) {
     OverlayManager.showSheet(
@@ -59,6 +69,7 @@ class _AttendancePageState extends State<AttendancePage> {
     return Scaffold(
       appBar: DefaultAppBar(
           title: 'Chấm công',
+          onBack: () => context.popUtil(HomeModule.route),
           action: HistoryButton(onPressed: () => _showSheetHistory(context))),
       body: Stack(children: [
         RepaintBoundary(child: _mapService.mapWidget),
@@ -67,27 +78,31 @@ class _AttendancePageState extends State<AttendancePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                width: context.screenWidth,
-                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(10.sqr)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Chụp ảnh checkin',
-                      style: context.textTheme.subtitle1,
-                    ),
-                    SizedBox(height: 14.h),
-                    ImagePickerWidget(
-                      max: 5,
-                      images: files,
-                    ),
-                  ],
+              if (isPhotoRequired)
+                Container(
+                  width: context.screenWidth,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+                  decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(10.sqr)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Chụp ảnh checkin',
+                        style: context.textTheme.subtitle1,
+                      ),
+                      SizedBox(height: 14.h),
+                      Form(
+                        child: ImagePickerWidget(
+                          max: 1,
+                          images: files,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 child: Container(
@@ -139,11 +154,12 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                 ),
               ),
-              _actionButton(widget.type,
-                  action: () => showRequiredTask(
-                        context,
-                        () {},
-                      ))
+              _actionButton(widget.type, action: () {
+                bloc.add(AttendanceEvent(
+                    file: files.first,
+                    feature: widget.entity.feature,
+                    general: widget.entity.general));
+              })
             ],
           ),
         )

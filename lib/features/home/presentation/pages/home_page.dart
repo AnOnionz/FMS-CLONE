@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -6,13 +8,18 @@ import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
 import 'package:fms/features/home/presentation/widgets/tasks.dart';
 
+import '../../../general/presentation/bloc/general_bloc.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+
+  final bloc = Modular.get<GeneralBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +55,45 @@ class HomePage extends StatelessWidget {
         padding: EdgeInsets.only(top: 30.h),
         child: SingleChildScrollView(
           physics: kPhysics,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _title(context, 'Thông tin chung'),
-              Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
-                  child: CommonInfo()),
-              _title(context, 'Chức năng hỗ trợ'),
-              Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
-                  child: CommonFeature()),
-              _title(context, 'Danh sách công việc'),
-              Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 29.h, horizontal: 16.w),
-                  child: Tasks()),
-            ],
+          child: BlocBuilder<GeneralBloc, GeneralState>(
+            bloc: bloc,
+            builder: (context, state) {
+              if (state is GeneralSuccess) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _title(context, 'Thông tin chung'),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 29.h, horizontal: 16.w),
+                        child: CommonInfo()),
+                    _title(context, 'Chức năng hỗ trợ'),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 29.h, horizontal: 16.w),
+                        child: CommonFeature(
+                          general: state.general,
+                        )),
+                    _title(context, 'Danh sách công việc'),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 29.h, horizontal: 16.w),
+                        child: Tasks(
+                          general: state.general,
+                        )),
+                  ],
+                );
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppIndicator(
+                    height: 30.h,
+                    width: 30.h,
+                  )
+                ],
+              );
+            },
           ),
         ),
       ),

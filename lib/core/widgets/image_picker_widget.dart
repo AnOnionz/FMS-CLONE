@@ -213,7 +213,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             child: Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return ImageDetail(
-                    image: _images[index], onPreview: _imagePreview);
+                    isLast: index == _images.length - 1,
+                    isWatermarking: isWatermarking,
+                    image: _images[index],
+                    onPreview: _imagePreview);
               },
               loop: false,
               itemCount: _images.length,
@@ -231,87 +234,98 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
 class ImageDetail extends StatelessWidget {
   final XFile image;
+  final bool isLast;
+  final ValueNotifier<bool> isWatermarking;
   final Future<void> Function(Image image) onPreview;
   const ImageDetail({
     super.key,
     required this.image,
     required this.onPreview,
+    required this.isLast,
+    required this.isWatermarking,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: image.readAsBytes(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final imagePreview = Image.memory(
-            snapshot.data!,
-            fit: BoxFit.fitWidth,
-          );
-          return GestureDetector(
-            onTap: () => onPreview(Image.memory(
-              snapshot.data!,
-              fit: BoxFit.contain,
-            )),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.sqr),
-              child: Container(
-                // decoration: BoxDecoration(
-                //     color: AppColors.white,
-                //     borderRadius: BorderRadius.circular(12.sqr)),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 100.h,
-                      width: 100.h,
-                      child: imagePreview,
+    return ListenableBuilder(
+        listenable: isWatermarking,
+        builder: (context, child) {
+          if (isLast && isWatermarking.value == true) {
+            return AppIndicator(height: 30.h, width: 30.h);
+          }
+          return FutureBuilder(
+            future: image.readAsBytes(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final imagePreview = Image.memory(
+                  snapshot.data!,
+                  fit: BoxFit.fitWidth,
+                );
+                return GestureDetector(
+                  onTap: () => onPreview(Image.memory(
+                    snapshot.data!,
+                    fit: BoxFit.contain,
+                  )),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.sqr),
+                    child: Container(
+                      // decoration: BoxDecoration(
+                      //     color: AppColors.white,
+                      //     borderRadius: BorderRadius.circular(12.sqr)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 100.h,
+                            width: 100.h,
+                            child: imagePreview,
+                          ),
+                          // SizedBox(
+                          //   height: 30.h,
+                          //   width: 100.h,
+                          //   child: Padding(
+                          //     padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.w),
+                          //     child: Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //       children: [
+                          //         Text(
+                          //           'GPS: ${image.lat} - ${image.lng}',
+                          //           style: DefaultTextStyle.of(context).style,
+                          //         ),
+                          //         Row(
+                          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //           children: [
+                          //             Text(
+                          //               image.datetime,
+                          //               style: DefaultTextStyle.of(context).style.copyWith(
+                          //                   color: 'ADADAD'.toColor(),
+                          //                   fontWeight: FontWeight.w400),
+                          //             ),
+                          //             Text(
+                          //               image.lengthString,
+                          //               style: DefaultTextStyle.of(context)
+                          //                   .style
+                          //                   .copyWith(fontWeight: FontWeight.w400),
+                          //             )
+                          //           ],
+                          //         )
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
                     ),
-                    // SizedBox(
-                    //   height: 30.h,
-                    //   width: 100.h,
-                    //   child: Padding(
-                    //     padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.w),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         Text(
-                    //           'GPS: ${image.lat} - ${image.lng}',
-                    //           style: DefaultTextStyle.of(context).style,
-                    //         ),
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Text(
-                    //               image.datetime,
-                    //               style: DefaultTextStyle.of(context).style.copyWith(
-                    //                   color: 'ADADAD'.toColor(),
-                    //                   fontWeight: FontWeight.w400),
-                    //             ),
-                    //             Text(
-                    //               image.lengthString,
-                    //               style: DefaultTextStyle.of(context)
-                    //                   .style
-                    //                   .copyWith(fontWeight: FontWeight.w400),
-                    //             )
-                    //           ],
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
+                );
+              }
+              return SizedBox(
+                height: 100.h,
+                width: 100.h,
+                child: AppIndicator(height: 50.h, width: 50.h),
+              );
+            },
           );
-        }
-        return SizedBox(
-          height: 100.h,
-          width: 100.h,
-          child: Icon(Icons.broken_image_outlined),
-        );
-      },
-    );
+        });
   }
 }

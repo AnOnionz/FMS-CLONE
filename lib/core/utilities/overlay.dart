@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-import '../app_lifecycle/app_lifecycle.dart';
 import '../constant/colors.dart';
 import '../widgets/custom_bottom_sheet.dart';
 import '/core/widgets/loading_alert.dart';

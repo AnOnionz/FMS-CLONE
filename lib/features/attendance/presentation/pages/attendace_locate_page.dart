@@ -8,13 +8,16 @@ import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
+import 'package:fms/features/attendance/domain/entities/feature_entity.dart';
+import 'package:fms/features/home/home_module.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/outline.dart';
 import '../bloc/locate_cubit.dart';
 
 class AttendanceLocatePage extends StatefulWidget {
-  const AttendanceLocatePage({super.key});
+  final FeatureEntity entity;
+  const AttendanceLocatePage({super.key, required this.entity});
 
   @override
   State<AttendanceLocatePage> createState() => _AttendanceLocatePageState();
@@ -38,7 +41,13 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DefaultAppBar(title: 'Chấm công'),
+        appBar: DefaultAppBar(
+            title: 'Chấm công',
+            onBack: () {
+              try {
+                context.popUtil(HomeModule.route);
+              } catch (e) {}
+            }),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -71,7 +80,8 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           listener: (context, state) {
                             if (state is LocateSuccess) {
                               context.nextReplacementRoute(
-                                  AttendanceOutModule.attendance);
+                                  AttendanceOutModule.attendance,
+                                  arguments: widget.entity);
                             }
                           },
                           builder: (context, state) {
@@ -135,8 +145,8 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           child: FlatButton(
                               onPressed: () {
                                 context.nextReplacementRoute(
-                                    AttendanceOutModule.route +
-                                        AttendanceOutModule.attendance);
+                                    AttendanceOutModule.attendance,
+                                    arguments: widget.entity);
                               },
                               name: 'Tiếp tục',
                               color: AppColors.orange),
@@ -150,9 +160,7 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                       if (state is LocateFailue ||
                           state is LocateDistanceInvalid) {
                         return OutlineButton(
-                            onPressed: () =>
-                                BlocProvider.of<LocateCubit>(context)
-                                    .getLocation(),
+                            onPressed: () => _cubit.getLocation(),
                             name: 'Thử lại',
                             color: AppColors.orange);
                       }

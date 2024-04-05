@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 // import 'package:crypto/crypto.dart';
@@ -30,9 +31,17 @@ class DioClient extends ApiService {
 
     _http.interceptors.add(
       LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ),
+          logPrint: (object) {
+            final RegExp pattern =
+                RegExp('.{1,800}'); // 800 is the size of each chunk
+            pattern
+                .allMatches(object.toString())
+                .forEach((RegExpMatch match) => print(match.group(0)));
+          },
+          responseBody: true,
+          responseHeader: false,
+          requestHeader: false,
+          request: false),
     );
     // http.httpClientAdapter = IOHttpClientAdapter(
     //   createHttpClient: () {
@@ -82,6 +91,24 @@ class DioClient extends ApiService {
             queryParameters: queryParameters,
             data: data,
             cancelToken: cancelToken));
+  }
+
+  Future<T?> postHttp<T>(
+      {required String path,
+      int retries = 1,
+      FormData? data,
+      Map<String, dynamic>? queryParameters}) async {
+    setBaseUrl(path);
+    final response = await _request(
+        retries: retries,
+        _http.post('',
+            queryParameters: queryParameters,
+            data: data,
+            cancelToken: cancelToken));
+
+    setBaseUrl(ApiService.apiBaseUrl);
+
+    return response as T?;
   }
 
   @override

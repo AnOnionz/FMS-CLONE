@@ -3,26 +3,23 @@ import 'dart:convert';
 
 class OutletEntity {
   final int id;
-  final bool isActive;
+
   final String code;
   final String name;
 
   OutletEntity(
     this.id,
-    this.isActive,
     this.code,
     this.name,
   );
 
   OutletEntity copyWith({
     int? id,
-    bool? isActive,
     String? code,
     String? name,
   }) {
     return OutletEntity(
       id ?? this.id,
-      isActive ?? this.isActive,
       code ?? this.code,
       name ?? this.name,
     );
@@ -31,7 +28,6 @@ class OutletEntity {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'isActive': isActive,
       'code': code,
       'name': name,
     };
@@ -40,7 +36,6 @@ class OutletEntity {
   factory OutletEntity.fromMap(Map<String, dynamic> map) {
     return OutletEntity(
       map['id'] as int,
-      map['isActive'] as bool,
       map['code'] as String,
       map['name'] as String,
     );
@@ -53,6 +48,6 @@ class OutletEntity {
 
   @override
   String toString() {
-    return 'OutletEntity(id: $id, isActive: $isActive, code: $code, name: $name)';
+    return 'OutletEntity(id: $id, code: $code, name: $name)';
   }
 }

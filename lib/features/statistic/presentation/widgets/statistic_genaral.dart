@@ -39,9 +39,9 @@ class StatisticGenaral extends StatelessWidget {
             children: [
               switch (type) {
                 StatisticType.outlet =>
-                  OutletInfo(outlet: OutletEntity(1, true, 'name', 'code')),
+                  OutletInfo(outlet: OutletEntity(1, 'name', 'code')),
                 StatisticType.booth =>
-                  BoothInfo(booth: BoothEntity(1, true, 'name', 'description')),
+                  BoothInfo(booth: BoothEntity(1, 'name', 'description')),
                 _ => EmployeeInfo(credentials: credentials)
               },
               Padding(

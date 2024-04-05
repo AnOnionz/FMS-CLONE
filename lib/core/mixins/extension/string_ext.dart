@@ -14,7 +14,11 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:intl/intl.dart' as intl;
+
+import '../../constant/enum.dart';
 
 import '/core/mixins/extension/num_ext.dart';
 
@@ -550,4 +554,11 @@ extension AssetsExtension on String {
 
   /// 	File extension is RIV
   String get riv => padRight(length + 1, '.riv');
+}
+
+extension FeatureTypeExtension on String {
+  FeatureType? toFeatureType() {
+    return FeatureType.values
+        .firstWhereOrNull((element) => element.name == this);
+  }
 }

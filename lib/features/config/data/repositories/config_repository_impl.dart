@@ -1,6 +1,6 @@
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
-import 'package:fms/features/config/domain/entities/config.dart';
+import 'package:fms/features/config/domain/entities/config_entity.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
 import '../../../../core/usecase/either.dart';

@@ -2,34 +2,34 @@ import 'dart:convert';
 
 class ProjectEntity {
   final int id;
-  final bool isActive;
   final String name;
-  final String startDate;
-  final String? endDated;
-  final String status;
+  final DateTime startDate;
+  final DateTime? endDated;
 
-  ProjectEntity(this.id, this.isActive, this.name, this.startDate,
-      this.endDated, this.status);
+  ProjectEntity(
+    this.id,
+    this.name,
+    this.startDate,
+    this.endDated,
+  );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'isActive': isActive,
       'name': name,
       'startDate': startDate,
       'endDated': endDated,
-      'status': status,
     };
   }
 
   factory ProjectEntity.fromMap(Map<String, dynamic> map) {
     return ProjectEntity(
       map['id'] as int,
-      map['isActive'] as bool,
       map['name'] as String,
-      map['startDate'] as String,
-      map['endDated'] as String?,
-      map['status'] as String,
+      DateTime.parse(map['startDate'] as String),
+      map['startDate'] != null
+          ? DateTime.parse(map['startDate'] as String)
+          : null,
     );
   }
 
@@ -42,22 +42,20 @@ class ProjectEntity {
     int? id,
     bool? isActive,
     String? name,
-    String? startDate,
-    String? endDated,
+    DateTime? startDate,
+    DateTime? endDated,
     String? status,
   }) {
     return ProjectEntity(
       id ?? this.id,
-      isActive ?? this.isActive,
       name ?? this.name,
       startDate ?? this.startDate,
       endDated ?? this.endDated,
-      status ?? this.status,
     );
   }
 
   @override
   String toString() {
-    return 'ProjectEntity(id: $id, isActive: $isActive, name: $name, startDate: $startDate, endDated: $endDated, status: $status)';
+    return 'ProjectEntity(id: $id,  name: $name, startDate: $startDate, endDated: $endDated)';
   }
 }
