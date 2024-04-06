@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
-import 'package:fms/features/attendance/domain/entities/feature_entity.dart';
+import 'package:fms/features/home/domain/entities/feature_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/home/presentation/widgets/task_box.dart';
 import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
@@ -22,7 +22,7 @@ class Tasks extends StatelessWidget {
           .map((f) => Expanded(
                   child: TaskBox(
                 name: f.name,
-                onPressed: () => context.nextRoute(AttendanceOutModule.route,
+                onPressed: () => context.nextRoute('/${f.type!.name}/',
                     arguments: FeatureEntity(general: general, feature: f)),
               )))
           .toList(),

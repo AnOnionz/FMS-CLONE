@@ -7,8 +7,9 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/features/attendance/attendance_core_module.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
-import 'package:fms/features/attendance/domain/entities/feature_entity.dart';
+import 'package:fms/features/home/domain/entities/feature_entity.dart';
 import 'package:fms/features/home/home_module.dart';
 
 import '../../../../core/constant/colors.dart';
@@ -80,7 +81,7 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           listener: (context, state) {
                             if (state is LocateSuccess) {
                               context.nextReplacementRoute(
-                                  AttendanceOutModule.attendance,
+                                  AttendanceCoreModule.attendance,
                                   arguments: widget.entity);
                             }
                           },
@@ -145,7 +146,7 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           child: FlatButton(
                               onPressed: () {
                                 context.nextReplacementRoute(
-                                    AttendanceOutModule.attendance,
+                                    AttendanceCoreModule.attendance,
                                     arguments: widget.entity);
                               },
                               name: 'Tiếp tục',

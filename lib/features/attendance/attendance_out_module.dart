@@ -4,15 +4,13 @@ import 'package:fms/features/attendance/attendance_core_module.dart';
 
 import '../../core/constant/enum.dart';
 import '../../routes/routes.dart';
-import 'domain/entities/feature_entity.dart';
+import '../home/domain/entities/feature_entity.dart';
 import 'presentation/pages/attendace_locate_page.dart';
 import 'presentation/pages/attendance_flow_page.dart';
 import 'presentation/pages/attendance_page.dart';
 
 class AttendanceOutModule extends Module {
   static const String route = '/attendanceClockingOut/';
-  static const String locate = 'locate';
-  static const String attendance = 'attendance';
 
   @override
   List<Module> get imports => [
@@ -26,11 +24,11 @@ class AttendanceOutModule extends Module {
       child: (_) => AttendanceFlowPage(entity: r.args.data as FeatureEntity),
     );
     r.child(
-      Routes.root + locate,
+      Routes.root + AttendanceCoreModule.locate,
       child: (_) => AttendanceLocatePage(entity: r.args.data as FeatureEntity),
     );
     r.child(
-      Routes.root + attendance,
+      Routes.root + AttendanceCoreModule.attendance,
       child: (_) => AttendancePage(
           type: AttendanceType.CheckOut, entity: r.args.data as FeatureEntity),
     );

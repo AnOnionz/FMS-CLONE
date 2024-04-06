@@ -17,6 +17,7 @@ abstract class ImagesRemoteDataSource {
         filename: file.name,
       )
     });
+    print(form.files.first.value.filename);
     final _resp = await dio.post(path: '/images', data: form);
     return parseJson<ImageUploadModel>(
         (json: _resp, fromJson: ImageUploadModel.fromMap));

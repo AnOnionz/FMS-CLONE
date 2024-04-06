@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/image_picker_widget.dart';
-
+import '../../../home/domain/entities/feature_entity.dart';
 import '../../../home/home_module.dart';
-import '../../domain/entities/feature_entity.dart';
+import '../widgets/notifications.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
@@ -29,12 +32,41 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   final bloc = Modular.get<AttendanceBloc>();
-
+  ValueNotifier<bool> isWatermarking = ValueNotifier(false);
   bool isMapLoading = true;
   final List<XFile> files = [];
 
   bool get isPhotoRequired =>
       widget.entity.feature.featureAttendance!.isPhotoRequired;
+
+  bool get isLocationRequired =>
+      widget.entity.feature.featureAttendance!.isLocationRequired;
+
+  bool get isWatermarkRequired =>
+      widget.entity.feature.featureAttendance!.isWatermarkRequired;
+
+  bool _validateForm() {
+    if (isPhotoRequired && files.isEmpty) {
+      showWarning(context, 'Yêu cầu chụp ảnh');
+      return false;
+    }
+    if (isWatermarkRequired && isWatermarking.value == true) {
+      showWarning(context, 'Đang chuẩn bị hình ảnh');
+      return false;
+    }
+    return true;
+  }
+
+  void _attendance() {
+    if (_validateForm())
+      bloc.add(AttendanceEvent(
+          file: isPhotoRequired ? files.first : null,
+          position: isLocationRequired
+              ? Modular.get<LocationService>().currentLocation
+              : null,
+          feature: widget.entity.feature,
+          general: widget.entity.general));
+  }
 
   void _showSheetHistory(BuildContext context) {
     OverlayManager.showSheet(
@@ -98,6 +130,8 @@ class _AttendancePageState extends State<AttendancePage> {
                         child: ImagePickerWidget(
                           max: 1,
                           images: files,
+                          isWatermarkRequired: isWatermarkRequired,
+                          isWatermarking: isWatermarking,
                         ),
                       ),
                     ],
@@ -116,12 +150,12 @@ class _AttendancePageState extends State<AttendancePage> {
                         children: [
                           RichText(
                               text: TextSpan(
-                                  text: 'Outlet:',
+                                  text: 'Outlet: ',
                                   style: context.textTheme.subtitle1
                                       ?.copyWith(color: AppColors.nobel),
                                   children: [
                                 TextSpan(
-                                    text: 'Tên outlet',
+                                    text: widget.entity.general.outlet.name,
                                     style: context.textTheme.subtitle1
                                         ?.copyWith(color: AppColors.black))
                               ])),
@@ -129,13 +163,12 @@ class _AttendancePageState extends State<AttendancePage> {
                             padding: EdgeInsets.symmetric(vertical: 12.h),
                             child: RichText(
                                 text: TextSpan(
-                                    text: 'Địa chỉ:',
+                                    text: 'Địa chỉ: ',
                                     style: context.textTheme.subtitle1
                                         ?.copyWith(color: AppColors.nobel),
                                     children: [
                                   TextSpan(
-                                      text:
-                                          '123 Trần Bình Trọng, Bình Thạnh, thHCM',
+                                      text: widget.entity.general.outlet.code,
                                       style: context.textTheme.subtitle1
                                           ?.copyWith(color: AppColors.black))
                                 ])),
@@ -154,12 +187,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                 ),
               ),
-              _actionButton(widget.type, action: () {
-                bloc.add(AttendanceEvent(
-                    file: files.first,
-                    feature: widget.entity.feature,
-                    general: widget.entity.general));
-              })
+              _actionButton(widget.type, action: _attendance)
             ],
           ),
         )
@@ -168,18 +196,36 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _actionButton(AttendanceType type, {VoidCallback? action}) {
-    return FlatButton(
-      onPressed: action,
-      name: type.name.toUpperCase(),
-      color: type == AttendanceType.CheckIn
-          ? AppColors.royalBlue
-          : AppColors.orange,
-      disableColor: type == AttendanceType.CheckIn
-          ? AppColors.solitude
-          : AppColors.potPourri,
-      disableTextColor: type == AttendanceType.CheckIn
-          ? '#C8C8C8'.toColor()
-          : AppColors.delRio,
+    return BlocConsumer<AttendanceBloc, AttendanceState>(
+      bloc: bloc,
+      listener: (context, state) {
+        if (state is AttendanceLoading) {
+          OverlayManager.showLoading();
+        }
+        if (state is AttendanceFailure) {
+          OverlayManager.hide();
+          showFailure(context, state.failure, _attendance);
+        }
+        if (state is AttendanceSuccess) {
+          OverlayManager.hide();
+          showSuccess(context);
+        }
+      },
+      builder: (context, state) {
+        return FlatButton(
+          onPressed: action,
+          name: type.name.toUpperCase(),
+          color: type == AttendanceType.CheckIn
+              ? AppColors.royalBlue
+              : AppColors.orange,
+          disableColor: type == AttendanceType.CheckIn
+              ? AppColors.solitude
+              : AppColors.potPourri,
+          disableTextColor: type == AttendanceType.CheckIn
+              ? '#C8C8C8'.toColor()
+              : AppColors.delRio,
+        );
+      },
     );
   }
 

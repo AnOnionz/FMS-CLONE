@@ -129,6 +129,6 @@ final class MediaService {
     file.deleteSync();
     file.writeAsBytesSync(img.encodePng(newImage));
 
-    return XFile.fromData(file.readAsBytesSync());
+    return XFile.fromData(file.readAsBytesSync(), path: file.path);
   }
 }

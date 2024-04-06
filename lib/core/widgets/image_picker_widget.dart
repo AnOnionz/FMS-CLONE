@@ -17,6 +17,7 @@ class ImagePickerWidget extends StatefulWidget {
   final int max;
   final bool isCarousel;
   final bool isWatermarkRequired;
+  final ValueNotifier<bool>? isWatermarking;
 
   const ImagePickerWidget({
     super.key,
@@ -24,6 +25,7 @@ class ImagePickerWidget extends StatefulWidget {
     required this.max,
     this.isCarousel = false,
     this.isWatermarkRequired = true,
+    this.isWatermarking,
   });
 
   @override
@@ -34,7 +36,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final MediaService _service = MediaService();
   late final _images = widget.images;
 
-  ValueNotifier<bool> isWatermarking = ValueNotifier(false);
+  late ValueNotifier<bool> isWatermarking =
+      widget.isWatermarking ?? ValueNotifier(false);
 
   Future<void> _takeImage() async {
     if (widget.images.length < widget.max) {
@@ -68,13 +71,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         // });
       }
     }
-  }
-
-  File changeFileNameOnlySync(File file, String newFileName) {
-    final path = file.path;
-    final lastSeparator = path.lastIndexOf(Platform.pathSeparator);
-    final newPath = path.substring(0, lastSeparator + 1) + newFileName;
-    return file.renameSync(newPath);
   }
 
   Future<void> _imagePreview(Image image) async {

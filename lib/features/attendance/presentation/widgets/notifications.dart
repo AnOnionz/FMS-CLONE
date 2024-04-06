@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/widgets/bottom_sheet_notification.dart';
 import 'package:fms/features/home/home_module.dart';
@@ -20,16 +21,31 @@ void showSuccess(BuildContext context) {
               color: AppColors.royalBlue)));
 }
 
-void showFailure(BuildContext context) {
+void showFailure(BuildContext context, Failure failure, VoidCallback onRetry) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
           icon: SvgPicture.asset(AppIcons.failure),
           title: 'Chấm công thất bại',
-          message: 'Phát sinh lỗi trong quá trình chấm công',
+          message: failure.message ?? 'Phát sinh lỗi trong quá trình chấm công',
           action: OutlineButton(
-              onPressed: () => context.popUtil(HomeModule.route),
+              onPressed: () {
+                context.pop();
+                onRetry();
+              },
               name: 'Thử lại',
               color: AppColors.orange)));
+}
+
+void showWarning(BuildContext context, String message) {
+  OverlayManager.showSheet(
+      body: BottomSheetNotification(
+          icon: SvgPicture.asset(AppIcons.failure),
+          title: 'Thông báo',
+          message: message,
+          action: OutlineButton(
+              onPressed: () => context.pop(),
+              name: 'Đóng',
+              color: AppColors.brickRed)));
 }
 
 void showRequiredInternet(BuildContext context, VoidCallback onRetry) {

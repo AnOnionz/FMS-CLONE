@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:fms/features/attendance/domain/entities/feature_entity.dart';
+import 'package:fms/features/home/domain/entities/feature_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/home/presentation/widgets/feature_box.dart';
 import 'package:fms/features/sync/sync_module.dart';

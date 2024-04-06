@@ -31,17 +31,15 @@ class DioClient extends ApiService {
 
     _http.interceptors.add(
       LogInterceptor(
-          logPrint: (object) {
-            final RegExp pattern =
-                RegExp('.{1,800}'); // 800 is the size of each chunk
-            pattern
-                .allMatches(object.toString())
-                .forEach((RegExpMatch match) => print(match.group(0)));
-          },
-          responseBody: true,
-          responseHeader: false,
-          requestHeader: false,
-          request: false),
+        logPrint: (object) {
+          final RegExp pattern =
+              RegExp('.{1,800}'); // 800 is the size of each chunk
+          pattern
+              .allMatches(object.toString())
+              .forEach((RegExpMatch match) => print(match.group(0)));
+        },
+        responseBody: true,
+      ),
     );
     // http.httpClientAdapter = IOHttpClientAdapter(
     //   createHttpClient: () {
@@ -69,7 +67,7 @@ class DioClient extends ApiService {
   Future<T?> get<T>(
       {required String path,
       int retries = 1,
-      FormData? data,
+      Object? data,
       Map<String, dynamic>? queryParameters}) async {
     return _request(
         retries: retries,
@@ -83,7 +81,7 @@ class DioClient extends ApiService {
   Future<T?> post<T>(
       {required String path,
       int retries = 1,
-      FormData? data,
+      Object? data,
       Map<String, dynamic>? queryParameters}) async {
     return _request(
         retries: retries,
@@ -115,7 +113,7 @@ class DioClient extends ApiService {
   Future<T?> put<T>(
       {required String path,
       int retries = 1,
-      FormData? data,
+      Object? data,
       Map<String, dynamic>? queryParameters}) async {
     return _request(
         retries: retries,
@@ -147,7 +145,7 @@ class DioClient extends ApiService {
     } on SocketException catch (e, s) {
       throw InternetException(e.message, e, s);
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 

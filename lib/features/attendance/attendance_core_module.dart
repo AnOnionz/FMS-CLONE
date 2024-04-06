@@ -9,6 +9,8 @@ import '../../routes/core_module.dart';
 import 'presentation/bloc/locate_cubit.dart';
 
 class AttendanceCoreModule extends Module {
+  static const String locate = 'locate';
+  static const String attendance = 'attendance';
   @override
   List<Module> get imports => [CoreModule(), AuthenticationModule()];
 
