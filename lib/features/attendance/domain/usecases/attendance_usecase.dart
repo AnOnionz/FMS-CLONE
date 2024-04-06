@@ -14,7 +14,7 @@ class AttendanceUsecase extends UseCase<int, AttendanceParams> {
 
   @override
   Future<Result<int>> call(params) {
-    return repository.attendance(
+    return repository.postAttendance(
         file: params.file,
         position: params.position,
         time: params.time,
