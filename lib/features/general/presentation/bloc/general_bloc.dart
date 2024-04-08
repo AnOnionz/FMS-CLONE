@@ -29,15 +29,15 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
 
       await createGeneral(general); //???
 
-      final isUseLocation = event.config.features
-              .firstWhereOrNull(
-                  (feature) => feature.type == FeatureType.attendanceClockingIn)
-              ?.featureAttendance!
-              .isLocationRequired ??
-          false;
-      if (isUseLocation) {
-        _locationService.enablePositionSubscription();
-      }
+      // final isUseLocation = event.config.features
+      //         .firstWhereOrNull(
+      //             (feature) => feature.type == FeatureType.attendanceClockingIn)
+      //         ?.featureAttendance!
+      //         .isLocationRequired ??
+      //     false;
+      // if (isUseLocation) {
+      //   _locationService.enablePositionSubscription();
+      // }
 
       emit(GeneralSuccess(general: general));
     });
