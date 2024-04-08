@@ -25,7 +25,7 @@ class NoteItem extends StatefulWidget {
 
 class _NoteItemState extends State<NoteItem> {
   final TextEditingController _controller = TextEditingController();
-  final List<XFile> _image = [];
+  final ValueNotifier<List<XFile>> _image = ValueNotifier([]);
 
   @override
   Widget build(BuildContext context) {

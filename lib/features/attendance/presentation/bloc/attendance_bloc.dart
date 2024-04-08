@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/errors/failure.dart';
+import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/attendance_usecase.dart';
 import 'package:fms/features/config/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
@@ -15,19 +17,27 @@ part 'attendance_state.dart';
 
 class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final AttendanceUsecase _attendance;
+
   AttendanceBloc(this._attendance) : super(AttendanceInitial()) {
-    on<AttendanceEvent>((event, emit) async {
-      emit(AttendanceLoading());
-      final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
-      final time = await timeService.ntpDateTime();
-      final execute = await _attendance(AttendanceParams(
-          feature: event.feature,
-          file: event.file,
-          position: event.position,
-          time: time,
-          general: event.general));
-      execute.fold((failure) => emit(AttendanceFailure(failure)),
-          (data) => emit(AttendanceSuccess()));
+    on<AttendanceEvent>(_onAttedanceUpload, transformer: droppable());
+  }
+
+  Future<void> _onAttedanceUpload(AttendanceEvent event, emit) async {
+    emit(AttendanceLoading());
+    final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
+    final time = await timeService.ntpDateTime();
+    final execute = await _attendance(AttendanceParams(
+        feature: event.feature,
+        file: event.file,
+        position: event.position,
+        time: time,
+        general: event.general));
+    execute.fold((failure) => emit(AttendanceFailure(failure)), (data) {
+      if (data == null) {
+        emit(AttendanceFailure(DataNullFailure()));
+        return;
+      }
+      emit(AttendanceSuccess(data));
     });
   }
 }

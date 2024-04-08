@@ -13,6 +13,7 @@ import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
 import 'package:fms/features/setting/setting_module.dart';
+import 'package:fms/features/work_place/work_place_module.dart';
 
 import '../../../../core/widgets/image_profile.dart';
 
@@ -108,28 +109,39 @@ class DrawerSide extends StatelessWidget {
                                           )
                                         : SizedBox.shrink(),
                                     _rowFeature(
-                                      context,
-                                      AppIcons.notification,
-                                      'Thông báo',
-                                      SettingModule.route,
+                                      context: context,
+                                      icon: AppIcons.shop,
+                                      name: 'Đổi outlet làm việc',
+                                      onPressed: () {
+                                        Scaffold.of(context).closeEndDrawer();
+                                        context.navigate(WorkPlaceModule.route);
+                                        context.nextRoute(
+                                            WorkPlaceModule.selectProject);
+                                      },
+                                    ),
+                                    _rowFeature(
+                                      context: context,
+                                      icon: AppIcons.notification,
+                                      name: 'Thông báo',
+                                      route: SettingModule.route,
                                     ),
                                     SizedBox(
                                       height: 8.h,
                                     ),
                                     _rowFeature(
-                                      context,
-                                      AppIcons.about,
-                                      'Thông tin và ứng dụng',
-                                      AppInfomationModule.route,
+                                      context: context,
+                                      icon: AppIcons.about,
+                                      name: 'Thông tin và ứng dụng',
+                                      route: AppInfomationModule.route,
                                     ),
                                     SizedBox(
                                       height: 8.h,
                                     ),
                                     _rowFeature(
-                                      context,
-                                      AppIcons.config,
-                                      'Cài đặt',
-                                      SettingModule.route,
+                                      context: context,
+                                      icon: AppIcons.config,
+                                      name: 'Cài đặt',
+                                      route: SettingModule.route,
                                     ),
                                     Padding(
                                       padding:
@@ -214,12 +226,18 @@ class DrawerSide extends StatelessWidget {
   }
 
   Widget _rowFeature(
-      BuildContext context, String icon, String name, String route) {
+      {required BuildContext context,
+      required String icon,
+      required String name,
+      String? route,
+      VoidCallback? onPressed}) {
     return GestureDetector(
-      onTap: () {
-        context.nextRoute(route);
-        Scaffold.of(context).closeEndDrawer();
-      },
+      onTap: route != null
+          ? () {
+              context.nextRoute(route);
+              Scaffold.of(context).closeEndDrawer();
+            }
+          : onPressed,
       child: ColoredBox(
         color: AppColors.transparent,
         child: Padding(

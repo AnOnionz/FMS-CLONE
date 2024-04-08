@@ -21,7 +21,7 @@ void showSuccess(BuildContext context) {
               color: AppColors.royalBlue)));
 }
 
-void showFailure(BuildContext context, Failure failure, VoidCallback onRetry) {
+void showFailure(BuildContext context, Failure failure, VoidCallback? onRetry) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
           icon: SvgPicture.asset(AppIcons.failure),
@@ -30,7 +30,7 @@ void showFailure(BuildContext context, Failure failure, VoidCallback onRetry) {
           action: OutlineButton(
               onPressed: () {
                 context.pop();
-                onRetry();
+                onRetry?.call();
               },
               name: 'Thử lại',
               color: AppColors.orange)));

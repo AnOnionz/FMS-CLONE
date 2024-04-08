@@ -7,13 +7,13 @@ import '../../../general/domain/entities/general_entity.dart';
 import '../entities/attendance_entity.dart';
 
 abstract class AttendanceRepository {
-  Future<Result<int>> postAttendance(
+  Future<Result<AttendanceData?>> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,
       required Feature feature,
       required GeneralEntity general});
 
-  Future<Result<AttendanceEntity?>> getAttendance(
+  Future<Result<AttendanceEntity?>> getAttendanceInfo(
       {required Feature feature, required GeneralEntity general});
 }

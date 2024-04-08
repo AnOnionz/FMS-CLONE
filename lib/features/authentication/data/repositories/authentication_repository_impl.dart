@@ -36,7 +36,7 @@ class AuthenticationRepositoryImpl extends Repository
                 credentials.accessToken.toString());
       }
       return Right(credentials);
-    }, useInternet: false);
+    });
   }
 
   @override
@@ -48,7 +48,7 @@ class AuthenticationRepositoryImpl extends Repository
       _dio.setBearerAuth(
           token: credentials.tokenType + ' ' + credentials.accessToken);
       return Right(true);
-    }, useInternet: false);
+    });
   }
 
   @override
@@ -93,7 +93,7 @@ class AuthenticationRepositoryImpl extends Repository
         }
         rethrow;
       }
-    }, useInternet: false);
+    });
   }
 
   @override
@@ -101,7 +101,7 @@ class AuthenticationRepositoryImpl extends Repository
     return todo(() async {
       final check = await _remote.hasValidCredentials();
       return Right(check);
-    }, useInternet: false);
+    });
   }
 
   @override
@@ -109,7 +109,7 @@ class AuthenticationRepositoryImpl extends Repository
     return todo(() async {
       final userProfile = await _remote.userProfile(accessToken);
       return Right(userProfile);
-    }, useInternet: false);
+    });
   }
 
   @override

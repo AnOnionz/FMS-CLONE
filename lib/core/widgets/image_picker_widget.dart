@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,7 +12,7 @@ import '../constant/icons.dart';
 import 'app_indicator.dart';
 
 class ImagePickerWidget extends StatefulWidget {
-  final List<XFile> images;
+  final ValueNotifier<List<XFile>> images;
   final int max;
   final bool isCarousel;
   final bool isWatermarkRequired;
@@ -40,7 +39,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       widget.isWatermarking ?? ValueNotifier(false);
 
   Future<void> _takeImage() async {
-    if (widget.images.length < widget.max) {
+    if (widget.images.value.length < widget.max) {
       final file = await _service.pickImage(720, 1280, 90);
       if (file != null) {
         //final bytes = await file.readAsBytes();
@@ -49,7 +48,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         // final position =
         //     await Modular.get<LocationService>().getCurrentPosition();
         setState(() {
-          _images.add(file);
+          _images.value.add(file);
         });
 
         if (widget.isWatermarkRequired) {
@@ -57,12 +56,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           final fileWithWatermark = await _service.addWatermark(file);
 
           setState(() {
-            _images.last = fileWithWatermark;
+            _images.value.last = fileWithWatermark;
           });
           isWatermarking.value = false;
         }
         // setState(() {
-        //   _images.add(FileWithMetaData(
+        //   _images.value.add(FileWithMetaData(
         //       rawPath: bytes.toList(),
         //       time: time,
         //       length: length,
@@ -136,7 +135,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ),
             Expanded(
               child: ListView.separated(
-                  itemCount: _images.length,
+                  itemCount: _images.value.length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   separatorBuilder: (context, index) => SizedBox(
@@ -146,12 +145,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                     return ListenableBuilder(
                       listenable: isWatermarking,
                       builder: (context, child) {
-                        if (index == _images.length - 1 &&
+                        if (index == _images.value.length - 1 &&
                             isWatermarking.value == true) {
                           return AppIndicator(height: 30.h, width: 30.h);
                         }
                         return FutureBuilder(
-                          future: _images[index].readAsBytes(),
+                          future: _images.value[index].readAsBytes(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               final image = Image.memory(
@@ -209,13 +208,13 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             child: Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return ImageDetail(
-                    isLast: index == _images.length - 1,
+                    isLast: index == _images.value.length - 1,
                     isWatermarking: isWatermarking,
-                    image: _images[index],
+                    image: _images.value[index],
                     onPreview: _imagePreview);
               },
               loop: false,
-              itemCount: _images.length,
+              itemCount: _images.value.length,
               itemHeight: 100.h,
               itemWidth: 100.w,
               layout: SwiperLayout.STACK,

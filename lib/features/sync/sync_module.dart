@@ -5,7 +5,7 @@ import 'package:fms/features/sync/presentation/pages/sync_page.dart';
 import '../../routes/routes.dart';
 
 class SyncModule extends Module {
-  static const String route = '/sync/';
+  static const String route = '/synchronization/';
   @override
   List<Module> get imports => [];
 

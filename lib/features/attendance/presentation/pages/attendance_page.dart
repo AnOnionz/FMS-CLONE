@@ -8,7 +8,9 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
+import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,7 +26,7 @@ class AttendancePage extends StatefulWidget {
   final FeatureEntity entity;
   final AttendanceType type;
 
-  const AttendancePage({super.key, required this.type, required this.entity});
+  AttendancePage({super.key, required this.type, required this.entity});
 
   @override
   State<AttendancePage> createState() => _AttendancePageState();
@@ -32,9 +34,27 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   final bloc = Modular.get<AttendanceBloc>();
+
+  final infoCubit = Modular.get<AttendanceInfoCubit>();
+
   ValueNotifier<bool> isWatermarking = ValueNotifier(false);
-  bool isMapLoading = true;
-  final List<XFile> files = [];
+
+  ValueNotifier<List<XFile>> files = ValueNotifier([]);
+
+  AttendanceEntity? _attendanceInfo;
+
+  @override
+  void initState() {
+    infoCubit.getInfo(
+        feature: widget.entity.feature, general: widget.entity.general);
+    files.addListener(() {
+      setState(() {});
+    });
+    isWatermarking.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
 
   bool get isPhotoRequired =>
       widget.entity.feature.featureAttendance!.isPhotoRequired;
@@ -45,27 +65,24 @@ class _AttendancePageState extends State<AttendancePage> {
   bool get isWatermarkRequired =>
       widget.entity.feature.featureAttendance!.isWatermarkRequired;
 
-  bool _validateForm() {
-    if (isPhotoRequired && files.isEmpty) {
-      showWarning(context, 'Yêu cầu chụp ảnh');
+  bool get _validateForm {
+    if (isPhotoRequired && files.value.isEmpty) {
       return false;
     }
     if (isWatermarkRequired && isWatermarking.value == true) {
-      showWarning(context, 'Đang chuẩn bị hình ảnh');
       return false;
     }
     return true;
   }
 
   void _attendance() {
-    if (_validateForm())
-      bloc.add(AttendanceEvent(
-          file: isPhotoRequired ? files.first : null,
-          position: isLocationRequired
-              ? Modular.get<LocationService>().currentLocation
-              : null,
-          feature: widget.entity.feature,
-          general: widget.entity.general));
+    bloc.add(AttendanceEvent(
+        file: isPhotoRequired ? files.value.first : null,
+        position: isLocationRequired
+            ? Modular.get<LocationService>().currentLocation
+            : null,
+        feature: widget.entity.feature,
+        general: widget.entity.general));
   }
 
   void _showSheetHistory(BuildContext context) {
@@ -173,21 +190,35 @@ class _AttendancePageState extends State<AttendancePage> {
                                           ?.copyWith(color: AppColors.black))
                                 ])),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TimeBox(
-                                type: AttendanceType.CheckIn,
-                                time: DateTime.now(),
-                              ),
-                              TimeBox(type: AttendanceType.CheckOut),
-                            ],
+                          BlocListener<AttendanceInfoCubit,
+                              AttendanceInfoState>(
+                            bloc: infoCubit,
+                            listener: (context, state) {
+                              if (state is AttendanceInfoSuccess) {
+                                setState(() {
+                                  _attendanceInfo = state.info;
+                                });
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TimeBox(
+                                  type: AttendanceType.CheckIn,
+                                  time: _attendanceInfo?.dataIn?.deviceTime,
+                                ),
+                                TimeBox(
+                                  type: AttendanceType.CheckOut,
+                                  time: _attendanceInfo?.dataOut?.deviceTime,
+                                ),
+                              ],
+                            ),
                           )
                         ]),
                   ),
                 ),
               ),
-              _actionButton(widget.type, action: _attendance)
+              _actionButton(widget.type, _validateForm ? _attendance : null)
             ],
           ),
         )
@@ -195,7 +226,7 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  Widget _actionButton(AttendanceType type, {VoidCallback? action}) {
+  Widget _actionButton(AttendanceType type, VoidCallback? action) {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       bloc: bloc,
       listener: (context, state) {
@@ -204,10 +235,20 @@ class _AttendancePageState extends State<AttendancePage> {
         }
         if (state is AttendanceFailure) {
           OverlayManager.hide();
-          showFailure(context, state.failure, _attendance);
+          showFailure(context, state.failure, action);
         }
         if (state is AttendanceSuccess) {
           OverlayManager.hide();
+          setState(() {
+            _attendanceInfo = _attendanceInfo?.copyWith(
+              dataIn: widget.type == AttendanceType.CheckIn
+                  ? state.attendanceData
+                  : null,
+              dataOut: widget.type == AttendanceType.CheckOut
+                  ? state.attendanceData
+                  : null,
+            );
+          });
           showSuccess(context);
         }
       },

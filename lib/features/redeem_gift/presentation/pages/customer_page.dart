@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/image_picker_widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -21,6 +22,8 @@ class RedeemGiftCustomerPage extends StatefulWidget {
 class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
     with AutomaticKeepAliveClientMixin {
   final _formKey = GlobalKey<FormState>();
+  final ValueNotifier<List<XFile>> _imageInvoice = ValueNotifier([]);
+  final ValueNotifier<List<XFile>> _imageExchange = ValueNotifier([]);
   final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _invoiceCodeController = TextEditingController();
@@ -85,7 +88,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                       padding: EdgeInsets.symmetric(vertical: 20.h),
                       child: ImagePickerWidget(
                         max: 5,
-                        images: [],
+                        images: _imageInvoice,
                       ),
                     ),
                     Text(
@@ -96,7 +99,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                       padding: EdgeInsets.only(top: 20.h),
                       child: ImagePickerWidget(
                         max: 5,
-                        images: [],
+                        images: _imageExchange,
                       ),
                     ),
                   ],

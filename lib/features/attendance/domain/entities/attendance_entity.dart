@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class AttendanceEntity {
   final int id;
-  final AttendanceData dataIn;
-  final AttendanceData dataOut;
+  final AttendanceData? dataIn;
+  final AttendanceData? dataOut;
 
   AttendanceEntity({
     required this.id,
@@ -14,16 +15,20 @@ class AttendanceEntity {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'dataIn': dataIn.toMap(),
-      'dataOut': dataOut.toMap(),
+      'in': dataIn?.toMap(),
+      'out': dataOut?.toMap(),
     };
   }
 
   factory AttendanceEntity.fromMap(Map<String, dynamic> map) {
     return AttendanceEntity(
       id: map['id'] as int,
-      dataIn: AttendanceData.fromMap(map['dataIn'] as Map<String, dynamic>),
-      dataOut: AttendanceData.fromMap(map['dataOut'] as Map<String, dynamic>),
+      dataIn: map['in'] != null
+          ? AttendanceData.fromMap(map['in'] as Map<String, dynamic>)
+          : null,
+      dataOut: map['out'] != null
+          ? AttendanceData.fromMap(map['out'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -31,14 +36,29 @@ class AttendanceEntity {
 
   factory AttendanceEntity.fromJson(String source) =>
       AttendanceEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'AttendanceEntity(id: $id, in: $dataIn, out: $dataOut)';
+
+  AttendanceEntity copyWith({
+    int? id,
+    AttendanceData? dataIn,
+    AttendanceData? dataOut,
+  }) {
+    return AttendanceEntity(
+      id: id ?? this.id,
+      dataIn: dataIn ?? this.dataIn,
+      dataOut: dataOut ?? this.dataOut,
+    );
+  }
 }
 
 class AttendanceData {
-  final ImageCloud image;
+  final ImageCloud? image;
   final double latitude;
   final double longitude;
-  final String deviceId;
-  final String deviceTime;
+  final String? deviceId;
+  final DateTime deviceTime;
 
   AttendanceData({
     required this.image,
@@ -50,7 +70,7 @@ class AttendanceData {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'image': image.toMap(),
+      'image': image?.toMap(),
       'latitude': latitude,
       'longitude': longitude,
       'deviceId': deviceId,
@@ -60,11 +80,13 @@ class AttendanceData {
 
   factory AttendanceData.fromMap(Map<String, dynamic> map) {
     return AttendanceData(
-      image: ImageCloud.fromMap(map['image'] as Map<String, dynamic>),
-      latitude: map['latitude'] as double,
-      longitude: map['longitude'] as double,
-      deviceId: map['deviceId'] as String,
-      deviceTime: map['deviceTime'] as String,
+      image: map['image'] != null
+          ? ImageCloud.fromMap(map['image'] as Map<String, dynamic>)
+          : null,
+      latitude: double.parse(map['latitude'].toString()),
+      longitude: double.parse(map['longitude'].toString()),
+      deviceId: map['deviceId'] as String?,
+      deviceTime: DateTime.parse(map['deviceTime'] as String).toLocal(),
     );
   }
 
@@ -72,36 +94,34 @@ class AttendanceData {
 
   factory AttendanceData.fromJson(String source) =>
       AttendanceData.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'AttendanceData(image: $image, latitude: $latitude, longitude: $longitude, deviceId: $deviceId, deviceTime: $deviceTime)';
+  }
 }
 
 class ImageCloud {
   final int id;
-  final String expiresAt;
-  final String uploadUrl;
-  final String filename;
+  final List<String> variants;
 
   ImageCloud({
     required this.id,
-    required this.expiresAt,
-    required this.uploadUrl,
-    required this.filename,
+    required this.variants,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'expiresAt': expiresAt,
-      'uploadUrl': uploadUrl,
-      'filename': filename,
+      'variants': variants,
     };
   }
 
   factory ImageCloud.fromMap(Map<String, dynamic> map) {
     return ImageCloud(
       id: map['id'] as int,
-      expiresAt: map['expiresAt'] as String,
-      uploadUrl: map['uploadUrl'] as String,
-      filename: map['filename'] as String,
+      variants:
+          (map['variants'] as List<dynamic>).map((e) => e.toString()).toList(),
     );
   }
 

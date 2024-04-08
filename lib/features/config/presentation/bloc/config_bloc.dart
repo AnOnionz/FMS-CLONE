@@ -21,7 +21,6 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       : super(ConfigInitial()) {
     on<FetchConfig>((event, emit) async {
       emit(ConfigLoading());
-
       OverlayManager.showLoading();
       final execute = await getConfig(WorkPlaceParams(enitty: event.workPlace));
       final config = execute.fold((fail) {
@@ -34,13 +33,13 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       });
 
       if (config != null) {
+        OverlayManager.hide();
         generalBloc.add(GeneralStared(
             project: event.workPlace.project!,
             outlet: event.workPlace.outlet!,
             booth: event.workPlace.booth!,
             config: config));
-        OverlayManager.hide();
-        Modular.to.pushNamed(HomeModule.route);
+        Modular.to.navigate(HomeModule.route);
         emit(ConfigSuccess(config));
       }
     });

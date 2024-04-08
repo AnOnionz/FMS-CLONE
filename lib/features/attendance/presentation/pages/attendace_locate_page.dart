@@ -8,7 +8,6 @@ import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/attendance/attendance_core_module.dart';
-import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/home/domain/entities/feature_entity.dart';
 import 'package:fms/features/home/home_module.dart';
 
@@ -26,6 +25,8 @@ class AttendanceLocatePage extends StatefulWidget {
 
 class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
   final _cubit = Modular.get<LocateCubit>();
+
+  bool canBack = true;
 
   @override
   void initState() {
@@ -47,7 +48,9 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
             onBack: () {
               try {
                 context.popUtil(HomeModule.route);
-              } catch (e) {}
+              } catch (e) {
+                context.popUtil(HomeModule.route);
+              }
             }),
         body: SafeArea(
           child: Padding(
@@ -80,6 +83,9 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           bloc: _cubit,
                           listener: (context, state) {
                             if (state is LocateSuccess) {
+                              setState(() {
+                                canBack = false;
+                              });
                               context.nextReplacementRoute(
                                   AttendanceCoreModule.attendance,
                                   arguments: widget.entity);
@@ -145,6 +151,9 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                           padding: EdgeInsets.only(bottom: 16.h),
                           child: FlatButton(
                               onPressed: () {
+                                setState(() {
+                                  canBack = false;
+                                });
                                 context.nextReplacementRoute(
                                     AttendanceCoreModule.attendance,
                                     arguments: widget.entity);

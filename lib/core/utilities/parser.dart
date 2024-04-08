@@ -2,10 +2,10 @@
 T? parseJson<T>(
     ({
       T Function(Map<String, dynamic>) fromJson,
-      Map<String, dynamic>? json,
+      dynamic json,
     }) model) {
-  if (model.json == null) return null;
-  return model.fromJson(model.json!);
+  if (model.json == null || model.json == '') return null;
+  return model.fromJson(model.json as Map<String, dynamic>);
 }
 
 /// Try parse [List Object] from json list data
@@ -16,7 +16,7 @@ List<T> parseListJson<T>(
       T Function(Map<String, dynamic>) fromJson,
       List<dynamic>? listJson
     }) model) {
-  if (model.listJson == null) {
+  if (model.listJson == null || model.listJson == '') {
     return [];
   }
 

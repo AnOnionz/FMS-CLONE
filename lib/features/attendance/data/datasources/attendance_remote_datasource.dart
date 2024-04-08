@@ -9,13 +9,13 @@ import '../../../images/data/models/image_upload_model.dart';
 import '../../domain/entities/attendance_entity.dart';
 
 abstract class IAttendanceRemoteDataSource {
-  Future<int> postAttendance(
+  Future<AttendanceData?> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,
       required Feature feature,
       required GeneralEntity general});
-  Future<AttendanceEntity?> getAttendance(
+  Future<AttendanceEntity?> getAttendanceInfo(
       {required Feature feature, required GeneralEntity general});
 }
 
@@ -23,7 +23,7 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
     implements IAttendanceRemoteDataSource {
   AttendanceRemoteDataSource(super.dio);
 
-  Future<int> postAttendance(
+  Future<AttendanceData?> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,
@@ -48,11 +48,14 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
         path:
             '/app/projects/${general.project.id}/outlets/${general.outlet.id}/booths/${general.booth.id}/features/${feature.id}/attendance');
 
-    return (_resp as Map)['id'] as int;
+    return parseJson<AttendanceData>((
+      json: (_resp as Map<String, dynamic>).entries.elementAt(1).value,
+      fromJson: AttendanceData.fromMap
+    ));
   }
 
   @override
-  Future<AttendanceEntity?> getAttendance(
+  Future<AttendanceEntity?> getAttendanceInfo(
       {required Feature feature, required GeneralEntity general}) async {
     final _resp = await dio.get(
         path:

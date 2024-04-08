@@ -19,31 +19,31 @@ class AttendanceRepositoryImpl extends Repository
       : _remote = remote;
 
   @override
-  Future<Result<int>> postAttendance(
+  Future<Result<AttendanceData?>> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,
       required Feature feature,
       required GeneralEntity general}) {
     return todo(() async {
-      final id = await _remote.postAttendance(
+      final attendanceData = await _remote.postAttendance(
           file: file,
           time: time,
           position: position,
           feature: feature,
           general: general);
-      return Right(id);
-    }, useInternet: true);
+      return Right(attendanceData);
+    });
   }
 
   @override
-  Future<Result<AttendanceEntity?>> getAttendance(
+  Future<Result<AttendanceEntity?>> getAttendanceInfo(
       {required Feature feature, required GeneralEntity general}) {
     return todo(() async {
       final attendanceEntity =
-          await _remote.getAttendance(feature: feature, general: general);
+          await _remote.getAttendanceInfo(feature: feature, general: general);
 
       return Right(attendanceEntity);
-    }, useInternet: true);
+    });
   }
 }

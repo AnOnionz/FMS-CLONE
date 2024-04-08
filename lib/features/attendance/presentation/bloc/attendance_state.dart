@@ -11,7 +11,11 @@ final class AttendanceInitial extends AttendanceState {}
 
 final class AttendanceLoading extends AttendanceState {}
 
-final class AttendanceSuccess extends AttendanceState {}
+final class AttendanceSuccess extends AttendanceState {
+  final AttendanceData attendanceData;
+
+  AttendanceSuccess(this.attendanceData);
+}
 
 final class AttendanceFailure extends AttendanceState {
   final Failure failure;

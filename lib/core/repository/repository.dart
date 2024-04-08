@@ -14,7 +14,7 @@ abstract class Repository {
   ///  If exception will be return failure,
   ///  on finally will be call if it isn't null
   Future<Result<T>> todo<T>(Function0<Future<Result<T>>> action,
-      {Function? onFinally, bool useInternet = true}) async {
+      {Function? onFinally, bool useInternet = false}) async {
     try {
       if (useInternet && !_connectivityService.hasConnected) {
         throw InternetException('intenet status disconnected', null, null);

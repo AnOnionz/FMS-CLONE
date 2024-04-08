@@ -5,14 +5,15 @@ import '../../../../core/usecase/usecase.dart';
 import '../../data/repositories/attendance_repository_impl.dart';
 import 'attendance_usecase.dart';
 
-class AttendanceUsecase extends UseCase<AttendanceEntity?, AttendanceParams> {
+class GetAttendanceInfoUsecase
+    extends UseCase<AttendanceEntity?, AttendanceParams> {
   final AttendanceRepositoryImpl repository;
 
-  AttendanceUsecase(this.repository);
+  GetAttendanceInfoUsecase(this.repository);
 
   @override
   Future<Result<AttendanceEntity?>> call(params) {
-    return repository.getAttendance(
+    return repository.getAttendanceInfo(
         feature: params.feature, general: params.general);
   }
 }

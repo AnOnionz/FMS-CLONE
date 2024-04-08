@@ -23,7 +23,14 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
           forceMaterialTransparency: true,
           leadingWidth: 42.w,
           leading: GestureDetector(
-            onTap: onBack ?? () => Modular.to.pop(),
+            onTap: onBack ??
+                () {
+                  try {
+                    context.pop();
+                  } catch (e) {
+                    context.pop();
+                  }
+                },
             child: Padding(
               padding: EdgeInsets.only(left: 16.w),
               child: SvgPicture.asset(

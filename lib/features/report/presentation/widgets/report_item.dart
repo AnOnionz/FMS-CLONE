@@ -3,14 +3,23 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/report/domain/entities/report_entity.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/widgets/image_picker_widget.dart';
 
-class ReportItem extends StatelessWidget {
+class ReportItem extends StatefulWidget {
   final ReportEntity entity;
   const ReportItem({super.key, required this.entity});
 
-  bool get _isRequire => entity.min == entity.max;
+  @override
+  State<ReportItem> createState() => _ReportItemState();
+}
+
+class _ReportItemState extends State<ReportItem> {
+  bool get _isRequire => widget.entity.min == widget.entity.max;
+
+  late final ValueNotifier<List<XFile>> _image =
+      ValueNotifier(widget.entity.files);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class ReportItem extends StatelessWidget {
         children: [
           RichText(
             text: TextSpan(
-                text: '${entity.name} ',
+                text: '${widget.entity.name} ',
                 style: context.textTheme.subtitle1
                     ?.copyWith(color: AppColors.black),
                 children: [
@@ -38,15 +47,15 @@ class ReportItem extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h),
             child: ImagePickerWidget(
-              images: entity.files,
-              max: entity.max,
+              images: _image,
+              max: widget.entity.max,
               isCarousel: true,
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 4.h),
             child: Text(
-              entity.description,
+              widget.entity.description,
               style: context.textTheme.caption2,
             ),
           )
@@ -57,8 +66,8 @@ class ReportItem extends StatelessWidget {
 
   String _optinal() {
     return switch (_isRequire) {
-      true => '(bắt buộc chụp ${entity.max} hình)',
-      false => '(chụp từ ${entity.min}-${entity.max} hình)',
+      true => '(bắt buộc chụp ${widget.entity.max} hình)',
+      false => '(chụp từ ${widget.entity.min}-${widget.entity.max} hình)',
     };
   }
 }

@@ -72,3 +72,9 @@ class ServerDownFailure extends Failure {
       {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
 }
+
+class DataNullFailure extends Failure {
+  const DataNullFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
+      : super(message, error, stackTrace);
+}

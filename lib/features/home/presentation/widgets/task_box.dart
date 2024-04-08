@@ -9,7 +9,14 @@ import 'package:fms/core/responsive/utilities/flex_extention.dart';
 class TaskBox extends StatefulWidget {
   final String name;
   final VoidCallback onPressed;
-  const TaskBox({super.key, required this.name, required this.onPressed});
+  double height;
+  final Function(double newValue) onHeightUpdated;
+  TaskBox(
+      {super.key,
+      required this.name,
+      required this.onPressed,
+      required this.height,
+      required this.onHeightUpdated});
 
   @override
   State<TaskBox> createState() => _TaskBoxState();
@@ -17,15 +24,21 @@ class TaskBox extends StatefulWidget {
 
 class _TaskBoxState extends State<TaskBox> {
   GlobalKey _key = GlobalKey();
-  double height = 165.h;
+  double height = 125.h;
 
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       final box = _key.currentContext!.findRenderObject() as RenderBox;
       final Size size = Size(box.size.width, box.size.height);
+
       setState(() {
-        height = size.height + 40.h;
+        if (size.height > widget.height) {
+          widget.onHeightUpdated(size.height);
+        }
+        if (widget.height > height) {
+          height = widget.height;
+        }
       });
     });
     super.initState();
@@ -33,8 +46,8 @@ class _TaskBoxState extends State<TaskBox> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
+    return Container(
+      height: height + 40.h,
       width: (context.screenWidth - 64.w) / 3,
       child: Stack(
         children: [
@@ -42,7 +55,8 @@ class _TaskBoxState extends State<TaskBox> {
             alignment: Alignment.bottomCenter,
             child: GestureDetector(
               onTap: widget.onPressed,
-              child: DecoratedBox(
+              child: Container(
+                height: height,
                 key: _key,
                 decoration: BoxDecoration(
                     color: 'FF0014'.toColor(0.5),
@@ -52,9 +66,8 @@ class _TaskBoxState extends State<TaskBox> {
                         bottomLeft: Radius.circular(5.sqr),
                         bottomRight: Radius.circular(5.sqr))),
                 child: Padding(
-                  padding: EdgeInsets.only(top: 60.h, bottom: 30.h),
+                  padding: EdgeInsets.only(top: 60.h, bottom: 10.h),
                   child: Center(
-                    heightFactor: 1,
                     child: Text(
                       widget.name,
                       textAlign: TextAlign.center,
@@ -67,7 +80,7 @@ class _TaskBoxState extends State<TaskBox> {
             ),
           ),
           Positioned(
-              top: 0, left: 0, child: SvgPicture.asset(AppIcons.cameraTask))
+              top: 0, left: -0.5, child: SvgPicture.asset(AppIcons.cameraTask))
         ],
       ),
     );
