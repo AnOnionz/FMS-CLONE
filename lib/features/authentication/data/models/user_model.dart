@@ -97,7 +97,6 @@ class CustomUri {
   }
 
   Uri toUri() {
-    print(this);
     return Uri(
         fragment: fragment,
         host: host,

@@ -14,7 +14,7 @@ class WatermarkPainter extends CustomPainter {
 
   //this value can smaller.
   double get pictureH =>
-      _size * 4; //there is 2 times _size due to text will around word-spacing.
+      _size * 6; //there is 2 times _size due to text will around word-spacing.
 
   WatermarkPainter(this._text, this._size, {Color? color = AppColors.black})
       : _color = color;

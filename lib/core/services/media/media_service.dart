@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
-import 'package:flutter/rendering.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/camera/camera_module.dart';
@@ -107,22 +111,23 @@ final class MediaService {
     }
   }
 
-  Future<XFile> addWatermark(XFile image, {Color? color}) async {
-    final locationService = Modular.get<LocationService>();
+  Future<XFile> addWatermark(XFile image) async {
+    final _locationService = Modular.get<LocationService>();
     final _networkTime = Modular.get<NetworkTimeService>();
-    final address = await locationService.placeString();
+    final address = await _locationService.placeString();
     final ntpTime = await _networkTime.ntpDateTime();
+
     final time = fWatermark.format(ntpTime);
 
     final imgBytes = await image.readAsBytes();
     final painterDesc =
-        WatermarkPainter('${time}\n${address}', 18.0.sp, color: color);
+        WatermarkPainter('${time}${address}', 16.sp, color: Colors.white);
     final imageDesc = await painterDesc.toImageData();
     final decoded = await decodeImageFromList(imgBytes);
     final newImage = img.compositeImage(img.decodeImage(imgBytes)!,
         img.decodeImage(imageDesc!.buffer.asUint8List())!,
-        dstX: 8,
-        dstY: decoded.height - 56,
+        dstX: 12,
+        dstY: decoded.height - (19.2.sp * 6).toInt(),
         dstW: painterDesc.pictureW.toInt(),
         dstH: painterDesc.pictureH.toInt());
     final file = File(image.path);

@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -42,6 +43,8 @@ class _AttendancePageState extends State<AttendancePage> {
   ValueNotifier<List<XFile>> files = ValueNotifier([]);
 
   AttendanceEntity? _attendanceInfo;
+
+  final GoogleMapService _mapService = GoogleMapService();
 
   @override
   void initState() {
@@ -112,7 +115,6 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final GoogleMapService _mapService = GoogleMapService();
     _mapService.padding = paddingBottom(context);
 
     return Scaffold(
@@ -122,106 +124,141 @@ class _AttendancePageState extends State<AttendancePage> {
           action: HistoryButton(onPressed: () => _showSheetHistory(context))),
       body: Stack(children: [
         RepaintBoundary(child: _mapService.mapWidget),
-        Padding(
-          padding: EdgeInsets.only(bottom: 24.h, left: 16.w, right: 16.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if (isPhotoRequired)
-                Container(
-                  width: context.screenWidth,
-                  padding:
-                      EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10.sqr)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Chụp ảnh checkin',
-                        style: context.textTheme.subtitle1,
-                      ),
-                      SizedBox(height: 14.h),
-                      Form(
-                        child: ImagePickerWidget(
-                          max: 1,
-                          images: files,
-                          isWatermarkRequired: isWatermarkRequired,
-                          isWatermarking: isWatermarking,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.h),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.sqr)),
-                  child: Padding(
-                    padding: EdgeInsets.all(24.h),
+        ListenableBuilder(
+          listenable: _mapService,
+          builder: (context, child) {
+            return _mapService.isMaploading
+                ? SizedBox.shrink()
+                : Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 24.h, left: 16.w, right: 16.w),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                              text: TextSpan(
-                                  text: 'Outlet: ',
-                                  style: context.textTheme.subtitle1
-                                      ?.copyWith(color: AppColors.nobel),
-                                  children: [
-                                TextSpan(
-                                    text: widget.entity.general.outlet.name,
-                                    style: context.textTheme.subtitle1
-                                        ?.copyWith(color: AppColors.black))
-                              ])),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12.h),
-                            child: RichText(
-                                text: TextSpan(
-                                    text: 'Địa chỉ: ',
-                                    style: context.textTheme.subtitle1
-                                        ?.copyWith(color: AppColors.nobel),
-                                    children: [
-                                  TextSpan(
-                                      text: widget.entity.general.outlet.code,
-                                      style: context.textTheme.subtitle1
-                                          ?.copyWith(color: AppColors.black))
-                                ])),
-                          ),
-                          BlocListener<AttendanceInfoCubit,
-                              AttendanceInfoState>(
-                            bloc: infoCubit,
-                            listener: (context, state) {
-                              if (state is AttendanceInfoSuccess) {
-                                setState(() {
-                                  _attendanceInfo = state.info;
-                                });
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TimeBox(
-                                  type: AttendanceType.CheckIn,
-                                  time: _attendanceInfo?.dataIn?.deviceTime,
-                                ),
-                                TimeBox(
-                                  type: AttendanceType.CheckOut,
-                                  time: _attendanceInfo?.dataOut?.deviceTime,
-                                ),
-                              ],
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (isPhotoRequired)
+                          ZoomIn(
+                            delay: 400.milliseconds,
+                            duration: 300.milliseconds,
+                            child: Container(
+                              width: context.screenWidth,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16.h, horizontal: 24.w),
+                              decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(10.sqr)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Chụp ảnh checkin',
+                                    style: context.textTheme.subtitle1,
+                                  ),
+                                  SizedBox(height: 14.h),
+                                  Form(
+                                    child: ImagePickerWidget(
+                                      max: 1,
+                                      images: files,
+                                      isWatermarkRequired: isWatermarkRequired,
+                                      isWatermarking: isWatermarking,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
-                        ]),
-                  ),
-                ),
-              ),
-              _actionButton(widget.type, _validateForm ? _attendance : null)
-            ],
-          ),
-        )
+                          ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          child: ZoomIn(
+                            delay: 200.milliseconds,
+                            duration: 300.milliseconds,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.sqr)),
+                              child: Padding(
+                                padding: EdgeInsets.all(24.h),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                          text: TextSpan(
+                                              text: 'Outlet: ',
+                                              style: context.textTheme.subtitle1
+                                                  ?.copyWith(
+                                                      color: AppColors.nobel),
+                                              children: [
+                                            TextSpan(
+                                                text: widget
+                                                    .entity.general.outlet.name,
+                                                style: context
+                                                    .textTheme.subtitle1
+                                                    ?.copyWith(
+                                                        color: AppColors.black))
+                                          ])),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 12.h),
+                                        child: RichText(
+                                            text: TextSpan(
+                                                text: 'Địa chỉ: ',
+                                                style: context
+                                                    .textTheme.subtitle1
+                                                    ?.copyWith(
+                                                        color: AppColors.nobel),
+                                                children: [
+                                              TextSpan(
+                                                  text: widget.entity.general
+                                                      .outlet.code,
+                                                  style: context
+                                                      .textTheme.subtitle1
+                                                      ?.copyWith(
+                                                          color:
+                                                              AppColors.black))
+                                            ])),
+                                      ),
+                                      BlocListener<AttendanceInfoCubit,
+                                          AttendanceInfoState>(
+                                        bloc: infoCubit,
+                                        listener: (context, state) {
+                                          if (state is AttendanceInfoSuccess) {
+                                            setState(() {
+                                              _attendanceInfo = state.info;
+                                            });
+                                          }
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TimeBox(
+                                              type: AttendanceType.CheckIn,
+                                              time: _attendanceInfo
+                                                  ?.dataIn?.deviceTime,
+                                            ),
+                                            TimeBox(
+                                              type: AttendanceType.CheckOut,
+                                              time: _attendanceInfo
+                                                  ?.dataOut?.deviceTime,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ),
+                        ZoomIn(
+                          duration: 300.milliseconds,
+                          child: _actionButton(
+                              widget.type, _validateForm ? _attendance : null),
+                        )
+                      ],
+                    ),
+                  );
+          },
+        ),
       ]),
     );
   }

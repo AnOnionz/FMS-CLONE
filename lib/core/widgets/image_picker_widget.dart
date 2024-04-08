@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+
 import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,32 +43,25 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     if (widget.images.value.length < widget.max) {
       final file = await _service.pickImage(720, 1280, 90);
       if (file != null) {
-        //final bytes = await file.readAsBytes();
-        // final length = await file.length();
-        // final time = await file.lastModified();
-        // final position =
-        //     await Modular.get<LocationService>().getCurrentPosition();
         setState(() {
           _images.value.add(file);
         });
 
         if (widget.isWatermarkRequired) {
           isWatermarking.value = true;
-          final fileWithWatermark = await _service.addWatermark(file);
-
-          setState(() {
-            _images.value.last = fileWithWatermark;
-          });
-          isWatermarking.value = false;
+          try {
+            final fileWithWatermark = await _service.addWatermark(file);
+            setState(() {
+              _images.value.last = fileWithWatermark;
+            });
+            isWatermarking.value = false;
+          } catch (e) {
+            isWatermarking.value = false;
+            setState(() {
+              _images.value.removeLast();
+            });
+          }
         }
-        // setState(() {
-        //   _images.value.add(FileWithMetaData(
-        //       rawPath: bytes.toList(),
-        //       time: time,
-        //       length: length,
-        //       lat: position?.latitude,
-        //       lng: position?.longitude));
-        // });
       }
     }
   }
@@ -89,7 +83,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   children: [
                     Container(
                         width: image.width,
-                        height: image.width,
+                        height: image.height,
                         child: FittedBox(fit: BoxFit.fill, child: image)),
                     Align(
                       alignment: Alignment.topRight,

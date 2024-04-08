@@ -10,5 +10,6 @@ abstract final class Keys {
   static const String CURRENT_USER_ID = 'current_user_id';
   static const String REFRESH_TOKEN = 'refresh_token';
   static const String LOCATION = 'location';
+  static const String LOCATION_STRING = 'location_string';
   static const String USE_CUSTOM_CAMERA = 'use_custom_camera';
 }

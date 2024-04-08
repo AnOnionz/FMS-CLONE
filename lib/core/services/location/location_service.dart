@@ -13,7 +13,8 @@ import './../../../core/database/database.dart';
 import './../../../core/errors/location_error.dart';
 import './../../../core/mixins/common.dart';
 
-/// singleton service
+int kDistanceFilter = 15;
+
 final class LocationService extends ChangeNotifier {
   LocationService() {
     _currentLocation = getPositionLocal();
@@ -42,11 +43,10 @@ final class LocationService extends ChangeNotifier {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return AndroidSettings(
           accuracy: LocationAccuracy.high,
-          distanceFilter: 100,
+          distanceFilter: kDistanceFilter,
           forceLocationManager: true,
-          intervalDuration: const Duration(seconds: 10),
-          //(Optional) Set foreground notification config to keep the app alive
-          //when going to the background
+          intervalDuration: 20.seconds,
+          timeLimit: 15.seconds,
           foregroundNotificationConfig: const ForegroundNotificationConfig(
             notificationText:
                 "App will continue to receive your location even when you aren't using it",
@@ -57,14 +57,14 @@ final class LocationService extends ChangeNotifier {
         defaultTargetPlatform == TargetPlatform.macOS) {
       return AppleSettings(
         accuracy: LocationAccuracy.high,
-        activityType: ActivityType.fitness,
-        distanceFilter: 100,
+        distanceFilter: kDistanceFilter,
         pauseLocationUpdatesAutomatically: true,
+        timeLimit: 15.seconds,
       );
     } else {
       return LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 100,
+        distanceFilter: kDistanceFilter,
       );
     }
   } // Continuously emit location updates
@@ -159,6 +159,10 @@ final class LocationService extends ChangeNotifier {
           .timeout(10.seconds);
 
       positionUpdate(userLocation);
+      placemark(userLocation).then((value) {
+        database.setValue(Keys.LOCATION_STRING, value);
+      });
+
       return _currentLocation;
     } catch (e, s) {
       print(e.runtimeType);
@@ -217,21 +221,43 @@ final class LocationService extends ChangeNotifier {
 
   Future<String> placeString() async {
     final _localPosition = getPositionLocal();
+
     if (_localPosition == null) {
       return 'Vị trí không xác định';
-    } else {
-      try {
-        final placemarks = await placemarkFromCoordinates(
-            _localPosition.latitude, _localPosition.longitude);
-        final Placemark place = placemarks.first;
-        final locationStr =
-            '${place.street}, ${place.subLocality} ${place.subAdministrativeArea}, ${place.administrativeArea}';
-
-        return locationStr;
-      } catch (e) {
-        return 'Vị trí không xác định';
-      }
     }
+    try {
+      final place = await placemark(_localPosition);
+      return place;
+    } catch (e) {
+      return database.getValue(Keys.LOCATION_STRING) ??
+          'Vị trí không xác định';
+    }
+  }
+
+  Future<String> placemark(Position position) async {
+    final placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    if (placemarks.isEmpty) {
+      return 'Vị trí không xác định';
+    }
+    final Placemark placemark = placemarks.first;
+
+    final street =
+        placemark.street?.insert(placemark.street!.isEmpty ? '' : '\n', 0);
+
+    final subLocality = placemark.subLocality
+        ?.insert(placemark.subLocality!.isEmpty ? '' : '\n', 0);
+
+    final subAdministrativeArea = placemark.subAdministrativeArea
+        ?.insert(placemark.subAdministrativeArea!.isEmpty ? '' : '\n', 0);
+
+    final administrativeArea = placemark.administrativeArea
+        ?.insert(placemark.administrativeArea!.isEmpty ? '' : '\n', 0);
+
+    final locationStr =
+        '$street$subLocality$subAdministrativeArea$administrativeArea';
+
+    return locationStr;
   }
 
   Future<bool> isValidDistance(

@@ -13,7 +13,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/mixins/common.dart';
 import '../../../../core/services/connectivity/connectivity_service.dart';
-import '../../../../core/services/location/location_service.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 
@@ -24,13 +23,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationBloc _authenticationBloc;
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
-  final LocationService _locationService;
 
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
 
   AppBloc(this._authenticationBloc, this._connectivityService,
-      this._locationService, this._networkTimeService)
+      this._networkTimeService)
       : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -99,17 +97,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   /// Starts the internet connection service.
 
-  Future<void> _startLocationService() async {
-    return _locationService.enablePositionSubscription();
-  }
-
   /// Callback function when an [AppStarted] event is emitted.
   Future<void> _onAppStarted(AppStarted event, Emitter<AppState> emit) async {
     emit(const AppLoading());
-
     _startInternetConnectionService();
     _startNetworkTimeService();
-    _startLocationService();
 
     _connectivityService.onConnectionChange.listen((status) async {
       Fx.log('Internet status: $status');

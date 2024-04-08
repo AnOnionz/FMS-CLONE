@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '/core/services/map/map_service.dart';
 
-final class GoogleMapService implements MapService {
+final class GoogleMapService extends ChangeNotifier implements MapService {
   GoogleMapController? _controller;
   static const _initPosition = LatLng(15.6283721, 106.6830262);
   EdgeInsets _padding = EdgeInsets.zero;
@@ -27,6 +27,8 @@ final class GoogleMapService implements MapService {
     return LatLng(_currentPosition.latitude, _currentPosition.longitude);
   }
 
+  bool isMaploading = true;
+
   @override
   Widget get mapWidget => GoogleMap(
         initialCameraPosition: _initial,
@@ -35,6 +37,8 @@ final class GoogleMapService implements MapService {
         padding: _padding,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
+          isMaploading = false;
+          notifyListeners();
           _controller!.animateCamera(CameraUpdate.newCameraPosition(_initial));
         },
       );
