@@ -8,10 +8,10 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
-import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -36,20 +36,16 @@ class AttendancePage extends StatefulWidget {
 class _AttendancePageState extends State<AttendancePage> {
   final bloc = Modular.get<AttendanceBloc>();
 
-  final infoCubit = Modular.get<AttendanceInfoCubit>();
-
-  ValueNotifier<bool> isWatermarking = ValueNotifier(false);
+  final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
   ValueNotifier<List<XFile>> files = ValueNotifier([]);
 
-  AttendanceEntity? _attendanceInfo;
+  late AttendanceEntity? _attendanceInfo = widget.entity.general.attendance;
 
   final GoogleMapService _mapService = GoogleMapService();
 
   @override
   void initState() {
-    infoCubit.getInfo(
-        feature: widget.entity.feature, general: widget.entity.general);
     files.addListener(() {
       setState(() {});
     });
@@ -128,7 +124,7 @@ class _AttendancePageState extends State<AttendancePage> {
           listenable: _mapService,
           builder: (context, child) {
             return _mapService.isMaploading
-                ? SizedBox.shrink()
+                ? Center(child: AppIndicator())
                 : Padding(
                     padding:
                         EdgeInsets.only(bottom: 24.h, left: 16.w, right: 16.w),
@@ -217,32 +213,21 @@ class _AttendancePageState extends State<AttendancePage> {
                                                               AppColors.black))
                                             ])),
                                       ),
-                                      BlocListener<AttendanceInfoCubit,
-                                          AttendanceInfoState>(
-                                        bloc: infoCubit,
-                                        listener: (context, state) {
-                                          if (state is AttendanceInfoSuccess) {
-                                            setState(() {
-                                              _attendanceInfo = state.info;
-                                            });
-                                          }
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TimeBox(
-                                              type: AttendanceType.CheckIn,
-                                              time: _attendanceInfo
-                                                  ?.dataIn?.deviceTime,
-                                            ),
-                                            TimeBox(
-                                              type: AttendanceType.CheckOut,
-                                              time: _attendanceInfo
-                                                  ?.dataOut?.deviceTime,
-                                            ),
-                                          ],
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TimeBox(
+                                            type: AttendanceType.CheckIn,
+                                            time: _attendanceInfo
+                                                ?.dataIn?.deviceTime,
+                                          ),
+                                          TimeBox(
+                                            type: AttendanceType.CheckOut,
+                                            time: _attendanceInfo
+                                                ?.dataOut?.deviceTime,
+                                          ),
+                                        ],
                                       )
                                     ]),
                               ),
@@ -267,26 +252,21 @@ class _AttendancePageState extends State<AttendancePage> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       bloc: bloc,
       listener: (context, state) {
-        if (state is AttendanceLoading) {
-          OverlayManager.showLoading();
-        }
-        if (state is AttendanceFailure) {
-          OverlayManager.hide();
-          showFailure(context, state.failure, action);
-        }
-        if (state is AttendanceSuccess) {
-          OverlayManager.hide();
-          setState(() {
-            _attendanceInfo = _attendanceInfo?.copyWith(
-              dataIn: widget.type == AttendanceType.CheckIn
-                  ? state.attendanceData
-                  : null,
-              dataOut: widget.type == AttendanceType.CheckOut
-                  ? state.attendanceData
-                  : null,
-            );
-          });
-          showSuccess(context);
+        if (mounted) {
+          if (state is AttendanceLoading) {
+            OverlayManager.showLoading();
+          }
+          if (state is AttendanceFailure) {
+            OverlayManager.hide();
+            showFailure(context, state.failure, action);
+          }
+          if (state is AttendanceSuccess) {
+            OverlayManager.hide();
+            setState(() {
+              _attendanceInfo = state.attendanceData;
+            });
+            showSuccess(context);
+          }
         }
       },
       builder: (context, state) {

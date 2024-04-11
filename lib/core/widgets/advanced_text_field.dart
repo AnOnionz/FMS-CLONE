@@ -6,9 +6,13 @@ import '../constant/colors.dart';
 
 class AdvancedTextField extends StatefulWidget {
   final TextEditingController controller;
+  final TextInputAction? textInputAction;
   final String unit;
   const AdvancedTextField(
-      {super.key, required this.controller, required this.unit});
+      {super.key,
+      required this.controller,
+      required this.unit,
+      this.textInputAction = TextInputAction.next});
 
   @override
   State<AdvancedTextField> createState() => _AdvancedTextFieldState();
@@ -49,6 +53,7 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
       focusNode: _focusNode,
       keyboardType: TextInputType.numberWithOptions(),
       cursorWidth: 0.54,
+      textInputAction: widget.textInputAction,
       contextMenuBuilder: (context, _) => SizedBox(),
       style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
       decoration: InputDecoration(

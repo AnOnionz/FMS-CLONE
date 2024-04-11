@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/item_container.dart';
@@ -8,10 +10,22 @@ import 'package:fms/core/widgets/item_container.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/images.dart';
 import '../../../../core/widgets/advanced_text_field.dart';
+import '../../../config/domain/entities/config_entity.dart';
 
-class CrawlItem extends StatelessWidget {
-  CrawlItem({super.key});
+class CrawlItem extends StatefulWidget {
+  final FeatureQuantity entity;
+  final bool isLast;
+  CrawlItem({
+    super.key,
+    required this.entity,
+    this.isLast = false,
+  });
 
+  @override
+  State<CrawlItem> createState() => _CrawlItemState();
+}
+
+class _CrawlItemState extends State<CrawlItem> {
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -45,7 +59,9 @@ class CrawlItem extends StatelessWidget {
           ),
           trailing: AdvancedTextField(
             controller: _controller,
-            unit: 'vnđ',
+            textInputAction:
+                widget.isLast ? TextInputAction.done : TextInputAction.next,
+            unit: widget.entity.productPackaging?.unitName ?? 'vnđ',
           )),
     );
   }

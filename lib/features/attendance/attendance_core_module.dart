@@ -6,15 +6,16 @@ import 'package:fms/features/attendance/domain/usecases/get_attendance_usecase.d
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_flow_cubit.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
+import 'package:fms/features/general/general_module.dart';
 import '../../routes/core_module.dart';
-import 'presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'presentation/bloc/locate_cubit.dart';
 
 class AttendanceCoreModule extends Module {
   static const String locate = 'locate';
   static const String attendance = 'attendance';
   @override
-  List<Module> get imports => [CoreModule(), AuthenticationModule()];
+  List<Module> get imports =>
+      [CoreModule(), AuthenticationModule(), GeneralModule()];
 
   @override
   void binds(Injector i) {
@@ -25,6 +26,5 @@ class AttendanceCoreModule extends Module {
     i.addSingleton(GetAttendanceInfoUsecase.new);
     i.add(AttendanceBloc.new, config: blocConfig<AttendanceBloc>());
     i.add(AttendanceFlowCubit.new);
-    i.add(AttendanceInfoCubit.new);
   }
 }

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/crawl/presentation/widgets/crawl_item.dart';
+import 'package:fms/features/home/domain/entities/feature_entity.dart';
 
 import '../../../../core/widgets/app_bar.dart';
 
 class CrawlPage extends StatelessWidget {
-  const CrawlPage({super.key});
+  final FeatureEntity entity;
+  const CrawlPage({super.key, required this.entity});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(
-          title: 'Giá bán sản phẩm', action: SearchButton(onPressed: () {})),
+          title: entity.feature.name, action: SearchButton(onPressed: () {})),
       body: GestureDetector(
         onTap: () {
           final FocusScopeNode currentFocus = FocusScope.of(context);
@@ -34,8 +37,12 @@ class CrawlPage extends StatelessWidget {
                     SliverPadding(
                         padding: EdgeInsets.only(bottom: 5.h),
                         sliver: SliverList.builder(
-                          itemCount: 5,
-                          itemBuilder: (context, index) => CrawlItem(),
+                          itemCount: entity.feature.featureQuantities!.length,
+                          itemBuilder: (context, index) => CrawlItem(
+                            isLast: index ==
+                                entity.feature.featureQuantities!.length - 1,
+                            entity: entity.feature.featureQuantities![index],
+                          ),
                         ))
                   ],
                 ),

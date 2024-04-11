@@ -1,22 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
-import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/report/presentation/widgets/report_item.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
-import '../../domain/entities/report_entity.dart';
+import '../../../home/domain/entities/feature_entity.dart';
 
-class ReportPage extends StatelessWidget {
-  final List<ReportEntity> reportList;
-  const ReportPage({super.key, required this.reportList});
+class ReportPage extends StatefulWidget {
+  final FeatureEntity entity;
+  ReportPage({super.key, required this.entity});
+
+  @override
+  State<ReportPage> createState() => _ReportPageState();
+}
+
+class _ReportPageState extends State<ReportPage> {
+  late final Map<int, ValueNotifier<List<XFile>>> images;
+  final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    images = widget.entity.feature.featurePhotos!
+        .map((e) => ValueNotifier(<XFile>[])
+          ..addListener(() {
+            setState(() {});
+          }))
+        .toList()
+        .asMap();
+  }
+
+  bool get _validateForm {
+    if (images.entries.any((entry) => _validate(entry))) {
+      return false;
+    }
+    if (isWatermarking.value == true) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _validate(MapEntry<int, ValueNotifier<List<XFile>>> entry) {
+    final photoItem = widget.entity.feature.featurePhotos![entry.key];
+
+    if (entry.value.value.length < photoItem.minimum ||
+        entry.value.value.length > photoItem.maximum) {
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Chụp hình report'),
+      appBar: DefaultAppBar(title: widget.entity.feature.name),
       body: Padding(
         padding: EdgeInsets.only(top: 26.h),
         child: Column(
@@ -29,10 +69,19 @@ class ReportPage extends StatelessWidget {
                   SliverPadding(
                       padding: EdgeInsets.only(bottom: 5.h),
                       sliver: SliverList.builder(
-                        itemCount: reportList.length,
-                        itemBuilder: (context, index) => ReportItem(
-                          entity: reportList[index],
-                        ),
+                        itemCount: widget.entity.feature.featurePhotos!.length,
+                        itemBuilder: (context, index) {
+                          final photoItem =
+                              widget.entity.feature.featurePhotos![index];
+                          return ReportItem(
+                            entity: photoItem,
+                            files: images[index]!,
+                            isWatermark: photoItem.isWatermarkRequired,
+                            isWatermarking: photoItem.isWatermarkRequired
+                                ? isWatermarking
+                                : null,
+                          );
+                        },
                       ))
                 ],
               ),
@@ -46,16 +95,7 @@ class ReportPage extends StatelessWidget {
               ]),
               padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
               child: FlatButton(
-                onPressed: () {
-                  reportList.any((report) {
-                    if (!report.validate()) {
-                      OverlayManager.showSnackbar(
-                          snackbar: SnackBar(content: Text(report.name)));
-                      return true;
-                    }
-                    return false;
-                  });
-                },
+                onPressed: _validateForm ? () {} : null,
                 name: 'Lưu',
                 color: AppColors.orange,
                 disableColor: AppColors.potPourri,

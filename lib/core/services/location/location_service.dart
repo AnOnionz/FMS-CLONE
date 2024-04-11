@@ -82,7 +82,9 @@ final class LocationService extends ChangeNotifier {
     serviceEnabled = await _geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
-      // show dialog
+      OverlayManager.showServiceDialog(
+          message: 'vị trí của thiết bị chưa được bật',
+          solution: () => openLocationSettings());
       subscription?.resume();
       return false;
     }

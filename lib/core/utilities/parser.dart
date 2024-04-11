@@ -4,7 +4,7 @@ T? parseJson<T>(
       T Function(Map<String, dynamic>) fromJson,
       dynamic json,
     }) model) {
-  if (model.json == null || model.json == '') return null;
+  if (model.json == null || model.json == '' || model.json == {}) return null;
   return model.fromJson(model.json as Map<String, dynamic>);
 }
 

@@ -46,10 +46,12 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
         appBar: DefaultAppBar(
             title: 'Chấm công',
             onBack: () {
-              try {
-                context.popUtil(HomeModule.route);
-              } catch (e) {
-                context.popUtil(HomeModule.route);
+              if (mounted) {
+                try {
+                  context.popUtil(HomeModule.route);
+                } catch (e) {
+                  context.popUtil(HomeModule.route);
+                }
               }
             }),
         body: SafeArea(

@@ -8,15 +8,13 @@ sealed class GeneralEvent extends Equatable {
 }
 
 class GeneralStared extends GeneralEvent {
-  final ProjectEntity project;
-  final OutletEntity outlet;
+  final GeneralEntity general;
 
-  final BoothEntity booth;
-  final ConfigEntity config;
+  GeneralStared({required this.general});
+}
 
-  GeneralStared(
-      {required this.project,
-      required this.outlet,
-      required this.booth,
-      required this.config});
+class GeneralUpdate extends GeneralEvent {
+  final AttendanceEntity? attendance;
+
+  GeneralUpdate({required this.attendance});
 }

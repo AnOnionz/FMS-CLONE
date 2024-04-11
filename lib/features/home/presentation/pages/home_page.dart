@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/mixins/common.dart';
+
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
@@ -29,8 +29,9 @@ class HomePage extends StatelessWidget {
       appBar: PreferredSize(
           preferredSize: Size(context.screenWidth, 35.h),
           child: Padding(
-            padding: Fx.pH16,
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: AppBar(
+              backgroundColor: Colors.amber,
               leading: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -51,49 +52,51 @@ class HomePage extends StatelessWidget {
               ],
             ),
           )),
-      body: Padding(
-        padding: EdgeInsets.only(top: 30.h),
-        child: SingleChildScrollView(
-          physics: kPhysics,
-          child: BlocBuilder<GeneralBloc, GeneralState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state is GeneralSuccess) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _title(context, 'Thông tin chung'),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 29.h, horizontal: 16.w),
-                        child: CommonInfo()),
-                    _title(context, 'Chức năng hỗ trợ'),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 29.h, horizontal: 16.w),
-                        child: CommonFeature(
-                          general: state.general,
-                        )),
-                    _title(context, 'Danh sách công việc'),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 29.h, horizontal: 16.w),
-                        child: Tasks(
-                          general: state.general,
-                        )),
-                  ],
-                );
-              }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppIndicator(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(top: 15.h),
+          child: SingleChildScrollView(
+            physics: kPhysics,
+            child: BlocBuilder<GeneralBloc, GeneralState>(
+              bloc: bloc,
+              builder: (context, state) {
+                if (state is GeneralSuccess) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: 15.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _title(context, 'Thông tin chung'),
+                        Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 29.h, horizontal: 16.w),
+                            child: CommonInfo()),
+                        _title(context, 'Chức năng hỗ trợ'),
+                        Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 29.h, horizontal: 16.w),
+                            child: CommonFeature(
+                              general: state.general,
+                            )),
+                        _title(context, 'Danh sách công việc'),
+                        Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 29.h, horizontal: 16.w),
+                            child: Tasks(
+                              general: state.general,
+                            )),
+                      ],
+                    ),
+                  );
+                }
+                return Center(
+                  child: AppIndicator(
                     height: 30.h,
                     width: 30.h,
-                  )
-                ],
-              );
-            },
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

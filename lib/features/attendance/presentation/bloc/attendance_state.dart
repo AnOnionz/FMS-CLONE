@@ -12,7 +12,7 @@ final class AttendanceInitial extends AttendanceState {}
 final class AttendanceLoading extends AttendanceState {}
 
 final class AttendanceSuccess extends AttendanceState {
-  final AttendanceData attendanceData;
+  final AttendanceEntity? attendanceData;
 
   AttendanceSuccess(this.attendanceData);
 }

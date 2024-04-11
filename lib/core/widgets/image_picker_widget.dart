@@ -1,4 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -36,8 +37,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final MediaService _service = MediaService();
   late final _images = widget.images;
 
-  late ValueNotifier<bool> isWatermarking =
-      widget.isWatermarking ?? ValueNotifier(false);
+  late ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
   Future<void> _takeImage() async {
     if (widget.images.value.length < widget.max) {
@@ -49,19 +49,23 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
         if (widget.isWatermarkRequired) {
           isWatermarking.value = true;
+          widget.isWatermarking?.value = true;
           try {
             final fileWithWatermark = await _service.addWatermark(file);
             setState(() {
               _images.value.last = fileWithWatermark;
             });
             isWatermarking.value = false;
+            widget.isWatermarking?.value = false;
           } catch (e) {
             isWatermarking.value = false;
+            widget.isWatermarking?.value = false;
             setState(() {
               _images.value.removeLast();
             });
           }
         }
+        widget.images.notifyListeners();
       }
     }
   }
@@ -81,10 +85,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               children: <Widget>[
                 Stack(
                   children: [
-                    Container(
-                        width: image.width,
-                        height: image.height,
-                        child: FittedBox(fit: BoxFit.fill, child: image)),
+                    Align(
+                      child: Container(
+                          width: image.width,
+                          height: image.height,
+                          child: FittedBox(fit: BoxFit.fill, child: image)),
+                    ),
                     Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
@@ -210,7 +216,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               loop: false,
               itemCount: _images.value.length,
               itemHeight: 100.h,
-              itemWidth: 100.w,
+              itemWidth: 100.h,
+              containerWidth: 100.h,
+              containerHeight: 100.h,
               layout: SwiperLayout.STACK,
               axisDirection: AxisDirection.right,
             ),
@@ -240,7 +248,9 @@ class ImageDetail extends StatelessWidget {
         listenable: isWatermarking,
         builder: (context, child) {
           if (isLast && isWatermarking.value == true) {
-            return AppIndicator(height: 30.h, width: 30.h);
+            return Center(
+              child: AppIndicator(),
+            );
           }
           return FutureBuilder(
             future: image.readAsBytes(),
@@ -248,70 +258,22 @@ class ImageDetail extends StatelessWidget {
               if (snapshot.hasData) {
                 final imagePreview = Image.memory(
                   snapshot.data!,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                 );
                 return GestureDetector(
                   onTap: () => onPreview(Image.memory(
                     snapshot.data!,
                     fit: BoxFit.contain,
                   )),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.sqr),
-                    child: Container(
-                      // decoration: BoxDecoration(
-                      //     color: AppColors.white,
-                      //     borderRadius: BorderRadius.circular(12.sqr)),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 100.h,
-                            width: 100.h,
-                            child: imagePreview,
-                          ),
-                          // SizedBox(
-                          //   height: 30.h,
-                          //   width: 100.h,
-                          //   child: Padding(
-                          //     padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.w),
-                          //     child: Column(
-                          //       crossAxisAlignment: CrossAxisAlignment.start,
-                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //       children: [
-                          //         Text(
-                          //           'GPS: ${image.lat} - ${image.lng}',
-                          //           style: DefaultTextStyle.of(context).style,
-                          //         ),
-                          //         Row(
-                          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               image.datetime,
-                          //               style: DefaultTextStyle.of(context).style.copyWith(
-                          //                   color: 'ADADAD'.toColor(),
-                          //                   fontWeight: FontWeight.w400),
-                          //             ),
-                          //             Text(
-                          //               image.lengthString,
-                          //               style: DefaultTextStyle.of(context)
-                          //                   .style
-                          //                   .copyWith(fontWeight: FontWeight.w400),
-                          //             )
-                          //           ],
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
+                  child: Center(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.sqr),
+                        child: SizedBox(width: 100.h, child: imagePreview)),
                   ),
                 );
               }
-              return SizedBox(
-                height: 100.h,
-                width: 100.h,
-                child: AppIndicator(height: 50.h, width: 50.h),
+              return Center(
+                child: AppIndicator(),
               );
             },
           );

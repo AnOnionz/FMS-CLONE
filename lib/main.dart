@@ -9,6 +9,7 @@ import 'features/app/presentation/pages/app.dart';
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
+
   runApp(ModularApp(
       module: AppModule(),
       child: FlexibleBuilder(designSize: Size(430, 934), child: const App())));

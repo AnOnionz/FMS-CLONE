@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -25,22 +27,21 @@ class FeatureBox extends StatelessWidget {
                   blurRadius: 20,
                   color: '#888888'.toColor(0.1))
             ]),
-        child: Padding(
-          padding:
-              EdgeInsets.only(top: 12.h, bottom: 16.h, left: 16.w, right: 16.w),
-          child: Column(
-            children: [
-              SvgPicture.asset(icon),
-              SizedBox(
-                height: 11.h,
-              ),
-              Text(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 13.h),
+              child: SvgPicture.asset(icon),
+            ),
+            Expanded(
+              child: Text(
                 name,
+                textAlign: TextAlign.center,
                 style: context.textTheme.caption3
                     ?.copyWith(color: AppColors.nobel),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

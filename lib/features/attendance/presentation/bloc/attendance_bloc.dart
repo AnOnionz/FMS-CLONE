@@ -7,18 +7,23 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/attendance_usecase.dart';
 import 'package:fms/features/config/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
+import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/services/network_time/network_time_service.dart';
+import '../../domain/usecases/get_attendance_usecase.dart';
 
 part 'attendance_event.dart';
 part 'attendance_state.dart';
 
 class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final AttendanceUsecase _attendance;
+  final GetAttendanceInfoUsecase _getAttendanceInfo;
+  final GeneralBloc _generalBloc;
 
-  AttendanceBloc(this._attendance) : super(AttendanceInitial()) {
+  AttendanceBloc(this._attendance, this._generalBloc, this._getAttendanceInfo)
+      : super(AttendanceInitial()) {
     on<AttendanceEvent>(_onAttedanceUpload, transformer: droppable());
   }
 
@@ -27,17 +32,27 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
     final time = await timeService.ntpDateTime();
     final execute = await _attendance(AttendanceParams(
-        feature: event.feature,
         file: event.file,
         position: event.position,
         time: time,
+        feature: event.feature,
         general: event.general));
-    execute.fold((failure) => emit(AttendanceFailure(failure)), (data) {
+    final attendance =
+        execute.fold((failure) => emit(AttendanceFailure(failure)), (data) {
       if (data == null) {
         emit(AttendanceFailure(DataNullFailure()));
-        return;
+        return null;
       }
-      emit(AttendanceSuccess(data));
+      return data;
     });
+
+    if (attendance != null) {
+      final execute = await _getAttendanceInfo(AttendanceParams(
+          time: time, feature: event.feature, general: event.general));
+      execute.fold((failure) => emit(AttendanceSuccess(null)), (data) {
+        _generalBloc.add(GeneralUpdate(attendance: data));
+        emit(AttendanceSuccess(data));
+      });
+    }
   }
 }
