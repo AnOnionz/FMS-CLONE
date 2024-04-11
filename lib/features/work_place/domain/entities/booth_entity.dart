@@ -1,25 +1,16 @@
 import 'dart:convert';
 
+import 'package:isar/isar.dart';
+
+part 'booth_entity.g.dart';
+
+@embedded
 class BoothEntity {
-  final int id;
+  int? id;
+  String? name;
+  String? description;
 
-  final String name;
-  final String? description;
-
-  BoothEntity(this.id, this.name, this.description);
-
-  BoothEntity copyWith({
-    int? id,
-    bool? isActive,
-    String? name,
-    String? description,
-  }) {
-    return BoothEntity(
-      id ?? this.id,
-      name ?? this.name,
-      description ?? this.description,
-    );
-  }
+  BoothEntity({this.id, this.name, this.description});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -31,9 +22,10 @@ class BoothEntity {
 
   factory BoothEntity.fromMap(Map<String, dynamic> map) {
     return BoothEntity(
-      map['id'] as int,
-      map['name'] as String,
-      map['description'] != null ? map['description'] as String : null,
+      id: map['id'] as int,
+      name: map['name'] as String,
+      description:
+          map['description'] != null ? map['description'] as String : null,
     );
   }
 

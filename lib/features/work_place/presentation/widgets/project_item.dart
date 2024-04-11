@@ -57,7 +57,7 @@ class ProjectItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  project.name,
+                  project.name!,
                   style: context.textTheme.subtitle1
                       ?.copyWith(color: AppColors.nero),
                 ),
@@ -65,7 +65,7 @@ class ProjectItem extends StatelessWidget {
                   height: 6.h,
                 ),
                 Text(
-                    '${project.startDate.formatBy(format)} - ${project.startDate.formatBy(format)}',
+                    '${project.startDate?.formatBy(format)} - ${project.endDated?.formatBy(format)}',
                     style: context.textTheme.caption1
                         ?.copyWith(color: AppColors.dimGray))
               ],

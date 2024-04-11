@@ -84,24 +84,24 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                       'Chụp hình hóa đơn',
                       style: context.textTheme.subtitle1,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: ImagePickerWidget(
-                        max: 5,
-                        images: _imageInvoice,
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 20.h),
+                    //   child: ImagePickerWidget(
+                    //     max: 5,
+                    //     images: _imageInvoice,
+                    //   ),
+                    // ),
                     Text(
                       'Chụp hình đổi quà',
                       style: context.textTheme.subtitle1,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.h),
-                      child: ImagePickerWidget(
-                        max: 5,
-                        images: _imageExchange,
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(top: 20.h),
+                    //   child: ImagePickerWidget(
+                    //     max: 5,
+                    //     images: _imageExchange,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

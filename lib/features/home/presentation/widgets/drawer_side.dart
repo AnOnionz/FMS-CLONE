@@ -11,6 +11,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
 import 'package:fms/features/setting/setting_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
@@ -22,6 +23,8 @@ class DrawerSide extends StatelessWidget {
 
   Credentials? get credentials =>
       Modular.get<AuthenticationRepository>().credentials;
+
+  GeneralBloc get _generalBloc => Modular.get<GeneralBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +120,7 @@ class DrawerSide extends StatelessWidget {
                                         context.navigate(WorkPlaceModule.route);
                                         context.nextRoute(
                                             WorkPlaceModule.selectProject);
+                                        _generalBloc.add(GeneralReset());
                                       },
                                     ),
                                     _rowFeature(

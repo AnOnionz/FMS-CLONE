@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/features/home/domain/entities/feature_entity.dart';
+import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_flow_cubit.dart';
 
 class AttendanceFlowPage extends StatefulWidget {
-  final FeatureEntity entity;
+  final GeneralItemData entity;
   const AttendanceFlowPage({super.key, required this.entity});
 
   @override

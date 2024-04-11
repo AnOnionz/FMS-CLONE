@@ -1,12 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
-import 'package:fms/features/config/domain/entities/config_entity.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/work_place/domain/entities/project_entity.dart';
+import 'package:isar/isar.dart';
 
+import '../../../../core/utilities/parser.dart';
 import '../../../work_place/domain/entities/booth_entity.dart';
 import '../../../work_place/domain/entities/outlet_entity.dart';
 
+part 'general_entity.g.dart';
+
+@collection
 class GeneralEntity {
+  Id get isarId => fastHash(config.versionId!.toString());
   final ProjectEntity project;
   final OutletEntity outlet;
   final BoothEntity booth;
@@ -35,5 +41,10 @@ class GeneralEntity {
       config: config ?? this.config,
       attendance: attendance ?? this.attendance,
     );
+  }
+
+  @override
+  String toString() {
+    return 'GeneralEntity(project: $project, outlet: $outlet, booth: $booth, config: $config, attendance: $attendance)';
   }
 }

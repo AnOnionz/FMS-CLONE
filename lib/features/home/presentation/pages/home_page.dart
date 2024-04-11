@@ -75,16 +75,12 @@ class HomePage extends StatelessWidget {
                         Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: 29.h, horizontal: 16.w),
-                            child: CommonFeature(
-                              general: state.general,
-                            )),
+                            child: CommonFeature()),
                         _title(context, 'Danh sách công việc'),
                         Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: 29.h, horizontal: 16.w),
-                            child: Tasks(
-                              general: state.general,
-                            )),
+                            child: Tasks()),
                       ],
                     ),
                   );

@@ -1,14 +1,14 @@
-import 'package:fms/core/utilities/parser.dart';
-import 'package:fms/features/config/domain/entities/config_entity.dart';
-
 import '../../../../core/data_source/remote_datasource.dart';
+import '../../../../core/utilities/parser.dart';
 import '../../../work_place/domain/entities/work_place_entity.dart';
+import '../../domain/entities/config_entity.dart';
 
-abstract class IConfigDatasource {
+abstract class IGeneralRemoteDatasource {
   Future<ConfigEntity?> getConfigs(WorkPlaceEntity model);
 }
 
-class ConfigDatasource extends RemoteDatasource implements IConfigDatasource {
+class GeneralRemoteDatasorce extends RemoteDatasource
+    implements IGeneralRemoteDatasource {
   @override
   Future<ConfigEntity?> getConfigs(WorkPlaceEntity model) async {
     final _resp = await dio.get(

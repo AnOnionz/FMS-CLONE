@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../routes/routes.dart';
-import '../home/domain/entities/feature_entity.dart';
+import '../home/domain/entities/general_item_data.dart';
 import 'presentation/cubit/crawl_cubit.dart';
 import 'presentation/pages/crawl_page.dart';
 
@@ -18,7 +18,7 @@ class CrawlModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => CrawlPage(entity: r.args.data as FeatureEntity),
+      child: (_) => CrawlPage(entity: r.args.data as GeneralItemData),
     );
   }
 }

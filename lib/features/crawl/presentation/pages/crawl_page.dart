@@ -4,19 +4,19 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/crawl/presentation/widgets/crawl_item.dart';
-import 'package:fms/features/home/domain/entities/feature_entity.dart';
+import 'package:fms/features/home/domain/entities/general_item_data.dart';
 
 import '../../../../core/widgets/app_bar.dart';
 
 class CrawlPage extends StatelessWidget {
-  final FeatureEntity entity;
+  final GeneralItemData entity;
   const CrawlPage({super.key, required this.entity});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(
-          title: entity.feature.name, action: SearchButton(onPressed: () {})),
+          title: entity.feature.name!, action: SearchButton(onPressed: () {})),
       body: GestureDetector(
         onTap: () {
           final FocusScopeNode currentFocus = FocusScope.of(context);

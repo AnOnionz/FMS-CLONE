@@ -49,16 +49,16 @@ class _NoteItemState extends State<NoteItem> {
                   ),
                 )
               : const SizedBox(),
-          widget.canTakeImge
-              ? Padding(
-                  padding: EdgeInsets.only(top: 16.h),
-                  child: ImagePickerWidget(
-                    images: _image,
-                    max: 5,
-                    isCarousel: true,
-                  ),
-                )
-              : const SizedBox(),
+          // widget.canTakeImge
+          //     ? Padding(
+          //         padding: EdgeInsets.only(top: 16.h),
+          //         child: ImagePickerWidget(
+          //           images: _image,
+          //           max: 5,
+          //           isCarousel: true,
+          //         ),
+          //       )
+          //     : const SizedBox(),
         ],
       ),
     );

@@ -37,7 +37,8 @@ class TaskBox extends StatelessWidget {
                         bottomLeft: Radius.circular(5.sqr),
                         bottomRight: Radius.circular(5.sqr))),
                 child: Padding(
-                  padding: EdgeInsets.only(top: 60.h, bottom: 10.h),
+                  padding: EdgeInsets.only(
+                      top: 50.h, bottom: 10.h, left: 10.w, right: 10.w),
                   child: Center(
                     child: Text(
                       name,

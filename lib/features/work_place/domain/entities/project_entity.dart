@@ -1,17 +1,22 @@
 import 'dart:convert';
 
-class ProjectEntity {
-  final int id;
-  final String name;
-  final DateTime startDate;
-  final DateTime? endDated;
+import 'package:isar/isar.dart';
 
-  ProjectEntity(
+part 'project_entity.g.dart';
+
+@embedded
+class ProjectEntity {
+  int? id;
+  String? name;
+  DateTime? startDate;
+  DateTime? endDated;
+
+  ProjectEntity({
     this.id,
     this.name,
     this.startDate,
     this.endDated,
-  );
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -24,11 +29,11 @@ class ProjectEntity {
 
   factory ProjectEntity.fromMap(Map<String, dynamic> map) {
     return ProjectEntity(
-      map['id'] as int,
-      map['name'] as String,
-      DateTime.parse(map['startDate'] as String),
-      map['startDate'] != null
-          ? DateTime.parse(map['startDate'] as String)
+      id: map['id'] as int,
+      name: map['name'] as String,
+      startDate: DateTime.parse(map['startDate'] as String),
+      endDated: map['endDated'] != null
+          ? DateTime.parse(map['endDated'] as String)
           : null,
     );
   }
@@ -47,10 +52,10 @@ class ProjectEntity {
     String? status,
   }) {
     return ProjectEntity(
-      id ?? this.id,
-      name ?? this.name,
-      startDate ?? this.startDate,
-      endDated ?? this.endDated,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      startDate: startDate ?? this.startDate,
+      endDated: endDated ?? this.endDated,
     );
   }
 

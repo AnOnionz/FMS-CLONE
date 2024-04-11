@@ -1,15 +1,19 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:isar/isar.dart';
+
+part 'attendance_entity.g.dart';
+
+@embedded
 class AttendanceEntity {
-  final int id;
+  final int? id;
   final AttendanceData? dataIn;
   final AttendanceData? dataOut;
 
   AttendanceEntity({
-    required this.id,
-    required this.dataIn,
-    required this.dataOut,
+    this.id,
+    this.dataIn,
+    this.dataOut,
   });
 
   Map<String, dynamic> toMap() {
@@ -53,20 +57,26 @@ class AttendanceEntity {
   }
 }
 
+@embedded
 class AttendanceData {
   final ImageCloud? image;
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
   final String? deviceId;
-  final DateTime deviceTime;
+  final DateTime? deviceTime;
 
   AttendanceData({
-    required this.image,
-    required this.latitude,
-    required this.longitude,
-    required this.deviceId,
-    required this.deviceTime,
+    this.image,
+    this.latitude,
+    this.longitude,
+    this.deviceId,
+    this.deviceTime,
   });
+
+  @override
+  String toString() {
+    return 'AttendanceData(image: $image, latitude: $latitude, longitude: $longitude, deviceId: $deviceId, deviceTime: $deviceTime)';
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -83,9 +93,13 @@ class AttendanceData {
       image: map['image'] != null
           ? ImageCloud.fromMap(map['image'] as Map<String, dynamic>)
           : null,
-      latitude: double.parse(map['latitude'].toString()),
-      longitude: double.parse(map['longitude'].toString()),
-      deviceId: map['deviceId'] as String?,
+      latitude: map['latitude'] != null
+          ? double.tryParse(map['latitude'].toString())
+          : null,
+      longitude: map['longitude'] != null
+          ? double.tryParse(map['longitude'].toString())
+          : null,
+      deviceId: map['deviceId'] != null ? map['deviceId'] as String : null,
       deviceTime: DateTime.parse(map['deviceTime'] as String).toLocal(),
     );
   }
@@ -94,25 +108,24 @@ class AttendanceData {
 
   factory AttendanceData.fromJson(String source) =>
       AttendanceData.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'AttendanceData(image: $image, latitude: $latitude, longitude: $longitude, deviceId: $deviceId, deviceTime: $deviceTime)';
-  }
 }
 
+@embedded
 class ImageCloud {
-  final int id;
-  final List<String> variants;
+  final int? id;
+  final String? filename;
+  final List<String>? variants;
 
   ImageCloud({
-    required this.id,
-    required this.variants,
+    this.id,
+    this.filename,
+    this.variants,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'filename': filename,
       'variants': variants,
     };
   }
@@ -120,6 +133,7 @@ class ImageCloud {
   factory ImageCloud.fromMap(Map<String, dynamic> map) {
     return ImageCloud(
       id: map['id'] as int,
+      filename: map['filename'] as String?,
       variants:
           (map['variants'] as List<dynamic>).map((e) => e.toString()).toList(),
     );

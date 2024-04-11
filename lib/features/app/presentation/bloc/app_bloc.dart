@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/utilities/overlay.dart';
+import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
+import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -23,12 +25,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationBloc _authenticationBloc;
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
-
+  final GeneralBloc _generalBloc;
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
+
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
+  StreamSubscription<GeneralState>? _generalStreamSubscription;
 
   AppBloc(this._authenticationBloc, this._connectivityService,
-      this._networkTimeService)
+      this._generalBloc, this._networkTimeService)
       : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -72,10 +76,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _checkAuthenticationStatus(AuthenticationStatus status) {
     if (status == AuthenticationStatus.authenticated) {
-      // If the user is authenticated, navigate to the profile page.
-      Modular.to.navigate(WorkPlaceModule.route);
+      _generalBloc.add(GeneralStared());
+      _generalBloc.stream.first.then((generalState) {
+        if (generalState is GeneralSuccess) {
+          Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
+        }
+        if (generalState is GeneralFailure) {
+          Modular.to.navigate(WorkPlaceModule.route);
+        }
+      });
     } else if (status == AuthenticationStatus.unauthenticated) {
-      // If the user is unauthenticated, navigate to the login page.
+      _generalBloc.add(GeneralReset());
       Modular.to.navigate(SignModule.route);
     }
   }

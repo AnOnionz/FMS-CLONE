@@ -31,14 +31,20 @@ class OutletItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              outlet.name,
+              outlet.name!,
               style:
                   context.textTheme.subtitle1?.copyWith(color: AppColors.nero),
             ),
             SizedBox(
               height: 6.h,
             ),
-            Text(outlet.code,
+            Text(outlet.address,
+                style: context.textTheme.caption1
+                    ?.copyWith(color: AppColors.dimGray)),
+            SizedBox(
+              height: 6.h,
+            ),
+            Text(outlet.code!,
                 style: context.textTheme.caption1
                     ?.copyWith(color: AppColors.dimGray))
           ],

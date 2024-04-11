@@ -8,3 +8,17 @@ abstract class ReportState extends Equatable {
 }
 
 class ReportInitial extends ReportState {}
+
+class ReportLoading extends ReportState {}
+
+class ReportFailure extends ReportState {
+  final Failure failure;
+
+  ReportFailure(this.failure);
+}
+
+class ReportSuccess extends ReportState {
+  final List<ReportEntity> photos;
+
+  ReportSuccess(this.photos);
+}

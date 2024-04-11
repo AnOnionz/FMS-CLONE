@@ -16,7 +16,7 @@ sealed class AuthenticationLocalDataSource {
   void clearAllUserData();
 }
 
-class UserLocalDataSourceImpl implements AuthenticationLocalDataSource {
+class AuthLocalDataSourceImpl implements AuthenticationLocalDataSource {
   final database = Database.instance;
   @override
   bool get isLogin => getUserFromLocal() != null;

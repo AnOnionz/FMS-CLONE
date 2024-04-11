@@ -1,10 +1,10 @@
 import 'package:fms/core/utilities/parser.dart';
-import 'package:fms/features/config/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/images/data/datasource/images_remote_datasource.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../general/domain/entities/config_entity.dart';
 import '../../../images/data/models/image_upload_model.dart';
 import '../../domain/entities/attendance_entity.dart';
 
@@ -13,10 +13,10 @@ abstract class IAttendanceRemoteDataSource {
       {XFile? file,
       Position? position,
       required DateTime time,
-      required Feature feature,
+      required FeatureEntity feature,
       required GeneralEntity general});
   Future<AttendanceEntity?> getAttendanceInfo(
-      {required Feature feature, required GeneralEntity general});
+      {required FeatureEntity feature, required GeneralEntity general});
 }
 
 class AttendanceRemoteDataSource extends ImagesRemoteDataSource
@@ -27,20 +27,17 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
       {XFile? file,
       Position? position,
       required DateTime time,
-      required Feature feature,
+      required FeatureEntity feature,
       required GeneralEntity general}) async {
     ImageUploadModel? imageServerModel;
     if (file != null) {
       imageServerModel = await uploadImageToServer(file);
-      if (imageServerModel != null) {
-        await uploadImageToCloud(file, imageUploadModel: imageServerModel);
-      }
     }
     final form = {
       if (position != null) 'latitude': position.latitude,
       if (position != null) 'longitude': position.longitude,
       if (imageServerModel != null) 'imageId': imageServerModel.id,
-      'deviceTime': time.toIso8601String()
+      'deviceTime': time.toUtc().toIso8601String()
     };
 
     final _resp = await dio.post(
@@ -56,7 +53,7 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
 
   @override
   Future<AttendanceEntity?> getAttendanceInfo(
-      {required Feature feature, required GeneralEntity general}) async {
+      {required FeatureEntity feature, required GeneralEntity general}) async {
     final _resp = await dio.get(
         path:
             '/app/projects/${general.project.id}/outlets/${general.outlet.id}/booths/${general.booth.id}/features/${feature.id}/attendance');

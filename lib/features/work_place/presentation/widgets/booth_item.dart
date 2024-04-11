@@ -31,16 +31,10 @@ class BoothItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              booth.name,
+              booth.name!,
               style:
                   context.textTheme.subtitle1?.copyWith(color: AppColors.nero),
             ),
-            SizedBox(
-              height: 6.h,
-            ),
-            Text(booth.description ?? '',
-                style: context.textTheme.caption1
-                    ?.copyWith(color: AppColors.dimGray))
           ],
         ),
       ),

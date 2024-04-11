@@ -655,21 +655,27 @@ mixin Fx {
     if (message.length < limitLength) {
       debugPrint('   $msg');
     } else {
-      final StringBuffer outStr = StringBuffer();
-      for (int index = 0; index < message.length; index++) {
-        outStr.write(message[index]);
-        if (index % limitLength == 0 && index != 0) {
-          debugPrint(outStr.toString());
-          outStr.clear();
-          final int lastIndex = index + 1;
-          if (message.length - lastIndex < limitLength) {
-            final String remainderStr =
-                message.substring(lastIndex, message.length);
-            debugPrint(remainderStr);
-            break;
-          }
-        }
-      }
+      final RegExp pattern =
+          RegExp('.{1,800}'); // 800 is the size of each chunk
+      pattern
+          .allMatches(msg.toString())
+          .forEach((RegExpMatch match) => print(match.group(0)));
+
+      // final StringBuffer outStr = StringBuffer();
+      // for (int index = 0; index < message.length; index++) {
+      //   outStr.write(message[index]);
+      //   if (index % limitLength == 0 && index != 0) {
+      //     debugPrint(outStr.toString());
+      //     outStr.clear();
+      //     final int lastIndex = index + 1;
+      //     if (message.length - lastIndex < limitLength) {
+      //       final String remainderStr =
+      //           message.substring(lastIndex, message.length);
+      //       debugPrint(remainderStr);
+      //       break;
+      //     }
+      //   }
+      //}
     }
     if (hasDottedLine) {
       debugPrint(

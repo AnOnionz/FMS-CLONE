@@ -18,9 +18,9 @@ final class Database {
 
   factory Database() => instance;
 
-  Future<void> open(List<CollectionSchema<dynamic>> schemas) async {
+  static Future<void> open(List<CollectionSchema<dynamic>> schemas) async {
     final dir = await getApplicationDocumentsDirectory();
-    _isar = await Isar.open(schemas, directory: dir.path, inspector: false);
+    _isar = await Isar.open(schemas, directory: dir.path);
   }
 
   void deleteDatabase<T>() {

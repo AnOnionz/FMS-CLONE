@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: "2952a4d4339ed3b65e8e54765ec68ee6ada5cb21d83cb8d39e3f6b4e690ab5ca"
+      sha256: b5c2874d1bb1b92851955a1ac93802e54cf3f24ba40b98dfc4e4b0b2b4b0ae3f
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.4"
   bloc:
     dependency: "direct main"
     description:
@@ -721,10 +721,10 @@ packages:
     dependency: transitive
     description:
       name: geolocator_android
-      sha256: "93906636752ea4d4e778afa981fdfe7409f545b3147046300df194330044d349"
+      sha256: f15d1536cd01b1399578f1da1eb5d566e7a718db6a3648f2c24d2e2f859f0692
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.1"
+    version: "4.5.4"
   geolocator_apple:
     dependency: transitive
     description:
@@ -1466,6 +1466,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   sqflite:
     dependency: transitive
     description:
@@ -1587,13 +1595,13 @@ packages:
     source: hosted
     version: "2.2.2"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
-      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      sha256: "814e9e88f21a176ae1359149021870e87f7cddaf633ab678a5d2b0bff7fd1ba8"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "4.4.0"
   vector_graphics:
     dependency: transitive
     description:

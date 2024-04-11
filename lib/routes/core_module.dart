@@ -10,6 +10,7 @@ import '../core/services/connectivity/connectivity_service.dart';
 import '../core/services/location/location_service.dart';
 import '../core/services/network_time/network_time_service.dart';
 import '../core/styles/theme_manager.dart';
+import '../core/utilities/bloc_obsever.dart';
 
 class CoreModule extends Module {
   @override
@@ -23,6 +24,7 @@ class CoreModule extends Module {
     i.addSingleton(ConnectivityService.new);
     i.addSingleton(NetworkTimeService.new);
     i.addSingleton(GoogleMapService.new);
+    Bloc.observer = SimpleBlocObserver();
   }
 }
 

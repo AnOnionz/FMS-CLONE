@@ -55,9 +55,10 @@ class SignBloc extends Bloc<SignEvent, SignState> {
     emit(const SignLoading());
     final execute = await _logout();
     execute.fold((fail) => emit(SignFailure(fail)), (success) {
-      if (success) {}
-      _authenticationBloc.add(AuthenticationLogoutSuccess());
-      return emit(SignSuccess(SignStatus.loggedOut));
+      if (success) {
+        _authenticationBloc.add(AuthenticationLogoutSuccess());
+        return emit(SignSuccess(SignStatus.loggedOut));
+      }
     });
   }
 

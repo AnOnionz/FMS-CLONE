@@ -3,7 +3,7 @@ part of 'attendance_bloc.dart';
 class AttendanceEvent extends Equatable {
   final XFile? file;
   final Position? position;
-  final Feature feature;
+  final FeatureEntity feature;
   final GeneralEntity general;
 
   const AttendanceEvent(

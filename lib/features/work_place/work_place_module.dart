@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/features/config/domain/usecases/get_config_usecase.dart';
+import 'package:fms/features/general/general_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/work_place/data/datasources/work_place_datasource.dart';
 import 'package:fms/features/work_place/data/repositories/work_place_repository_impl.dart';
@@ -10,7 +10,7 @@ import 'package:fms/features/work_place/presentation/bloc/work_place_bloc.dart';
 import 'package:fms/features/work_place/presentation/pages/work_place_page.dart';
 
 import '../../routes/routes.dart';
-import '../config/config_module.dart';
+
 import 'domain/usecases/get_booths_usecase.dart';
 import 'domain/usecases/get_outlets_usecase.dart';
 import 'presentation/pages/booth_selection_page.dart';
@@ -24,13 +24,12 @@ class WorkPlaceModule extends Module {
   static const String selectBooth = 'select_booth';
   static const String config = 'config';
   @override
-  List<Module> get imports => [SignModule(), ConfigModule()];
+  List<Module> get imports => [SignModule(), GeneralModule()];
 
   @override
   void binds(Injector i) {
     i.addLazySingleton(WorkPlaceDatasource.new);
     i.addLazySingleton(WorkPlaceRepositoryImpl.new);
-    i.add(GetConfigUsecase.new);
     i.add(GetProjectsUsecase.new);
     i.add(GetOutletsUsecase.new);
     i.add(GetBoothsUsecase.new);

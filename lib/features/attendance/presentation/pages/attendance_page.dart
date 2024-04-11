@@ -18,13 +18,13 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/image_picker_widget.dart';
-import '../../../home/domain/entities/feature_entity.dart';
+import '../../../home/domain/entities/general_item_data.dart';
 import '../../../home/home_module.dart';
 import '../widgets/notifications.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
-  final FeatureEntity entity;
+  final GeneralItemData entity;
   final AttendanceType type;
 
   AttendancePage({super.key, required this.type, required this.entity});
@@ -38,7 +38,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
-  ValueNotifier<List<XFile>> files = ValueNotifier([]);
+  XFile? image;
 
   late AttendanceEntity? _attendanceInfo = widget.entity.general.attendance;
 
@@ -46,9 +46,6 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   void initState() {
-    files.addListener(() {
-      setState(() {});
-    });
     isWatermarking.addListener(() {
       setState(() {});
     });
@@ -56,16 +53,16 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   bool get isPhotoRequired =>
-      widget.entity.feature.featureAttendance!.isPhotoRequired;
+      widget.entity.feature.featureAttendance!.isPhotoRequired ?? false;
 
   bool get isLocationRequired =>
-      widget.entity.feature.featureAttendance!.isLocationRequired;
+      widget.entity.feature.featureAttendance!.isLocationRequired ?? false;
 
   bool get isWatermarkRequired =>
-      widget.entity.feature.featureAttendance!.isWatermarkRequired;
+      widget.entity.feature.featureAttendance!.isWatermarkRequired ?? false;
 
   bool get _validateForm {
-    if (isPhotoRequired && files.value.isEmpty) {
+    if (image == null) {
       return false;
     }
     if (isWatermarkRequired && isWatermarking.value == true) {
@@ -76,7 +73,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
   void _attendance() {
     bloc.add(AttendanceEvent(
-        file: isPhotoRequired ? files.value.first : null,
+        file: isPhotoRequired ? image : null,
         position: isLocationRequired
             ? Modular.get<LocationService>().currentLocation
             : null,
@@ -150,13 +147,17 @@ class _AttendancePageState extends State<AttendancePage> {
                                     style: context.textTheme.subtitle1,
                                   ),
                                   SizedBox(height: 14.h),
-                                  Form(
-                                    child: ImagePickerWidget(
-                                      max: 1,
-                                      images: files,
-                                      isWatermarkRequired: isWatermarkRequired,
-                                      isWatermarking: isWatermarking,
-                                    ),
+                                  ImagePickerWidget(
+                                    height: 60.h,
+                                    width: 60.h,
+                                    enable: image == null,
+                                    onChanged: (file) {
+                                      setState(() {
+                                        image = file;
+                                      });
+                                    },
+                                    isWatermarkRequired: isWatermarkRequired,
+                                    isWatermarking: isWatermarking,
                                   ),
                                 ],
                               ),
@@ -205,7 +206,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                                 children: [
                                               TextSpan(
                                                   text: widget.entity.general
-                                                      .outlet.code,
+                                                      .outlet.address,
                                                   style: context
                                                       .textTheme.subtitle1
                                                       ?.copyWith(

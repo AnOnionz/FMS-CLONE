@@ -24,7 +24,7 @@ class AttendanceCoreModule extends Module {
     i.addSingleton(AttendanceRepositoryImpl.new);
     i.addSingleton(AttendanceUsecase.new);
     i.addSingleton(GetAttendanceInfoUsecase.new);
-    i.add(AttendanceBloc.new, config: blocConfig<AttendanceBloc>());
+    i.add(AttendanceBloc.new);
     i.add(AttendanceFlowCubit.new);
   }
 }

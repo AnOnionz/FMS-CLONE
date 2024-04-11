@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../routes/core_module.dart';
-import 'data/datasources/local_data_source.dart';
-import 'data/datasources/remote_data_source.dart';
+import 'data/datasources/auth_local_data_source.dart';
+import 'data/datasources/auth_remote_data_source.dart';
 import 'domain/repositories/authentication_repository.dart';
 import 'domain/usecases/change_pass_usecase.dart';
 import 'domain/usecases/get_credentials_usecase.dart';
@@ -19,8 +19,8 @@ class AuthenticationModule extends Module {
 
   @override
   void exportedBinds(Injector i) {
-    i.add<AuthenticationLocalDataSource>(UserLocalDataSourceImpl.new);
-    i.add<AuthenticationRemoteDataSource>(UserRemoteDataSourceImpl.new);
+    i.add<AuthenticationLocalDataSource>(AuthLocalDataSourceImpl.new);
+    i.add<AuthenticationRemoteDataSource>(AuthRemoteDataSourceImpl.new);
     i.addSingleton<AuthenticationRepository>(AuthenticationRepositoryImpl.new);
     i.addLazySingleton<LoginUsecase>(LoginUsecase.new);
     i.addLazySingleton<LogoutUsecase>(LogoutUsecase.new);

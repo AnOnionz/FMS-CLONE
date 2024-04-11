@@ -1,15 +1,26 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
-import 'core/utilities/bloc_obsever.dart';
+import 'core/database/database.dart';
+import 'core/database/file_metadata.dart';
+import 'core/database/local_value.dart';
 import 'features/app/app_module.dart';
 import 'features/app/presentation/pages/app.dart';
+import 'features/authentication/data/models/user_model.dart';
+import 'features/general/domain/entities/general_entity.dart';
+import 'features/setting/domain/entities/setting_app.dart';
 
-void main() {
-  Bloc.observer = SimpleBlocObserver();
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  print(DateTime.now().toUtc().toIso8601String());
+  await Database.open([
+    LocalValueSchema,
+    UserModelSchema,
+    SettingAppSchema,
+    FileWithMetaDataSchema,
+    GeneralEntitySchema
+  ]);
   runApp(ModularApp(
       module: AppModule(),
       child: FlexibleBuilder(designSize: Size(430, 934), child: const App())));

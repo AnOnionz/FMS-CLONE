@@ -5,7 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/errors/failure.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/attendance_usecase.dart';
-import 'package:fms/features/config/domain/entities/config_entity.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -50,8 +50,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       final execute = await _getAttendanceInfo(AttendanceParams(
           time: time, feature: event.feature, general: event.general));
       execute.fold((failure) => emit(AttendanceSuccess(null)), (data) {
-        _generalBloc.add(GeneralUpdate(attendance: data));
         emit(AttendanceSuccess(data));
+        if (data != null) {
+          _generalBloc.add(GeneralRefresh(attendance: data));
+        }
       });
     }
   }

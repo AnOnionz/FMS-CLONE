@@ -3,13 +3,13 @@ import 'package:fms/features/general/general_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 
 import '../../routes/routes.dart';
-import '../config/config_module.dart';
+
 import 'presentation/pages/home_page.dart';
 
 class HomeModule extends Module {
   static const String route = '/home/';
   @override
-  List<Module> get imports => [SignModule(), ConfigModule(), GeneralModule()];
+  List<Module> get imports => [SignModule(), GeneralModule()];
 
   @override
   void binds(Injector i) {}

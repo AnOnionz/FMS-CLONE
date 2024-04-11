@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/config/domain/entities/config_entity.dart';
+import 'package:fms/core/widgets/carousel_images.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
+import 'package:fms/features/report/domain/entities/report_entity.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/widgets/image_picker_widget.dart';
 
 class ReportItem extends StatelessWidget {
   final FeaturePhoto entity;
-  final ValueNotifier<List<XFile>> files;
+  final List<ReportEntity> photos;
   final bool isWatermark;
   final ValueNotifier<bool>? isWatermarking;
+  final void Function(XFile file) onChanged;
   const ReportItem(
       {super.key,
       required this.entity,
-      required this.files,
+      required this.photos,
       required this.isWatermark,
-      required this.isWatermarking});
+      this.isWatermarking,
+      required this.onChanged});
 
   bool get _isFixed => entity.minimum == entity.maximum;
 
@@ -45,16 +49,34 @@ class ReportItem extends StatelessWidget {
                 ]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.h),
-            child: ImagePickerWidget(
-              key: ValueKey(entity.id),
-              images: files,
-              max: entity.maximum,
-              isCarousel: true,
-              isWatermarkRequired: isWatermark,
-              isWatermarking: isWatermarking,
-            ),
-          ),
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 4,
+                      child: ImagePickerWidget(
+                        key: ValueKey(entity.id),
+                        enable: photos.length < entity.maximum!,
+                        onChanged: onChanged,
+                        isWatermarkRequired: isWatermark,
+                        isWatermarking: isWatermarking,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: CarouselImages(
+                          images: photos
+                              .map((e) => ImageDynamic(
+                                  uuid: e.dataUuid,
+                                  rawData: e.rawPath,
+                                  networkImage: e.image))
+                              .toList(),
+                          isWatermarking: isWatermarking),
+                    ),
+                  ],
+                ),
+              )),
           Padding(
             padding: EdgeInsets.only(bottom: 4.h),
             child: Text(

@@ -38,10 +38,11 @@ class StatisticGenaral extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               switch (type) {
-                StatisticType.outlet =>
-                  OutletInfo(outlet: OutletEntity(1, 'name', 'code')),
-                StatisticType.booth =>
-                  BoothInfo(booth: BoothEntity(1, 'name', 'description')),
+                StatisticType.outlet => OutletInfo(
+                    outlet: OutletEntity(id: 1, name: 'name', code: 'code')),
+                StatisticType.booth => BoothInfo(
+                    booth: BoothEntity(
+                        id: 1, name: 'name', description: 'description')),
                 _ => EmployeeInfo(credentials: credentials)
               },
               Padding(
@@ -129,12 +130,12 @@ class OutletInfo extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
           child: Text(
-            outlet.name,
+            outlet.name!,
             style: context.textTheme.h3?.copyWith(color: AppColors.black),
           ),
         ),
         Text(
-          outlet.code,
+          outlet.code!,
           style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
         ),
       ],
@@ -191,7 +192,7 @@ class BoothInfo extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
           child: Text(
-            booth.name,
+            booth.name!,
             style: context.textTheme.h3?.copyWith(color: AppColors.black),
           ),
         ),

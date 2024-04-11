@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/general/domain/entities/general_entity.dart';
-import 'package:fms/features/home/domain/entities/feature_entity.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/home/presentation/widgets/task_box.dart';
 
 class Tasks extends StatefulWidget {
-  final GeneralEntity general;
-  const Tasks({super.key, required this.general});
+  const Tasks({super.key});
 
   @override
   State<Tasks> createState() => _TasksState();
 }
 
-class _TasksState extends State<Tasks> {
-  late final tasks = widget.general.config.features
-      .where((feature) => feature.type != null && !feature.type!.isAssistance)
+class _TasksState extends State<Tasks> with GeneralMixin {
+  late final tasks = general.config!.features
+      ?.where((feature) => feature.type != null && !feature.type!.isAssistance)
       .toList();
   final double columns = 3;
-  late final rows = (tasks.length / columns).ceil();
+  late final rows = (tasks!.length / columns).ceil();
   final double extendHeight = 172;
 
   @override
@@ -35,15 +33,15 @@ class _TasksState extends State<Tasks> {
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
                 mainAxisExtent: extendHeight),
-            itemCount: tasks.length,
+            itemCount: tasks!.length,
             itemBuilder: (context, index) {
-              final feature = tasks[index];
+              final feature = tasks![index];
               return TaskBox(
                 height: extendHeight,
-                name: feature.name,
+                name: feature.name!,
                 onPressed: () => context.nextRoute('/${feature.type!.name}/',
-                    arguments: FeatureEntity(
-                        general: widget.general, feature: feature)),
+                    arguments:
+                        GeneralItemData(general: general, feature: feature)),
               );
             },
           )

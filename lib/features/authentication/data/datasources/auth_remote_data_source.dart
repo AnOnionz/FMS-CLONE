@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:auth0_flutter/auth0_flutter.dart';
 
 import '../../../../core/constant/keys.dart';
@@ -14,7 +15,7 @@ sealed class AuthenticationRemoteDataSource {
   Future<void> changePassword(String email);
 }
 
-class UserRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
+class AuthRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
   late final Auth0 auth0 = Auth0(
     env.variables[Keys.AUTH0_DOMAIN] as String,
     env.variables[Keys.AUTH0_CLIENT_ID] as String,

@@ -3,6 +3,7 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:intl/intl.dart';
 
 class TimeBox extends StatelessWidget {
   final AttendanceType type;
@@ -27,15 +28,12 @@ class TimeBox extends StatelessWidget {
   }
 
   Widget timeText(BuildContext context) {
-    String timeString(int? value) {
-      return switch (value) { != null => value.toString(), _ => '_ _' };
-    }
+    final str = switch (time) {
+      != null => time!.formatBy(DateFormat('HH:mm:ss')),
+      _ => '_ _'
+    };
 
-    final int? h = time?.hour;
-    final int? m = time?.minute;
-    final int? s = time?.second;
-
-    return Text('${timeString(h)}:${timeString(m)}:${timeString(s)}',
+    return Text(str,
         style: context.textTheme.subtitle1?.copyWith(
             color: time == null ? AppColors.nobel : AppColors.black));
   }

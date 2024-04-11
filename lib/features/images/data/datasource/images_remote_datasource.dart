@@ -10,6 +10,7 @@ abstract class ImagesRemoteDataSource {
   final DioClient dio;
 
   ImagesRemoteDataSource(this.dio);
+
   Future<ImageUploadModel?> uploadImageToServer(XFile file) async {
     final form = FormData.fromMap({
       'file': MultipartFile.fromBytes(
@@ -17,21 +18,23 @@ abstract class ImagesRemoteDataSource {
         filename: file.name,
       )
     });
-    print(form.files.first.value.filename);
+
     final _resp = await dio.post(path: '/images', data: form);
-    return parseJson<ImageUploadModel>(
+
+    final imageUploadModel = parseJson<ImageUploadModel>(
         (json: _resp, fromJson: ImageUploadModel.fromMap));
-  }
 
-  Future<void> uploadImageToCloud(XFile file,
-      {required ImageUploadModel imageUploadModel}) async {
-    final form = FormData.fromMap({
-      'file': MultipartFile.fromBytes(
-        await file.readAsBytes(),
-        filename: file.name,
-      )
-    });
+    if (imageUploadModel != null) {
+      final formCloudFlare = FormData.fromMap({
+        'file': MultipartFile.fromBytes(
+          await file.readAsBytes(),
+          filename: file.name,
+        )
+      });
 
-    await dio.postHttp(path: imageUploadModel.uploadUrl, data: form);
+      await dio.postHttp(
+          path: imageUploadModel.uploadUrl, data: formCloudFlare);
+    }
+    return imageUploadModel;
   }
 }

@@ -1,27 +1,30 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 
+import 'package:isar/isar.dart';
+
+part 'config_entity.g.dart';
+
+@embedded
 class ConfigEntity {
-  final String versionCode;
-  final int versionId;
-  final List<Feature> features;
+  String? versionCode;
+  int? versionId;
+  List<FeatureEntity>? features;
 
   ConfigEntity({
-    required this.versionCode,
-    required this.versionId,
-    required this.features,
+    this.versionCode,
+    this.versionId,
+    this.features,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'versionCode': versionCode,
       'versionId': versionId,
-      'features': features.map((x) => x.toMap()).toList(),
+      'features': features?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -29,12 +32,12 @@ class ConfigEntity {
     return ConfigEntity(
       versionCode: map['versionCode'] as String,
       versionId: map['versionId'] as int,
-      features: List<Feature>.from(
+      features: List<FeatureEntity>.from(
         (map['features'] as List<dynamic>)
-            .map<Feature>(
-              (x) => Feature.fromMap(x as Map<String, dynamic>),
+            .map<FeatureEntity>(
+              (x) => FeatureEntity.fromMap(x as Map<String, dynamic>),
             )
-            .sorted((a, b) => a.ordinal - b.ordinal),
+            .sorted((a, b) => a.ordinal! - b.ordinal!),
       ),
     );
   }
@@ -45,22 +48,24 @@ class ConfigEntity {
       ConfigEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class Feature {
-  final int id;
-  final String name;
+@embedded
+class FeatureEntity {
+  final int? id;
+  final String? name;
+  @Enumerated(EnumType.name)
   final FeatureType? type;
-  final int ordinal;
-  final List<dynamic> dependentOnFeatureIds;
+  final int? ordinal;
+  final List<int>? dependentOnFeatureIds;
   final FeatureAttendance? featureAttendance;
   final List<FeatureQuantity>? featureQuantities;
   final List<FeaturePhoto>? featurePhotos;
 
-  Feature({
-    required this.id,
-    required this.name,
-    required this.type,
-    required this.ordinal,
-    required this.dependentOnFeatureIds,
+  FeatureEntity({
+    this.id,
+    this.name,
+    this.type,
+    this.ordinal,
+    this.dependentOnFeatureIds,
     this.featureAttendance,
     this.featureQuantities,
     this.featurePhotos,
@@ -79,14 +84,14 @@ class Feature {
     };
   }
 
-  factory Feature.fromMap(Map<String, dynamic> map) {
-    return Feature(
+  factory FeatureEntity.fromMap(Map<String, dynamic> map) {
+    return FeatureEntity(
       id: map['id'] as int,
       name: map['name'] as String,
       type: (map['type'] as String).toFeatureType(),
       ordinal: map['ordinal'] as int,
       dependentOnFeatureIds:
-          List<dynamic>.from(map['dependentOnFeatureIds'] as List<dynamic>),
+          List<int>.from(map['dependentOnFeatureIds'] as List<dynamic>),
       featureAttendance: map['featureAttendance'] != null
           ? FeatureAttendance.fromMap(
               map['featureAttendance'] as Map<String, dynamic>)
@@ -110,8 +115,8 @@ class Feature {
 
   String toJson() => json.encode(toMap());
 
-  factory Feature.fromJson(String source) =>
-      Feature.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory FeatureEntity.fromJson(String source) =>
+      FeatureEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -119,19 +124,20 @@ class Feature {
   }
 }
 
+@embedded
 class FeatureAttendance {
-  final int id;
-  final bool isPhotoRequired;
-  final bool isWatermarkRequired;
-  final bool isLocationRequired;
-  final dynamic mustWithinRadius;
+  final int? id;
+  final bool? isPhotoRequired;
+  final bool? isWatermarkRequired;
+  final bool? isLocationRequired;
+  final double? mustWithinRadius;
 
   FeatureAttendance({
-    required this.id,
-    required this.isPhotoRequired,
-    required this.isWatermarkRequired,
-    required this.isLocationRequired,
-    required this.mustWithinRadius,
+    this.id,
+    this.isPhotoRequired,
+    this.isWatermarkRequired,
+    this.isLocationRequired,
+    this.mustWithinRadius,
   });
 
   Map<String, dynamic> toMap() {
@@ -150,7 +156,7 @@ class FeatureAttendance {
       isPhotoRequired: map['isPhotoRequired'] as bool,
       isWatermarkRequired: map['isWatermarkRequired'] as bool,
       isLocationRequired: map['isLocationRequired'] as bool,
-      mustWithinRadius: map['mustWithinRadius'] as dynamic,
+      mustWithinRadius: map['mustWithinRadius'] as double?,
     );
   }
 
@@ -165,17 +171,18 @@ class FeatureAttendance {
   }
 }
 
+@embedded
 class FeatureQuantity {
-  final int id;
+  final int? id;
   final Item? item;
-  final int ordinal;
+  final int? ordinal;
   final Product? product;
   final ProductPackaging? productPackaging;
 
   FeatureQuantity({
-    required this.id,
+    this.id,
     this.item,
-    required this.ordinal,
+    this.ordinal,
     this.product,
     this.productPackaging,
   });
@@ -218,23 +225,24 @@ class FeatureQuantity {
   }
 }
 
+@embedded
 class FeaturePhoto {
-  final int id;
-  final int ordinal;
-  final String name;
+  final int? id;
+  final int? ordinal;
+  final String? name;
   final String? description;
-  final int minimum;
-  final int maximum;
-  final bool isWatermarkRequired;
+  final int? minimum;
+  final int? maximum;
+  final bool? isWatermarkRequired;
 
   FeaturePhoto({
-    required this.id,
-    required this.ordinal,
-    required this.name,
-    required this.description,
-    required this.minimum,
-    required this.maximum,
-    required this.isWatermarkRequired,
+    this.id,
+    this.ordinal,
+    this.name,
+    this.description,
+    this.minimum,
+    this.maximum,
+    this.isWatermarkRequired,
   });
 
   Map<String, dynamic> toMap() {
@@ -272,19 +280,20 @@ class FeaturePhoto {
   }
 }
 
+@embedded
 class Item {
-  final int id;
-  final String name;
-  final String code;
-  final String unitName;
-  final String itemTypeName;
+  final int? id;
+  final String? name;
+  final String? code;
+  final String? unitName;
+  final String? itemTypeName;
 
   Item({
-    required this.id,
-    required this.name,
-    required this.code,
-    required this.unitName,
-    required this.itemTypeName,
+    this.id,
+    this.name,
+    this.code,
+    this.unitName,
+    this.itemTypeName,
   });
 
   Map<String, dynamic> toMap() {
@@ -318,17 +327,18 @@ class Item {
   }
 }
 
+@embedded
 class Product {
-  final int id;
-  final String brandName;
-  final String name;
-  final String code;
+  final int? id;
+  final String? brandName;
+  final String? name;
+  final String? code;
 
   Product({
-    required this.id,
-    required this.brandName,
-    required this.name,
-    required this.code,
+    this.id,
+    this.brandName,
+    this.name,
+    this.code,
   });
 
   Map<String, dynamic> toMap() {
@@ -360,19 +370,20 @@ class Product {
   }
 }
 
+@embedded
 class ProductPackaging {
-  final int id;
-  final String barcode;
-  final int price;
-  final dynamic rate;
-  final String unitName;
+  final int? id;
+  final String? barcode;
+  final int? price;
+  final int? rate;
+  final String? unitName;
 
   ProductPackaging({
-    required this.id,
-    required this.barcode,
-    required this.price,
-    required this.rate,
-    required this.unitName,
+    this.id,
+    this.barcode,
+    this.price,
+    this.rate,
+    this.unitName,
   });
 
   Map<String, dynamic> toMap() {
@@ -390,7 +401,7 @@ class ProductPackaging {
       id: map['id'] as int,
       barcode: map['barcode'] as String,
       price: map['price'] as int,
-      rate: map['rate'] as dynamic,
+      rate: map['rate'] as int?,
       unitName: map['unitName'] as String,
     );
   }

@@ -1,5 +1,5 @@
-import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:typed_data';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -7,27 +7,40 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
+import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../constant/colors.dart';
 import '../constant/icons.dart';
-import 'app_indicator.dart';
+
+class ImageDynamic extends Equatable {
+  final String uuid;
+  final List<int>? rawData;
+  final ImageCloud? networkImage;
+
+  ImageDynamic(
+      {required this.uuid, required this.rawData, required this.networkImage});
+
+  @override
+  List<Object?> get props => [uuid];
+}
 
 class ImagePickerWidget extends StatefulWidget {
-  final ValueNotifier<List<XFile>> images;
-  final int max;
-  final bool isCarousel;
+  final bool enable;
   final bool isWatermarkRequired;
+  final void Function(XFile file) onChanged;
   final ValueNotifier<bool>? isWatermarking;
+  final double? width;
+  final double? height;
 
-  const ImagePickerWidget({
-    super.key,
-    required this.images,
-    required this.max,
-    this.isCarousel = false,
-    this.isWatermarkRequired = true,
-    this.isWatermarking,
-  });
+  const ImagePickerWidget(
+      {super.key,
+      required this.enable,
+      this.isWatermarkRequired = true,
+      this.isWatermarking,
+      required this.onChanged,
+      this.width,
+      this.height});
 
   @override
   State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
@@ -35,37 +48,24 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final MediaService _service = MediaService();
-  late final _images = widget.images;
 
-  late ValueNotifier<bool> isWatermarking = ValueNotifier(false);
+  late ValueNotifier<bool> isWatermarking =
+      widget.isWatermarking ?? ValueNotifier(false);
 
   Future<void> _takeImage() async {
-    if (widget.images.value.length < widget.max) {
-      final file = await _service.pickImage(720, 1280, 90);
-      if (file != null) {
-        setState(() {
-          _images.value.add(file);
-        });
-
-        if (widget.isWatermarkRequired) {
-          isWatermarking.value = true;
-          widget.isWatermarking?.value = true;
-          try {
-            final fileWithWatermark = await _service.addWatermark(file);
-            setState(() {
-              _images.value.last = fileWithWatermark;
-            });
-            isWatermarking.value = false;
-            widget.isWatermarking?.value = false;
-          } catch (e) {
-            isWatermarking.value = false;
-            widget.isWatermarking?.value = false;
-            setState(() {
-              _images.value.removeLast();
-            });
-          }
+    final file = await _service.pickImage(720, 1280, 90);
+    if (file != null) {
+      if (widget.isWatermarkRequired) {
+        isWatermarking.value = true;
+        try {
+          final fileWithWatermark = await _service.addWatermark(file);
+          isWatermarking.value = false;
+          widget.onChanged(fileWithWatermark);
+        } catch (e) {
+          isWatermarking.value = false;
         }
-        widget.images.notifyListeners();
+      } else {
+        widget.onChanged(file);
       }
     }
   }
@@ -113,170 +113,57 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isCarousel)
-      return SizedBox(
-        height: 60.h,
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () => _takeImage(),
-              child: Container(
-                  padding: EdgeInsets.all(15.h),
-                  decoration: BoxDecoration(
-                      color: AppColors.solitude,
-                      borderRadius: BorderRadius.circular(6.sqr)),
-                  child: SvgPicture.asset(
-                    AppIcons.camera,
-                    height: 30.h,
-                  )),
-            ),
-            SizedBox(
-              width: 12.h,
-            ),
-            Expanded(
-              child: ListView.separated(
-                  itemCount: _images.value.length,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => SizedBox(
-                        width: 12.h,
-                      ),
-                  itemBuilder: (context, index) {
-                    return ListenableBuilder(
-                      listenable: isWatermarking,
-                      builder: (context, child) {
-                        if (index == _images.value.length - 1 &&
-                            isWatermarking.value == true) {
-                          return AppIndicator(height: 30.h, width: 30.h);
-                        }
-                        return FutureBuilder(
-                          future: _images.value[index].readAsBytes(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final image = Image.memory(
-                                snapshot.data!,
-                                fit: BoxFit.cover,
-                              );
-                              return GestureDetector(
-                                onTap: () => _imagePreview(image),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(6.sqr),
-                                  child: SizedBox(
-                                      height: 60.h, width: 60.h, child: image),
-                                ),
-                              );
-                            }
-                            return SizedBox(
-                              height: 60.h,
-                              width: 60.h,
-                              child: AppIndicator(height: 30.h, width: 30.h),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  }),
-            ),
-          ],
+    return GestureDetector(
+      onTap: () => widget.enable ? _takeImage() : null,
+      child: Container(
+        height: widget.height ?? 100.h,
+        width: widget.width ?? 100.h,
+        child: Center(
+          child: SvgPicture.asset(
+            AppIcons.camera,
+            height: 50.h,
+            width: 50.h,
+          ),
         ),
-      );
-    return IntrinsicHeight(
-      child: Row(
-        children: [
-          Flexible(
-            flex: 4,
-            child: GestureDetector(
-              onTap: () => _takeImage(),
-              child: Container(
-                height: 100.h,
-                width: 100.h,
-                child: Center(
-                  child: SvgPicture.asset(
-                    AppIcons.camera,
-                    height: 50.h,
-                    width: 50.h,
-                  ),
-                ),
-                decoration: BoxDecoration(
-                    color: AppColors.aliceBlue,
-                    borderRadius: BorderRadius.circular(13.33.sqr)),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return ImageDetail(
-                    isLast: index == _images.value.length - 1,
-                    isWatermarking: isWatermarking,
-                    image: _images.value[index],
-                    onPreview: _imagePreview);
-              },
-              loop: false,
-              itemCount: _images.value.length,
-              itemHeight: 100.h,
-              itemWidth: 100.h,
-              containerWidth: 100.h,
-              containerHeight: 100.h,
-              layout: SwiperLayout.STACK,
-              axisDirection: AxisDirection.right,
-            ),
-          ),
-        ],
+        decoration: BoxDecoration(
+            color: AppColors.aliceBlue,
+            borderRadius: BorderRadius.circular(13.33.sqr)),
       ),
     );
   }
 }
 
 class ImageDetail extends StatelessWidget {
-  final XFile image;
-  final bool isLast;
-  final ValueNotifier<bool> isWatermarking;
-  final Future<void> Function(Image image) onPreview;
+  final ImageDynamic image;
+  final double? width;
+  final double? height;
   const ImageDetail({
     super.key,
     required this.image,
-    required this.onPreview,
-    required this.isLast,
-    required this.isWatermarking,
+    this.width,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-        listenable: isWatermarking,
-        builder: (context, child) {
-          if (isLast && isWatermarking.value == true) {
-            return Center(
-              child: AppIndicator(),
-            );
-          }
-          return FutureBuilder(
-            future: image.readAsBytes(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final imagePreview = Image.memory(
-                  snapshot.data!,
-                  fit: BoxFit.cover,
-                );
-                return GestureDetector(
-                  onTap: () => onPreview(Image.memory(
-                    snapshot.data!,
-                    fit: BoxFit.contain,
-                  )),
-                  child: Center(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.sqr),
-                        child: SizedBox(width: 100.h, child: imagePreview)),
-                  ),
-                );
-              }
-              return Center(
-                child: AppIndicator(),
-              );
-            },
-          );
-        });
+    if (image.rawData != null)
+      return Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(12.sqr),
+            child: SizedBox(
+                width: width ?? 100.h,
+                height: height ?? 100.h,
+                child: Image.memory(Uint8List.fromList(image.rawData!)))),
+      );
+    else {
+      return Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(12.sqr),
+            child: SizedBox(
+                width: width ?? 100.h,
+                height: height ?? 100.h,
+                child: Image.network(image.networkImage!.variants!.first))),
+      );
+    }
   }
 }

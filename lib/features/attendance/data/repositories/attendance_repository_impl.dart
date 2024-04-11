@@ -7,7 +7,7 @@ import 'package:fms/features/attendance/domain/repositories/attendance_repositor
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../config/domain/entities/config_entity.dart';
+import '../../../general/domain/entities/config_entity.dart';
 import '../../../general/domain/entities/general_entity.dart';
 import '../../domain/entities/attendance_entity.dart';
 
@@ -23,7 +23,7 @@ class AttendanceRepositoryImpl extends Repository
       {XFile? file,
       Position? position,
       required DateTime time,
-      required Feature feature,
+      required FeatureEntity feature,
       required GeneralEntity general}) {
     return todo(() async {
       final attendanceData = await _remote.postAttendance(
@@ -38,7 +38,7 @@ class AttendanceRepositoryImpl extends Repository
 
   @override
   Future<Result<AttendanceEntity?>> getAttendanceInfo(
-      {required Feature feature, required GeneralEntity general}) {
+      {required FeatureEntity feature, required GeneralEntity general}) {
     return todo(() async {
       final attendanceEntity =
           await _remote.getAttendanceInfo(feature: feature, general: general);

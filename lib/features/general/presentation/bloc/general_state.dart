@@ -17,4 +17,8 @@ final class GeneralSuccess extends GeneralState {
   GeneralSuccess({required this.general});
 }
 
-final class GeneralFailure extends GeneralState {}
+final class GeneralFailure extends GeneralState {
+  final Failure? failure;
+
+  GeneralFailure({this.failure});
+}

@@ -7,14 +7,18 @@ sealed class GeneralEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GeneralStared extends GeneralEvent {
-  final GeneralEntity general;
+class GeneralFetch extends GeneralEvent {
+  final WorkPlaceEntity workPlace;
 
-  GeneralStared({required this.general});
+  GeneralFetch({required this.workPlace});
 }
 
-class GeneralUpdate extends GeneralEvent {
-  final AttendanceEntity? attendance;
+class GeneralStared extends GeneralEvent {}
 
-  GeneralUpdate({required this.attendance});
+class GeneralReset extends GeneralEvent {}
+
+class GeneralRefresh extends GeneralEvent {
+  final AttendanceEntity attendance;
+
+  GeneralRefresh({required this.attendance});
 }

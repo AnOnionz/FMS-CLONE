@@ -5,6 +5,7 @@ import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
 import 'package:fms/features/crawl/crawl.module.dart';
+import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/lock/lock_module.dart';
 import 'package:fms/features/note/note_module.dart';
@@ -38,12 +39,7 @@ class AppModule extends Module {
   @override
   void binds(i) {
     AppConfig();
-    Database().open([
-      LocalValueSchema,
-      UserModelSchema,
-      SettingAppSchema,
-      FileWithMetaDataSchema
-    ]);
+
     i.addLazySingleton(AppBloc.new);
   }
 

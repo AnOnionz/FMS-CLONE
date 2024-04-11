@@ -10,7 +10,7 @@ import 'package:fms/core/widgets/item_container.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/images.dart';
 import '../../../../core/widgets/advanced_text_field.dart';
-import '../../../config/domain/entities/config_entity.dart';
+import '../../../general/domain/entities/config_entity.dart';
 
 class CrawlItem extends StatefulWidget {
   final FeatureQuantity entity;
