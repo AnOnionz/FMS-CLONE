@@ -56,9 +56,12 @@ class AppIcons {
   static String requiredAttendance = 'required_attendance'.icon.svg;
   static String requiredInternet = 'required_internet'.icon.svg;
   static String requiredTask = 'required_task'.icon.svg;
+  static String requiredDownload = 'required_download'.icon.svg;
   static String success = 'success'.icon.svg;
   static String failure = 'failure'.icon.svg;
   static String logout = 'logout'.icon.svg;
   static String upload = 'upload'.icon.svg;
   static String shop = 'shop'.icon.svg;
+  static String bin = 'bin'.icon.svg;
+  static String binCircle = 'bin_circle'.icon.svg;
 }

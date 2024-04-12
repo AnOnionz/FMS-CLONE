@@ -1,7 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/utilities/overlay.dart';
+import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/report/domain/usecases/create_photos_usecase.dart';
@@ -20,16 +24,29 @@ class ReportCubit extends Cubit<ReportState> {
       {required List<ReportEntity> items,
       required GeneralEntity general,
       required FeatureEntity feature}) async {
+    OverlayManager.showLoading();
     final execute = await createPhotos(
         CreatePhotosParams(photos: items, general: general, feature: feature));
-    execute.fold((failure) => emit(ReportFailure(failure)),
-        (data) => emit(ReportSuccess(data)));
+    execute.fold((failure) {
+      OverlayManager.hide();
+      showFailure(
+          title: 'Lưu thất bại',
+          icon: SvgPicture.asset(AppIcons.failure),
+          btnText: 'Thử lại',
+          onPressed: () {
+            OverlayManager.hide();
+            savePhotos(items: items, general: general, feature: feature);
+          });
+    }, (data) {
+      OverlayManager.hide();
+      showSuccess(title: 'Lưu thành công');
+      emit(ReportSuccess(data));
+    });
   }
 
   Future<void> fetchPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {
     emit(ReportLoading());
-
     final execute =
         await getPhotos(GetPhotosParams(general: general, feature: feature));
     execute.fold((failure) => emit(ReportFailure(failure)),

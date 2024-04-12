@@ -48,9 +48,9 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
             onBack: () {
               if (mounted) {
                 try {
-                  context.popUtil(HomeModule.route);
+                  context.popUntil(HomeModule.route);
                 } catch (e) {
-                  context.popUtil(HomeModule.route);
+                  context.popUntil(HomeModule.route);
                 }
               }
             }),

@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -10,17 +11,21 @@ import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
+import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/constant/icons.dart';
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
+import '../../../../core/widgets/button/outline.dart';
 import '../../../../core/widgets/image_picker_widget.dart';
+import '../../../../core/widgets/listview_images.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../../../home/home_module.dart';
-import '../widgets/notifications.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
@@ -35,20 +40,21 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   final bloc = Modular.get<AttendanceBloc>();
-
+  final cubit = Modular.get<AttendanceInfoCubit>();
+  final GoogleMapService _mapService = GoogleMapService();
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
   XFile? image;
 
-  late AttendanceEntity? _attendanceInfo = widget.entity.general.attendance;
+  ImageDynamic? _imageDynamic;
+  AttendanceEntity? _attendanceInfo;
+  bool attendanceInfoLoaded = false;
 
-  final GoogleMapService _mapService = GoogleMapService();
+  final imageSize = Size(60.h, 60.h);
 
   @override
   void initState() {
-    isWatermarking.addListener(() {
-      setState(() {});
-    });
+    _getInfo();
     super.initState();
   }
 
@@ -61,8 +67,11 @@ class _AttendancePageState extends State<AttendancePage> {
   bool get isWatermarkRequired =>
       widget.entity.feature.featureAttendance!.isWatermarkRequired ?? false;
 
-  bool get _validateForm {
-    if (image == null) {
+  bool _validateForm() {
+    if (attendanceInfoLoaded == false) {
+      return false;
+    }
+    if (_imageDynamic == null) {
       return false;
     }
     if (isWatermarkRequired && isWatermarking.value == true) {
@@ -71,9 +80,14 @@ class _AttendancePageState extends State<AttendancePage> {
     return true;
   }
 
+  void _getInfo() {
+    cubit.getInfo(
+        feature: widget.entity.feature, general: widget.entity.general);
+  }
+
   void _attendance() {
     bloc.add(AttendanceEvent(
-        file: isPhotoRequired ? image : null,
+        file: isPhotoRequired ? XFile(_imageDynamic!.path!) : null,
         position: isLocationRequired
             ? Modular.get<LocationService>().currentLocation
             : null,
@@ -113,7 +127,7 @@ class _AttendancePageState extends State<AttendancePage> {
     return Scaffold(
       appBar: DefaultAppBar(
           title: 'Chấm công',
-          onBack: () => context.popUtil(HomeModule.route),
+          onBack: () => context.popUntil(HomeModule.route),
           action: HistoryButton(onPressed: () => _showSheetHistory(context))),
       body: Stack(children: [
         RepaintBoundary(child: _mapService.mapWidget),
@@ -147,17 +161,38 @@ class _AttendancePageState extends State<AttendancePage> {
                                     style: context.textTheme.subtitle1,
                                   ),
                                   SizedBox(height: 14.h),
-                                  ImagePickerWidget(
+                                  SizedBox(
                                     height: 60.h,
-                                    width: 60.h,
-                                    enable: image == null,
-                                    onChanged: (file) {
-                                      setState(() {
-                                        image = file;
-                                      });
-                                    },
-                                    isWatermarkRequired: isWatermarkRequired,
-                                    isWatermarking: isWatermarking,
+                                    child: Row(
+                                      children: [
+                                        ImagePickerWidget(
+                                          size: imageSize,
+                                          enable: image == null,
+                                          onChanged: (file) {
+                                            setState(() {
+                                              _imageDynamic = file;
+                                            });
+                                          },
+                                          isWatermarkRequired:
+                                              isWatermarkRequired,
+                                          isWatermarking: isWatermarking,
+                                        ),
+                                        SizedBox(width: 12.h),
+                                        Expanded(
+                                            child: ListViewImages(
+                                          size: imageSize,
+                                          feature: widget.entity.feature,
+                                          onDeleted: (image) {
+                                            setState(() {
+                                              _imageDynamic = null;
+                                            });
+                                          },
+                                          images: _imageDynamic != null
+                                              ? [_imageDynamic!]
+                                              : [],
+                                        ))
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -174,71 +209,142 @@ class _AttendancePageState extends State<AttendancePage> {
                                   borderRadius: BorderRadius.circular(10.sqr)),
                               child: Padding(
                                 padding: EdgeInsets.all(24.h),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      RichText(
-                                          text: TextSpan(
-                                              text: 'Outlet: ',
-                                              style: context.textTheme.subtitle1
-                                                  ?.copyWith(
-                                                      color: AppColors.nobel),
+                                child: BlocConsumer<AttendanceInfoCubit,
+                                    AttendanceInfoState>(
+                                  bloc: cubit,
+                                  listener: (context, state) {
+                                    if (state is AttendanceInfoSuccess) {
+                                      setState(() {
+                                        _attendanceInfo = state.info;
+                                        attendanceInfoLoaded = true;
+                                      });
+                                    }
+                                    if (state is AttendanceInfoFailure) {
+                                      showFailure(
+                                          title: 'Tải dữ liệu thất bại',
+                                          icon: SvgPicture.asset(
+                                              AppIcons.requiredDownload),
+                                          message:
+                                              'Kiểm tra lại đường truyền mạng và thử lại',
+                                          btnText: 'Thử lại',
+                                          onPressed: () {
+                                            context.pop();
+                                            _getInfo();
+                                          });
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    if (state is AttendanceInfoSuccess) {
+                                      return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            RichText(
+                                                text: TextSpan(
+                                                    text: 'Outlet: ',
+                                                    style: context
+                                                        .textTheme.subtitle1
+                                                        ?.copyWith(
+                                                            color: AppColors
+                                                                .nobel),
+                                                    children: [
+                                                  TextSpan(
+                                                      text: widget.entity
+                                                          .general.outlet.name,
+                                                      style: context
+                                                          .textTheme.subtitle1
+                                                          ?.copyWith(
+                                                              color: AppColors
+                                                                  .black))
+                                                ])),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 12.h),
+                                              child: RichText(
+                                                  text: TextSpan(
+                                                      text: 'Địa chỉ: ',
+                                                      style: context
+                                                          .textTheme.subtitle1
+                                                          ?.copyWith(
+                                                              color: AppColors
+                                                                  .nobel),
+                                                      children: [
+                                                    TextSpan(
+                                                        text: widget
+                                                            .entity
+                                                            .general
+                                                            .outlet
+                                                            .address,
+                                                        style: context
+                                                            .textTheme.subtitle1
+                                                            ?.copyWith(
+                                                                color: AppColors
+                                                                    .black))
+                                                  ])),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                            TextSpan(
-                                                text: widget
-                                                    .entity.general.outlet.name,
-                                                style: context
-                                                    .textTheme.subtitle1
-                                                    ?.copyWith(
-                                                        color: AppColors.black))
-                                          ])),
-                                      Padding(
+                                                TimeBox(
+                                                  type: AttendanceType.CheckIn,
+                                                  time: _attendanceInfo
+                                                      ?.dataIn?.deviceTime,
+                                                ),
+                                                TimeBox(
+                                                  type: AttendanceType.CheckOut,
+                                                  time: _attendanceInfo
+                                                      ?.dataOut?.deviceTime,
+                                                ),
+                                              ],
+                                            )
+                                          ]);
+                                    }
+                                    if (state is AttendanceInfoFailure) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 40.h),
+                                          child: SizedBox(
+                                            width: 120.w,
+                                            child: Column(
+                                              children: [
+                                                OutlineButton(
+                                                    onPressed: _getInfo,
+                                                    name: 'Thử lại',
+                                                    color: AppColors.orange)
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return Center(
+                                      child: Padding(
                                         padding: EdgeInsets.symmetric(
-                                            vertical: 12.h),
-                                        child: RichText(
-                                            text: TextSpan(
-                                                text: 'Địa chỉ: ',
-                                                style: context
-                                                    .textTheme.subtitle1
-                                                    ?.copyWith(
-                                                        color: AppColors.nobel),
-                                                children: [
-                                              TextSpan(
-                                                  text: widget.entity.general
-                                                      .outlet.address,
-                                                  style: context
-                                                      .textTheme.subtitle1
-                                                      ?.copyWith(
-                                                          color:
-                                                              AppColors.black))
-                                            ])),
+                                            vertical: 40.h),
+                                        child: Column(
+                                          children: [
+                                            AppIndicator(),
+                                            SizedBox(height: 8.h),
+                                            Text('Tải dữ liệu chấm công',
+                                                style:
+                                                    context.textTheme.subtitle1)
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TimeBox(
-                                            type: AttendanceType.CheckIn,
-                                            time: _attendanceInfo
-                                                ?.dataIn?.deviceTime,
-                                          ),
-                                          TimeBox(
-                                            type: AttendanceType.CheckOut,
-                                            time: _attendanceInfo
-                                                ?.dataOut?.deviceTime,
-                                          ),
-                                        ],
-                                      )
-                                    ]),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
                         ),
                         ZoomIn(
                           duration: 300.milliseconds,
-                          child: _actionButton(
-                              widget.type, _validateForm ? _attendance : null),
+                          child: _actionButton(widget.type,
+                              _validateForm() ? _attendance : null),
                         )
                       ],
                     ),
@@ -259,14 +365,23 @@ class _AttendancePageState extends State<AttendancePage> {
           }
           if (state is AttendanceFailure) {
             OverlayManager.hide();
-            showFailure(context, state.failure, action);
+            showFailure(
+                icon: SvgPicture.asset(AppIcons.failure),
+                title: 'Chấm công thất bại',
+                message: state.failure.message ??
+                    'Phát sinh lỗi trong quá trình chấm công',
+                btnText: 'Thử lại',
+                onPressed: () {
+                  context.pop();
+                  action?.call();
+                });
           }
           if (state is AttendanceSuccess) {
             OverlayManager.hide();
             setState(() {
               _attendanceInfo = state.attendanceData;
             });
-            showSuccess(context);
+            showSuccess(title: 'Chấm công thành công');
           }
         }
       },

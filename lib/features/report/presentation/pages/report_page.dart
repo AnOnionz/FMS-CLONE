@@ -5,14 +5,12 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/core/widgets/empty_widget.dart';
 import 'package:fms/features/report/domain/entities/report_entity.dart';
 import 'package:fms/features/report/presentation/widgets/report_item.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/colors.dart';
-import '../../../../core/services/network_time/network_time_service.dart';
+import '../../../../core/constant/enum.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
 import '../../../home/domain/entities/general_item_data.dart';
@@ -28,7 +26,7 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   final ReportCubit _cubit = Modular.get();
-  final NetworkTimeService _timeService = Modular.get();
+
   late final Map<int, List<ReportEntity>> reports = {};
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
   final ValueNotifier<bool> isUpdatePhoto = ValueNotifier(false);
@@ -36,7 +34,6 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
-
     fetchPhotos();
   }
 
@@ -48,9 +45,15 @@ class _ReportPageState extends State<ReportPage> {
   void onFetchSuccess(List<ReportEntity> data) {
     widget.entity.feature.featurePhotos!.forEach((featurePhoto) {
       setState(() {
-        reports[featurePhoto.id!] = data
-            .where((report) => report.featurePhotoId == featurePhoto.id!)
-            .toList();
+        reports[featurePhoto.id!] =
+            reports[featurePhoto.id!] ?? <ReportEntity>[];
+        data.forEach((photo) {
+          if (!reports[featurePhoto.id!]!
+              .map((e) => e.dataUuid)
+              .contains(photo.dataUuid)) {
+            reports[featurePhoto.id!]!.add(photo);
+          }
+        });
       });
     });
   }
@@ -73,8 +76,48 @@ class _ReportPageState extends State<ReportPage> {
                   }
                 },
                 builder: (context, state) {
-                  if (state is ReportLoading) {
-                    return Center(child: AppIndicator());
+                  if (state is ReportSuccess) {
+                    return CustomScrollView(
+                      physics: kPhysics,
+                      slivers: [
+                        SliverPadding(
+                            padding: EdgeInsets.only(bottom: 5.h),
+                            sliver: SliverList.builder(
+                              itemCount:
+                                  widget.entity.feature.featurePhotos!.length,
+                              itemBuilder: (context, index) {
+                                final photoItem =
+                                    widget.entity.feature.featurePhotos![index];
+                                return ReportItem(
+                                  entity: photoItem,
+                                  feature: widget.entity.feature,
+                                  photos: reports[photoItem.id!]!,
+                                  onAdded: (file) async {
+                                    isUpdatePhoto.value = true;
+                                    reports[photoItem.id!]!.add(ReportEntity(
+                                        dataUuid: Uuid().v1(),
+                                        dataTimestamp: file.dataTimestamp,
+                                        path: file.path,
+                                        featurePhotoId: photoItem.id!,
+                                        status: SyncStatus.noSynced));
+                                    isUpdatePhoto.value = false;
+                                    setState(() {});
+                                  },
+                                  onDeleted: (image) {
+                                    reports[photoItem.id!]!.removeWhere(
+                                        (element) =>
+                                            element.dataUuid == image.uuid);
+                                    setState(() {});
+                                  },
+                                  isWatermark: photoItem.isWatermarkRequired!,
+                                  isWatermarking: photoItem.isWatermarkRequired!
+                                      ? isWatermarking
+                                      : null,
+                                );
+                              },
+                            ))
+                      ],
+                    );
                   }
                   if (state is ReportFailure) {
                     return Center(
@@ -82,41 +125,7 @@ class _ReportPageState extends State<ReportPage> {
                           DataLoadErrorWidget(onPressed: () => fetchPhotos()),
                     );
                   }
-                  return CustomScrollView(
-                    physics: kPhysics,
-                    slivers: [
-                      SliverPadding(
-                          padding: EdgeInsets.only(bottom: 5.h),
-                          sliver: SliverList.builder(
-                            itemCount:
-                                widget.entity.feature.featurePhotos!.length,
-                            itemBuilder: (context, index) {
-                              final photoItem =
-                                  widget.entity.feature.featurePhotos![index];
-                              return ReportItem(
-                                entity: photoItem,
-                                photos: reports[photoItem.id!]!,
-                                onChanged: (file) async {
-                                  isUpdatePhoto.value = true;
-                                  final time = await _timeService.ntpDateTime();
-                                  final bytes = await file.readAsBytes();
-                                  reports[photoItem.id!]!.add(ReportEntity(
-                                      dataUuid: Uuid().v1(),
-                                      dataTimestamp: time,
-                                      rawPath: bytes,
-                                      featurePhotoId: photoItem.id!));
-                                  isUpdatePhoto.value = false;
-                                  setState(() {});
-                                },
-                                isWatermark: photoItem.isWatermarkRequired!,
-                                isWatermarking: photoItem.isWatermarkRequired!
-                                    ? isWatermarking
-                                    : null,
-                              );
-                            },
-                          ))
-                    ],
-                  );
+                  return Center(child: AppIndicator());
                 },
               ),
             ),
@@ -129,7 +138,15 @@ class _ReportPageState extends State<ReportPage> {
               ]),
               padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  _cubit.savePhotos(
+                      items: reports.values
+                          .toList()
+                          .expand((element) => element)
+                          .toList(),
+                      general: widget.entity.general,
+                      feature: widget.entity.feature);
+                },
                 name: 'Lưu',
                 color: AppColors.orange,
                 disableColor: AppColors.potPourri,

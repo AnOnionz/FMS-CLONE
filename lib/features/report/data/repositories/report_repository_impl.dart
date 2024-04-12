@@ -39,7 +39,10 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
                 photo: photo, general: general, feature: feature);
             photo.status = SyncStatus.synced;
 
-            if (report != null) _resp.add(report);
+            if (report != null) {
+              photo.image = report.image;
+              _resp.add(report);
+            }
             _local.cachePhotoToLocal(photo);
           }
         }

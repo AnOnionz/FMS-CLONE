@@ -202,7 +202,7 @@ extension ContextExtensions on BuildContext {
   /// Calls pop repeatedly on the navigator that most tightly encloses the given context until the predicate returns true.
   ///
   ///
-  void popUtil(String page) => _popUntil(page);
+  void popUntil(String page) => _popUntil(page);
 
   ///
   /// Pushes the built widget to the screen using the material fade in animation

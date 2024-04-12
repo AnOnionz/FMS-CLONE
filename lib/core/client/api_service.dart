@@ -44,4 +44,12 @@ abstract class ApiService {
       {required String path,
       FormData? data,
       Map<String, dynamic>? queryParameters});
+
+  /// HTTP request methods
+  ///
+  ///[DELETE] method
+  Future<T?> delete<T>(
+      {required String path,
+      FormData? data,
+      Map<String, dynamic>? queryParameters});
 }

@@ -20,7 +20,6 @@ class AppConfig {
   };
 
   AppConfig() {
-    print('AppConfig Created');
     FlavorConfig(name: _env, variables: variables);
   }
 }

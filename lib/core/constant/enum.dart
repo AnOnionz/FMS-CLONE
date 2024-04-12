@@ -28,3 +28,10 @@ enum SettingType { none, toggle, transfer }
 enum StatisticType { sp, outlet, booth, employee }
 
 enum SyncStatus { noSynced, synced }
+
+enum ImageType {
+  original,
+  mobile,
+  public,
+  thumbnail,
+}

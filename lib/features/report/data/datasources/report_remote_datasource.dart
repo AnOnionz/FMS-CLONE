@@ -49,8 +49,7 @@ class ReportRemoteDataSource extends ImagesRemoteDataSource
         'imageId': photo.image!.id,
       };
     } else {
-      final imageUploadModel = await uploadImageToServer(
-          XFile.fromData(Uint8List.fromList(photo.rawPath!)));
+      final imageUploadModel = await uploadImageToServer(XFile(photo.path!));
       if (imageUploadModel != null) {
         formData = {
           'dataUuid': photo.dataUuid,

@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
+import 'package:fms/features/images/image_module.dart';
 import 'package:fms/features/report/data/datasources/report_local_datasource.dart';
 import 'package:fms/features/report/data/datasources/report_remote_datasource.dart';
 import 'package:fms/features/report/data/repositories/report_repository_impl.dart';
@@ -14,7 +15,7 @@ import '../../routes/routes.dart';
 class ReportModule extends Module {
   static const String route = '/photography/';
   @override
-  List<Module> get imports => [CoreModule()];
+  List<Module> get imports => [CoreModule(), ImageModule()];
   @override
   void binds(Injector i) {
     i.addLazySingleton(ReportLocalDataSource.new);

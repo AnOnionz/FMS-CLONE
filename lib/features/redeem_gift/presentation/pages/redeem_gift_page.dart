@@ -70,7 +70,7 @@ class _RedeemGiftPageState extends State<RedeemGiftPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: DefaultAppBar(
-          onBack: () => context.popUtil(HomeModule.route),
+          onBack: () => context.popUntil(HomeModule.route),
           title: 'Ghi nhận thông tin khách hàng',
         ),
         body: Column(

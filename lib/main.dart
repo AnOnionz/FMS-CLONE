@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/report/domain/entities/report_entity.dart';
 
 import 'core/database/database.dart';
 import 'core/database/file_metadata.dart';
@@ -13,13 +14,14 @@ import 'features/setting/domain/entities/setting_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print(DateTime.now().toUtc().toIso8601String());
+
   await Database.open([
     LocalValueSchema,
     UserModelSchema,
     SettingAppSchema,
     FileWithMetaDataSchema,
-    GeneralEntitySchema
+    GeneralEntitySchema,
+    ReportEntitySchema
   ]);
   runApp(ModularApp(
       module: AppModule(),

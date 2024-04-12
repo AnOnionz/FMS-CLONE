@@ -1,10 +1,7 @@
 part of 'report_cubit.dart';
 
-abstract class ReportState extends Equatable {
+abstract class ReportState {
   const ReportState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class ReportInitial extends ReportState {}

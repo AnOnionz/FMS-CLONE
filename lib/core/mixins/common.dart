@@ -684,7 +684,6 @@ mixin Fx {
   }
 
   static void logException(AppException e) {
-    print(e);
     String line(String text, String fill) {
       final fillCount =
           max(25.generate((index) => index).toString().length - text.length, 0);

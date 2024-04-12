@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
-import '/core/mixins/common.dart';
-import '/core/widgets/adaptive_indicator.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 
 class CachedImage extends StatelessWidget {
   final String imageUrl;
@@ -38,8 +36,7 @@ class CachedImage extends StatelessWidget {
       height: height,
       color: color,
       colorBlendMode: colorBlendMode,
-      placeholder:
-          placeholder ?? (context, url) => AdaptiveIndicator(radius: Fx.dp16),
+      placeholder: placeholder ?? (context, url) => AppIndicator(),
       useOldImageOnUrlChange: useOldImageOnUrlChange,
       fadeOutDuration:
           useFade ? const Duration(milliseconds: 500) : Duration.zero,
@@ -48,7 +45,8 @@ class CachedImage extends StatelessWidget {
       fadeInCurve: Curves.easeOut,
       fadeOutCurve: Curves.easeIn,
       fit: fit,
-      errorWidget: errorWidget,
+      errorWidget:
+          errorWidget ?? (_, string, obj) => Icon(Icons.broken_image_outlined),
     );
   }
 }

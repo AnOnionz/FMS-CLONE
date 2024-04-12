@@ -166,9 +166,7 @@ final class LocationService extends ChangeNotifier {
       });
 
       return _currentLocation;
-    } catch (e, s) {
-      print(e.runtimeType);
-      print(s);
+    } catch (e) {
       if (currentLocation != null) {
         return currentLocation;
       } else {

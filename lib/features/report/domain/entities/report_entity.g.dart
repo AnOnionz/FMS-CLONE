@@ -43,10 +43,10 @@ const ReportEntitySchema = CollectionSchema(
       type: IsarType.object,
       target: r'ImageCloud',
     ),
-    r'rawPath': PropertySchema(
+    r'path': PropertySchema(
       id: 5,
-      name: r'rawPath',
-      type: IsarType.longList,
+      name: r'path',
+      type: IsarType.string,
     ),
     r'status': PropertySchema(
       id: 6,
@@ -85,9 +85,9 @@ int _reportEntityEstimateSize(
     }
   }
   {
-    final value = object.rawPath;
+    final value = object.path;
     if (value != null) {
-      bytesCount += 3 + value.length * 8;
+      bytesCount += 3 + value.length * 3;
     }
   }
   bytesCount += 3 + object.status.name.length * 3;
@@ -110,7 +110,7 @@ void _reportEntitySerialize(
     ImageCloudSchema.serialize,
     object.image,
   );
-  writer.writeLongList(offsets[5], object.rawPath);
+  writer.writeString(offsets[5], object.path);
   writer.writeString(offsets[6], object.status.name);
 }
 
@@ -130,10 +130,10 @@ ReportEntity _reportEntityDeserialize(
       ImageCloudSchema.deserialize,
       allOffsets,
     ),
-    rawPath: reader.readLongList(offsets[5]),
+    path: reader.readStringOrNull(offsets[5]),
     status:
         _ReportEntitystatusValueEnumMap[reader.readStringOrNull(offsets[6])] ??
-            SyncStatus.noSynced,
+            SyncStatus.synced,
   );
   return object;
 }
@@ -160,11 +160,11 @@ P _reportEntityDeserializeProp<P>(
         allOffsets,
       )) as P;
     case 5:
-      return (reader.readLongList(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (_ReportEntitystatusValueEnumMap[
               reader.readStringOrNull(offset)] ??
-          SyncStatus.noSynced) as P;
+          SyncStatus.synced) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -664,166 +664,154 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathIsNull() {
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'rawPath',
+        property: r'path',
       ));
     });
   }
 
   QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathIsNotNull() {
+      pathIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'rawPath',
+        property: r'path',
       ));
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathElementEqualTo(int value) {
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'rawPath',
+        property: r'path',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathElementGreaterThan(
-    int value, {
+      pathGreaterThan(
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'rawPath',
+        property: r'path',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathElementLessThan(
-    int value, {
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathLessThan(
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'rawPath',
+        property: r'path',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathElementBetween(
-    int lower,
-    int upper, {
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathBetween(
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'rawPath',
+        property: r'path',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'rawPath',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'rawPath',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'rawPath',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathLengthLessThan(
-    int length, {
-    bool include = false,
+      pathStartsWith(
+    String value, {
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'rawPath',
-        0,
-        true,
-        length,
-        include,
-      );
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'path',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
     });
   }
 
   QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
+      pathIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'rawPath',
-        length,
-        include,
-        999999,
-        true,
-      );
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'path',
+        value: '',
+      ));
     });
   }
 
   QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      rawPathLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
+      pathIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'rawPath',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'path',
+        value: '',
+      ));
     });
   }
 
@@ -1029,6 +1017,18 @@ extension ReportEntityQuerySortBy
     });
   }
 
+  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.desc);
+    });
+  }
+
   QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -1107,6 +1107,18 @@ extension ReportEntityQuerySortThenBy
     });
   }
 
+  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.desc);
+    });
+  }
+
   QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -1149,9 +1161,10 @@ extension ReportEntityQueryWhereDistinct
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct> distinctByRawPath() {
+  QueryBuilder<ReportEntity, ReportEntity, QDistinct> distinctByPath(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'rawPath');
+      return query.addDistinctBy(r'path', caseSensitive: caseSensitive);
     });
   }
 
@@ -1202,9 +1215,9 @@ extension ReportEntityQueryProperty
     });
   }
 
-  QueryBuilder<ReportEntity, List<int>?, QQueryOperations> rawPathProperty() {
+  QueryBuilder<ReportEntity, String?, QQueryOperations> pathProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'rawPath');
+      return query.addPropertyName(r'path');
     });
   }
 

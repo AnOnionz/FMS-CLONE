@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fms/core/client/dio_client.dart';
 import 'package:fms/features/images/data/models/image_upload_model.dart';
-// import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/utilities/parser.dart';

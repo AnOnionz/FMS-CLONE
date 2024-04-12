@@ -3,6 +3,7 @@ import 'dart:io';
 
 // import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '/core/client/api_service.dart';
 import '/core/errors/app_exception.dart';
@@ -35,7 +36,7 @@ class DioClient extends ApiService {
               RegExp('.{1,800}'); // 800 is the size of each chunk
           pattern
               .allMatches(object.toString())
-              .forEach((RegExpMatch match) => print(match.group(0)));
+              .forEach((RegExpMatch match) => debugPrint(match.group(0)));
         },
         responseBody: true,
       ),
@@ -117,6 +118,20 @@ class DioClient extends ApiService {
     return _request(
         retries: retries,
         _http.put(path,
+            queryParameters: queryParameters,
+            data: data,
+            cancelToken: cancelToken));
+  }
+
+  @override
+  Future<T?> delete<T>(
+      {required String path,
+      int retries = 1,
+      Object? data,
+      Map<String, dynamic>? queryParameters}) async {
+    return _request(
+        retries: retries,
+        _http.delete(path,
             queryParameters: queryParameters,
             data: data,
             cancelToken: cancelToken));

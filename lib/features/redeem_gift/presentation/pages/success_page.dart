@@ -36,7 +36,7 @@ class SuccessPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: OutlineButton(
-                            onPressed: () => context.popUtil(HomeModule.route),
+                            onPressed: () => context.popUntil(HomeModule.route),
                             name: 'Trang chủ',
                             color: AppColors.orange),
                       ),
@@ -44,7 +44,7 @@ class SuccessPage extends StatelessWidget {
                       Expanded(
                         child: FlatButton(
                             onPressed: () {
-                              context.popUtil(HomeModule.route);
+                              context.popUntil(HomeModule.route);
                               context.nextRoute(RedeemGiftModule.route);
                             },
                             name: 'Tiếp tục đổi quà',

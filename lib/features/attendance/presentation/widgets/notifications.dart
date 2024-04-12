@@ -16,7 +16,7 @@ void showSuccess(BuildContext context) {
           icon: SvgPicture.asset(AppIcons.success),
           title: 'Chấm công thành công',
           action: OutlineButton(
-              onPressed: () => context.popUtil(HomeModule.route),
+              onPressed: () => context.popUntil(HomeModule.route),
               name: 'Về trang chủ',
               color: AppColors.royalBlue)));
 }
@@ -59,6 +59,16 @@ void showRequiredInternet(BuildContext context, VoidCallback onRetry) {
               onPressed: onRetry, name: 'Thử lại', color: AppColors.orange)));
 }
 
+void showInfoAttendanceFailure(BuildContext context, VoidCallback onRetry) {
+  OverlayManager.showSheet(
+      body: BottomSheetNotification(
+          icon: SvgPicture.asset(AppIcons.requiredDownload),
+          title: 'Tải dữ liệu thất bại',
+          message: 'Kiểm tra lại đường truyền mạng và thử lại',
+          action: OutlineButton(
+              onPressed: onRetry, name: 'Thử lại', color: AppColors.orange)));
+}
+
 void showRequiredSync(BuildContext context) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
@@ -82,7 +92,7 @@ void showRequiredTask(BuildContext context, VoidCallback onRetry) {
           message:
               'Yêu cầu hoàn thành tất cả công việc bắt buộc trong ngày trước khi chấm công ra',
           action: OutlineButton(
-              onPressed: () => context.popUtil(HomeModule.route),
+              onPressed: () => context.popUntil(HomeModule.route),
               name: 'Về trang chủ',
               color: AppColors.orange)));
 }

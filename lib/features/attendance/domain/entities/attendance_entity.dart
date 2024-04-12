@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:isar/isar.dart';
 
+import '../../../../core/constant/enum.dart';
+import 'package:collection/collection.dart';
+
 part 'attendance_entity.g.dart';
 
 @embedded
@@ -121,6 +124,10 @@ class ImageCloud {
     this.filename,
     this.variants,
   });
+
+  String getImage({ImageType image = ImageType.public}) {
+    return variants!.firstWhere((element) => element.endsWith(image.name));
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

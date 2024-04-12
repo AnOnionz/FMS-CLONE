@@ -7,7 +7,9 @@ import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_flow_cubit.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
 import 'package:fms/features/general/general_module.dart';
+import 'package:fms/features/images/image_module.dart';
 import '../../routes/core_module.dart';
+import 'presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'presentation/bloc/locate_cubit.dart';
 
 class AttendanceCoreModule extends Module {
@@ -15,7 +17,7 @@ class AttendanceCoreModule extends Module {
   static const String attendance = 'attendance';
   @override
   List<Module> get imports =>
-      [CoreModule(), AuthenticationModule(), GeneralModule()];
+      [CoreModule(), AuthenticationModule(), GeneralModule(), ImageModule()];
 
   @override
   void binds(Injector i) {
@@ -26,5 +28,6 @@ class AttendanceCoreModule extends Module {
     i.addSingleton(GetAttendanceInfoUsecase.new);
     i.add(AttendanceBloc.new);
     i.add(AttendanceFlowCubit.new);
+    i.add(AttendanceInfoCubit.new);
   }
 }
