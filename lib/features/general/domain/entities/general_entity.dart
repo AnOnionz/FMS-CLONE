@@ -11,11 +11,11 @@ part 'general_entity.g.dart';
 
 @collection
 class GeneralEntity {
-  Id get isarId => fastHash(config.versionId!.toString());
+  Id get isarId => fastHash(config.versionCode!);
   final ProjectEntity project;
   final OutletEntity outlet;
-  final BoothEntity booth;
   final ConfigEntity config;
+  final BoothEntity booth;
   final AttendanceEntity? attendance;
   final DateTime createdDate;
 

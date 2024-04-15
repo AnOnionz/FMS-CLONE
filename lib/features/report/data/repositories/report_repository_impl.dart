@@ -22,9 +22,6 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
     return todo(() async {
       final localPhotos = await _local.getPhotos();
       if (localPhotos.isNotEmpty) {
-        localPhotos.sort(
-          (a, b) => a.dataTimestamp.compareTo(b.dataTimestamp),
-        );
         return Right(localPhotos);
       }
       final photos =

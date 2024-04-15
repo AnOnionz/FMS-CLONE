@@ -47,6 +47,7 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   void onFetchSuccess(List<PhotoEntity> data) {
+    print(data);
     final photoGroup = groupBy<PhotoEntity, int>(
       data,
       (photo) {

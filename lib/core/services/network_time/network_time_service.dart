@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_kronos/flutter_kronos.dart';
+import 'package:fms/core/mixins/extension/num_ext.dart';
 
 final class NetworkTimeService {
   void startup() {
@@ -25,5 +26,12 @@ final class NetworkTimeService {
   Future<int> ntpDateTimeMs() async {
     final result = await FlutterKronos.getCurrentNtpTimeMs;
     return result ?? DateTime.now().millisecondsSinceEpoch;
+  }
+
+  Future<({DateTime yesterday, DateTime today})> todayRangeDate() async {
+    final time = await ntpDateTime();
+    final today = DateTime(time.year, time.month, time.day, 23, 59, 59, 999);
+    final yesterday = today.subtract(1.days);
+    return (yesterday: yesterday, today: today);
   }
 }

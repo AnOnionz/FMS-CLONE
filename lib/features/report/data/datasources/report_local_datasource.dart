@@ -4,6 +4,7 @@ import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/core/utilities/parser.dart';
+import 'package:isar/isar.dart';
 
 import '../../domain/entities/report_entity.dart';
 
@@ -32,17 +33,18 @@ class ReportLocalDataSource extends LocalDatasource
 
   @override
   Future<List<PhotoEntity>> getPhotos() async {
-    final time = await Modular.get<NetworkTimeService>().ntpDateTime();
-    final today = DateTime(time.year, time.month, time.day, 23, 59, 59, 999);
-    final yesterday = today.subtract(1.days);
-    return db.filter<PhotoEntity>(
-        (filter) => filter.dataTimestampBetween(yesterday, today));
+    final time = await Modular.get<NetworkTimeService>().todayRangeDate();
+
+    return db.filter<PhotoEntity>((filter) => filter
+        .dataTimestampBetween(time.yesterday, time.today)
+        .sortByDataTimestamp()
+        .build());
   }
 
   @override
   List<PhotoEntity> getPhotosNoSynced() {
     return db.filter<PhotoEntity>(
-        (filter) => filter.statusEqualTo(SyncStatus.noSynced));
+        (filter) => filter.statusEqualTo(SyncStatus.noSynced).build());
   }
 
   @override

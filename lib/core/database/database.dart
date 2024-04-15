@@ -68,9 +68,10 @@ final class Database {
   }
 
   List<T> filter<T>(
-      QueryBuilder<T, T, QAfterFilterCondition> Function(
-              QueryBuilder<T, T, QFilterCondition> filter)
-          func) {
+    Query<T> Function(
+      QueryBuilder<T, T, QFilterCondition> filter,
+    ) func,
+  ) {
     return func(_isar!.collection<T>().filter()).findAllSync();
   }
 
