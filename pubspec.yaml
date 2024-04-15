@@ -94,6 +94,7 @@ flutter:
     - assets/icons/
     - assets/rives/
     - assets/map_styles.json
+    - shorebird.yaml
 
   fonts:
     - family: AppIcon

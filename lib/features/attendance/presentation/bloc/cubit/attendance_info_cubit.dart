@@ -23,9 +23,8 @@ class AttendanceInfoCubit extends Cubit<AttendanceInfoState> {
     final execute = await _getAttendanceInfo(AttendanceParams(
         time: DateTime.now(), feature: feature, general: general));
 
-    execute
-        .fold((failure) async => emit(AttendanceInfoFailure(DownloadFailure())),
-            (data) async {
+    execute.fold((failure) => emit(AttendanceInfoFailure(DownloadFailure())),
+        (data) {
       if (data != null) {
         _generalBloc.add(GeneralRefresh(attendance: data));
       }

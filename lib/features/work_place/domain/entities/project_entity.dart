@@ -32,8 +32,8 @@ class ProjectEntity {
       id: map['id'] as int,
       name: map['name'] as String,
       startDate: DateTime.parse(map['startDate'] as String),
-      endDated: map['endDated'] != null
-          ? DateTime.parse(map['endDated'] as String)
+      endDated: map['endDate'] != null
+          ? DateTime.parse(map['endDate'] as String)
           : null,
     );
   }

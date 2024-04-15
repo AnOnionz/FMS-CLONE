@@ -25,7 +25,7 @@ class ReportCubit extends Cubit<ReportState> {
     OverlayManager.showLoading();
     final execute = await createPhotos(
         CreatePhotosParams(photos: items, general: general, feature: feature));
-    execute.fold((failure) async {
+    execute.fold((failure) {
       OverlayManager.hide();
       showFailure(
           title: 'Lưu thất bại',
