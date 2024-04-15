@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/images/domain/usecases/delete_image_usecase.dart';
-import 'package:fms/features/report/domain/entities/report_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/widgets/image_picker_widget.dart';

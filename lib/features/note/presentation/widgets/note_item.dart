@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/image_picker_widget.dart';
-import '../../../report/domain/entities/report_entity.dart';
+import '../../../report/domain/entities/photo_entity.dart';
 import 'note_text_field.dart';
 
 class NoteItem extends StatefulWidget {

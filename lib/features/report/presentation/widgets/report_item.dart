@@ -4,7 +4,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/listview_images.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/report/domain/entities/report_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/widgets/image_picker_widget.dart';
 

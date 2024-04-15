@@ -9,7 +9,7 @@ import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/report/domain/usecases/create_photos_usecase.dart';
 import 'package:fms/features/report/domain/usecases/get_photos_usecase.dart';
 
-import '../../domain/entities/report_entity.dart';
+import '../../domain/entities/photo_entity.dart';
 
 part 'report_state.dart';
 

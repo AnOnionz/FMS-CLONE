@@ -6,7 +6,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/features/report/domain/entities/report_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:fms/features/report/presentation/widgets/report_item.dart';
 import 'package:uuid/uuid.dart';
 
@@ -47,7 +47,7 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   void onFetchSuccess(List<PhotoEntity> data) {
-    print(data);
+    print(data.length);
     final photoGroup = groupBy<PhotoEntity, int>(
       data,
       (photo) {

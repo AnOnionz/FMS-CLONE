@@ -6,7 +6,7 @@ import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/report/data/datasources/report_local_datasource.dart';
 import 'package:fms/features/report/data/datasources/report_remote_datasource.dart';
-import 'package:fms/features/report/domain/entities/report_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:fms/features/report/domain/repositories/report_repository.dart';
 
 import '../../../../core/usecase/either.dart';
@@ -44,11 +44,11 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
                 photo: photo, general: general, feature: feature);
             photo = photo.copyWith(id: report?.id, status: SyncStatus.synced);
             if (report != null) {
-              photo.image = report.image;
-              _resp.add(report);
+              report.image = report.image;
             }
-            _local.cachePhotoToLocal(photo);
           }
+          photo.attendanceId = general.attendance?.id;
+          _local.cachePhotoToLocal(photo);
         }
         return Right(_resp);
       },

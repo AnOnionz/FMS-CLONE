@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:fms/core/constant/enum.dart';
@@ -7,7 +6,7 @@ import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
 
-part 'report_entity.g.dart';
+part 'photo_entity.g.dart';
 
 @collection
 class PhotoEntity {
@@ -15,6 +14,7 @@ class PhotoEntity {
   int? id;
   String dataUuid;
   String? path;
+  int? attendanceId;
   @Index(type: IndexType.value)
   DateTime dataTimestamp;
   int featurePhotoId;
@@ -24,6 +24,7 @@ class PhotoEntity {
 
   PhotoEntity(
       {this.id,
+      this.attendanceId,
       required this.dataUuid,
       required this.dataTimestamp,
       required this.featurePhotoId,
@@ -44,13 +45,9 @@ class PhotoEntity {
   factory PhotoEntity.fromJson(String source) =>
       PhotoEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  @override
-  String toString() {
-    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, dataTimestamp: $dataTimestamp, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
-  }
-
   PhotoEntity copyWith({
     int? id,
+    int? attendanceId,
     String? dataUuid,
     String? path,
     DateTime? dataTimestamp,
@@ -60,6 +57,7 @@ class PhotoEntity {
   }) {
     return PhotoEntity(
       id: id ?? this.id,
+      attendanceId: attendanceId ?? this.attendanceId,
       dataUuid: dataUuid ?? this.dataUuid,
       path: path ?? this.path,
       dataTimestamp: dataTimestamp ?? this.dataTimestamp,
@@ -67,5 +65,10 @@ class PhotoEntity {
       image: image ?? this.image,
       status: status ?? this.status,
     );
+  }
+
+  @override
+  String toString() {
+    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, attendanceId: $attendanceId, dataTimestamp: $dataTimestamp, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
   }
 }

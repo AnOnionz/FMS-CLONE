@@ -4,7 +4,7 @@ import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/report/data/repositories/report_repository_impl.dart';
 
-import '../entities/report_entity.dart';
+import '../entities/photo_entity.dart';
 
 class CreatePhotosUsecase
     extends UseCase<List<PhotoEntity>, CreatePhotosParams> {

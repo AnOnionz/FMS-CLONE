@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'report_entity.dart';
+part of 'photo_entity.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -17,39 +17,44 @@ const PhotoEntitySchema = CollectionSchema(
   name: r'PhotoEntity',
   id: 8245672414119462092,
   properties: {
-    r'dataTimestamp': PropertySchema(
+    r'attendanceId': PropertySchema(
       id: 0,
+      name: r'attendanceId',
+      type: IsarType.long,
+    ),
+    r'dataTimestamp': PropertySchema(
+      id: 1,
       name: r'dataTimestamp',
       type: IsarType.dateTime,
     ),
     r'dataUuid': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'dataUuid',
       type: IsarType.string,
     ),
     r'featurePhotoId': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'featurePhotoId',
       type: IsarType.long,
     ),
     r'id': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'id',
       type: IsarType.long,
     ),
     r'image': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'image',
       type: IsarType.object,
       target: r'ImageCloud',
     ),
     r'path': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'path',
       type: IsarType.string,
     ),
     r'status': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'status',
       type: IsarType.string,
       enumMap: _PhotoEntitystatusEnumValueMap,
@@ -60,7 +65,21 @@ const PhotoEntitySchema = CollectionSchema(
   deserialize: _photoEntityDeserialize,
   deserializeProp: _photoEntityDeserializeProp,
   idName: r'isarId',
-  indexes: {},
+  indexes: {
+    r'dataTimestamp': IndexSchema(
+      id: 5857465224912740492,
+      name: r'dataTimestamp',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'dataTimestamp',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {r'ImageCloud': ImageCloudSchema},
   getId: _photoEntityGetId,
@@ -100,18 +119,19 @@ void _photoEntitySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.dataTimestamp);
-  writer.writeString(offsets[1], object.dataUuid);
-  writer.writeLong(offsets[2], object.featurePhotoId);
-  writer.writeLong(offsets[3], object.id);
+  writer.writeLong(offsets[0], object.attendanceId);
+  writer.writeDateTime(offsets[1], object.dataTimestamp);
+  writer.writeString(offsets[2], object.dataUuid);
+  writer.writeLong(offsets[3], object.featurePhotoId);
+  writer.writeLong(offsets[4], object.id);
   writer.writeObject<ImageCloud>(
-    offsets[4],
+    offsets[5],
     allOffsets,
     ImageCloudSchema.serialize,
     object.image,
   );
-  writer.writeString(offsets[5], object.path);
-  writer.writeString(offsets[6], object.status.name);
+  writer.writeString(offsets[6], object.path);
+  writer.writeString(offsets[7], object.status.name);
 }
 
 PhotoEntity _photoEntityDeserialize(
@@ -121,18 +141,19 @@ PhotoEntity _photoEntityDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = PhotoEntity(
-    dataTimestamp: reader.readDateTime(offsets[0]),
-    dataUuid: reader.readString(offsets[1]),
-    featurePhotoId: reader.readLong(offsets[2]),
-    id: reader.readLongOrNull(offsets[3]),
+    attendanceId: reader.readLongOrNull(offsets[0]),
+    dataTimestamp: reader.readDateTime(offsets[1]),
+    dataUuid: reader.readString(offsets[2]),
+    featurePhotoId: reader.readLong(offsets[3]),
+    id: reader.readLongOrNull(offsets[4]),
     image: reader.readObjectOrNull<ImageCloud>(
-      offsets[4],
+      offsets[5],
       ImageCloudSchema.deserialize,
       allOffsets,
     ),
-    path: reader.readStringOrNull(offsets[5]),
+    path: reader.readStringOrNull(offsets[6]),
     status:
-        _PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offsets[6])] ??
+        _PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offsets[7])] ??
             SyncStatus.synced,
   );
   return object;
@@ -146,22 +167,24 @@ P _photoEntityDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTime(offset)) as P;
-    case 1:
-      return (reader.readString(offset)) as P;
-    case 2:
-      return (reader.readLong(offset)) as P;
-    case 3:
       return (reader.readLongOrNull(offset)) as P;
+    case 1:
+      return (reader.readDateTime(offset)) as P;
+    case 2:
+      return (reader.readString(offset)) as P;
+    case 3:
+      return (reader.readLong(offset)) as P;
     case 4:
+      return (reader.readLongOrNull(offset)) as P;
+    case 5:
       return (reader.readObjectOrNull<ImageCloud>(
         offset,
         ImageCloudSchema.deserialize,
         allOffsets,
       )) as P;
-    case 5:
-      return (reader.readStringOrNull(offset)) as P;
     case 6:
+      return (reader.readStringOrNull(offset)) as P;
+    case 7:
       return (_PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
           SyncStatus.synced) as P;
     default:
@@ -194,6 +217,14 @@ extension PhotoEntityQueryWhereSort
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhere> anyDataTimestamp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'dataTimestamp'),
+      );
     });
   }
 }
@@ -268,10 +299,177 @@ extension PhotoEntityQueryWhere
       ));
     });
   }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause>
+      dataTimestampEqualTo(DateTime dataTimestamp) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'dataTimestamp',
+        value: [dataTimestamp],
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause>
+      dataTimestampNotEqualTo(DateTime dataTimestamp) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataTimestamp',
+              lower: [],
+              upper: [dataTimestamp],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataTimestamp',
+              lower: [dataTimestamp],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataTimestamp',
+              lower: [dataTimestamp],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataTimestamp',
+              lower: [],
+              upper: [dataTimestamp],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause>
+      dataTimestampGreaterThan(
+    DateTime dataTimestamp, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataTimestamp',
+        lower: [dataTimestamp],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause>
+      dataTimestampLessThan(
+    DateTime dataTimestamp, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataTimestamp',
+        lower: [],
+        upper: [dataTimestamp],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause>
+      dataTimestampBetween(
+    DateTime lowerDataTimestamp,
+    DateTime upperDataTimestamp, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataTimestamp',
+        lower: [lowerDataTimestamp],
+        includeLower: includeLower,
+        upper: [upperDataTimestamp],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension PhotoEntityQueryFilter
     on QueryBuilder<PhotoEntity, PhotoEntity, QFilterCondition> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      attendanceIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'attendanceId',
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      attendanceIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'attendanceId',
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      attendanceIdEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'attendanceId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      attendanceIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'attendanceId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      attendanceIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'attendanceId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      attendanceIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'attendanceId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataTimestampEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -957,6 +1155,19 @@ extension PhotoEntityQueryLinks
 
 extension PhotoEntityQuerySortBy
     on QueryBuilder<PhotoEntity, PhotoEntity, QSortBy> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByAttendanceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'attendanceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy>
+      sortByAttendanceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'attendanceId', Sort.desc);
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.asc);
@@ -1034,6 +1245,19 @@ extension PhotoEntityQuerySortBy
 
 extension PhotoEntityQuerySortThenBy
     on QueryBuilder<PhotoEntity, PhotoEntity, QSortThenBy> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByAttendanceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'attendanceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy>
+      thenByAttendanceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'attendanceId', Sort.desc);
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.asc);
@@ -1123,6 +1347,12 @@ extension PhotoEntityQuerySortThenBy
 
 extension PhotoEntityQueryWhereDistinct
     on QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByAttendanceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'attendanceId');
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataTimestamp');
@@ -1168,6 +1398,12 @@ extension PhotoEntityQueryProperty
   QueryBuilder<PhotoEntity, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
+    });
+  }
+
+  QueryBuilder<PhotoEntity, int?, QQueryOperations> attendanceIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'attendanceId');
     });
   }
 

@@ -6,7 +6,7 @@ import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/images/data/datasource/images_remote_datasource.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../domain/entities/report_entity.dart';
+import '../../domain/entities/photo_entity.dart';
 
 abstract class IReportRemoteDataSource {
   Future<PhotoEntity?> createPhoto(

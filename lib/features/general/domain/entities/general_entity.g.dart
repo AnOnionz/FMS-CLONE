@@ -66,7 +66,6 @@ const GeneralEntitySchema = CollectionSchema(
     r'Province': ProvinceSchema,
     r'District': DistrictSchema,
     r'Ward': WardSchema,
-    r'BoothEntity': BoothEntitySchema,
     r'ConfigEntity': ConfigEntitySchema,
     r'FeatureEntity': FeatureEntitySchema,
     r'FeatureAttendance': FeatureAttendanceSchema,
@@ -75,6 +74,7 @@ const GeneralEntitySchema = CollectionSchema(
     r'Product': ProductSchema,
     r'ProductPackaging': ProductPackagingSchema,
     r'FeaturePhoto': FeaturePhotoSchema,
+    r'BoothEntity': BoothEntitySchema,
     r'AttendanceEntity': AttendanceEntitySchema,
     r'AttendanceData': AttendanceDataSchema,
     r'ImageCloud': ImageCloudSchema

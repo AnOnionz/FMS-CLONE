@@ -1,5 +1,5 @@
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/features/report/domain/entities/report_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/utilities/parser.dart';
 

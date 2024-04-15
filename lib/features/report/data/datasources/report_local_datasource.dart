@@ -6,7 +6,7 @@ import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/core/utilities/parser.dart';
 import 'package:isar/isar.dart';
 
-import '../../domain/entities/report_entity.dart';
+import '../../domain/entities/photo_entity.dart';
 
 abstract class IReportLocalDataSource {
   void cachePhotoToLocal(PhotoEntity photo);
