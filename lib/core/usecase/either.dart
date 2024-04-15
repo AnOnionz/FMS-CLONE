@@ -1,9 +1,12 @@
+import 'dart:async';
+
 class Left<L, R> extends Either<L, R> {
   final L _l;
   const Left(this._l);
   L get value => _l;
   @override
-  B fold<B>(B Function(L left) ifLeft, B Function(R right) ifRight) =>
+  FutureOr<B> fold<B>(FutureOr<B> Function(L left) ifLeft,
+          FutureOr<B> Function(R right) ifRight) =>
       ifLeft(_l);
   @override
   bool operator ==(other) => other is Left && other._l == _l;
@@ -16,7 +19,9 @@ class Right<L, R> extends Either<L, R> {
   const Right(this._r);
   R get value => _r;
   @override
-  B fold<B>(B Function(L l) ifLeft, B Function(R r) ifRight) => ifRight(_r);
+  FutureOr<B> fold<B>(FutureOr<B> Function(L l) ifLeft,
+          FutureOr<B> Function(R r) ifRight) =>
+      ifRight(_r);
   @override
   bool operator ==(other) => other is Right && other._r == _r;
   @override
@@ -30,5 +35,6 @@ abstract class Either<L, R>
     implements TraversableMonadOps<Either<L, dynamic>, R> {
   const Either();
 
-  B fold<B>(B Function(L failure) ifLeft, B Function(R data) ifRight);
+  FutureOr<B> fold<B>(FutureOr<B> Function(L failure) ifLeft,
+      FutureOr<B> Function(R data) ifRight);
 }

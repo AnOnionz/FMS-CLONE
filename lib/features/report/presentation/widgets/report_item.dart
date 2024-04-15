@@ -11,7 +11,7 @@ import '../../../../core/widgets/image_picker_widget.dart';
 class ReportItem extends StatelessWidget {
   final FeaturePhoto entity;
   final FeatureEntity feature;
-  final List<ReportEntity> photos;
+  final List<PhotoEntity> photos;
   final bool isWatermark;
   final ValueNotifier<bool>? isWatermarking;
   final void Function(ImageDynamic image) onAdded;
@@ -30,9 +30,9 @@ class ReportItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageSize = Size(100.h, 100.h);
+    final imageSize = Size(60, 60);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       decoration: BoxDecoration(
           color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
@@ -49,11 +49,11 @@ class ReportItem extends StatelessWidget {
                     text: _optinal(),
                     style: context.textTheme.subtitle1
                         ?.copyWith(color: AppColors.orange),
-                  )
+                  ),
                 ]),
           ),
           Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
+              padding: EdgeInsets.only(top: 20.h),
               child: SizedBox(
                 height: imageSize.height,
                 child: Row(
@@ -84,13 +84,15 @@ class ReportItem extends StatelessWidget {
                   ],
                 ),
               )),
-          Padding(
-            padding: EdgeInsets.only(bottom: 4.h),
-            child: Text(
-              entity.description ?? '',
-              style: context.textTheme.caption2,
-            ),
-          )
+          (entity.description != null)
+              ? Padding(
+                  padding: EdgeInsets.only(top: 20.h),
+                  child: Text(
+                    entity.description!,
+                    style: context.textTheme.caption2,
+                  ),
+                )
+              : SizedBox.shrink()
         ],
       ),
     );

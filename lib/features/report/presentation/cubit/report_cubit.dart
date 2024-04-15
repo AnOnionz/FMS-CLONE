@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/errors/failure.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -21,26 +19,28 @@ class ReportCubit extends Cubit<ReportState> {
   ReportCubit(this.createPhotos, this.getPhotos) : super(ReportLoading());
 
   Future<void> savePhotos(
-      {required List<ReportEntity> items,
+      {required List<PhotoEntity> items,
       required GeneralEntity general,
       required FeatureEntity feature}) async {
     OverlayManager.showLoading();
     final execute = await createPhotos(
         CreatePhotosParams(photos: items, general: general, feature: feature));
-    execute.fold((failure) {
+    execute.fold((failure) async {
       OverlayManager.hide();
       showFailure(
           title: 'Lưu thất bại',
-          icon: SvgPicture.asset(AppIcons.failure),
+          failure: failure,
           btnText: 'Thử lại',
           onPressed: () {
             OverlayManager.hide();
             savePhotos(items: items, general: general, feature: feature);
           });
-    }, (data) {
+    }, (data) async {
+      await getPhotos(GetPhotosParams(general: general, feature: feature))
+        ..fold((failure) async => emit(ReportSuccess([])),
+            (data) async => emit(ReportSuccess(data)));
       OverlayManager.hide();
       showSuccess(title: 'Lưu thành công');
-      emit(ReportSuccess(data));
     });
   }
 
@@ -49,7 +49,7 @@ class ReportCubit extends Cubit<ReportState> {
     emit(ReportLoading());
     final execute =
         await getPhotos(GetPhotosParams(general: general, feature: feature));
-    execute.fold((failure) => emit(ReportFailure(failure)),
-        (data) => emit(ReportSuccess(data)));
+    execute.fold((failure) async => emit(ReportFailure(failure)),
+        (data) async => emit(ReportSuccess(data)));
   }
 }

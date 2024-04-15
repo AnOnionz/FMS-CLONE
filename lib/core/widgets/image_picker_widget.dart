@@ -288,8 +288,7 @@ class _ImageViewWidgetState extends State<ImageViewWidget> with GeneralMixin {
                       onPressed: () {
                         context.pop();
                         _bloc.add(DeleteImageRequest(
-                            id: widget.image.id,
-                            uuid: widget.image.uuid,
+                            image: widget.image,
                             general: general,
                             feature: widget.feature));
                       }),

@@ -34,7 +34,8 @@ class LockBloc extends Bloc<LockEvent, LockState> {
     emit(const LockLoading());
 
     final hasPasscode = await hasPasscodeUsecase();
-    hasPasscode.fold((fail) => emit(const LockFailure()), (success) => null);
+    hasPasscode.fold(
+        (fail) async => emit(const LockFailure()), (success) async => null);
 
     final canAuthenticateWithBiometrics = await _auth.canCheckBiometrics;
     final canAuthenticate =

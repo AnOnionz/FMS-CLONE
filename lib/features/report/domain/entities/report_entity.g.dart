@@ -9,13 +9,13 @@ part of 'report_entity.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetReportEntityCollection on Isar {
-  IsarCollection<ReportEntity> get reportEntitys => this.collection();
+extension GetPhotoEntityCollection on Isar {
+  IsarCollection<PhotoEntity> get photoEntitys => this.collection();
 }
 
-const ReportEntitySchema = CollectionSchema(
-  name: r'ReportEntity',
-  id: 6454312636927543971,
+const PhotoEntitySchema = CollectionSchema(
+  name: r'PhotoEntity',
+  id: 8245672414119462092,
   properties: {
     r'dataTimestamp': PropertySchema(
       id: 0,
@@ -52,25 +52,25 @@ const ReportEntitySchema = CollectionSchema(
       id: 6,
       name: r'status',
       type: IsarType.string,
-      enumMap: _ReportEntitystatusEnumValueMap,
+      enumMap: _PhotoEntitystatusEnumValueMap,
     )
   },
-  estimateSize: _reportEntityEstimateSize,
-  serialize: _reportEntitySerialize,
-  deserialize: _reportEntityDeserialize,
-  deserializeProp: _reportEntityDeserializeProp,
+  estimateSize: _photoEntityEstimateSize,
+  serialize: _photoEntitySerialize,
+  deserialize: _photoEntityDeserialize,
+  deserializeProp: _photoEntityDeserializeProp,
   idName: r'isarId',
   indexes: {},
   links: {},
   embeddedSchemas: {r'ImageCloud': ImageCloudSchema},
-  getId: _reportEntityGetId,
-  getLinks: _reportEntityGetLinks,
-  attach: _reportEntityAttach,
+  getId: _photoEntityGetId,
+  getLinks: _photoEntityGetLinks,
+  attach: _photoEntityAttach,
   version: '3.1.0+1',
 );
 
-int _reportEntityEstimateSize(
-  ReportEntity object,
+int _photoEntityEstimateSize(
+  PhotoEntity object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -94,8 +94,8 @@ int _reportEntityEstimateSize(
   return bytesCount;
 }
 
-void _reportEntitySerialize(
-  ReportEntity object,
+void _photoEntitySerialize(
+  PhotoEntity object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -114,13 +114,13 @@ void _reportEntitySerialize(
   writer.writeString(offsets[6], object.status.name);
 }
 
-ReportEntity _reportEntityDeserialize(
+PhotoEntity _photoEntityDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = ReportEntity(
+  final object = PhotoEntity(
     dataTimestamp: reader.readDateTime(offsets[0]),
     dataUuid: reader.readString(offsets[1]),
     featurePhotoId: reader.readLong(offsets[2]),
@@ -132,13 +132,13 @@ ReportEntity _reportEntityDeserialize(
     ),
     path: reader.readStringOrNull(offsets[5]),
     status:
-        _ReportEntitystatusValueEnumMap[reader.readStringOrNull(offsets[6])] ??
+        _PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offsets[6])] ??
             SyncStatus.synced,
   );
   return object;
 }
 
-P _reportEntityDeserializeProp<P>(
+P _photoEntityDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -162,46 +162,45 @@ P _reportEntityDeserializeProp<P>(
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (_ReportEntitystatusValueEnumMap[
-              reader.readStringOrNull(offset)] ??
+      return (_PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
           SyncStatus.synced) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-const _ReportEntitystatusEnumValueMap = {
+const _PhotoEntitystatusEnumValueMap = {
   r'noSynced': r'noSynced',
   r'synced': r'synced',
 };
-const _ReportEntitystatusValueEnumMap = {
+const _PhotoEntitystatusValueEnumMap = {
   r'noSynced': SyncStatus.noSynced,
   r'synced': SyncStatus.synced,
 };
 
-Id _reportEntityGetId(ReportEntity object) {
+Id _photoEntityGetId(PhotoEntity object) {
   return object.isarId;
 }
 
-List<IsarLinkBase<dynamic>> _reportEntityGetLinks(ReportEntity object) {
+List<IsarLinkBase<dynamic>> _photoEntityGetLinks(PhotoEntity object) {
   return [];
 }
 
-void _reportEntityAttach(
-    IsarCollection<dynamic> col, Id id, ReportEntity object) {}
+void _photoEntityAttach(
+    IsarCollection<dynamic> col, Id id, PhotoEntity object) {}
 
-extension ReportEntityQueryWhereSort
-    on QueryBuilder<ReportEntity, ReportEntity, QWhere> {
-  QueryBuilder<ReportEntity, ReportEntity, QAfterWhere> anyIsarId() {
+extension PhotoEntityQueryWhereSort
+    on QueryBuilder<PhotoEntity, PhotoEntity, QWhere> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension ReportEntityQueryWhere
-    on QueryBuilder<ReportEntity, ReportEntity, QWhereClause> {
-  QueryBuilder<ReportEntity, ReportEntity, QAfterWhereClause> isarIdEqualTo(
+extension PhotoEntityQueryWhere
+    on QueryBuilder<PhotoEntity, PhotoEntity, QWhereClause> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> isarIdEqualTo(
       Id isarId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
@@ -211,7 +210,7 @@ extension ReportEntityQueryWhere
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterWhereClause> isarIdNotEqualTo(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> isarIdNotEqualTo(
       Id isarId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
@@ -234,7 +233,7 @@ extension ReportEntityQueryWhere
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterWhereClause> isarIdGreaterThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> isarIdGreaterThan(
       Id isarId,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
@@ -244,7 +243,7 @@ extension ReportEntityQueryWhere
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterWhereClause> isarIdLessThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> isarIdLessThan(
       Id isarId,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
@@ -254,7 +253,7 @@ extension ReportEntityQueryWhere
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterWhereClause> isarIdBetween(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> isarIdBetween(
     Id lowerIsarId,
     Id upperIsarId, {
     bool includeLower = true,
@@ -271,9 +270,9 @@ extension ReportEntityQueryWhere
   }
 }
 
-extension ReportEntityQueryFilter
-    on QueryBuilder<ReportEntity, ReportEntity, QFilterCondition> {
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+extension PhotoEntityQueryFilter
+    on QueryBuilder<PhotoEntity, PhotoEntity, QFilterCondition> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataTimestampEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -283,7 +282,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataTimestampGreaterThan(
     DateTime value, {
     bool include = false,
@@ -297,7 +296,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataTimestampLessThan(
     DateTime value, {
     bool include = false,
@@ -311,7 +310,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataTimestampBetween(
     DateTime lower,
     DateTime upper, {
@@ -329,8 +328,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      dataUuidEqualTo(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> dataUuidEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -343,7 +341,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidGreaterThan(
     String value, {
     bool include = false,
@@ -359,7 +357,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidLessThan(
     String value, {
     bool include = false,
@@ -375,8 +373,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      dataUuidBetween(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> dataUuidBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -395,7 +392,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -409,7 +406,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -423,7 +420,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -434,8 +431,9 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      dataUuidMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> dataUuidMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'dataUuid',
@@ -445,7 +443,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -455,7 +453,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       dataUuidIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -465,7 +463,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       featurePhotoIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -475,7 +473,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       featurePhotoIdGreaterThan(
     int value, {
     bool include = false,
@@ -489,7 +487,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       featurePhotoIdLessThan(
     int value, {
     bool include = false,
@@ -503,7 +501,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       featurePhotoIdBetween(
     int lower,
     int upper, {
@@ -521,7 +519,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> idIsNull() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'id',
@@ -529,8 +527,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      idIsNotNull() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> idIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'id',
@@ -538,7 +535,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> idEqualTo(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> idEqualTo(
       int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -548,7 +545,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> idGreaterThan(
     int? value, {
     bool include = false,
   }) {
@@ -561,7 +558,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> idLessThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> idLessThan(
     int? value, {
     bool include = false,
   }) {
@@ -574,7 +571,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> idBetween(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> idBetween(
     int? lower,
     int? upper, {
     bool includeLower = true,
@@ -591,8 +588,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      imageIsNull() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> imageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'image',
@@ -600,7 +596,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       imageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -609,7 +605,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> isarIdEqualTo(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> isarIdEqualTo(
       Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -619,7 +615,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       isarIdGreaterThan(
     Id value, {
     bool include = false,
@@ -633,8 +629,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      isarIdLessThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> isarIdLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -647,7 +642,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> isarIdBetween(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> isarIdBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -664,7 +659,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathIsNull() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'path',
@@ -672,7 +667,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       pathIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -681,7 +676,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathEqualTo(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -694,8 +689,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      pathGreaterThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -710,7 +704,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathLessThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -725,7 +719,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathBetween(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -744,8 +738,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      pathStartsWith(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -758,7 +751,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathEndsWith(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -771,7 +764,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathContains(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -783,7 +776,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> pathMatches(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -795,8 +788,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      pathIsEmpty() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> pathIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'path',
@@ -805,7 +797,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       pathIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -815,7 +807,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> statusEqualTo(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> statusEqualTo(
     SyncStatus value, {
     bool caseSensitive = true,
   }) {
@@ -828,7 +820,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       statusGreaterThan(
     SyncStatus value, {
     bool include = false,
@@ -844,8 +836,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      statusLessThan(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> statusLessThan(
     SyncStatus value, {
     bool include = false,
     bool caseSensitive = true,
@@ -860,7 +851,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> statusBetween(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> statusBetween(
     SyncStatus lower,
     SyncStatus upper, {
     bool includeLower = true,
@@ -879,7 +870,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       statusStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -893,8 +884,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      statusEndsWith(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> statusEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -907,8 +897,9 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
-      statusContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> statusContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'status',
@@ -918,7 +909,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> statusMatches(
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> statusMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -930,7 +921,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       statusIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -940,7 +931,7 @@ extension ReportEntityQueryFilter
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
       statusIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -951,9 +942,9 @@ extension ReportEntityQueryFilter
   }
 }
 
-extension ReportEntityQueryObject
-    on QueryBuilder<ReportEntity, ReportEntity, QFilterCondition> {
-  QueryBuilder<ReportEntity, ReportEntity, QAfterFilterCondition> image(
+extension PhotoEntityQueryObject
+    on QueryBuilder<PhotoEntity, PhotoEntity, QFilterCondition> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition> image(
       FilterQuery<ImageCloud> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'image');
@@ -961,214 +952,210 @@ extension ReportEntityQueryObject
   }
 }
 
-extension ReportEntityQueryLinks
-    on QueryBuilder<ReportEntity, ReportEntity, QFilterCondition> {}
+extension PhotoEntityQueryLinks
+    on QueryBuilder<PhotoEntity, PhotoEntity, QFilterCondition> {}
 
-extension ReportEntityQuerySortBy
-    on QueryBuilder<ReportEntity, ReportEntity, QSortBy> {
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByDataTimestamp() {
+extension PhotoEntityQuerySortBy
+    on QueryBuilder<PhotoEntity, PhotoEntity, QSortBy> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy>
       sortByDataTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByDataUuid() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByDataUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByDataUuidDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByDataUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy>
-      sortByFeaturePhotoId() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByFeaturePhotoId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featurePhotoId', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy>
       sortByFeaturePhotoIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featurePhotoId', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortById() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByPath() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByPathDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByPathDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByStatus() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> sortByStatusDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.desc);
     });
   }
 }
 
-extension ReportEntityQuerySortThenBy
-    on QueryBuilder<ReportEntity, ReportEntity, QSortThenBy> {
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByDataTimestamp() {
+extension PhotoEntityQuerySortThenBy
+    on QueryBuilder<PhotoEntity, PhotoEntity, QSortThenBy> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy>
       thenByDataTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByDataUuid() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByDataUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByDataUuidDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByDataUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy>
-      thenByFeaturePhotoId() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByFeaturePhotoId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featurePhotoId', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy>
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy>
       thenByFeaturePhotoIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featurePhotoId', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenById() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByIsarId() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByIsarIdDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByIsarIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByPath() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByPathDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByPathDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'path', Sort.desc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByStatus() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QAfterSortBy> thenByStatusDesc() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.desc);
     });
   }
 }
 
-extension ReportEntityQueryWhereDistinct
-    on QueryBuilder<ReportEntity, ReportEntity, QDistinct> {
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct>
-      distinctByDataTimestamp() {
+extension PhotoEntityQueryWhereDistinct
+    on QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> {
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataTimestamp');
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct> distinctByDataUuid(
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByDataUuid(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataUuid', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct>
-      distinctByFeaturePhotoId() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByFeaturePhotoId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'featurePhotoId');
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct> distinctById() {
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctById() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id');
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct> distinctByPath(
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByPath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'path', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<ReportEntity, ReportEntity, QDistinct> distinctByStatus(
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByStatus(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
@@ -1176,52 +1163,52 @@ extension ReportEntityQueryWhereDistinct
   }
 }
 
-extension ReportEntityQueryProperty
-    on QueryBuilder<ReportEntity, ReportEntity, QQueryProperty> {
-  QueryBuilder<ReportEntity, int, QQueryOperations> isarIdProperty() {
+extension PhotoEntityQueryProperty
+    on QueryBuilder<PhotoEntity, PhotoEntity, QQueryProperty> {
+  QueryBuilder<PhotoEntity, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
     });
   }
 
-  QueryBuilder<ReportEntity, DateTime, QQueryOperations>
+  QueryBuilder<PhotoEntity, DateTime, QQueryOperations>
       dataTimestampProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataTimestamp');
     });
   }
 
-  QueryBuilder<ReportEntity, String, QQueryOperations> dataUuidProperty() {
+  QueryBuilder<PhotoEntity, String, QQueryOperations> dataUuidProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataUuid');
     });
   }
 
-  QueryBuilder<ReportEntity, int, QQueryOperations> featurePhotoIdProperty() {
+  QueryBuilder<PhotoEntity, int, QQueryOperations> featurePhotoIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'featurePhotoId');
     });
   }
 
-  QueryBuilder<ReportEntity, int?, QQueryOperations> idProperty() {
+  QueryBuilder<PhotoEntity, int?, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<ReportEntity, ImageCloud?, QQueryOperations> imageProperty() {
+  QueryBuilder<PhotoEntity, ImageCloud?, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
     });
   }
 
-  QueryBuilder<ReportEntity, String?, QQueryOperations> pathProperty() {
+  QueryBuilder<PhotoEntity, String?, QQueryOperations> pathProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'path');
     });
   }
 
-  QueryBuilder<ReportEntity, SyncStatus, QQueryOperations> statusProperty() {
+  QueryBuilder<PhotoEntity, SyncStatus, QQueryOperations> statusProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'status');
     });

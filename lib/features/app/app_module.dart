@@ -5,7 +5,6 @@ import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
 import 'package:fms/features/crawl/crawl.module.dart';
-import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/lock/lock_module.dart';
 import 'package:fms/features/note/note_module.dart';
@@ -18,16 +17,12 @@ import 'package:fms/features/urgency/urgency_module.dart';
 
 import '../../../routes/admin_module.dart';
 import '../../../routes/routes.dart';
-import '../../core/database/database.dart';
-import '../../core/database/file_metadata.dart';
-import '../../core/database/local_value.dart';
 import '../../routes/core_module.dart';
 import '../attendance/attendance_in_module.dart';
 import '../attendance_report/attendance_report_module.dart';
-import '../authentication/data/models/user_model.dart';
 import '../general/general_module.dart';
 import '../leave/leave_module.dart';
-import '../setting/domain/entities/setting_app.dart';
+import '../statistic/Individual_statistic_module.dart';
 import '../sync/sync_module.dart';
 import '../work_place/work_place_module.dart';
 import 'presentation/bloc/app_bloc.dart';
@@ -39,7 +34,6 @@ class AppModule extends Module {
   @override
   void binds(i) {
     AppConfig();
-
     i.addLazySingleton(AppBloc.new);
   }
 
@@ -80,6 +74,8 @@ class AppModule extends Module {
         module: UgrencyModule(), transition: TransitionType.fadeIn);
     r.module(StatisticModule.route,
         module: StatisticModule(), transition: TransitionType.fadeIn);
+    r.module(IndividualStatisticModule.route,
+        module: IndividualStatisticModule(), transition: TransitionType.fadeIn);
     r.module(LockModule.route,
         module: LockModule(), transition: TransitionType.fadeIn);
   }

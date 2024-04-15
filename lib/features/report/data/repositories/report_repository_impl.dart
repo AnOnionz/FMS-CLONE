@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
@@ -16,9 +17,16 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
 
   ReportRepositoryImpl(this._remote, this._local);
   @override
-  Future<Result<List<ReportEntity>>> allPhotos(
+  Future<Result<List<PhotoEntity>>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {
     return todo(() async {
+      final localPhotos = await _local.getPhotos();
+      if (localPhotos.isNotEmpty) {
+        localPhotos.sort(
+          (a, b) => a.dataTimestamp.compareTo(b.dataTimestamp),
+        );
+        return Right(localPhotos);
+      }
       final photos =
           await _remote.allPhotos(general: general, feature: feature);
       return Right(photos);
@@ -26,19 +34,18 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
   }
 
   @override
-  Future<Result<List<ReportEntity>>> createPhotos(
-      {required List<ReportEntity> photos,
+  Future<Result<List<PhotoEntity>>> createPhotos(
+      {required List<PhotoEntity> photos,
       required GeneralEntity general,
       required FeatureEntity feature}) async {
     return todo(
       () async {
-        final List<ReportEntity> _resp = [];
-        for (final ReportEntity photo in photos) {
+        final List<PhotoEntity> _resp = [];
+        for (PhotoEntity photo in photos) {
           if (photo.status == SyncStatus.noSynced) {
             final report = await _remote.createPhoto(
                 photo: photo, general: general, feature: feature);
-            photo.status = SyncStatus.synced;
-
+            photo = photo.copyWith(id: report?.id, status: SyncStatus.synced);
             if (report != null) {
               photo.image = report.image;
               _resp.add(report);

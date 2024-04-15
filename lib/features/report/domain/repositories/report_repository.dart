@@ -5,10 +5,10 @@ import '../../../general/domain/entities/general_entity.dart';
 import '../entities/report_entity.dart';
 
 abstract class ReportRepository {
-  Future<Result<List<ReportEntity>>> createPhotos(
-      {required List<ReportEntity> photos,
+  Future<Result<List<PhotoEntity>>> createPhotos(
+      {required List<PhotoEntity> photos,
       required GeneralEntity general,
       required FeatureEntity feature});
-  Future<Result<List<ReportEntity>>> allPhotos(
+  Future<Result<List<PhotoEntity>>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature});
 }

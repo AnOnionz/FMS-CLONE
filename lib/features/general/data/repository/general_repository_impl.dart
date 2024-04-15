@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
+import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/core/usecase/either.dart';
 import 'package:fms/features/attendance/data/datasources/attendance_remote_datasource.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
@@ -23,9 +25,17 @@ class GeneralRepository extends Repository implements IGeneralRepository {
   @override
   Future<Result<GeneralEntity?>> getLocalGeneral() async {
     final localGeneral = _local.getGeneral();
-    if (localGeneral != null) {
-      general = localGeneral;
+    if (localGeneral == null) {
+      return Right(null);
     }
+    final time = await Modular.get<NetworkTimeService>().ntpDateTime();
+    final dateNow = DateTime(time.year, time.month, time.day);
+    final dateGeneral = DateTime(localGeneral.createdDate.year,
+        localGeneral.createdDate.month, localGeneral.createdDate.day);
+    if (dateNow.isAfter(dateGeneral)) {
+      return Right(null);
+    }
+    general = localGeneral;
     return Right(localGeneral);
   }
 

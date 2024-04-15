@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/image_picker_widget.dart';
+import '../../../report/domain/entities/report_entity.dart';
 import 'note_text_field.dart';
 
 class NoteItem extends StatefulWidget {
@@ -25,8 +26,8 @@ class NoteItem extends StatefulWidget {
 
 class _NoteItemState extends State<NoteItem> {
   final TextEditingController _controller = TextEditingController();
-  final ValueNotifier<List<XFile>> _image = ValueNotifier([]);
-
+  final List<PhotoEntity> _image = [];
+  final size = Size(60.h, 60.h);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,10 +53,34 @@ class _NoteItemState extends State<NoteItem> {
           // widget.canTakeImge
           //     ? Padding(
           //         padding: EdgeInsets.only(top: 16.h),
-          //         child: ImagePickerWidget(
-          //           images: _image,
-          //           max: 5,
-          //           isCarousel: true,
+          //         child: SizedBox(
+          //           height: size.height,
+          //           child: Row(
+          //             children: [
+          //               ImagePickerWidget(
+          //                 enable: photos.length < entity.maximum!,
+          //                 onChanged: onAdded,
+          //                 isWatermarkRequired: isWatermark,
+          //                 isWatermarking: isWatermarking,
+          //               ),
+          //               SizedBox(width: 16.w),
+          //               Expanded(
+          //                 child: ListViewImages(
+          //                   feature: feature,
+          //                   size: imageSize,
+          //                   images: photos
+          //                       .map((e) => ImageDynamic(
+          //                           id: e.id,
+          //                           uuid: e.dataUuid,
+          //                           dataTimestamp: e.dataTimestamp,
+          //                           path: e.path,
+          //                           networkImage: e.image))
+          //                       .toList(),
+          //                   onDeleted: onDeleted,
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
           //         ),
           //       )
           //     : const SizedBox(),

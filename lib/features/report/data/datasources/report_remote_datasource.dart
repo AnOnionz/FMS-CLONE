@@ -9,11 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import '../../domain/entities/report_entity.dart';
 
 abstract class IReportRemoteDataSource {
-  Future<ReportEntity?> createPhoto(
-      {required ReportEntity photo,
+  Future<PhotoEntity?> createPhoto(
+      {required PhotoEntity photo,
       required GeneralEntity general,
       required FeatureEntity feature});
-  Future<List<ReportEntity>> allPhotos(
+  Future<List<PhotoEntity>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature});
 }
 
@@ -22,21 +22,21 @@ class ReportRemoteDataSource extends ImagesRemoteDataSource
   ReportRemoteDataSource(super.dio);
 
   @override
-  Future<List<ReportEntity>> allPhotos(
+  Future<List<PhotoEntity>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {
     final _resp = await dio.get(
         path:
             '/app/attendances/${general.attendance!.id}/features/${feature.id}/photos');
 
-    return parseListJson<ReportEntity>((
+    return parseListJson<PhotoEntity>((
       listJson: _resp,
-      fromJson: ReportEntity.fromMap,
+      fromJson: PhotoEntity.fromMap,
     ));
   }
 
   @override
-  Future<ReportEntity?> createPhoto(
-      {required ReportEntity photo,
+  Future<PhotoEntity?> createPhoto(
+      {required PhotoEntity photo,
       required GeneralEntity general,
       required FeatureEntity feature}) async {
     Map<String, dynamic> formData;
@@ -66,7 +66,6 @@ class ReportRemoteDataSource extends ImagesRemoteDataSource
         path:
             '/app/attendances/${general.attendance!.id}/features/${feature.id}/photos',
         data: formData);
-    return parseJson<ReportEntity>(
-        (json: _resp, fromJson: ReportEntity.fromMap));
+    return parseJson<PhotoEntity>((json: _resp, fromJson: PhotoEntity.fromMap));
   }
 }

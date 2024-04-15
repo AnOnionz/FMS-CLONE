@@ -11,6 +11,6 @@ class DeleteImageLocalDataSource extends LocalDatasource
     implements IDeteleImageLocalDataSource {
   @override
   Future<void> deleteLocalImage<T>({required String uuid}) async {
-    db.deleteObject<ReportEntity>(id: fastHash(uuid));
+    db.deleteObject<PhotoEntity>(id: fastHash(uuid));
   }
 }

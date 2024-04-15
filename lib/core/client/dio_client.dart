@@ -187,6 +187,14 @@ class DioClient extends ApiService {
   }
 
   @override
+  void setTimeout(
+    Duration? timeout,
+  ) {
+    _http.options = _http.options.copyWith(
+        connectTimeout: timeout, sendTimeout: timeout, receiveTimeout: timeout);
+  }
+
+  @override
   void setFormData() {
     _http.options.contentType = Headers.formUrlEncodedContentType;
   }

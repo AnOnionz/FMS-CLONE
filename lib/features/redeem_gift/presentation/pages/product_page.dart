@@ -81,7 +81,7 @@ class _RedeemGiftProductPageState extends State<RedeemGiftProductPage>
                       ]);
                     },
                     onSelected: (value) {
-                      print('Selected suggestion: $value');
+                      debugPrint('Selected suggestion: $value');
                     },
                   )),
                   SizedBox(width: 4.w),

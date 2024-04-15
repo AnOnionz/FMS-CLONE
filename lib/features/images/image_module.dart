@@ -7,16 +7,18 @@ import 'package:fms/features/images/presentation/bloc/delete_image_bloc.dart';
 import 'package:fms/routes/core_module.dart';
 
 import 'data/datasource/delete_image_local_remote_datasource.dart';
+import 'domain/usecases/delete_local_image_usecase.dart';
 
 class ImageModule extends Module {
   @override
   List<Module> get imports => [CoreModule()];
   @override
   void binds(Injector i) {
-    i.add(DeleteImageRemoteDataSource.new);
-    i.add(DeleteImageLocalDataSource.new);
-    i.add(DeleteImageRepositoryImpl.new);
-    i.add(DeleteImageUseCase.new);
+    i.addLazySingleton(DeleteImageRemoteDataSource.new);
+    i.addLazySingleton(DeleteImageLocalDataSource.new);
+    i.addLazySingleton(DeleteImageRepositoryImpl.new);
+    i.addLazySingleton(DeleteImageUseCase.new);
+    i.addLazySingleton(DeleteLocalImageUseCase.new);
     i.add<DeleteImageBloc>(DeleteImageBloc.new);
   }
 }

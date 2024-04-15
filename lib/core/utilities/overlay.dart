@@ -19,8 +19,11 @@ final class OverlayManager {
   static Future<void> showLoading({String? message}) async {
     await showAppDialog(
       barrierDismissible: false,
-      builder: (context) => LoadingAlert(
-        message: message ?? 'Vui lòng đợi...',
+      builder: (context) => PopScope(
+        canPop: false,
+        child: LoadingAlert(
+          message: message ?? 'Vui lòng đợi...',
+        ),
       ),
     );
   }

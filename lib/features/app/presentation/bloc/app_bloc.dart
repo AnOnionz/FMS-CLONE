@@ -5,6 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/client/api_service.dart';
+import 'package:fms/core/client/dio_client.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:fms/features/home/home_module.dart';
@@ -117,10 +120,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _connectivityService.onConnectionChange.listen((status) async {
       Fx.log('Internet status: $status');
       if (status == InternetStatus.connected) {
+        Modular.get<DioClient>().setTimeout(kTimeOutDuration);
       } else {
+        Modular.get<DioClient>().setTimeout(2.seconds);
         if (OverlayManager.currentContext != null) {
           OverlayManager.showToast(
-              msg: 'NO INTERNET', context: OverlayManager.currentContext!);
+              msg: 'Kết nối internet không ổn định',
+              context: OverlayManager.currentContext!);
         }
       }
     });

@@ -200,7 +200,7 @@ final class LocationService extends ChangeNotifier {
         _handlePermission(_positionStreamSubscription);
       }).listen((Position? position) {
         positionUpdate(position);
-        print(position == null
+        debugPrint(position == null
             ? 'Stream Location: Unknown'
             : 'Stream Location: ${position.latitude.toString()}, ${position.longitude.toString()}');
       });

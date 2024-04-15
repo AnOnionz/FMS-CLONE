@@ -27,14 +27,17 @@ class AuthenticationBloc
         await hasValidCredentialsUsecase()
           ..fold(
               (fail) async => emit(const AuthenticationState.unauthenticated()),
-              (success) {
+              (success) async {
             hasValidCredentials = true;
           });
 
         if (hasValidCredentials) {
           await getCredentialsUsecase()
-            ..fold((fail) => emit(const AuthenticationState.unauthenticated()),
-                (success) => emit(AuthenticationState.authenticated(success)));
+            ..fold(
+                (fail) async =>
+                    emit(const AuthenticationState.unauthenticated()),
+                (success) async =>
+                    emit(AuthenticationState.authenticated(success)));
         }
       },
       transformer: droppable(),

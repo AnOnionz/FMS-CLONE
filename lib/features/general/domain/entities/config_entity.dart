@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-
 import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
@@ -46,6 +45,10 @@ class ConfigEntity {
 
   factory ConfigEntity.fromJson(String source) =>
       ConfigEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'ConfigEntity(versionCode: $versionCode, versionId: $versionId, features: $features)';
 }
 
 @embedded
@@ -120,7 +123,7 @@ class FeatureEntity {
 
   @override
   String toString() {
-    return 'Feature(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos)';
+    return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos)';
   }
 }
 

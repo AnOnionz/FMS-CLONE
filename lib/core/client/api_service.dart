@@ -21,6 +21,10 @@ abstract class ApiService {
 
   void setFormData();
 
+  void setTimeout(
+    Duration? timeout,
+  );
+
   /// HTTP request methods
   ///
   /// [GET] method

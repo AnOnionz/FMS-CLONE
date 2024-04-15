@@ -8,4 +8,5 @@ abstract class DeleteImageRepository {
       required FeatureEntity feature,
       required int id,
       required String uuid});
+  Future<Result<void>> deleteLocalImage({required String uuid});
 }

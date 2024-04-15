@@ -6,7 +6,7 @@ import 'presentation/pages/statistic_page.dart';
 import 'presentation/pages/statistic_sp_page.dart';
 
 class StatisticModule extends Module {
-  static const String route = '/statistic/';
+  static const String route = '/onlineTeamSummaryReport/';
   static const String outlet = 'outlet';
   static const String booth = 'booth';
   static const String employee = 'employee';
@@ -22,8 +22,9 @@ class StatisticModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => StatisticPage(isSup: r.args.data as bool?),
+      child: (_) => StatisticPage(isSup: true),
     );
+
     r.child(
       Routes.root + outlet,
       child: (_) => const StatisticOutletPage(),

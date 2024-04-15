@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/home/home_module.dart';
 
@@ -26,16 +26,22 @@ void showSuccess({required String title}) {
 
 void showFailure({
   required String title,
-  required Widget icon,
-  String? message,
+  required Failure failure,
   required String btnText,
   required VoidCallback onPressed,
 }) {
+  final icon = switch (failure.runtimeType) {
+    SocketFailure => AppIcons.requiredInternet,
+    RequiredAllTaskDoneFailure => AppIcons.requiredTask,
+    RequiredSyncFailure => AppIcons.requiredSync,
+    DownloadFailure => AppIcons.requiredDownload,
+    _ => AppIcons.failure,
+  };
   OverlayManager.showSheet(
       body: BottomSheetNotification(
-          icon: icon,
+          icon: SvgPicture.asset(icon),
           title: title,
-          message: message,
+          message: failure.message,
           action: OutlineButton(
               onPressed: onPressed, name: btnText, color: AppColors.orange)));
 }

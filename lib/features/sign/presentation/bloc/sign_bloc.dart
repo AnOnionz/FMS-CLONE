@@ -40,7 +40,7 @@ class SignBloc extends Bloc<SignEvent, SignState> {
       SignInButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
     final execute = await _login();
-    execute.fold((fail) => emit(SignFailure(fail)), (credentials) {
+    execute.fold((fail) async => emit(SignFailure(fail)), (credentials) async {
       if (credentials == null) {
         return emit(SignCancel());
       } else {
@@ -54,7 +54,7 @@ class SignBloc extends Bloc<SignEvent, SignState> {
       SignOutButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
     final execute = await _logout();
-    execute.fold((fail) => emit(SignFailure(fail)), (success) {
+    execute.fold((fail) async => emit(SignFailure(fail)), (success) async {
       if (success) {
         _authenticationBloc.add(AuthenticationLogoutSuccess());
         return emit(SignSuccess(SignStatus.loggedOut));
@@ -66,12 +66,12 @@ class SignBloc extends Bloc<SignEvent, SignState> {
       RequestChangePassworkButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
     final execute = await _changePass();
-    execute.fold((fail) {
+    execute.fold((fail) async {
       OverlayManager.showSnackbar(
           snackbar:
               SnackBar(content: Text(fail.message ?? 'Gửi yêu cầu thất bại')));
       return emit(SignFailure(fail));
-    }, (success) {
+    }, (success) async {
       OverlayManager.showSnackbar(
           snackbar: SnackBar(content: Text('Yêu cầu đã được gửi')));
       return emit(SignSuccess(SignStatus.passwordChanged));

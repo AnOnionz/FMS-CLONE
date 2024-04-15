@@ -7,12 +7,12 @@ import 'package:fms/features/report/data/repositories/report_repository_impl.dar
 import '../entities/report_entity.dart';
 
 class CreatePhotosUsecase
-    extends UseCase<List<ReportEntity>, CreatePhotosParams> {
+    extends UseCase<List<PhotoEntity>, CreatePhotosParams> {
   final ReportRepositoryImpl repository;
 
   CreatePhotosUsecase(this.repository);
   @override
-  Future<Result<List<ReportEntity>>> call(CreatePhotosParams params) async {
+  Future<Result<List<PhotoEntity>>> call(CreatePhotosParams params) async {
     return repository.createPhotos(
         photos: params.photos,
         general: params.general,
@@ -21,7 +21,7 @@ class CreatePhotosUsecase
 }
 
 class CreatePhotosParams {
-  final List<ReportEntity> photos;
+  final List<PhotoEntity> photos;
   final GeneralEntity general;
   final FeatureEntity feature;
 

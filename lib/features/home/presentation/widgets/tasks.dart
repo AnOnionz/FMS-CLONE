@@ -12,7 +12,7 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> with GeneralMixin {
-  late final tasks = general.config!.features
+  late final tasks = general.config.features
       ?.where((feature) => feature.type != null && !feature.type!.isAssistance)
       .toList();
   final double columns = 3;

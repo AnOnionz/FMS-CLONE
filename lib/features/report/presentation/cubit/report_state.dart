@@ -15,7 +15,7 @@ class ReportFailure extends ReportState {
 }
 
 class ReportSuccess extends ReportState {
-  final List<ReportEntity> photos;
+  final List<PhotoEntity> photos;
 
   ReportSuccess(this.photos);
 }

@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/services/location/location_service.dart';
+import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/get_attendance_usecase.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
@@ -41,38 +43,42 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
 
       final execute = await _getConfig(event.workPlace);
 
-      final config = execute.fold((failure) {
+      execute.fold((failure) async {
         emit(GeneralFailure(failure: failure));
-        return null;
-      }, (config) => config);
+      }, (config) async {
+        if (config != null) {
+          final time = await Modular.get<NetworkTimeService>().ntpDateTime();
+          final GeneralEntity general = GeneralEntity(
+              project: event.workPlace.project!,
+              outlet: event.workPlace.outlet!,
+              booth: event.workPlace.booth!,
+              config: config,
+              createdDate: time);
 
-      if (config != null) {
-        final GeneralEntity general = GeneralEntity(
-            project: event.workPlace.project!,
-            outlet: event.workPlace.outlet!,
-            booth: event.workPlace.booth!,
-            config: config);
+          await _createGeneral(general);
 
-        await _createGeneral(general);
+          final execute = await _getAttendance();
 
-        final execute = await _getAttendance();
-
-        final attendanceInfo = execute.fold((failure) {
-          emit(GeneralFailure(failure: failure));
-          return null;
-        }, (data) => data);
-        if (attendanceInfo != null) {
-          final execute = await _refreshGeneral(attendanceInfo);
-          execute.fold((failure) => emit(GeneralFailure(failure: failure)),
-              (data) => emit(GeneralSuccess(general: general)));
-        } else {
-          emit(GeneralSuccess(general: general));
+          execute.fold((failure) async {
+            emit(GeneralFailure(failure: failure));
+            return null;
+          }, (data) async {
+            if (data != null) {
+              final execute = await _refreshGeneral(data);
+              execute.fold(
+                  (failure) async => emit(GeneralFailure(failure: failure)),
+                  (data) async => emit(GeneralSuccess(general: general)));
+            } else {
+              emit(GeneralSuccess(general: general));
+            }
+          });
         }
-      }
+      });
     });
     on<GeneralStared>((event, emit) async {
       final execute = await _getGeneral();
-      execute.fold((failure) => emit(GeneralFailure(failure: failure)), (data) {
+      execute.fold((failure) async => emit(GeneralFailure(failure: failure)),
+          (data) async {
         if (data == null) {
           return emit(GeneralFailure());
         }

@@ -29,22 +29,22 @@ class FetchWorkPlaceBloc
 
   Future<void> _onFetchBooths(FetchBooths event, emit) async {
     emit(FetchWorkPlaceLoading());
-    final execute = await getBooths(WorkPlaceParams(enitty: event.workPlace));
-    execute.fold((fail) => emit(FetchWorkPlaceFailure(fail)),
-        (list) => emit(FetchWorkPlaceSuccess(list)));
+    await getBooths(WorkPlaceParams(enitty: event.workPlace))
+      ..fold((fail) async => emit(FetchWorkPlaceFailure(fail)),
+          (list) async => emit(FetchWorkPlaceSuccess(list)));
   }
 
   Future<void> _onFetchOutlets(FetchOutlets event, emit) async {
     emit(FetchWorkPlaceLoading());
-    final execute = await getOutlets(WorkPlaceParams(enitty: event.workPlace));
-    execute.fold((fail) => emit(FetchWorkPlaceFailure(fail)),
-        (list) => emit(FetchWorkPlaceSuccess(list)));
+    await getOutlets(WorkPlaceParams(enitty: event.workPlace))
+      ..fold((fail) async => emit(FetchWorkPlaceFailure(fail)),
+          (list) async => emit(FetchWorkPlaceSuccess(list)));
   }
 
   Future<void> _onFetchProjects(FetchProjects event, emit) async {
     emit(FetchWorkPlaceLoading());
-    final execute = await getProjects();
-    execute.fold((fail) => emit(FetchWorkPlaceFailure(fail)),
-        (list) => emit(FetchWorkPlaceSuccess(list)));
+    await getProjects()
+      ..fold((fail) async => emit(FetchWorkPlaceFailure(fail)),
+          (list) async => emit(FetchWorkPlaceSuccess(list)));
   }
 }

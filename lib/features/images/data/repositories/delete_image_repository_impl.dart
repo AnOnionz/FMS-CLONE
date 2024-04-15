@@ -27,4 +27,12 @@ class DeleteImageRepositoryImpl extends Repository
       return Right(Never);
     });
   }
+
+  @override
+  Future<Result<void>> deleteLocalImage({required String uuid}) async {
+    return todo(() async {
+      await _local.deleteLocalImage(uuid: uuid);
+      return Right(Never);
+    });
+  }
 }

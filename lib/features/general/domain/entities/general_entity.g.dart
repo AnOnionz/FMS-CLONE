@@ -35,14 +35,19 @@ const GeneralEntitySchema = CollectionSchema(
       type: IsarType.object,
       target: r'ConfigEntity',
     ),
-    r'outlet': PropertySchema(
+    r'createdDate': PropertySchema(
       id: 3,
+      name: r'createdDate',
+      type: IsarType.dateTime,
+    ),
+    r'outlet': PropertySchema(
+      id: 4,
       name: r'outlet',
       type: IsarType.object,
       target: r'OutletEntity',
     ),
     r'project': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'project',
       type: IsarType.object,
       target: r'ProjectEntity',
@@ -133,14 +138,15 @@ void _generalEntitySerialize(
     ConfigEntitySchema.serialize,
     object.config,
   );
+  writer.writeDateTime(offsets[3], object.createdDate);
   writer.writeObject<OutletEntity>(
-    offsets[3],
+    offsets[4],
     allOffsets,
     OutletEntitySchema.serialize,
     object.outlet,
   );
   writer.writeObject<ProjectEntity>(
-    offsets[4],
+    offsets[5],
     allOffsets,
     ProjectEntitySchema.serialize,
     object.project,
@@ -171,14 +177,15 @@ GeneralEntity _generalEntityDeserialize(
           allOffsets,
         ) ??
         ConfigEntity(),
+    createdDate: reader.readDateTime(offsets[3]),
     outlet: reader.readObjectOrNull<OutletEntity>(
-          offsets[3],
+          offsets[4],
           OutletEntitySchema.deserialize,
           allOffsets,
         ) ??
         OutletEntity(),
     project: reader.readObjectOrNull<ProjectEntity>(
-          offsets[4],
+          offsets[5],
           ProjectEntitySchema.deserialize,
           allOffsets,
         ) ??
@@ -215,13 +222,15 @@ P _generalEntityDeserializeProp<P>(
           ) ??
           ConfigEntity()) as P;
     case 3:
+      return (reader.readDateTime(offset)) as P;
+    case 4:
       return (reader.readObjectOrNull<OutletEntity>(
             offset,
             OutletEntitySchema.deserialize,
             allOffsets,
           ) ??
           OutletEntity()) as P;
-    case 4:
+    case 5:
       return (reader.readObjectOrNull<ProjectEntity>(
             offset,
             ProjectEntitySchema.deserialize,
@@ -345,6 +354,62 @@ extension GeneralEntityQueryFilter
   }
 
   QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      createdDateEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createdDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      createdDateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'createdDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      createdDateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'createdDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      createdDateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'createdDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
       isarIdEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -443,10 +508,36 @@ extension GeneralEntityQueryLinks
     on QueryBuilder<GeneralEntity, GeneralEntity, QFilterCondition> {}
 
 extension GeneralEntityQuerySortBy
-    on QueryBuilder<GeneralEntity, GeneralEntity, QSortBy> {}
+    on QueryBuilder<GeneralEntity, GeneralEntity, QSortBy> {
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy> sortByCreatedDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy>
+      sortByCreatedDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdDate', Sort.desc);
+    });
+  }
+}
 
 extension GeneralEntityQuerySortThenBy
     on QueryBuilder<GeneralEntity, GeneralEntity, QSortThenBy> {
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy> thenByCreatedDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy>
+      thenByCreatedDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy> thenByIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.asc);
@@ -461,7 +552,14 @@ extension GeneralEntityQuerySortThenBy
 }
 
 extension GeneralEntityQueryWhereDistinct
-    on QueryBuilder<GeneralEntity, GeneralEntity, QDistinct> {}
+    on QueryBuilder<GeneralEntity, GeneralEntity, QDistinct> {
+  QueryBuilder<GeneralEntity, GeneralEntity, QDistinct>
+      distinctByCreatedDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createdDate');
+    });
+  }
+}
 
 extension GeneralEntityQueryProperty
     on QueryBuilder<GeneralEntity, GeneralEntity, QQueryProperty> {
@@ -487,6 +585,13 @@ extension GeneralEntityQueryProperty
   QueryBuilder<GeneralEntity, ConfigEntity, QQueryOperations> configProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'config');
+    });
+  }
+
+  QueryBuilder<GeneralEntity, DateTime, QQueryOperations>
+      createdDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createdDate');
     });
   }
 

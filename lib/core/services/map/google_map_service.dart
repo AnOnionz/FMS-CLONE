@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,11 +10,21 @@ import '/core/services/map/map_service.dart';
 
 final class GoogleMapService extends ChangeNotifier implements MapService {
   GoogleMapController? _controller;
-  static const _initPosition = LatLng(15.6283721, 106.6830262);
+  final Completer<GoogleMapController> _completer = Completer();
   EdgeInsets _padding = EdgeInsets.zero;
+  String? _mapStyleString;
+
+  static const _initPosition = LatLng(15.6283721, 106.6830262);
 
   void set padding(EdgeInsets e) {
     _padding = e;
+  }
+
+  void loadStyle() {
+    rootBundle.loadString('assets/map_styles.json').then((string) {
+      _mapStyleString = string;
+      notifyListeners();
+    });
   }
 
   CameraPosition _initial = CameraPosition(
@@ -37,9 +48,14 @@ final class GoogleMapService extends ChangeNotifier implements MapService {
         padding: _padding,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
-          isMaploading = false;
-          notifyListeners();
-          _controller!.animateCamera(CameraUpdate.newCameraPosition(_initial));
+          _completer.complete(controller);
+          _completer.future.then((value) {
+            isMaploading = false;
+            notifyListeners();
+            _controller!
+                .animateCamera(CameraUpdate.newCameraPosition(_initial));
+            value.setMapStyle(_mapStyleString);
+          });
         },
       );
 

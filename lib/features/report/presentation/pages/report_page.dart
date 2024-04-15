@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -27,9 +28,12 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   final ReportCubit _cubit = Modular.get();
 
-  late final Map<int, List<ReportEntity>> reports = {};
+  late final Map<int, List<PhotoEntity>> reports = {};
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
-  final ValueNotifier<bool> isUpdatePhoto = ValueNotifier(false);
+
+  bool get isActive => reports.values.any((photos) =>
+      photos.isNotEmpty &&
+      photos.any((photo) => photo.status == SyncStatus.noSynced));
 
   @override
   void initState() {
@@ -42,18 +46,17 @@ class _ReportPageState extends State<ReportPage> {
         general: widget.entity.general, feature: widget.entity.feature);
   }
 
-  void onFetchSuccess(List<ReportEntity> data) {
+  void onFetchSuccess(List<PhotoEntity> data) {
+    final photoGroup = groupBy<PhotoEntity, int>(
+      data,
+      (photo) {
+        return photo.featurePhotoId;
+      },
+    );
+
     widget.entity.feature.featurePhotos!.forEach((featurePhoto) {
       setState(() {
-        reports[featurePhoto.id!] =
-            reports[featurePhoto.id!] ?? <ReportEntity>[];
-        data.forEach((photo) {
-          if (!reports[featurePhoto.id!]!
-              .map((e) => e.dataUuid)
-              .contains(photo.dataUuid)) {
-            reports[featurePhoto.id!]!.add(photo);
-          }
-        });
+        reports[featurePhoto.id!] = photoGroup[featurePhoto.id!] ?? [];
       });
     });
   }
@@ -63,7 +66,7 @@ class _ReportPageState extends State<ReportPage> {
     return Scaffold(
       appBar: DefaultAppBar(title: widget.entity.feature.name!),
       body: Padding(
-        padding: EdgeInsets.only(top: 26.h),
+        padding: EdgeInsets.only(top: 30.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -93,14 +96,13 @@ class _ReportPageState extends State<ReportPage> {
                                   feature: widget.entity.feature,
                                   photos: reports[photoItem.id!]!,
                                   onAdded: (file) async {
-                                    isUpdatePhoto.value = true;
-                                    reports[photoItem.id!]!.add(ReportEntity(
+                                    reports[photoItem.id!]!.add(PhotoEntity(
                                         dataUuid: Uuid().v1(),
                                         dataTimestamp: file.dataTimestamp,
                                         path: file.path,
                                         featurePhotoId: photoItem.id!,
                                         status: SyncStatus.noSynced));
-                                    isUpdatePhoto.value = false;
+
                                     setState(() {});
                                   },
                                   onDeleted: (image) {
@@ -136,17 +138,19 @@ class _ReportPageState extends State<ReportPage> {
                     blurRadius: 25,
                     color: AppColors.black.withOpacity(0.15))
               ]),
-              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
+              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
               child: FlatButton(
-                onPressed: () {
-                  _cubit.savePhotos(
-                      items: reports.values
-                          .toList()
-                          .expand((element) => element)
-                          .toList(),
-                      general: widget.entity.general,
-                      feature: widget.entity.feature);
-                },
+                onPressed: isActive
+                    ? () {
+                        _cubit.savePhotos(
+                            items: reports.values
+                                .toList()
+                                .expand((element) => element)
+                                .toList(),
+                            general: widget.entity.general,
+                            feature: widget.entity.feature);
+                      }
+                    : null,
                 name: 'Lưu',
                 color: AppColors.orange,
                 disableColor: AppColors.potPourri,

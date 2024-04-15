@@ -44,8 +44,6 @@ class _AttendancePageState extends State<AttendancePage> {
   final GoogleMapService _mapService = GoogleMapService();
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
-  XFile? image;
-
   ImageDynamic? _imageDynamic;
   AttendanceEntity? _attendanceInfo;
   bool attendanceInfoLoaded = false;
@@ -54,6 +52,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   void initState() {
+    _mapService.loadStyle();
     _getInfo();
     super.initState();
   }
@@ -167,7 +166,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       children: [
                                         ImagePickerWidget(
                                           size: imageSize,
-                                          enable: image == null,
+                                          enable: _imageDynamic == null,
                                           onChanged: (file) {
                                             setState(() {
                                               _imageDynamic = file;
@@ -222,10 +221,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                     if (state is AttendanceInfoFailure) {
                                       showFailure(
                                           title: 'Tải dữ liệu thất bại',
-                                          icon: SvgPicture.asset(
-                                              AppIcons.requiredDownload),
-                                          message:
-                                              'Kiểm tra lại đường truyền mạng và thử lại',
+                                          failure: state.failure,
                                           btnText: 'Thử lại',
                                           onPressed: () {
                                             context.pop();
@@ -366,10 +362,8 @@ class _AttendancePageState extends State<AttendancePage> {
           if (state is AttendanceFailure) {
             OverlayManager.hide();
             showFailure(
-                icon: SvgPicture.asset(AppIcons.failure),
                 title: 'Chấm công thất bại',
-                message: state.failure.message ??
-                    'Phát sinh lỗi trong quá trình chấm công',
+                failure: state.failure,
                 btnText: 'Thử lại',
                 onPressed: () {
                   context.pop();

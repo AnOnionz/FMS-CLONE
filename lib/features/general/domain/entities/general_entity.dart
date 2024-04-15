@@ -17,6 +17,7 @@ class GeneralEntity {
   final BoothEntity booth;
   final ConfigEntity config;
   final AttendanceEntity? attendance;
+  final DateTime createdDate;
 
   GeneralEntity({
     required this.project,
@@ -24,6 +25,7 @@ class GeneralEntity {
     required this.booth,
     required this.config,
     this.attendance,
+    required this.createdDate,
   });
 
   GeneralEntity copyWith({
@@ -39,6 +41,7 @@ class GeneralEntity {
       booth: booth ?? this.booth,
       config: config ?? this.config,
       attendance: attendance ?? this.attendance,
+      createdDate: createdDate,
     );
   }
 

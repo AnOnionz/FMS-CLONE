@@ -93,6 +93,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/rives/
+    - assets/map_styles.json
 
   fonts:
     - family: AppIcon

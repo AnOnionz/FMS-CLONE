@@ -21,7 +21,7 @@ void main() async {
     SettingAppSchema,
     FileWithMetaDataSchema,
     GeneralEntitySchema,
-    ReportEntitySchema
+    PhotoEntitySchema
   ]);
   runApp(ModularApp(
       module: AppModule(),

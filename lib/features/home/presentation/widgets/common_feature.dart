@@ -36,6 +36,7 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralMixin {
             itemCount: tasks!.length,
             itemBuilder: (context, index) {
               final feature = tasks![index];
+
               return FeatureBox(
                 icon: AppIcons.sync,
                 name: feature.name!,

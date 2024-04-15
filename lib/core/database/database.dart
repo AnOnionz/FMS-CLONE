@@ -110,10 +110,12 @@ final class Database {
     return id;
   }
 
-  void deleteObject<T>({required int id}) {
+  bool deleteObject<T>({required int id}) {
+    bool? success;
     _isar?.writeTxnSync(() async {
-      _isar?.collection<T>().deleteSync(id);
+      success = _isar?.collection<T>().deleteSync(id);
     });
+    return success ?? false;
   }
 
   /// get value by key

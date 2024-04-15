@@ -58,7 +58,8 @@ class NotFoundFailure extends Failure {
 
 class SocketFailure extends Failure {
   const SocketFailure({String? message, Object? error, StackTrace? stackTrace})
-      : super(message, error, stackTrace);
+      : super('Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
+            error, stackTrace);
 }
 
 class BadRequestFailure extends Failure {
@@ -77,4 +78,25 @@ class DataNullFailure extends Failure {
   const DataNullFailure(
       {String? message, Object? error, StackTrace? stackTrace})
       : super(message, error, stackTrace);
+}
+
+class DownloadFailure extends Failure {
+  const DownloadFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
+      : super('Kiểm tra lại đường truyền mạng và thử lại', error, stackTrace);
+}
+
+class RequiredSyncFailure extends Failure {
+  const RequiredSyncFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
+      : super(message, error, stackTrace);
+}
+
+class RequiredAllTaskDoneFailure extends Failure {
+  const RequiredAllTaskDoneFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
+      : super(
+            'Yêu cầu hoàn thành tất cả công việc bắt buộc trong ngày trước khi chấm công ra',
+            error,
+            stackTrace);
 }
