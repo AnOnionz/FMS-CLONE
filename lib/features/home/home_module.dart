@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/general/general_module.dart';
+import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import 'package:fms/features/sign/sign_module.dart';
 
 import '../../routes/routes.dart';
@@ -12,7 +13,9 @@ class HomeModule extends Module {
   List<Module> get imports => [SignModule(), GeneralModule()];
 
   @override
-  void binds(Injector i) {}
+  void binds(Injector i) {
+    i.add(NecessaryBloc.new);
+  }
 
   @override
   void routes(RouteManager r) {

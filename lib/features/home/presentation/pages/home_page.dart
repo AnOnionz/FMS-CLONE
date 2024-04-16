@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
@@ -8,7 +7,6 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
-import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
@@ -57,41 +55,28 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.only(top: 15.h),
           child: SingleChildScrollView(
             physics: kPhysics,
-            child: BlocBuilder<GeneralBloc, GeneralState>(
-              bloc: bloc,
-              builder: (context, state) {
-                if (state is GeneralSuccess) {
-                  return Padding(
-                    padding: EdgeInsets.only(top: 15.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _title(context, 'Thông tin chung'),
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 29.h, horizontal: 16.w),
-                            child: CommonInfo()),
-                        _title(context, 'Chức năng hỗ trợ'),
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 29.h, horizontal: 16.w),
-                            child: CommonFeature()),
-                        _title(context, 'Danh sách công việc'),
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 29.h, horizontal: 16.w),
-                            child: Tasks()),
-                      ],
-                    ),
-                  );
-                }
-                return Center(
-                  child: AppIndicator(
-                    height: 30.h,
-                    width: 30.h,
-                  ),
-                );
-              },
+            child: Padding(
+              padding: EdgeInsets.only(top: 15.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _title(context, 'Thông tin chung'),
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 29.h, horizontal: 16.w),
+                      child: CommonInfo()),
+                  _title(context, 'Chức năng hỗ trợ'),
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 29.h, horizontal: 16.w),
+                      child: CommonFeature()),
+                  _title(context, 'Danh sách công việc'),
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 29.h, horizontal: 16.w),
+                      child: Tasks()),
+                ],
+              ),
             ),
           ),
         ),

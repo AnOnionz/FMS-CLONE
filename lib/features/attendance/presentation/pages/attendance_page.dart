@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -18,7 +19,6 @@ import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../core/constant/icons.dart';
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/button/outline.dart';
@@ -44,6 +44,9 @@ class _AttendancePageState extends State<AttendancePage> {
   final GoogleMapService _mapService = GoogleMapService();
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
+  late StreamSubscription<AttendanceInfoState> _subscriptionAttendanceInfo;
+  late StreamSubscription<AttendanceState> _subscriptionAttendance;
+
   ImageDynamic? _imageDynamic;
   AttendanceEntity? _attendanceInfo;
   bool attendanceInfoLoaded = false;
@@ -54,7 +57,20 @@ class _AttendancePageState extends State<AttendancePage> {
   void initState() {
     _mapService.loadStyle();
     _getInfo();
+    _subscriptionAttendanceInfo = cubit.stream.listen((state) {
+      attendanceInfoListen(state);
+    });
+    _subscriptionAttendance = bloc.stream.listen((state) {
+      attendanceListen(state);
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscriptionAttendance.cancel();
+    _subscriptionAttendanceInfo.cancel();
+    super.dispose();
   }
 
   bool get isPhotoRequired =>
@@ -66,22 +82,56 @@ class _AttendancePageState extends State<AttendancePage> {
   bool get isWatermarkRequired =>
       widget.entity.feature.featureAttendance!.isWatermarkRequired ?? false;
 
-  bool _validateForm() {
-    if (attendanceInfoLoaded == false) {
-      return false;
-    }
-    if (_imageDynamic == null) {
-      return false;
-    }
-    if (isWatermarkRequired && isWatermarking.value == true) {
-      return false;
-    }
-    return true;
-  }
+  bool get isActive => attendanceInfoLoaded == true && _imageDynamic != null;
 
   void _getInfo() {
     cubit.getInfo(
         feature: widget.entity.feature, general: widget.entity.general);
+  }
+
+  void attendanceInfoListen(state) {
+    if (state is AttendanceInfoSuccess) {
+      setState(() {
+        _attendanceInfo = state.info;
+        attendanceInfoLoaded = true;
+      });
+    }
+    if (state is AttendanceInfoFailure) {
+      showFailure(
+          title: 'Tải dữ liệu thất bại',
+          failure: state.failure,
+          btnText: 'Thử lại',
+          onPressed: () {
+            context.pop();
+            _getInfo();
+          });
+    }
+  }
+
+  void attendanceListen(state) {
+    if (mounted) {
+      if (state is AttendanceLoading) {
+        OverlayManager.showLoading();
+      }
+      if (state is AttendanceFailure) {
+        OverlayManager.hide();
+        showFailure(
+            title: 'Chấm công thất bại',
+            failure: state.failure,
+            btnText: 'Thử lại',
+            onPressed: () {
+              context.pop();
+              _attendance.call();
+            });
+      }
+      if (state is AttendanceSuccess) {
+        OverlayManager.hide();
+        setState(() {
+          _attendanceInfo = state.attendanceData;
+        });
+        showSuccess(title: 'Chấm công thành công');
+      }
+    }
   }
 
   void _attendance() {
@@ -208,27 +258,9 @@ class _AttendancePageState extends State<AttendancePage> {
                                   borderRadius: BorderRadius.circular(10.sqr)),
                               child: Padding(
                                 padding: EdgeInsets.all(24.h),
-                                child: BlocConsumer<AttendanceInfoCubit,
+                                child: BlocBuilder<AttendanceInfoCubit,
                                     AttendanceInfoState>(
                                   bloc: cubit,
-                                  listener: (context, state) {
-                                    if (state is AttendanceInfoSuccess) {
-                                      setState(() {
-                                        _attendanceInfo = state.info;
-                                        attendanceInfoLoaded = true;
-                                      });
-                                    }
-                                    if (state is AttendanceInfoFailure) {
-                                      showFailure(
-                                          title: 'Tải dữ liệu thất bại',
-                                          failure: state.failure,
-                                          btnText: 'Thử lại',
-                                          onPressed: () {
-                                            context.pop();
-                                            _getInfo();
-                                          });
-                                    }
-                                  },
                                   builder: (context, state) {
                                     if (state is AttendanceInfoSuccess) {
                                       return Column(
@@ -338,62 +370,33 @@ class _AttendancePageState extends State<AttendancePage> {
                           ),
                         ),
                         ZoomIn(
-                          duration: 300.milliseconds,
-                          child: _actionButton(widget.type,
-                              _validateForm() ? _attendance : null),
-                        )
+                            duration: 300.milliseconds,
+                            child: BlocBuilder<AttendanceBloc, AttendanceState>(
+                              bloc: bloc,
+                              builder: (context, state) {
+                                return FlatButton(
+                                  onPressed: isActive ? _attendance : null,
+                                  name: widget.type.name.toUpperCase(),
+                                  color: widget.type == AttendanceType.CheckIn
+                                      ? AppColors.royalBlue
+                                      : AppColors.orange,
+                                  disableColor:
+                                      widget.type == AttendanceType.CheckIn
+                                          ? AppColors.solitude
+                                          : AppColors.potPourri,
+                                  disableTextColor:
+                                      widget.type == AttendanceType.CheckIn
+                                          ? '#C8C8C8'.toColor()
+                                          : AppColors.delRio,
+                                );
+                              },
+                            ))
                       ],
                     ),
                   );
           },
         ),
       ]),
-    );
-  }
-
-  Widget _actionButton(AttendanceType type, VoidCallback? action) {
-    return BlocConsumer<AttendanceBloc, AttendanceState>(
-      bloc: bloc,
-      listener: (context, state) {
-        if (mounted) {
-          if (state is AttendanceLoading) {
-            OverlayManager.showLoading();
-          }
-          if (state is AttendanceFailure) {
-            OverlayManager.hide();
-            showFailure(
-                title: 'Chấm công thất bại',
-                failure: state.failure,
-                btnText: 'Thử lại',
-                onPressed: () {
-                  context.pop();
-                  action?.call();
-                });
-          }
-          if (state is AttendanceSuccess) {
-            OverlayManager.hide();
-            setState(() {
-              _attendanceInfo = state.attendanceData;
-            });
-            showSuccess(title: 'Chấm công thành công');
-          }
-        }
-      },
-      builder: (context, state) {
-        return FlatButton(
-          onPressed: action,
-          name: type.name.toUpperCase(),
-          color: type == AttendanceType.CheckIn
-              ? AppColors.royalBlue
-              : AppColors.orange,
-          disableColor: type == AttendanceType.CheckIn
-              ? AppColors.solitude
-              : AppColors.potPourri,
-          disableTextColor: type == AttendanceType.CheckIn
-              ? '#C8C8C8'.toColor()
-              : AppColors.delRio,
-        );
-      },
     );
   }
 

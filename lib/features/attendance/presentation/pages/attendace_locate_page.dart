@@ -99,7 +99,7 @@ class _AttendanceLocatePageState extends State<AttendanceLocatePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Đanh xác định vị trí của bạn',
+                                    'Đang xác định vị trí của bạn',
                                     style: context.textTheme.subtitle1
                                         ?.copyWith(color: AppColors.nightRider),
                                   ),

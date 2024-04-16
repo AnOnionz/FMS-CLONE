@@ -40,14 +40,19 @@ const GeneralEntitySchema = CollectionSchema(
       name: r'createdDate',
       type: IsarType.dateTime,
     ),
-    r'outlet': PropertySchema(
+    r'identifer': PropertySchema(
       id: 4,
+      name: r'identifer',
+      type: IsarType.string,
+    ),
+    r'outlet': PropertySchema(
+      id: 5,
       name: r'outlet',
       type: IsarType.object,
       target: r'OutletEntity',
     ),
     r'project': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'project',
       type: IsarType.object,
       target: r'ProjectEntity',
@@ -105,6 +110,7 @@ int _generalEntityEstimateSize(
   bytesCount += 3 +
       ConfigEntitySchema.estimateSize(
           object.config, allOffsets[ConfigEntity]!, allOffsets);
+  bytesCount += 3 + object.identifer.length * 3;
   bytesCount += 3 +
       OutletEntitySchema.estimateSize(
           object.outlet, allOffsets[OutletEntity]!, allOffsets);
@@ -139,14 +145,15 @@ void _generalEntitySerialize(
     object.config,
   );
   writer.writeDateTime(offsets[3], object.createdDate);
+  writer.writeString(offsets[4], object.identifer);
   writer.writeObject<OutletEntity>(
-    offsets[4],
+    offsets[5],
     allOffsets,
     OutletEntitySchema.serialize,
     object.outlet,
   );
   writer.writeObject<ProjectEntity>(
-    offsets[5],
+    offsets[6],
     allOffsets,
     ProjectEntitySchema.serialize,
     object.project,
@@ -178,14 +185,15 @@ GeneralEntity _generalEntityDeserialize(
         ) ??
         ConfigEntity(),
     createdDate: reader.readDateTime(offsets[3]),
+    identifer: reader.readString(offsets[4]),
     outlet: reader.readObjectOrNull<OutletEntity>(
-          offsets[4],
+          offsets[5],
           OutletEntitySchema.deserialize,
           allOffsets,
         ) ??
         OutletEntity(),
     project: reader.readObjectOrNull<ProjectEntity>(
-          offsets[5],
+          offsets[6],
           ProjectEntitySchema.deserialize,
           allOffsets,
         ) ??
@@ -224,13 +232,15 @@ P _generalEntityDeserializeProp<P>(
     case 3:
       return (reader.readDateTime(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
       return (reader.readObjectOrNull<OutletEntity>(
             offset,
             OutletEntitySchema.deserialize,
             allOffsets,
           ) ??
           OutletEntity()) as P;
-    case 5:
+    case 6:
       return (reader.readObjectOrNull<ProjectEntity>(
             offset,
             ProjectEntitySchema.deserialize,
@@ -410,6 +420,142 @@ extension GeneralEntityQueryFilter
   }
 
   QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'identifer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'identifer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'identifer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'identifer',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'identifer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'identifer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'identifer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'identifer',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'identifer',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      identiferIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'identifer',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
       isarIdEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -521,6 +667,19 @@ extension GeneralEntityQuerySortBy
       return query.addSortBy(r'createdDate', Sort.desc);
     });
   }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy> sortByIdentifer() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'identifer', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy>
+      sortByIdentiferDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'identifer', Sort.desc);
+    });
+  }
 }
 
 extension GeneralEntityQuerySortThenBy
@@ -535,6 +694,19 @@ extension GeneralEntityQuerySortThenBy
       thenByCreatedDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy> thenByIdentifer() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'identifer', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterSortBy>
+      thenByIdentiferDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'identifer', Sort.desc);
     });
   }
 
@@ -557,6 +729,13 @@ extension GeneralEntityQueryWhereDistinct
       distinctByCreatedDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdDate');
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QDistinct> distinctByIdentifer(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'identifer', caseSensitive: caseSensitive);
     });
   }
 }
@@ -592,6 +771,12 @@ extension GeneralEntityQueryProperty
       createdDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdDate');
+    });
+  }
+
+  QueryBuilder<GeneralEntity, String, QQueryOperations> identiferProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'identifer');
     });
   }
 

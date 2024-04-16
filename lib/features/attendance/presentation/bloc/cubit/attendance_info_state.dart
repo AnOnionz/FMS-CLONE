@@ -15,6 +15,11 @@ final class AttendanceInfoSuccess extends AttendanceInfoState {
   final AttendanceEntity? info;
 
   AttendanceInfoSuccess(this.info);
+
+  @override
+  String toString() {
+    return 'AttendanceInfoSuccess($info)';
+  }
 }
 
 final class AttendanceInfoFailure extends AttendanceInfoState {

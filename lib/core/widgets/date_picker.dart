@@ -4,7 +4,6 @@ import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:intl/intl.dart';
 
 class DatePicker extends StatefulWidget {
   final Color? fillColor;
@@ -25,7 +24,7 @@ class _DatePickerState extends State<DatePicker> {
 
     if (selectedDay != null) {
       setState(() {
-        controller.text = DateFormat('dd/MM/yyyy').format(selectedDay);
+        controller.text = kdMy.format(selectedDay);
       });
     }
   }

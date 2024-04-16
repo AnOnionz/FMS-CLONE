@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/image_picker_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';

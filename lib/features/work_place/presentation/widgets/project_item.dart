@@ -17,8 +17,6 @@ class ProjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final format = DateFormat('dd/MM/yyyy');
-
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -65,7 +63,7 @@ class ProjectItem extends StatelessWidget {
                   height: 6.h,
                 ),
                 Text(
-                    '${project.startDate?.formatBy(format)} - ${project.endDated?.formatBy(format)}',
+                    '${project.startDate?.formatBy(kdMy)} - ${project.endDated?.formatBy(kdMy)}',
                     style: context.textTheme.caption1
                         ?.copyWith(color: AppColors.dimGray))
               ],

@@ -11,7 +11,8 @@ part 'general_entity.g.dart';
 
 @collection
 class GeneralEntity {
-  Id get isarId => fastHash(config.versionCode!);
+  Id get isarId => fastHash(identifer);
+  final String identifer;
   final ProjectEntity project;
   final OutletEntity outlet;
   final ConfigEntity config;
@@ -20,6 +21,7 @@ class GeneralEntity {
   final DateTime createdDate;
 
   GeneralEntity({
+    required this.identifer,
     required this.project,
     required this.outlet,
     required this.booth,
@@ -28,14 +30,15 @@ class GeneralEntity {
     required this.createdDate,
   });
 
-  GeneralEntity copyWith({
-    ProjectEntity? project,
-    OutletEntity? outlet,
-    BoothEntity? booth,
-    ConfigEntity? config,
-    AttendanceEntity? attendance,
-  }) {
+  GeneralEntity copyWith(
+      {ProjectEntity? project,
+      OutletEntity? outlet,
+      BoothEntity? booth,
+      ConfigEntity? config,
+      AttendanceEntity? attendance,
+      String? identifer}) {
     return GeneralEntity(
+      identifer: identifer ?? this.identifer,
       project: project ?? this.project,
       outlet: outlet ?? this.outlet,
       booth: booth ?? this.booth,
@@ -47,6 +50,6 @@ class GeneralEntity {
 
   @override
   String toString() {
-    return 'GeneralEntity(project: $project, outlet: $outlet, booth: $booth, config: $config, attendance: $attendance)';
+    return 'GeneralEntity(identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth, attendance: $attendance, createdDate: $createdDate)';
   }
 }

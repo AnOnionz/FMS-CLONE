@@ -1,70 +1,39 @@
-import 'package:fms/features/authentication/data/models/user_model.dart';
+import 'package:fms/core/data_source/local_data_source.dart';
 
 import '/core/constant/keys.dart';
-import '/core/database/database.dart';
-import '/features/authentication/domain/entities/user_entity.dart';
 
 sealed class AuthenticationLocalDataSource {
-  bool get isLogin;
-  void cacheUserData(UserModel user);
-  void clearUserData();
   void cacheRefreshToken(String token);
+  void cacheIdentifier(String identifier);
   void clearToken();
-  UserEntity? getUserFromLocal();
-  String? getRefreshTokenFromLocal();
-  List<UserEntity> getAllUserData();
-  void clearAllUserData();
+  String? getRefreshToken();
+  String? getIdentifier();
 }
 
-class AuthLocalDataSourceImpl implements AuthenticationLocalDataSource {
-  final database = Database.instance;
-  @override
-  bool get isLogin => getUserFromLocal() != null;
-
-  @override
-
-  /// get existing user if id cached not null
-  UserEntity? getUserFromLocal() {
-    final id = database.getValue(Keys.CURRENT_USER_ID);
-    if (id == null) return null;
-    final UserEntity? user = database.getObject<UserModel>(id: int.parse(id));
-
-    return user;
-  }
-
-  @override
-  void cacheUserData(UserModel user) {
-    final id = database.addObject<UserModel>(user);
-    database.setValue(Keys.CURRENT_USER_ID, id.toString());
-  }
-
+class AuthLocalDataSourceImpl extends LocalDatasource
+    implements AuthenticationLocalDataSource {
   @override
   void cacheRefreshToken(String token) {
-    database.setValue(Keys.REFRESH_TOKEN, token);
+    db.setValue(Keys.REFRESH_TOKEN, token);
   }
 
   @override
-  String? getRefreshTokenFromLocal() {
-    return database.getValue(Keys.REFRESH_TOKEN);
-  }
-
-  @override
-  List<UserEntity> getAllUserData() {
-    return database.getObjects();
-  }
-
-  @override
-  void clearAllUserData() {
-    database.deleteCollection<UserEntity>();
-  }
-
-  @override
-  void clearUserData() {
-    database.setValue(Keys.CURRENT_USER_ID, null);
+  String? getRefreshToken() {
+    return db.getValue(Keys.REFRESH_TOKEN);
   }
 
   @override
   void clearToken() {
-    database.setValue(Keys.REFRESH_TOKEN, null);
+    db.setValue(Keys.REFRESH_TOKEN, null);
+  }
+
+  @override
+  void cacheIdentifier(String identifier) {
+    db.setValue(Keys.IDENTIFER, identifier);
+  }
+
+  @override
+  String? getIdentifier() {
+    return db.getValue(Keys.IDENTIFER);
   }
 }

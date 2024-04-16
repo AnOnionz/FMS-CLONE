@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import 'core/database/database.dart';
@@ -21,7 +22,8 @@ void main() async {
     SettingAppSchema,
     FileWithMetaDataSchema,
     GeneralEntitySchema,
-    PhotoEntitySchema
+    PhotoEntitySchema,
+    CrwalQuantityEntitySchema
   ]);
   runApp(ModularApp(
       module: AppModule(),

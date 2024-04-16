@@ -7,6 +7,7 @@ import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/core/usecase/either.dart';
 import 'package:fms/features/attendance/data/datasources/attendance_remote_datasource.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
+import 'package:fms/features/authentication/data/datasources/auth_local_data_source.dart';
 import 'package:fms/features/general/data/datasource/general_local_datasource.dart';
 import 'package:fms/features/general/data/datasource/general_remote_datasource.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -19,8 +20,10 @@ class GeneralRepository extends Repository implements IGeneralRepository {
   final AttendanceRemoteDataSource _attendanceRemote;
   final GeneralRemoteDatasorce _remote;
   final GeneralLocalDataSource _local;
+  final AuthenticationLocalDataSource _localAuth;
 
-  GeneralRepository(this._remote, this._attendanceRemote, this._local);
+  GeneralRepository(
+      this._remote, this._attendanceRemote, this._local, this._localAuth);
 
   @override
   Future<Result<GeneralEntity?>> getLocalGeneral() async {
@@ -49,8 +52,9 @@ class GeneralRepository extends Repository implements IGeneralRepository {
 
   @override
   Future<Result<void>> createGeneral(GeneralEntity entity) async {
-    general = entity;
-    _local.cacheGeneral(entity);
+    final identifer = _localAuth.getIdentifier();
+    general = entity.copyWith(identifer: identifer);
+    _local.cacheGeneral(general!);
     return Right(Never);
   }
 

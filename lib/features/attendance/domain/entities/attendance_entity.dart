@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:isar/isar.dart';
 
 import '../../../../core/constant/enum.dart';
-import 'package:collection/collection.dart';
 
 part 'attendance_entity.g.dart';
 

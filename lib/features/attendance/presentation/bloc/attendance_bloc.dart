@@ -3,7 +3,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/errors/failure.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/attendance_usecase.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';

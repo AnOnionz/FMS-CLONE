@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -8,10 +9,12 @@ class AdvancedTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputAction? textInputAction;
   final String unit;
+  final int maxLength;
   const AdvancedTextField(
       {super.key,
       required this.controller,
       required this.unit,
+      this.maxLength = 10,
       this.textInputAction = TextInputAction.next});
 
   @override
@@ -53,8 +56,15 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
       focusNode: _focusNode,
       keyboardType: TextInputType.numberWithOptions(),
       cursorWidth: 0.54,
+      maxLength: widget.maxLength,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
       textInputAction: widget.textInputAction,
-      contextMenuBuilder: (context, _) => SizedBox(),
+      buildCounter: (context,
+              {required currentLength,
+              required isFocused,
+              required maxLength}) =>
+          null,
+      contextMenuBuilder: (context, _) => SizedBox.shrink(),
       style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
       decoration: InputDecoration(
           hintText: '0',

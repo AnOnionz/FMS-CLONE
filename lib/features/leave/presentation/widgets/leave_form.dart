@@ -124,8 +124,7 @@ class _LeaveFormState extends State<LeaveForm> {
 
   Widget date() {
     return TextField(
-      controller: TextEditingController(
-          text: DateFormat('dd/MM/yyyy').format(widget.date)),
+      controller: TextEditingController(text: kdMy.format(widget.date)),
       enabled: false,
       style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
       decoration: InputDecoration(

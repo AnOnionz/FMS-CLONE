@@ -18,7 +18,7 @@ class DeleteImageBloc extends Bloc<DeleteImageEvent, DeleteImageState> {
   final DeleteLocalImageUseCase _deleteLocalImage;
   DeleteImageBloc(this._deleteImage, this._deleteLocalImage)
       : super(DeleteImageInitial()) {
-    on<DeleteImageRequest>((event, emit) async* {
+    on<DeleteImageRequest>((event, emit) async {
       emit(DeleteImageLoading());
       OverlayManager.showLoading();
       if (event.image.networkImage != null) {

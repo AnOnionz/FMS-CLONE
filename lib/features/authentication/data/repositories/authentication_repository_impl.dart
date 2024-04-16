@@ -30,6 +30,7 @@ class AuthenticationRepositoryImpl extends Repository
       _credentials = credentials;
       if (credentials != null) {
         _local.cacheRefreshToken(credentials.refreshToken!);
+        _local.cacheIdentifier(credentials.user.sub);
         _dio.setBearerAuth(
             token: credentials.tokenType +
                 ' ' +
@@ -78,11 +79,13 @@ class AuthenticationRepositoryImpl extends Repository
       try {
         final credentials = await _remote.credentials();
         _credentials = credentials;
+        _local.cacheRefreshToken(credentials.refreshToken!);
+        _local.cacheIdentifier(credentials.user.sub);
         _dio.setBearerAuth(
             token: credentials.tokenType + ' ' + credentials.accessToken);
         return Right(credentials);
       } on CredentialsManagerException catch (_) {
-        final refreshToken = _local.getRefreshTokenFromLocal();
+        final refreshToken = _local.getRefreshToken();
         if (refreshToken != null) {
           final newCredentials = await _remote.renewCredentials(refreshToken);
           _credentials = newCredentials;

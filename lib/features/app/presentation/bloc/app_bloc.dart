@@ -9,7 +9,7 @@ import 'package:fms/core/client/api_service.dart';
 import 'package:fms/core/client/dio_client.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/utilities/overlay.dart';
-import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
+import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
@@ -28,14 +28,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationBloc _authenticationBloc;
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
-  final GeneralBloc _generalBloc;
+  final GeneralRepository _generalRepository;
+
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
 
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
-  StreamSubscription<GeneralState>? _generalStreamSubscription;
 
   AppBloc(this._authenticationBloc, this._connectivityService,
-      this._generalBloc, this._networkTimeService)
+      this._generalRepository, this._networkTimeService)
       : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -77,19 +77,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  void _checkAuthenticationStatus(AuthenticationStatus status) {
+  Future<void> _checkAuthenticationStatus(AuthenticationStatus status) async {
     if (status == AuthenticationStatus.authenticated) {
-      _generalBloc.add(GeneralStared());
-      _generalBloc.stream.first.then((generalState) {
-        if (generalState is GeneralSuccess) {
-          Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
-        }
-        if (generalState is GeneralFailure) {
-          Modular.to.navigate(WorkPlaceModule.route);
-        }
-      });
+      await _generalRepository.getLocalGeneral()
+        ..fold((failure) => Modular.to.navigate(WorkPlaceModule.route), (data) {
+          if (data != null) {
+            Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
+          } else {
+            Modular.to.navigate(WorkPlaceModule.route);
+          }
+        });
     } else if (status == AuthenticationStatus.unauthenticated) {
-      _generalBloc.add(GeneralReset());
+      await _generalRepository.clearGeneral();
       Modular.to.navigate(SignModule.route);
     }
   }
@@ -214,9 +213,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppAuthenticationSubscribed event,
     Emitter<AppState> emit,
   ) {
-    _authenticationSubscription =
-        _authenticationBehaviorSubject.stream.distinct().listen((authState) {
-      _checkAuthenticationStatus(authState.status);
+    _authenticationSubscription = _authenticationBehaviorSubject.stream
+        .distinct()
+        .listen((authState) async {
+      await _checkAuthenticationStatus(authState.status);
     });
   }
 

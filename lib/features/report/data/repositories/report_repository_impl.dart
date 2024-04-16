@@ -20,7 +20,7 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
   Future<Result<List<PhotoEntity>>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {
     return todo(() async {
-      final localPhotos = await _local.getPhotos();
+      final localPhotos = await _local.getPhotos(general: general);
       if (localPhotos.isNotEmpty) {
         return Right(localPhotos);
       }
@@ -42,12 +42,13 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
           if (photo.status == SyncStatus.noSynced) {
             final report = await _remote.createPhoto(
                 photo: photo, general: general, feature: feature);
-            photo = photo.copyWith(id: report?.id, status: SyncStatus.synced);
+            photo = photo.copyWith(status: SyncStatus.synced);
             if (report != null) {
-              report.image = report.image;
+              photo = photo.copyWith(id: report.id, image: report.image);
             }
           }
-          photo.attendanceId = general.attendance?.id;
+          photo = photo.copyWith(attendanceId: general.attendance!.id);
+
           _local.cachePhotoToLocal(photo);
         }
         return Right(_resp);

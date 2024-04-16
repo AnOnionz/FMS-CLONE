@@ -1,18 +1,18 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/core/utilities/parser.dart';
 import 'package:isar/isar.dart';
 
+import '../../../general/domain/entities/general_entity.dart';
 import '../../domain/entities/photo_entity.dart';
 
 abstract class IReportLocalDataSource {
   void cachePhotoToLocal(PhotoEntity photo);
   void cachePhotosToLocal(List<PhotoEntity> photos);
   List<PhotoEntity> getPhotosNoSynced();
-  Future<List<PhotoEntity>> getPhotos();
+  Future<List<PhotoEntity>> getPhotos({required GeneralEntity general});
 }
 
 class ReportLocalDataSource extends LocalDatasource
@@ -32,10 +32,10 @@ class ReportLocalDataSource extends LocalDatasource
   }
 
   @override
-  Future<List<PhotoEntity>> getPhotos() async {
+  Future<List<PhotoEntity>> getPhotos({required GeneralEntity general}) async {
     final time = await Modular.get<NetworkTimeService>().todayRangeDate();
-
     return db.filter<PhotoEntity>((filter) => filter
+        .attendanceIdEqualTo(general.attendance!.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .sortByDataTimestamp()
         .build());

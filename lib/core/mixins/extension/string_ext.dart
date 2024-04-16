@@ -562,3 +562,20 @@ extension FeatureTypeExtension on String {
         .firstWhereOrNull((element) => element.name == this);
   }
 }
+
+extension DateTime1Extension on String? {
+  String datetimeFormatString() {
+    if (this == null) {
+      return '';
+    }
+    return kdMy.format(DateTime.parse(this!));
+  }
+
+  DateTime dateTimeFromTimeStamp() {
+    final timeStamp = int.tryParse(this!);
+    if (timeStamp != null) {
+      return DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
+    }
+    throw FormatException("Can't parse $this to DateTime");
+  }
+}

@@ -27,14 +27,7 @@ class ReportCubit extends Cubit<ReportState> {
         CreatePhotosParams(photos: items, general: general, feature: feature));
     execute.fold((failure) {
       OverlayManager.hide();
-      showFailure(
-          title: 'Lưu thất bại',
-          failure: failure,
-          btnText: 'Thử lại',
-          onPressed: () {
-            OverlayManager.hide();
-            savePhotos(items: items, general: general, feature: feature);
-          });
+      showSuccess(title: 'Lưu thành công');
     }, (data) async {
       await getPhotos(GetPhotosParams(general: general, feature: feature))
         ..fold((failure) async => emit(ReportSuccess([])),

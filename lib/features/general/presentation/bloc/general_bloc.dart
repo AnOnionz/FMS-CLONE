@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/get_attendance_usecase.dart';
@@ -51,11 +52,12 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
       if (config != null) {
         final time = await Modular.get<NetworkTimeService>().ntpDateTime();
         final GeneralEntity general = GeneralEntity(
+            identifer: 'temp',
             project: event.workPlace.project!,
             outlet: event.workPlace.outlet!,
             booth: event.workPlace.booth!,
             config: config,
-            createdDate: time);
+            createdDate: time.dMy());
 
         await _createGeneral(general);
 
@@ -78,9 +80,10 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
       final execute = await _getGeneral();
       execute.fold((failure) => emit(GeneralFailure(failure: failure)), (data) {
         if (data == null) {
-          return emit(GeneralFailure());
+          emit(GeneralFailure());
+        } else {
+          emit(GeneralSuccess(general: data));
         }
-        return emit(GeneralSuccess(general: data));
       });
     }, transformer: droppable());
 
@@ -90,6 +93,6 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
 
     on<GeneralReset>((event, emit) async {
       await _clearGeneral();
-    }, transformer: droppable());
+    });
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -26,6 +25,7 @@ class CrawlItem extends StatefulWidget {
 
 class _CrawlItemState extends State<CrawlItem> {
   final TextEditingController _controller = TextEditingController();
+  bool get isItem => widget.entity.item != null;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +41,20 @@ class _CrawlItemState extends State<CrawlItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Tên sản phẩm',
+                isItem
+                    ? widget.entity.item!.name!
+                    : widget.entity.product!.name!,
                 style: context.textTheme.caption1,
               ),
               Text(
-                'MA0001223',
+                isItem
+                    ? widget.entity.item!.code!
+                    : widget.entity.product!.code!,
                 style: context.textTheme.caption2
                     ?.copyWith(color: AppColors.nobel),
               ),
               Text(
-                'Loại: posm',
+                'Loại: ${isItem ? widget.entity.item!.itemTypeName! : 'sản phẩm'}',
                 style: context.textTheme.caption2
                     ?.copyWith(color: AppColors.nobel),
               )
@@ -60,7 +64,10 @@ class _CrawlItemState extends State<CrawlItem> {
             controller: _controller,
             textInputAction:
                 widget.isLast ? TextInputAction.done : TextInputAction.next,
-            unit: widget.entity.productPackaging?.unitName ?? 'vnđ',
+            unit: (isItem
+                    ? widget.entity.item?.unitName
+                    : widget.entity.productPackaging?.unitName) ??
+                'đơn vị',
           )),
     );
   }
