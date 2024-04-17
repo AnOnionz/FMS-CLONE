@@ -7,6 +7,7 @@ import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
+import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import '../../../authentication/domain/usecases/logout_usecase.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 
@@ -17,6 +18,7 @@ class SignBloc extends Bloc<SignEvent, SignState> {
   final LoginUsecase _login;
   final LogoutUsecase _logout;
   final ChangePassUsecase _changePass;
+
   late final AuthenticationBloc _authenticationBloc;
 
   SignBloc(
@@ -53,9 +55,14 @@ class SignBloc extends Bloc<SignEvent, SignState> {
   Future<void> _onSignOutButtonPressed(
       SignOutButtonPressed event, Emitter<SignState> emit) async {
     emit(const SignLoading());
+    OverlayManager.showLoading();
     final execute = await _logout();
-    execute.fold((fail) async => emit(SignFailure(fail)), (success) async {
+    execute.fold((fail) async {
+      OverlayManager.showLoading();
+      emit(SignFailure(fail));
+    }, (success) async {
       if (success) {
+        OverlayManager.showLoading();
         _authenticationBloc.add(AuthenticationLogoutSuccess());
         return emit(SignSuccess(SignStatus.loggedOut));
       }

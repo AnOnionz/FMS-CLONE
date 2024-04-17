@@ -124,7 +124,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         Modular.get<DioClient>().setTimeout(2.seconds);
         if (OverlayManager.currentContext != null) {
           OverlayManager.showToast(
-              msg: 'Kết nối internet không ổn định',
+              msg: 'Không có kết nối internet',
               context: OverlayManager.currentContext!);
         }
       }

@@ -50,6 +50,6 @@ class GeneralEntity {
 
   @override
   String toString() {
-    return 'GeneralEntity(identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth, attendance: $attendance, createdDate: $createdDate)';
+    return 'GeneralEntity(attendance: $attendance, identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth,  createdDate: $createdDate)';
   }
 }

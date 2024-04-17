@@ -11,4 +11,7 @@ abstract class ReportRepository {
       required FeatureEntity feature});
   Future<Result<List<PhotoEntity>>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature});
+  Future<Result<FeatureEntity?>> getPhotosNotCompleted(
+      {required GeneralEntity general, required FeatureEntity feature});
+  Future<Result<bool>> hasNoSyncedData({required GeneralEntity general});
 }

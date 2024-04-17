@@ -3,10 +3,13 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/widgets/popup.dart';
 
 class LogoutButton extends StatefulWidget {
   final bool Function() validate;
@@ -16,11 +19,13 @@ class LogoutButton extends StatefulWidget {
   State<LogoutButton> createState() => _LogoutButtonState();
 }
 
-class _LogoutButtonState extends State<LogoutButton> {
+class _LogoutButtonState extends State<LogoutButton> with GeneralMixin {
   final bloc = Modular.get<SignBloc>();
+  final necessaryBloc = Modular.get<NecessaryBloc>();
   @override
   void dispose() {
     bloc.close();
+    necessaryBloc.close();
     super.dispose();
   }
 
@@ -29,7 +34,15 @@ class _LogoutButtonState extends State<LogoutButton> {
     return GestureDetector(
       onTap: () {
         if (widget.validate()) {
-          bloc.add(SignOutButtonPressed());
+          necessaryBloc.add(NecessarySignOut(
+            onClose: () => Scaffold.of(context).closeEndDrawer(),
+            action: () => showWarning(
+                icon: SvgPicture.asset(AppIcons.logout),
+                btnText: 'Đăng xuất',
+                onPressed: () => bloc.add(SignOutButtonPressed()),
+                title: 'Bạn có chắc muốn đăng xuất ?'),
+            general: general,
+          ));
         }
       },
       child: Container(

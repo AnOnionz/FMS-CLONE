@@ -1,21 +1,21 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/general/general_module.dart';
 import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
+import 'package:fms/features/report/report_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 
 import '../../routes/routes.dart';
 
+import 'necessary_module.dart';
 import 'presentation/pages/home_page.dart';
 
 class HomeModule extends Module {
   static const String route = '/home/';
   @override
-  List<Module> get imports => [SignModule(), GeneralModule()];
+  List<Module> get imports => [SignModule(), NecessaryModule()];
 
   @override
-  void binds(Injector i) {
-    i.add(NecessaryBloc.new);
-  }
+  void binds(Injector i) {}
 
   @override
   void routes(RouteManager r) {

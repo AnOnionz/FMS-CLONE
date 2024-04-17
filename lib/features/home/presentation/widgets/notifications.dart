@@ -2,50 +2,80 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:fms/core/widgets/bottom_sheet_notification.dart';
-import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/core/widgets/popup.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/sync/sync_module.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/utilities/overlay.dart';
+import '../../../../core/widgets/bottom_sheet_notification.dart';
 import '../../../../core/widgets/button/outline.dart';
+import 'require_task_notify.dart';
 
-void showRequiredAttendance(BuildContext context) {
-  OverlayManager.showSheet(
-      body: BottomSheetNotification(
-          icon: SvgPicture.asset(AppIcons.requiredAttendance),
-          title: 'Chưa chấm công ra',
-          message: 'Chưa chấm công ra, bạn có chắc chắn muốn đăng xuất không ?',
-          action: FlatButton(
-              onPressed: () => context.pop(),
-              name: 'Đăng xuất',
-              color: AppColors.orange)));
+void showRequiredAttendanceOut(VoidCallback onPressed) {
+  showFailure(
+    title: 'Chưa chấm công ra',
+    icon: SvgPicture.asset(AppIcons.requiredTask),
+    message: 'Chưa chấm công ra, bạn có chắc chắn muốn đăng xuất không ?',
+    btnText: 'Đến trang chấm công',
+    onPressed: onPressed,
+  );
 }
 
-void showRequiredSync(BuildContext context) {
-  OverlayManager.showSheet(
-      body: BottomSheetNotification(
-          icon: SvgPicture.asset(AppIcons.requiredSync),
-          title: 'Yêu cầu đồng bộ dữ liệu',
-          message: 'Yêu cầu đồng bộ dữ liệu trước khi chấm công ra',
-          action: OutlineButton(
-              onPressed: () {
-                context.pop();
-                context.nextRoute(SyncModule.route);
-              },
-              name: 'Đến trang đồng bộ',
-              color: AppColors.orange)));
+void showRequiredAttendanceIn(VoidCallback onPressed) {
+  showFailure(
+    title: 'Chưa chấm công vào',
+    icon: SvgPicture.asset(AppIcons.requiredTask),
+    message:
+        'Chưa chấm công vào, yêu cầu chấm công trước khi vào ca làm việc ?',
+    btnText: 'Đến trang chấm công',
+    onPressed: onPressed,
+  );
 }
 
-void showRequiredTask(BuildContext context) {
+void showRequiredFeature(String feature, VoidCallback onPressed) {
+  showWarning(
+      title: 'Yêu cầu ${feature}',
+      icon: SvgPicture.asset(AppIcons.requiredTask),
+      btnText: 'Làm ngay',
+      onPressed: onPressed);
+}
+
+void showRequiredSync(VoidCallback onPressed) {
+  showFailure(
+    title: 'Yêu cầu đồng bộ dữ liệu',
+    icon: SvgPicture.asset(AppIcons.requiredTask),
+    message: 'Yêu cầu đồng bộ dữ liệu trước khi chấm công ra',
+    btnText: 'Đến trang đồng bộ',
+    onPressed: onPressed,
+  );
+}
+
+void showRequiredTaskBeforeLogout({required VoidCallback onPressed}) {
+  showWarning(
+      title: 'Chưa hoàn thành công việc',
+      icon: SvgPicture.asset(AppIcons.requiredTask),
+      btnText: 'Đăng xuất',
+      onPressed: onPressed);
+}
+
+void showRequiredTask(
+    {required List<FeatureEntity> features,
+    required VoidCallback onPressed,
+    bool forSignout = false}) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
           icon: SvgPicture.asset(AppIcons.requiredTask),
           title: 'Chưa hoàn thành công việc',
-          message:
-              'Yêu cầu hoàn thành tất cả công việc bắt buộc trong ngày trước khi chấm công ra',
-          action: FlatButton(
-              onPressed: () => context.pop(),
-              name: 'Đăng xuất',
+          message: RequireTaskNotify(
+            features: features,
+            forLogout: forSignout,
+          ),
+          action: OutlineButton(
+              onPressed: () {
+                OverlayManager.hide();
+                onPressed();
+              },
+              name: 'Về trang chủ',
               color: AppColors.orange)));
 }

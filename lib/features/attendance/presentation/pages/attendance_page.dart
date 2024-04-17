@@ -4,8 +4,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
+import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/location/location_service.dart';
@@ -17,6 +20,7 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
+import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
@@ -41,6 +45,7 @@ class AttendancePage extends StatefulWidget {
 class _AttendancePageState extends State<AttendancePage> {
   final bloc = Modular.get<AttendanceBloc>();
   final cubit = Modular.get<AttendanceInfoCubit>();
+  final _necessaryBloc = Modular.get<NecessaryBloc>();
   final GoogleMapService _mapService = GoogleMapService();
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
@@ -50,8 +55,6 @@ class _AttendancePageState extends State<AttendancePage> {
   ImageDynamic? _imageDynamic;
   AttendanceEntity? _attendanceInfo;
   bool attendanceInfoLoaded = false;
-
-  final imageSize = Size(60.h, 60.h);
 
   @override
   void initState() {
@@ -99,7 +102,8 @@ class _AttendancePageState extends State<AttendancePage> {
     if (state is AttendanceInfoFailure) {
       showFailure(
           title: 'Tải dữ liệu thất bại',
-          failure: state.failure,
+          icon: SvgPicture.asset(AppIcons.requiredDownload),
+          message: 'Kiểm tra lại đường truyền mạng và thử lại',
           btnText: 'Thử lại',
           onPressed: () {
             context.pop();
@@ -114,10 +118,18 @@ class _AttendancePageState extends State<AttendancePage> {
         OverlayManager.showLoading();
       }
       if (state is AttendanceFailure) {
+        String? icon;
+        String? message;
+        if (state.failure is SocketFailure) {
+          icon = AppIcons.requiredInternet;
+          message =
+              'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng';
+        }
         OverlayManager.hide();
         showFailure(
             title: 'Chấm công thất bại',
-            failure: state.failure,
+            icon: SvgPicture.asset(icon ?? AppIcons.failure),
+            message: message ?? 'Phát sinh lỗi trong quá trình chấm công',
             btnText: 'Thử lại',
             onPressed: () {
               context.pop();
@@ -135,13 +147,17 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   void _attendance() {
-    bloc.add(AttendanceEvent(
-        file: isPhotoRequired ? XFile(_imageDynamic!.path!) : null,
-        position: isLocationRequired
-            ? Modular.get<LocationService>().currentLocation
-            : null,
-        feature: widget.entity.feature,
-        general: widget.entity.general));
+    _necessaryBloc.add(NecessaryOut(
+        () => bloc.add(AttendanceEvent(
+            file: isPhotoRequired ? XFile(_imageDynamic!.path!) : null,
+            position: isLocationRequired
+                ? Modular.get<LocationService>().currentLocation
+                : null,
+            feature: widget.entity.feature,
+            general: widget.entity.general)),
+        general: widget.entity.general,
+        feature: widget.entity.feature));
+    ;
   }
 
   void _showSheetHistory(BuildContext context) {
@@ -212,35 +228,29 @@ class _AttendancePageState extends State<AttendancePage> {
                                   SizedBox(height: 14.h),
                                   SizedBox(
                                     height: 60.h,
-                                    child: Row(
-                                      children: [
-                                        ImagePickerWidget(
-                                          size: imageSize,
-                                          enable: _imageDynamic == null,
-                                          onChanged: (file) {
-                                            setState(() {
-                                              _imageDynamic = file;
-                                            });
-                                          },
-                                          isWatermarkRequired:
-                                              isWatermarkRequired,
-                                          isWatermarking: isWatermarking,
-                                        ),
-                                        SizedBox(width: 12.h),
-                                        Expanded(
-                                            child: ListViewImages(
-                                          size: imageSize,
-                                          feature: widget.entity.feature,
-                                          onDeleted: (image) {
-                                            setState(() {
-                                              _imageDynamic = null;
-                                            });
-                                          },
-                                          images: _imageDynamic != null
-                                              ? [_imageDynamic!]
-                                              : [],
-                                        ))
-                                      ],
+                                    child: ListViewImages(
+                                      height: 60.h,
+                                      feature: widget.entity.feature,
+                                      imagePickerButton: ImagePickerWidget(
+                                        enable: _imageDynamic == null,
+                                        height: 60.h,
+                                        onChanged: (file) {
+                                          setState(() {
+                                            _imageDynamic = file;
+                                          });
+                                        },
+                                        isWatermarkRequired:
+                                            isWatermarkRequired,
+                                        isWatermarking: isWatermarking,
+                                      ),
+                                      onDeleted: (image) {
+                                        setState(() {
+                                          _imageDynamic = null;
+                                        });
+                                      },
+                                      images: _imageDynamic != null
+                                          ? [_imageDynamic!]
+                                          : [],
                                     ),
                                   ),
                                 ],

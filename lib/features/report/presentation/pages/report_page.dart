@@ -63,6 +63,7 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.entity.general);
     return Scaffold(
       appBar: DefaultAppBar(title: widget.entity.feature.name!),
       body: Padding(

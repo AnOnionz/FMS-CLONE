@@ -30,9 +30,8 @@ class ReportItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageSize = Size(60, 60);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       decoration: BoxDecoration(
           color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
@@ -54,35 +53,23 @@ class ReportItem extends StatelessWidget {
           ),
           Padding(
               padding: EdgeInsets.only(top: 20.h),
-              child: SizedBox(
-                height: imageSize.height,
-                child: Row(
-                  children: [
-                    ImagePickerWidget(
-                      size: imageSize,
-                      enable: photos.length < entity.maximum!,
-                      onChanged: onAdded,
-                      isWatermarkRequired: isWatermark,
-                      isWatermarking: isWatermarking,
-                    ),
-                    SizedBox(width: 16.w),
-                    Expanded(
-                      child: ListViewImages(
-                        feature: feature,
-                        size: imageSize,
-                        images: photos
-                            .map((e) => ImageDynamic(
-                                id: e.id,
-                                uuid: e.dataUuid,
-                                dataTimestamp: e.dataTimestamp,
-                                path: e.path,
-                                networkImage: e.image))
-                            .toList(),
-                        onDeleted: onDeleted,
-                      ),
-                    ),
-                  ],
+              child: ListViewImages(
+                feature: feature,
+                imagePickerButton: ImagePickerWidget(
+                  enable: photos.length < entity.maximum!,
+                  onChanged: onAdded,
+                  isWatermarkRequired: isWatermark,
+                  isWatermarking: isWatermarking,
                 ),
+                images: photos
+                    .map((e) => ImageDynamic(
+                        id: e.id,
+                        uuid: e.dataUuid,
+                        dataTimestamp: e.dataTimestamp,
+                        path: e.path,
+                        networkImage: e.image))
+                    .toList(),
+                onDeleted: onDeleted,
               )),
           (entity.description != null)
               ? Padding(

@@ -19,16 +19,16 @@ class ReportLocalDataSource extends LocalDatasource
     implements IReportLocalDataSource {
   @override
   void cachePhotoToLocal(PhotoEntity photo) {
-    final oldPhoto = db.getObject<PhotoEntity>(id: fastHash(photo.dataUuid));
-    if (oldPhoto != null) {
-      oldPhoto.path = photo.path;
-      oldPhoto.image = photo.image;
-      oldPhoto.dataTimestamp = photo.dataTimestamp;
-      oldPhoto.status = photo.status;
-      oldPhoto.id = photo.id;
-      db.addObject<PhotoEntity>(oldPhoto);
-    } else
-      db.addObject<PhotoEntity>(photo);
+    // final oldPhoto = db.getObject<PhotoEntity>(id: fastHash(photo.dataUuid));
+    // if (oldPhoto != null) {
+    //   oldPhoto.path = photo.path;
+    //   oldPhoto.image = photo.image;
+    //   oldPhoto.status = photo.status;
+    //   oldPhoto.id = photo.id;
+
+    //   db.addObject<PhotoEntity>(oldPhoto);
+    // } else
+    db.addObject<PhotoEntity>(photo);
   }
 
   @override

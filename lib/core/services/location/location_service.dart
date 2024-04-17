@@ -235,29 +235,32 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<String> placemark(Position position) async {
-    final placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    if (placemarks.isEmpty) {
+    try {
+      final placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (placemarks.isEmpty) {
+        return 'Vị trí không xác định';
+      }
+      final Placemark placemark = placemarks.first;
+
+      final street =
+          placemark.street?.insert(placemark.street!.isEmpty ? '' : '\n', 0);
+
+      final subLocality = placemark.subLocality
+          ?.insert(placemark.subLocality!.isEmpty ? '' : '\n', 0);
+
+      final subAdministrativeArea = placemark.subAdministrativeArea
+          ?.insert(placemark.subAdministrativeArea!.isEmpty ? '' : '\n', 0);
+
+      final administrativeArea = placemark.administrativeArea
+          ?.insert(placemark.administrativeArea!.isEmpty ? '' : '\n', 0);
+
+      final locationStr =
+          '$street$subLocality$subAdministrativeArea$administrativeArea';
+      return locationStr;
+    } catch (e) {
       return 'Vị trí không xác định';
     }
-    final Placemark placemark = placemarks.first;
-
-    final street =
-        placemark.street?.insert(placemark.street!.isEmpty ? '' : '\n', 0);
-
-    final subLocality = placemark.subLocality
-        ?.insert(placemark.subLocality!.isEmpty ? '' : '\n', 0);
-
-    final subAdministrativeArea = placemark.subAdministrativeArea
-        ?.insert(placemark.subAdministrativeArea!.isEmpty ? '' : '\n', 0);
-
-    final administrativeArea = placemark.administrativeArea
-        ?.insert(placemark.administrativeArea!.isEmpty ? '' : '\n', 0);
-
-    final locationStr =
-        '$street$subLocality$subAdministrativeArea$administrativeArea';
-
-    return locationStr;
   }
 
   Future<bool> isValidDistance(

@@ -25,18 +25,19 @@ import '../services/network_time/network_time_service.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final bool enable;
+  final double? height;
   final bool isWatermarkRequired;
   final void Function(ImageDynamic image) onChanged;
   final ValueNotifier<bool>? isWatermarking;
-  final Size size;
 
-  const ImagePickerWidget(
-      {super.key,
-      required this.enable,
-      this.isWatermarkRequired = true,
-      this.isWatermarking,
-      required this.onChanged,
-      required this.size});
+  const ImagePickerWidget({
+    super.key,
+    this.height,
+    required this.enable,
+    this.isWatermarkRequired = true,
+    this.isWatermarking,
+    required this.onChanged,
+  });
 
   @override
   State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
@@ -82,11 +83,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final height = ((context.screenWidth - 80.w) - 4 * 12.h) / 5;
     return GestureDetector(
       onTap: () => widget.enable ? _takeImage() : null,
       child: Container(
-        height: widget.size.height,
-        width: widget.size.width,
+        height: widget.height ?? height,
+        width: widget.height ?? height,
         child: Center(
           child: ListenableBuilder(
               listenable: isWatermarking,
@@ -95,8 +97,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                     ? AppIndicator()
                     : SvgPicture.asset(
                         AppIcons.camera,
-                        height: widget.size.height / 2,
-                        width: widget.size.width / 2,
+                        height: (widget.height ?? height) / 2,
+                        width: (widget.height ?? height) / 2,
                       );
               }),
         ),
@@ -158,8 +160,8 @@ class ImageDetail extends StatelessWidget {
                 child: CachedImage(
                   fit: BoxFit.cover,
                   placeholder: (p0, p1) => SizedBox(
-                    width: 100.h,
-                    height: 100.h,
+                    width: 60.h,
+                    height: 60.h,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -202,12 +204,10 @@ class _ImageViewWidgetState extends State<ImageViewWidget> with GeneralMixin {
     _subscription = _bloc.stream.listen((state) {
       if (state is DeleteImageSuccess) {
         OverlayManager.hide();
-        context.pop();
         widget.onDeleted.call();
       }
       if (state is DeleteImageFailure) {
         OverlayManager.hide();
-        context.pop();
       }
     });
     super.initState();

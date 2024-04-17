@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
@@ -6,33 +7,36 @@ import 'image_picker_widget.dart';
 
 class ListViewImages extends StatelessWidget {
   final List<ImageDynamic> images;
+  final Widget imagePickerButton;
   final FeatureEntity feature;
-  final Size size;
+  final double? height;
   final void Function(ImageDynamic image) onDeleted;
   const ListViewImages(
       {super.key,
+      this.height,
       required this.images,
-      required this.size,
       required this.feature,
-      required this.onDeleted});
+      required this.onDeleted,
+      required this.imagePickerButton});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        itemCount: images.length,
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        separatorBuilder: (context, index) => SizedBox(
-              width: 8.w,
-            ),
-        itemBuilder: (context, index) {
-          return ImageDetail(
-            height: size.height,
-            width: size.width,
-            feature: feature,
-            image: images[index],
-            onDeleted: () => onDeleted(images[index]),
-          );
-        });
+    final width = context.screenWidth - 80.w;
+    return Wrap(
+      spacing: 12.h,
+      runSpacing: 10.h,
+      children: [
+        imagePickerButton,
+        ...images
+            .mapIndexed((currentValue, index) => ImageDetail(
+                  height: height ?? (width - 4 * 12.h) / 5,
+                  width: height ?? (width - 4 * 12.h) / 5,
+                  feature: feature,
+                  image: images[index],
+                  onDeleted: () => onDeleted(images[index]),
+                ))
+            .toList()
+      ],
+    );
   }
 }

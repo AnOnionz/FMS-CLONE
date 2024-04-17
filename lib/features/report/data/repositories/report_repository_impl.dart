@@ -54,8 +54,57 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
         return Right(_resp);
       },
       onFailure: (failure) {
-        _local.cachePhotosToLocal(photos);
+        photos.forEach((photo) {
+          photo = photo.copyWith(attendanceId: general.attendance!.id);
+          _local.cachePhotoToLocal(photo);
+        });
       },
     );
+  }
+
+  @override
+  Future<Result<FeatureEntity?>> getPhotosNotCompleted(
+      {required GeneralEntity general, required FeatureEntity feature}) {
+    return todo(() async {
+      final localPhotos = await _local.getPhotos(general: general);
+      if (localPhotos.isEmpty) {
+        final reportFeature = feature.copyWith(featurePhotos: []);
+        return Right(reportFeature);
+      }
+      if (localPhotos.isNotEmpty) {
+        final featurePhotos = <FeaturePhoto>[];
+        final photoGroup = groupBy<PhotoEntity, int>(
+          localPhotos,
+          (photo) {
+            return photo.featurePhotoId;
+          },
+        );
+
+        feature.featurePhotos!.forEach((featurePhoto) {
+          final photos = photoGroup[featurePhoto.id!] ?? [];
+          if (photos.length < featurePhoto.minimum!) {
+            featurePhotos.add(featurePhoto);
+          }
+        });
+        if (featurePhotos.length > 0) {
+          return Right(feature.copyWith(featurePhotos: featurePhotos));
+        }
+      }
+
+      return Right(null);
+    });
+  }
+
+  @override
+  Future<Result<bool>> hasNoSyncedData({required GeneralEntity general}) async {
+    return todo(() async {
+      final localPhotos = await _local.getPhotos(general: general);
+      if (localPhotos.isNotEmpty) {
+        final hasNoSynced =
+            localPhotos.any((photo) => photo.status == SyncStatus.noSynced);
+        return Right(hasNoSynced);
+      }
+      return Right(false);
+    });
   }
 }

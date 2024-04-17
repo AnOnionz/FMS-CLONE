@@ -1,9 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:isar/isar.dart';
+
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -124,6 +126,29 @@ class FeatureEntity {
   @override
   String toString() {
     return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos)';
+  }
+
+  FeatureEntity copyWith({
+    int? id,
+    String? name,
+    FeatureType? type,
+    int? ordinal,
+    List<int>? dependentOnFeatureIds,
+    FeatureAttendance? featureAttendance,
+    List<FeatureQuantity>? featureQuantities,
+    List<FeaturePhoto>? featurePhotos,
+  }) {
+    return FeatureEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      ordinal: ordinal ?? this.ordinal,
+      dependentOnFeatureIds:
+          dependentOnFeatureIds ?? this.dependentOnFeatureIds,
+      featureAttendance: featureAttendance ?? this.featureAttendance,
+      featureQuantities: featureQuantities ?? this.featureQuantities,
+      featurePhotos: featurePhotos ?? this.featurePhotos,
+    );
   }
 }
 

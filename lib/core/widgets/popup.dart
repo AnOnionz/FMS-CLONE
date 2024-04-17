@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fms/core/errors/failure.dart';
+import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/home/home_module.dart';
 
@@ -26,28 +27,6 @@ void showSuccess({required String title}) {
 
 void showFailure({
   required String title,
-  required Failure failure,
-  required String btnText,
-  required VoidCallback onPressed,
-}) {
-  final icon = switch (failure.runtimeType) {
-    SocketFailure => AppIcons.requiredInternet,
-    RequiredAllTaskDoneFailure => AppIcons.requiredTask,
-    RequiredSyncFailure => AppIcons.requiredSync,
-    DownloadFailure => AppIcons.requiredDownload,
-    _ => AppIcons.failure,
-  };
-  OverlayManager.showSheet(
-      body: BottomSheetNotification(
-          icon: SvgPicture.asset(icon),
-          title: title,
-          message: failure.message,
-          action: OutlineButton(
-              onPressed: onPressed, name: btnText, color: AppColors.orange)));
-}
-
-void showWarning({
-  required String title,
   required Widget icon,
   String? message,
   required String btnText,
@@ -57,7 +36,45 @@ void showWarning({
       body: BottomSheetNotification(
           icon: icon,
           title: title,
+          message: message != null
+              ? Builder(builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 32.h),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.nero),
+                    ),
+                  );
+                })
+              : null,
+          action: OutlineButton(
+              onPressed: () {
+                OverlayManager.hide();
+                onPressed();
+              },
+              name: btnText,
+              color: AppColors.orange)));
+}
+
+void showWarning({
+  required String title,
+  required Widget icon,
+  Widget? message,
+  required String btnText,
+  required VoidCallback onPressed,
+}) {
+  OverlayManager.showSheet(
+      body: BottomSheetNotification(
+          icon: icon,
+          title: title,
           message: message,
           action: FlatButton(
-              onPressed: onPressed, name: btnText, color: AppColors.orange)));
+              onPressed: () {
+                OverlayManager.hide();
+                onPressed();
+              },
+              name: btnText,
+              color: AppColors.orange)));
 }

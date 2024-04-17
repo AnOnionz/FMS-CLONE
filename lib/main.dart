@@ -15,7 +15,6 @@ import 'features/setting/domain/entities/setting_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Database.open([
     LocalValueSchema,
     UserModelSchema,

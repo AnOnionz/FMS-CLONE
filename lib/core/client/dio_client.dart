@@ -96,17 +96,20 @@ class DioClient extends ApiService {
       int retries = 1,
       FormData? data,
       Map<String, dynamic>? queryParameters}) async {
-    setBaseUrl(path);
-    final response = await _request(
-        retries: retries,
-        _http.post('',
-            queryParameters: queryParameters,
-            data: data,
-            cancelToken: cancelToken));
-
-    setBaseUrl(ApiService.apiBaseUrl);
-
-    return response as T?;
+    try {
+      setBaseUrl(path);
+      final response = await _request(
+          retries: retries,
+          _http.post('',
+              queryParameters: queryParameters,
+              data: data,
+              cancelToken: cancelToken));
+      setBaseUrl(ApiService.apiBaseUrl);
+      return response as T?;
+    } catch (e) {
+      setBaseUrl(ApiService.apiBaseUrl);
+      rethrow;
+    }
   }
 
   @override
