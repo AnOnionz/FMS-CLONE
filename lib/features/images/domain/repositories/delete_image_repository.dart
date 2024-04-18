@@ -4,9 +4,6 @@ import '../../../general/domain/entities/general_entity.dart';
 
 abstract class DeleteImageRepository {
   Future<Result<void>> deleteImage(
-      {required GeneralEntity general,
-      required FeatureEntity feature,
-      required int id,
-      required String uuid});
+      {required FeatureEntity feature, required int id, required String uuid});
   Future<Result<void>> deleteLocalImage({required String uuid});
 }

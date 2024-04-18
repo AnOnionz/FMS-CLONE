@@ -16,11 +16,11 @@ class AttendanceUsecase extends UseCase<AttendanceData?, AttendanceParams> {
   @override
   Future<Result<AttendanceData?>> call(params) {
     return repository.postAttendance(
-        file: params.file,
-        position: params.position,
-        time: params.time,
-        feature: params.feature,
-        general: params.general);
+      file: params.file,
+      position: params.position,
+      time: params.time,
+      feature: params.feature,
+    );
   }
 }
 
@@ -29,12 +29,11 @@ class AttendanceParams {
   final Position? position;
   final DateTime time;
   final FeatureEntity feature;
-  final GeneralEntity general;
 
-  AttendanceParams(
-      {this.file,
-      this.position,
-      required this.time,
-      required this.feature,
-      required this.general});
+  AttendanceParams({
+    this.file,
+    this.position,
+    required this.time,
+    required this.feature,
+  });
 }

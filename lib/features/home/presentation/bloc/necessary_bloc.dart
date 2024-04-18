@@ -6,10 +6,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
-import 'package:fms/features/report/domain/usecases/get_photos_usecase.dart';
 import 'package:fms/features/sync/sync_module.dart';
 import '../../../report/domain/usecases/has_photos_no_synced_usecase.dart';
 import '../../domain/entities/general_item_data.dart';
@@ -17,7 +17,8 @@ import '../../domain/entities/general_item_data.dart';
 part 'necessary_event.dart';
 part 'necessary_state.dart';
 
-class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
+class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
+    with GeneralDataMixin {
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
   final HasPhotosNoSyncedDataUsecase hasPhotosNoSynced;
   StreamSubscription<NecessaryState>? subscription;
@@ -31,8 +32,8 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
       if (state is NecessaryLockIn) {
         final action = () {
           Modular.to.pushNamed('/${state.feature.type!.name}/',
-              arguments: GeneralItemData(
-                  general: state.general, feature: state.feature));
+              arguments:
+                  GeneralItemData(general: general, feature: state.feature));
         };
         switch (state.feature.type) {
           case FeatureType.attendanceClockingIn:
@@ -52,8 +53,8 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
       }
       if (state is NecessaryUnfastenIn) {
         Modular.to.pushNamed('/${state.feature.type!.name}/',
-            arguments: GeneralItemData(
-                general: state.general, feature: state.feature));
+            arguments:
+                GeneralItemData(general: general, feature: state.feature));
       }
 
       if (state is NecessaryUnfastenOut) {
@@ -81,8 +82,8 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
       if (state is NecessaryAttendanceOut) {
         showRequiredAttendanceOut(() {
           Modular.to.pushNamed('/${state.feature.type!.name}/',
-              arguments: GeneralItemData(
-                  general: state.general, feature: state.feature));
+              arguments:
+                  GeneralItemData(general: general, feature: state.feature));
         });
       }
     });
@@ -92,15 +93,15 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
     bool _isLock = false;
 
     event.feature.dependentOnFeatureIds!.forEach((dependent) {
-      final feature = event.general.config.features!
+      final feature = general.config.features!
           .firstWhereOrNull((feature) => feature.id == dependent);
       if (feature != null) {
         switch (feature.type) {
           case FeatureType.attendanceClockingIn:
-            if (event.general.attendance == null ||
-                (event.general.attendance != null &&
-                    event.general.attendance!.dataOut != null)) {
-              emit(NecessaryLockIn(feature: feature, general: event.general));
+            if (general.attendance == null ||
+                (general.attendance != null &&
+                    general.attendance!.dataOut != null)) {
+              emit(NecessaryLockIn(feature: feature));
               _isLock = true;
               break;
             }
@@ -109,31 +110,31 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
       }
     });
     if (!_isLock) {
-      emit(NecessaryUnfastenIn(feature: event.feature, general: event.general));
+      emit(NecessaryUnfastenIn(feature: event.feature));
     }
   }
 
   Future<void> onNecessaryOut(NecessaryOut event, emit) async {
-    final features = await checkTasksNotCompleted(
-        feature: event.feature, general: event.general);
+    final features =
+        await checkTasksNotCompleted(feature: event.feature, general: general);
     features.removeWhere(
         (element) => element.type == FeatureType.attendanceClockingOut);
     if (features.isNotEmpty) {
-      emit(NecessaryLockOut(features: features, general: event.general));
+      emit(NecessaryLockOut(features: features));
     }
     if (features.isEmpty) {
-      emit(NecessaryUnfastenOut(action: event.action, general: event.general));
+      emit(NecessaryUnfastenOut(action: event.action));
     }
   }
 
   Future<void> onNecessarySignOut(NecessarySignOut event, emit) async {
-    final features = await checkTasksNotCompleted(general: event.general);
+    final features = await checkTasksNotCompleted(general: general);
 
     if (features.isEmpty) {
       emit(NecessaryUnfastenOut(
         action: event.action,
-        general: event.general,
       ));
+      return;
     }
 
     ///  check tasks
@@ -142,13 +143,12 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
     if (tasks.isNotEmpty) {
       features.removeWhere(
           (element) => element.type == FeatureType.attendanceClockingOut);
-      emit(NecessaryTask(
-          onClose: event.onClose, features: features, general: event.general));
+      emit(NecessaryTask(onClose: event.onClose, features: features));
       return;
     }
 
     ///check sync
-    final hasSynced = await checkHasNoSynced(general: event.general);
+    final hasSynced = await checkHasNoSynced(general: general);
 
     if (hasSynced) {
       emit(NecessarySync(onClose: event.onClose));
@@ -159,8 +159,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
     final featureAttendanceOut = features.firstWhereOrNull(
         (feature) => feature.type == FeatureType.attendanceClockingOut);
     if (featureAttendanceOut != null) {
-      emit(NecessaryAttendanceOut(
-          general: event.general, feature: featureAttendanceOut));
+      emit(NecessaryAttendanceOut(feature: featureAttendanceOut));
       return;
     }
   }
@@ -182,8 +181,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
           .firstWhereOrNull((feature) => feature.id == dependent);
       if (dependentFeature != null) {
         if (dependentFeature.type == FeatureType.photography) {
-          await getPhotosNotCompleted(
-              GetPhotosParams(general: general, feature: dependentFeature))
+          await getPhotosNotCompleted(dependentFeature)
             ..fold((failure) {}, (data) {
               if (data != null) {
                 features.add(data);
@@ -222,6 +220,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState> {
             });
         }
       }
+      if (hasNoSynced) return hasNoSynced;
     });
     return hasNoSynced;
   }

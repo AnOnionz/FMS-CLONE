@@ -12,7 +12,14 @@ class NecessaryModule extends Module {
 
   @override
   void binds(Injector i) {
-    i.add(NecessaryBloc.new);
+    i.add(NecessaryBloc.new,
+        config: BindConfig<NecessaryBloc>(
+          notifier: (bloc) => bloc.stream,
+          onDispose: (bloc) {
+            bloc.subscription?.cancel();
+            bloc.close();
+          },
+        ));
   }
 
   @override

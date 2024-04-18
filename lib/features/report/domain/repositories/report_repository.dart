@@ -6,12 +6,9 @@ import '../entities/photo_entity.dart';
 
 abstract class ReportRepository {
   Future<Result<List<PhotoEntity>>> createPhotos(
-      {required List<PhotoEntity> photos,
-      required GeneralEntity general,
-      required FeatureEntity feature});
-  Future<Result<List<PhotoEntity>>> allPhotos(
-      {required GeneralEntity general, required FeatureEntity feature});
+      {required List<PhotoEntity> photos, required FeatureEntity feature});
+  Future<Result<List<PhotoEntity>>> allPhotos({required FeatureEntity feature});
   Future<Result<FeatureEntity?>> getPhotosNotCompleted(
-      {required GeneralEntity general, required FeatureEntity feature});
+      {required FeatureEntity feature});
   Future<Result<bool>> hasNoSyncedData({required GeneralEntity general});
 }

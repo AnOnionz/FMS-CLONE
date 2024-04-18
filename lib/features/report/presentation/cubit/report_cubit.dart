@@ -20,16 +20,15 @@ class ReportCubit extends Cubit<ReportState> {
 
   Future<void> savePhotos(
       {required List<PhotoEntity> items,
-      required GeneralEntity general,
       required FeatureEntity feature}) async {
     OverlayManager.showLoading();
-    final execute = await createPhotos(
-        CreatePhotosParams(photos: items, general: general, feature: feature));
+    final execute =
+        await createPhotos(CreatePhotosParams(photos: items, feature: feature));
     execute.fold((failure) {
       OverlayManager.hide();
       showSuccess(title: 'Lưu thành công');
     }, (data) async {
-      await getPhotos(GetPhotosParams(general: general, feature: feature))
+      await getPhotos(feature)
         ..fold((failure) async => emit(ReportSuccess([])),
             (data) async => emit(ReportSuccess(data)));
       OverlayManager.hide();
@@ -40,8 +39,7 @@ class ReportCubit extends Cubit<ReportState> {
   Future<void> fetchPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {
     emit(ReportLoading());
-    final execute =
-        await getPhotos(GetPhotosParams(general: general, feature: feature));
+    final execute = await getPhotos(feature);
     execute.fold((failure) async => emit(ReportFailure(failure)),
         (data) async => emit(ReportSuccess(data)));
   }

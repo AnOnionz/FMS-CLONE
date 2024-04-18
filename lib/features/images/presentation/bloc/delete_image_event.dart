@@ -9,9 +9,8 @@ sealed class DeleteImageEvent extends Equatable {
 
 class DeleteImageRequest extends DeleteImageEvent {
   final ImageDynamic image;
-  final GeneralEntity general;
+
   final FeatureEntity feature;
 
-  DeleteImageRequest(
-      {required this.image, required this.general, required this.feature});
+  DeleteImageRequest({required this.image, required this.feature});
 }

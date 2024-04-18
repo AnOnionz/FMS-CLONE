@@ -3,7 +3,8 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
-import 'image_picker_widget.dart';
+import 'image_dynamic.dart';
+import 'image_thumbnail_widget.dart';
 
 class ListViewImages extends StatelessWidget {
   final List<ImageDynamic> images;
@@ -28,7 +29,7 @@ class ListViewImages extends StatelessWidget {
       children: [
         imagePickerButton,
         ...images
-            .mapIndexed((currentValue, index) => ImageDetail(
+            .mapIndexed((currentValue, index) => ImageThumbnailWidget(
                   height: height ?? (width - 4 * 12.h) / 5,
                   width: height ?? (width - 4 * 12.h) / 5,
                   feature: feature,

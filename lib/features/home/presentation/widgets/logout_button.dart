@@ -3,7 +3,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 
@@ -19,7 +18,7 @@ class LogoutButton extends StatefulWidget {
   State<LogoutButton> createState() => _LogoutButtonState();
 }
 
-class _LogoutButtonState extends State<LogoutButton> with GeneralMixin {
+class _LogoutButtonState extends State<LogoutButton> {
   final bloc = Modular.get<SignBloc>();
   final necessaryBloc = Modular.get<NecessaryBloc>();
   @override
@@ -41,7 +40,6 @@ class _LogoutButtonState extends State<LogoutButton> with GeneralMixin {
                 btnText: 'Đăng xuất',
                 onPressed: () => bloc.add(SignOutButtonPressed()),
                 title: 'Bạn có chắc muốn đăng xuất ?'),
-            general: general,
           ));
         }
       },

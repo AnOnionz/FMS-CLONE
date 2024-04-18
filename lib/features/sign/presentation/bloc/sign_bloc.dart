@@ -7,7 +7,6 @@ import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
-import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import '../../../authentication/domain/usecases/logout_usecase.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
 

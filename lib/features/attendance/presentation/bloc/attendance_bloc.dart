@@ -32,11 +32,11 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
     final time = await timeService.ntpDateTime();
     final execute = await _attendance(AttendanceParams(
-        file: event.file,
-        position: event.position,
-        time: time,
-        feature: event.feature,
-        general: event.general));
+      file: event.file,
+      position: event.position,
+      time: time,
+      feature: event.feature,
+    ));
     final attendance =
         execute.fold((failure) => emit(AttendanceFailure(failure)), (data) {
       if (data == null) {
@@ -47,8 +47,8 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     });
 
     if (attendance != null) {
-      final execute = await _getAttendanceInfo(AttendanceParams(
-          time: time, feature: event.feature, general: event.general));
+      final execute = await _getAttendanceInfo(
+          AttendanceParams(time: time, feature: event.feature));
       execute.fold((failure) => emit(AttendanceSuccess(null)), (data) {
         emit(AttendanceSuccess(data));
         if (data != null) {

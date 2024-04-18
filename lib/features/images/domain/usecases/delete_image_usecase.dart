@@ -11,22 +11,15 @@ class DeleteImageUseCase extends UseCase<void, DeleteImageParams> {
   @override
   Future<Result<void>> call(DeleteImageParams params) {
     return repository.deleteImage(
-        general: params.general,
-        feature: params.feature,
-        id: params.id,
-        uuid: params.uuid);
+        feature: params.feature, id: params.id, uuid: params.uuid);
   }
 }
 
 class DeleteImageParams {
-  final GeneralEntity general;
   final FeatureEntity feature;
   final int id;
   final String uuid;
 
   DeleteImageParams(
-      {required this.general,
-      required this.feature,
-      required this.id,
-      required this.uuid});
+      {required this.feature, required this.id, required this.uuid});
 }

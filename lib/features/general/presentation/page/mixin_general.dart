@@ -6,3 +6,7 @@ import 'package:fms/features/general/domain/entities/general_entity.dart';
 mixin GeneralMixin<T extends StatefulWidget> on State<T> {
   GeneralEntity get general => Modular.get<GeneralRepository>().general!;
 }
+
+mixin GeneralDataMixin {
+  GeneralEntity get general => Modular.get<GeneralRepository>().general!;
+}

@@ -43,7 +43,7 @@ class _TasksState extends State<Tasks> with GeneralMixin {
                 name: feature.name!,
                 onPressed: () => context
                     .read<NecessaryBloc>()
-                    .add(NecessaryIn(feature: feature, general: general)),
+                    .add(NecessaryIn(feature: feature)),
               );
             },
           )

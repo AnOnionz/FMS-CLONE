@@ -4,6 +4,7 @@ import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/report/data/datasources/report_local_datasource.dart';
 import 'package:fms/features/report/data/datasources/report_remote_datasource.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
@@ -11,16 +12,18 @@ import 'package:fms/features/report/domain/repositories/report_repository.dart';
 
 import '../../../../core/usecase/either.dart';
 
-class ReportRepositoryImpl extends Repository implements ReportRepository {
+class ReportRepositoryImpl extends Repository
+    with GeneralDataMixin
+    implements ReportRepository {
   final ReportRemoteDataSource _remote;
   final ReportLocalDataSource _local;
 
   ReportRepositoryImpl(this._remote, this._local);
   @override
   Future<Result<List<PhotoEntity>>> allPhotos(
-      {required GeneralEntity general, required FeatureEntity feature}) async {
+      {required FeatureEntity feature}) async {
     return todo(() async {
-      final localPhotos = await _local.getPhotos(general: general);
+      final localPhotos = await _local.getPhotosLocal();
       if (localPhotos.isNotEmpty) {
         return Right(localPhotos);
       }
@@ -33,7 +36,6 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
   @override
   Future<Result<List<PhotoEntity>>> createPhotos(
       {required List<PhotoEntity> photos,
-      required GeneralEntity general,
       required FeatureEntity feature}) async {
     return todo(
       () async {
@@ -47,26 +49,21 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
               photo = photo.copyWith(id: report.id, image: report.image);
             }
           }
-          photo = photo.copyWith(attendanceId: general.attendance!.id);
-
-          _local.cachePhotoToLocal(photo);
         }
+        _local.cachePhotosToLocal(photos);
         return Right(_resp);
       },
       onFailure: (failure) {
-        photos.forEach((photo) {
-          photo = photo.copyWith(attendanceId: general.attendance!.id);
-          _local.cachePhotoToLocal(photo);
-        });
+        _local.cachePhotosToLocal(photos);
       },
     );
   }
 
   @override
   Future<Result<FeatureEntity?>> getPhotosNotCompleted(
-      {required GeneralEntity general, required FeatureEntity feature}) {
+      {required FeatureEntity feature}) {
     return todo(() async {
-      final localPhotos = await _local.getPhotos(general: general);
+      final localPhotos = await _local.getPhotosLocal();
       if (localPhotos.isEmpty) {
         final reportFeature = feature.copyWith(featurePhotos: []);
         return Right(reportFeature);
@@ -98,11 +95,9 @@ class ReportRepositoryImpl extends Repository implements ReportRepository {
   @override
   Future<Result<bool>> hasNoSyncedData({required GeneralEntity general}) async {
     return todo(() async {
-      final localPhotos = await _local.getPhotos(general: general);
+      final localPhotos = _local.getPhotosNoSynced();
       if (localPhotos.isNotEmpty) {
-        final hasNoSynced =
-            localPhotos.any((photo) => photo.status == SyncStatus.noSynced);
-        return Right(hasNoSynced);
+        return Right(true);
       }
       return Right(false);
     });

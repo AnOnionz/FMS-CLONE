@@ -60,6 +60,10 @@ final class Database {
     }
   }
 
+  IsarCollection<T> colection<T>() {
+    return _isar!.collection<T>();
+  }
+
   List<T> where<T>(
       QueryBuilder<T, T, QAfterWhereClause> Function(
               QueryBuilder<T, T, QWhere> where)

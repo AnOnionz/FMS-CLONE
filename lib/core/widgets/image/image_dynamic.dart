@@ -1,0 +1,21 @@
+import 'package:equatable/equatable.dart';
+
+import '../../../features/attendance/domain/entities/attendance_entity.dart';
+
+class ImageDynamic extends Equatable {
+  final int? id;
+  final String uuid;
+  final DateTime dataTimestamp;
+  final String? path;
+  final ImageCloud? networkImage;
+
+  ImageDynamic(
+      {this.id,
+      required this.uuid,
+      required this.dataTimestamp,
+      this.path,
+      this.networkImage});
+
+  @override
+  List<Object?> get props => [uuid];
+}

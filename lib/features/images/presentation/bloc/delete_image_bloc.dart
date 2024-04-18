@@ -6,7 +6,8 @@ import 'package:fms/features/images/domain/usecases/delete_image_usecase.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/errors/failure.dart';
-import '../../../../core/widgets/image_picker_widget.dart';
+import '../../../../core/widgets/image/image_picker_widget.dart';
+import '../../../../core/widgets/image/images.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/usecases/delete_local_image_usecase.dart';
 
@@ -23,7 +24,6 @@ class DeleteImageBloc extends Bloc<DeleteImageEvent, DeleteImageState> {
       OverlayManager.showLoading();
       if (event.image.networkImage != null) {
         final execute = await _deleteImage(DeleteImageParams(
-            general: event.general,
             feature: event.feature,
             id: event.image.id!,
             uuid: event.image.uuid));

@@ -11,7 +11,7 @@ class SyncModule extends Module {
 
   @override
   void binds(Injector i) {
-    i.add(SyncBloc.new);
+    i.addLazySingleton(SyncBloc.new);
   }
 
   @override

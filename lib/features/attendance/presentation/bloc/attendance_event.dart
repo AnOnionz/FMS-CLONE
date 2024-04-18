@@ -4,11 +4,9 @@ class AttendanceEvent extends Equatable {
   final XFile? file;
   final Position? position;
   final FeatureEntity feature;
-  final GeneralEntity general;
 
-  const AttendanceEvent(
-      {this.file, this.position, required this.feature, required this.general});
+  const AttendanceEvent({this.file, this.position, required this.feature});
 
   @override
-  List<Object?> get props => [file, position, feature, general];
+  List<Object?> get props => [file, position, feature];
 }

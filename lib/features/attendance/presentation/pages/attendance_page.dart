@@ -26,8 +26,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/button/outline.dart';
-import '../../../../core/widgets/image_picker_widget.dart';
-import '../../../../core/widgets/listview_images.dart';
+import '../../../../core/widgets/image/images.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../../../home/home_module.dart';
 import '../widgets/time_box.dart';
@@ -88,8 +87,7 @@ class _AttendancePageState extends State<AttendancePage> {
   bool get isActive => attendanceInfoLoaded == true && _imageDynamic != null;
 
   void _getInfo() {
-    cubit.getInfo(
-        feature: widget.entity.feature, general: widget.entity.general);
+    cubit.getInfo(feature: widget.entity.feature);
   }
 
   void attendanceInfoListen(state) {
@@ -106,7 +104,6 @@ class _AttendancePageState extends State<AttendancePage> {
           message: 'Kiểm tra lại đường truyền mạng và thử lại',
           btnText: 'Thử lại',
           onPressed: () {
-            context.pop();
             _getInfo();
           });
     }
@@ -119,26 +116,25 @@ class _AttendancePageState extends State<AttendancePage> {
       }
       if (state is AttendanceFailure) {
         String? icon;
-        String? message;
+
         if (state.failure is SocketFailure) {
           icon = AppIcons.requiredInternet;
-          message =
-              'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng';
         }
         OverlayManager.hide();
         showFailure(
             title: 'Chấm công thất bại',
             icon: SvgPicture.asset(icon ?? AppIcons.failure),
-            message: message ?? 'Phát sinh lỗi trong quá trình chấm công',
+            message: state.failure.message ??
+                'Phát sinh lỗi trong quá trình chấm công',
             btnText: 'Thử lại',
             onPressed: () {
-              context.pop();
               _attendance.call();
             });
       }
       if (state is AttendanceSuccess) {
         OverlayManager.hide();
         setState(() {
+          _imageDynamic = null;
           _attendanceInfo = state.attendanceData;
         });
         showSuccess(title: 'Chấm công thành công');
@@ -153,9 +149,7 @@ class _AttendancePageState extends State<AttendancePage> {
             position: isLocationRequired
                 ? Modular.get<LocationService>().currentLocation
                 : null,
-            feature: widget.entity.feature,
-            general: widget.entity.general)),
-        general: widget.entity.general,
+            feature: widget.entity.feature)),
         feature: widget.entity.feature));
     ;
   }

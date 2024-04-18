@@ -14,17 +14,14 @@ class CreatePhotosUsecase
   @override
   Future<Result<List<PhotoEntity>>> call(CreatePhotosParams params) async {
     return repository.createPhotos(
-        photos: params.photos,
-        general: params.general,
-        feature: params.feature);
+        photos: params.photos, feature: params.feature);
   }
 }
 
 class CreatePhotosParams {
   final List<PhotoEntity> photos;
-  final GeneralEntity general;
+
   final FeatureEntity feature;
 
-  CreatePhotosParams(
-      {required this.photos, required this.general, required this.feature});
+  CreatePhotosParams({required this.photos, required this.feature});
 }

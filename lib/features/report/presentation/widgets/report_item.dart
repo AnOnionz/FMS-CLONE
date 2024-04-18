@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/listview_images.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
-import '../../../../core/widgets/image_picker_widget.dart';
+import '../../../../core/widgets/image/images.dart';
 
 class ReportItem extends StatelessWidget {
   final FeaturePhoto entity;
@@ -49,6 +48,12 @@ class ReportItem extends StatelessWidget {
                     style: context.textTheme.subtitle1
                         ?.copyWith(color: AppColors.orange),
                   ),
+                  if (entity.isRequired)
+                    TextSpan(
+                      text: ' *',
+                      style: context.textTheme.subtitle1
+                          ?.copyWith(color: AppColors.orange),
+                    ),
                 ]),
           ),
           Padding(

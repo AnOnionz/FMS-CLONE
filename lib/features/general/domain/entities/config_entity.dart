@@ -273,6 +273,8 @@ class FeaturePhoto {
     this.isWatermarkRequired,
   });
 
+  bool get isRequired => (minimum ?? 0) > 0;
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
