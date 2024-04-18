@@ -12,6 +12,7 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
+import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:rxdart/rxdart.dart';
@@ -29,13 +30,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
   final GeneralRepository _generalRepository;
-
+  final SyncBloc _syncBloc;
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
 
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
 
   AppBloc(this._authenticationBloc, this._connectivityService,
-      this._generalRepository, this._networkTimeService)
+      this._generalRepository, this._networkTimeService, this._syncBloc)
       : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -82,6 +83,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       await _generalRepository.getLocalGeneral()
         ..fold((failure) => Modular.to.navigate(WorkPlaceModule.route), (data) {
           if (data != null) {
+            _syncBloc.add(SyncStarted());
             Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
           } else {
             Modular.to.navigate(WorkPlaceModule.route);

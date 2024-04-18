@@ -10,6 +10,7 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:fms/features/home/home_module.dart';
+import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/work_place/presentation/widgets/booth_item.dart';
 
@@ -27,7 +28,7 @@ class BoothSelectionPage extends StatefulWidget {
 
 class _BoothSelectionPageState extends State<BoothSelectionPage> {
   late final WorkPlaceBloc _workPlaceBloc = Modular.get();
-
+  late final SyncBloc _syncBloc = Modular.get();
   late final GeneralBloc _generalBloc = Modular.get();
 
   late final FetchWorkPlaceBloc _fetchWorkPlaceBloc =
@@ -50,6 +51,7 @@ class _BoothSelectionPageState extends State<BoothSelectionPage> {
       }
       if (state is GeneralSuccess) {
         OverlayManager.hide();
+        _syncBloc.add(SyncStarted());
         context.navigate(HomeModule.route);
       }
       if (state is GeneralFailure) {

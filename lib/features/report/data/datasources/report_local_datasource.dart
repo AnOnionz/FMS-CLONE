@@ -10,12 +10,12 @@ import '../../domain/entities/photo_entity.dart';
 abstract class IReportLocalDataSource {
   void cachePhotoToLocal(PhotoEntity photo);
   void cachePhotosToLocal(List<PhotoEntity> photos);
-  List<PhotoEntity> getPhotosNoSynced();
+  Future<List<PhotoEntity>> getPhotosNoSynced();
   Future<List<PhotoEntity>> getPhotosLocal();
 }
 
-class ReportLocalDataSource extends LocalDatasource
-    with GeneralDataMixin
+class ReportLocalDataSource
+    with LocalDatasource, GeneralDataMixin
     implements IReportLocalDataSource {
   @override
   void cachePhotoToLocal(PhotoEntity photo) {
@@ -24,7 +24,7 @@ class ReportLocalDataSource extends LocalDatasource
 
   @override
   Future<List<PhotoEntity>> getPhotosLocal() async {
-    final time = await Modular.get<NetworkTimeService>().todayRangeDate();
+    final time = await Modular.get<NetworkTimeService>().betweenToday();
     return db.filter<PhotoEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance!.id)
         .dataTimestampBetween(time.yesterday, time.today)
@@ -33,9 +33,12 @@ class ReportLocalDataSource extends LocalDatasource
   }
 
   @override
-  List<PhotoEntity> getPhotosNoSynced() {
+  Future<List<PhotoEntity>> getPhotosNoSynced() async {
+    final time = await Modular.get<NetworkTimeService>().betweenToday();
+
     return db.filter<PhotoEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance!.id)
+        .dataTimestampBetween(time.yesterday, time.today)
         .statusEqualTo(SyncStatus.noSynced)
         .build());
   }

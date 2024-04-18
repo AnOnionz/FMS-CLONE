@@ -11,7 +11,8 @@ abstract class ICrawlLocalDatasource {
   Future<CrwalQuantityEntity?> getQuantities();
 }
 
-class CrawlLocalDatasource extends LocalDatasource
+class CrawlLocalDatasource
+    with LocalDatasource
     implements ICrawlLocalDatasource {
   @override
   void cacheQuantitiesToLocal(CrwalQuantityEntity entity) {
@@ -20,7 +21,9 @@ class CrawlLocalDatasource extends LocalDatasource
 
   @override
   Future<CrwalQuantityEntity?> getQuantities() async {
-    final time = await Modular.get<NetworkTimeService>().todayRangeDate();
+    final networkTimeService = Modular.get<NetworkTimeService>();
+    final ntpTime = await networkTimeService.ntpDateTime();
+    final time = networkTimeService.betweenTime(ntpTime);
     return db.getObject(
         id: fastHash(time.today.dMy().millisecondsSinceEpoch.toString()));
   }

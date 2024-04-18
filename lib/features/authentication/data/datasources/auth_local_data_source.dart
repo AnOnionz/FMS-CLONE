@@ -10,7 +10,8 @@ sealed class AuthenticationLocalDataSource {
   String? getIdentifier();
 }
 
-class AuthLocalDataSourceImpl extends LocalDatasource
+class AuthLocalDataSourceImpl
+    with LocalDatasource
     implements AuthenticationLocalDataSource {
   @override
   void cacheRefreshToken(String token) {

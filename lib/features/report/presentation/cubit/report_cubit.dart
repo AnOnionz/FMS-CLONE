@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/popup.dart';

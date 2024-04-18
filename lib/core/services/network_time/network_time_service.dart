@@ -28,8 +28,14 @@ final class NetworkTimeService {
     return result ?? DateTime.now().millisecondsSinceEpoch;
   }
 
-  Future<({DateTime yesterday, DateTime today})> todayRangeDate() async {
+  Future<({DateTime yesterday, DateTime today})> betweenToday() async {
     final time = await ntpDateTime();
+    final today = DateTime(time.year, time.month, time.day, 23, 59, 59, 999);
+    final yesterday = today.subtract(1.days);
+    return (yesterday: yesterday, today: today);
+  }
+
+  ({DateTime yesterday, DateTime today}) betweenTime(DateTime time) {
     final today = DateTime(time.year, time.month, time.day, 23, 59, 59, 999);
     final yesterday = today.subtract(1.days);
     return (yesterday: yesterday, today: today);

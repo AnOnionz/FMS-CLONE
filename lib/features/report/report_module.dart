@@ -12,7 +12,7 @@ import 'package:fms/routes/core_module.dart';
 
 import '../../routes/routes.dart';
 import 'domain/usecases/get_photos_not_completed_usecase.dart';
-import 'domain/usecases/has_photos_no_synced_usecase.dart';
+import 'domain/usecases/photos_no_synced_usecase.dart';
 
 class ReportModule extends Module {
   static const String route = '/photography/';
@@ -26,7 +26,7 @@ class ReportModule extends Module {
     i.addLazySingleton(GetPhotosUsecase.new);
     i.addLazySingleton(GetPhotosNotCompletedUsecase.new);
     i.addLazySingleton(CreatePhotosUsecase.new);
-    i.addLazySingleton(HasPhotosNoSyncedDataUsecase.new);
+    i.addLazySingleton(PhotosNoSyncedDataUsecase.new);
     i.add<ReportCubit>(ReportCubit.new);
   }
 

@@ -30,7 +30,7 @@ import 'presentation/bloc/app_bloc.dart';
 class AppModule extends Module {
   @override
   List<Module> get imports =>
-      [CoreModule(), AuthenticationModule(), GeneralModule()];
+      [CoreModule(), AuthenticationModule(), GeneralModule(), SyncModule()];
   @override
   void binds(i) {
     AppConfig();

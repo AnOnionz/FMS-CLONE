@@ -11,7 +11,7 @@ import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
 import 'package:fms/features/sync/sync_module.dart';
-import '../../../report/domain/usecases/has_photos_no_synced_usecase.dart';
+import '../../../report/domain/usecases/photos_no_synced_usecase.dart';
 import '../../domain/entities/general_item_data.dart';
 
 part 'necessary_event.dart';
@@ -20,7 +20,7 @@ part 'necessary_state.dart';
 class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     with GeneralDataMixin {
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
-  final HasPhotosNoSyncedDataUsecase hasPhotosNoSynced;
+  final PhotosNoSyncedDataUsecase hasPhotosNoSynced;
   StreamSubscription<NecessaryState>? subscription;
   NecessaryBloc(this.getPhotosNotCompleted, this.hasPhotosNoSynced)
       : super(NecessaryInit()) {
@@ -214,8 +214,8 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
         if (dependentFeature.type == FeatureType.photography) {
           await hasPhotosNoSynced(general)
             ..fold((failure) {}, (data) {
-              if (data) {
-                hasNoSynced = data;
+              if (data.isNotEmpty) {
+                hasNoSynced = true;
               }
             });
         }

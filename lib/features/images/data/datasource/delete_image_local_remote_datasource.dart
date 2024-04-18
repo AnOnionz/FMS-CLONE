@@ -7,7 +7,8 @@ abstract class IDeteleImageLocalDataSource {
   Future<void> deleteLocalImage<T>({required String uuid});
 }
 
-class DeleteImageLocalDataSource extends LocalDatasource
+class DeleteImageLocalDataSource
+    with LocalDatasource
     implements IDeteleImageLocalDataSource {
   @override
   Future<void> deleteLocalImage<T>({required String uuid}) async {

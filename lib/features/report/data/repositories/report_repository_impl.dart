@@ -34,26 +34,34 @@ class ReportRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<List<PhotoEntity>>> createPhotos(
+  Future<Result<void>> createPhotos(
       {required List<PhotoEntity> photos,
       required FeatureEntity feature}) async {
     return todo(
       () async {
-        final List<PhotoEntity> _resp = [];
-        for (PhotoEntity photo in photos) {
+        await Future.forEach(photos, (photo) async {
           if (photo.status == SyncStatus.noSynced) {
             final report = await _remote.createPhoto(
                 photo: photo, general: general, feature: feature);
-            photo = photo.copyWith(status: SyncStatus.synced);
+
             if (report != null) {
-              photo = photo.copyWith(id: report.id, image: report.image);
+              photo = photo.copyWith(
+                  id: report.id,
+                  attendanceId: general.attendance!.id,
+                  image: report.image,
+                  status: SyncStatus.synced);
+
+              _local.cachePhotoToLocal(photo);
             }
           }
-        }
-        _local.cachePhotosToLocal(photos);
-        return Right(_resp);
+        });
+
+        return Right(Never);
       },
       onFailure: (failure) {
+        photos.forEach((element) {
+          element.attendanceId = general.attendance!.id;
+        });
         _local.cachePhotosToLocal(photos);
       },
     );
@@ -93,13 +101,10 @@ class ReportRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<bool>> hasNoSyncedData({required GeneralEntity general}) async {
+  Future<Result<List<PhotoEntity>>> noSyncedData() async {
     return todo(() async {
-      final localPhotos = _local.getPhotosNoSynced();
-      if (localPhotos.isNotEmpty) {
-        return Right(true);
-      }
-      return Right(false);
+      final localPhotos = await _local.getPhotosNoSynced();
+      return Right(localPhotos);
     });
   }
 }

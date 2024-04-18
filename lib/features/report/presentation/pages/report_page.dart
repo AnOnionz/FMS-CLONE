@@ -99,8 +99,6 @@ class _ReportPageState extends State<ReportPage> {
                                     reports[photoItem.id!]!.add(PhotoEntity(
                                         dataUuid: Uuid().v1(),
                                         dataTimestamp: file.dataTimestamp,
-                                        attendanceId: widget
-                                            .entity.general.attendance!.id,
                                         path: file.path,
                                         featurePhotoId: photoItem.id!,
                                         status: SyncStatus.noSynced));

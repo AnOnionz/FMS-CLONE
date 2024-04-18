@@ -5,10 +5,11 @@ abstract class SyncEvent {
   const SyncEvent();
 }
 
+class SyncStarted extends SyncEvent {}
+
 class SyncUpdated extends SyncEvent {
   final FeatureType type;
+  final List<dynamic> data;
 
-  SyncUpdated({
-    required this.type,
-  });
+  SyncUpdated({required this.type, required this.data});
 }
