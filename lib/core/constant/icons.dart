@@ -64,4 +64,5 @@ class AppIcons {
   static String shop = 'shop'.icon.svg;
   static String bin = 'bin'.icon.svg;
   static String binCircle = 'bin_circle'.icon.svg;
+  static String requestSignout = 'request_signout'.icon.svg;
 }

@@ -12,7 +12,7 @@ class ExpectationTaskListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 32.h),
+      padding: EdgeInsets.fromLTRB(8.w, features.isNotEmpty ? 32.h : 0, 8.w, 0),
       child: CustomScrollView(
           shrinkWrap: true,
           physics:

@@ -10,6 +10,7 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
+import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/sync/sync_module.dart';
 import '../../../report/domain/usecases/photos_no_synced_usecase.dart';
 import '../../domain/entities/general_item_data.dart';
@@ -20,9 +21,9 @@ part 'necessary_state.dart';
 class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     with GeneralDataMixin {
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
-  final PhotosNoSyncedDataUsecase hasPhotosNoSynced;
+  final SyncBloc _syncBloc;
   StreamSubscription<NecessaryState>? subscription;
-  NecessaryBloc(this.getPhotosNotCompleted, this.hasPhotosNoSynced)
+  NecessaryBloc(this.getPhotosNotCompleted, this._syncBloc)
       : super(NecessaryInit()) {
     on<NecessaryIn>(onNecessaryIn);
     on<NecessaryOut>(onNecessaryOut);
@@ -148,11 +149,15 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     }
 
     ///check sync
-    final hasSynced = await checkHasNoSynced(general: general);
+    final featureSync = general.config.features!.firstWhereOrNull(
+        (element) => element.type == FeatureType.synchronization);
+    if (featureSync != null) {
+      final hasSynced = _syncBloc.state.number > 0;
 
-    if (hasSynced) {
-      emit(NecessarySync(onClose: event.onClose));
-      return;
+      if (hasSynced) {
+        emit(NecessarySync(onClose: event.onClose));
+        return;
+      }
     }
 
     /// check attendance out
@@ -199,29 +204,29 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     return features;
   }
 
-  Future<bool> checkHasNoSynced({required GeneralEntity general}) async {
-    bool hasNoSynced = false;
-    final List<int> featureIds = general.config.features
-            ?.where((feature) => !feature.type!.isAssistance)
-            .map((e) => e.id!)
-            .toList() ??
-        [];
+  // Future<bool> checkHasNoSynced({required GeneralEntity general}) async {
+  //   bool hasNoSynced = false;
+  //   final List<int> featureIds = general.config.features
+  //           ?.where((feature) => !feature.type!.isAssistance)
+  //           .map((e) => e.id!)
+  //           .toList() ??
+  //       [];
 
-    await Future.forEach(featureIds, (dependent) async {
-      final dependentFeature = general.config.features!
-          .firstWhereOrNull((feature) => feature.id == dependent);
-      if (dependentFeature != null) {
-        if (dependentFeature.type == FeatureType.photography) {
-          await hasPhotosNoSynced(general)
-            ..fold((failure) {}, (data) {
-              if (data.isNotEmpty) {
-                hasNoSynced = true;
-              }
-            });
-        }
-      }
-      if (hasNoSynced) return hasNoSynced;
-    });
-    return hasNoSynced;
-  }
+  //   await Future.forEach(featureIds, (dependent) async {
+  //     final dependentFeature = general.config.features!
+  //         .firstWhereOrNull((feature) => feature.id == dependent);
+  //     if (dependentFeature != null) {
+  //       if (dependentFeature.type == FeatureType.photography) {
+  //         await hasPhotosNoSynced(general)
+  //           ..fold((failure) {}, (data) {
+  //             if (data.isNotEmpty) {
+  //               hasNoSynced = true;
+  //             }
+  //           });
+  //       }
+  //     }
+  //     if (hasNoSynced) return hasNoSynced;
+  //   });
+  //   return hasNoSynced;
+  // }
 }

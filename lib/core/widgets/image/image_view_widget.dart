@@ -44,10 +44,12 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
     _subscription = _bloc.stream.listen((state) {
       if (state is DeleteImageSuccess) {
         OverlayManager.hide();
+        context.pop();
         widget.onDeleted.call();
       }
       if (state is DeleteImageFailure) {
         OverlayManager.hide();
+        context.pop();
       }
     });
     super.initState();
@@ -126,7 +128,6 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                       icon: SvgPicture.asset(AppIcons.binCircle),
                       btnText: 'Xóa',
                       onPressed: () {
-                        context.pop();
                         _bloc.add(DeleteImageRequest(
                             image: widget.image, feature: widget.feature));
                       }),

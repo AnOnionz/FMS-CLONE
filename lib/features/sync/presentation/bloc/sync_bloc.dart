@@ -31,11 +31,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
           data[FeatureType.photography] = event.data;
         default:
       }
-
-      if (data.values.expand((element) => element).isEmpty) {
+      final count = data.values.expand((element) => element).length;
+      if (count == 0) {
         emit(SyncState.successfully());
       } else
-        emit(SyncState.expectation(data: data));
+        emit(SyncState.expectation(data: data, number: count));
     });
   }
 

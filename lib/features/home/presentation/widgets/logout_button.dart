@@ -36,7 +36,7 @@ class _LogoutButtonState extends State<LogoutButton> {
           necessaryBloc.add(NecessarySignOut(
             onClose: () => Scaffold.of(context).closeEndDrawer(),
             action: () => showWarning(
-                icon: SvgPicture.asset(AppIcons.logout),
+                icon: SvgPicture.asset(AppIcons.requestSignout),
                 btnText: 'Đăng xuất',
                 onPressed: () => bloc.add(SignOutButtonPressed()),
                 title: 'Bạn có chắc muốn đăng xuất ?'),

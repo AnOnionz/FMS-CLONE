@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/report/data/datasources/report_local_datasource.dart';
 import 'package:fms/features/report/data/datasources/report_remote_datasource.dart';
@@ -39,15 +40,18 @@ class ReportRepositoryImpl extends Repository
       required FeatureEntity feature}) async {
     return todo(
       () async {
+        photos.forEach((element) {
+          element.attendanceId = general.attendance!.id;
+          element.featureId = feature.id;
+        });
+
         await Future.forEach(photos, (photo) async {
           if (photo.status == SyncStatus.noSynced) {
-            final report = await _remote.createPhoto(
-                photo: photo, general: general, feature: feature);
-
+            final report =
+                await _remote.createPhoto(photo: photo, general: general);
             if (report != null) {
               photo = photo.copyWith(
                   id: report.id,
-                  attendanceId: general.attendance!.id,
                   image: report.image,
                   status: SyncStatus.synced);
 
@@ -59,9 +63,6 @@ class ReportRepositoryImpl extends Repository
         return Right(Never);
       },
       onFailure: (failure) {
-        photos.forEach((element) {
-          element.attendanceId = general.attendance!.id;
-        });
         _local.cachePhotosToLocal(photos);
       },
     );
@@ -105,6 +106,20 @@ class ReportRepositoryImpl extends Repository
     return todo(() async {
       final localPhotos = await _local.getPhotosNoSynced();
       return Right(localPhotos);
+    });
+  }
+
+  @override
+  Future<void> synchronized() async {
+    final photosNoSynced = await _local.getPhotosNoSynced();
+
+    await Future.forEach(photosNoSynced, (photo) async {
+      final report = await _remote.createPhoto(photo: photo, general: general);
+      if (report != null) {
+        photo = photo.copyWith(
+            id: report.id, image: report.image, status: SyncStatus.synced);
+        _local.cachePhotoToLocal(photo);
+      }
     });
   }
 }

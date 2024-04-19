@@ -2356,28 +2356,33 @@ const FeaturePhotoSchema = Schema(
       name: r'id',
       type: IsarType.long,
     ),
-    r'isWatermarkRequired': PropertySchema(
+    r'isRequired': PropertySchema(
       id: 2,
+      name: r'isRequired',
+      type: IsarType.bool,
+    ),
+    r'isWatermarkRequired': PropertySchema(
+      id: 3,
       name: r'isWatermarkRequired',
       type: IsarType.bool,
     ),
     r'maximum': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'maximum',
       type: IsarType.long,
     ),
     r'minimum': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'minimum',
       type: IsarType.long,
     ),
     r'name': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'name',
       type: IsarType.string,
     ),
     r'ordinal': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'ordinal',
       type: IsarType.long,
     )
@@ -2417,11 +2422,12 @@ void _featurePhotoSerialize(
 ) {
   writer.writeString(offsets[0], object.description);
   writer.writeLong(offsets[1], object.id);
-  writer.writeBool(offsets[2], object.isWatermarkRequired);
-  writer.writeLong(offsets[3], object.maximum);
-  writer.writeLong(offsets[4], object.minimum);
-  writer.writeString(offsets[5], object.name);
-  writer.writeLong(offsets[6], object.ordinal);
+  writer.writeBool(offsets[2], object.isRequired);
+  writer.writeBool(offsets[3], object.isWatermarkRequired);
+  writer.writeLong(offsets[4], object.maximum);
+  writer.writeLong(offsets[5], object.minimum);
+  writer.writeString(offsets[6], object.name);
+  writer.writeLong(offsets[7], object.ordinal);
 }
 
 FeaturePhoto _featurePhotoDeserialize(
@@ -2433,11 +2439,11 @@ FeaturePhoto _featurePhotoDeserialize(
   final object = FeaturePhoto(
     description: reader.readStringOrNull(offsets[0]),
     id: reader.readLongOrNull(offsets[1]),
-    isWatermarkRequired: reader.readBoolOrNull(offsets[2]),
-    maximum: reader.readLongOrNull(offsets[3]),
-    minimum: reader.readLongOrNull(offsets[4]),
-    name: reader.readStringOrNull(offsets[5]),
-    ordinal: reader.readLongOrNull(offsets[6]),
+    isWatermarkRequired: reader.readBoolOrNull(offsets[3]),
+    maximum: reader.readLongOrNull(offsets[4]),
+    minimum: reader.readLongOrNull(offsets[5]),
+    name: reader.readStringOrNull(offsets[6]),
+    ordinal: reader.readLongOrNull(offsets[7]),
   );
   return object;
 }
@@ -2454,14 +2460,16 @@ P _featurePhotoDeserializeProp<P>(
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 4:
       return (reader.readLongOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 6:
+      return (reader.readStringOrNull(offset)) as P;
+    case 7:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2690,6 +2698,16 @@ extension FeaturePhotoQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<FeaturePhoto, FeaturePhoto, QAfterFilterCondition>
+      isRequiredEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isRequired',
+        value: value,
       ));
     });
   }

@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/sync/sync_module.dart';
 
 import '../../routes/routes.dart';
 import '../general/general_module.dart';
@@ -8,7 +9,7 @@ import 'presentation/pages/home_page.dart';
 
 class NecessaryModule extends Module {
   @override
-  List<Module> get imports => [GeneralModule(), ReportModule()];
+  List<Module> get imports => [GeneralModule(), ReportModule(), SyncModule()];
 
   @override
   void binds(Injector i) {

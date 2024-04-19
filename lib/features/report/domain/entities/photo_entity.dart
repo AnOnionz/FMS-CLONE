@@ -1,7 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:isar/isar.dart';
+
 import '../../../../core/utilities/parser.dart';
 
 part 'photo_entity.g.dart';
@@ -15,6 +18,7 @@ class PhotoEntity {
   int? attendanceId;
   @Index(type: IndexType.value)
   DateTime dataTimestamp;
+  int? featureId;
   int featurePhotoId;
   ImageCloud? image;
   @Enumerated(EnumType.name)
@@ -25,6 +29,7 @@ class PhotoEntity {
       this.attendanceId,
       required this.dataUuid,
       required this.dataTimestamp,
+      this.featureId,
       required this.featurePhotoId,
       this.image,
       this.path,
@@ -46,6 +51,7 @@ class PhotoEntity {
   PhotoEntity copyWith({
     int? id,
     int? attendanceId,
+    int? featureId,
     String? dataUuid,
     String? path,
     DateTime? dataTimestamp,
@@ -59,6 +65,7 @@ class PhotoEntity {
       dataUuid: dataUuid ?? this.dataUuid,
       path: path ?? this.path,
       dataTimestamp: dataTimestamp ?? this.dataTimestamp,
+      featureId: featureId ?? this.featureId,
       featurePhotoId: featurePhotoId ?? this.featurePhotoId,
       image: image ?? this.image,
       status: status ?? this.status,
@@ -67,6 +74,6 @@ class PhotoEntity {
 
   @override
   String toString() {
-    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, attendanceId: $attendanceId,  dataTimestamp: $dataTimestamp, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
+    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, attendanceId: $attendanceId, dataTimestamp: $dataTimestamp, featureId: $featureId, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
   }
 }

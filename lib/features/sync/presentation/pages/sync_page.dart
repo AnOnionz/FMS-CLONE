@@ -9,9 +9,12 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
+import 'package:fms/features/sync/presentation/bloc/sync_progress_bloc.dart';
+
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 import '../../../../core/constant/colors.dart';
@@ -28,26 +31,28 @@ class SyncPage extends StatefulWidget {
 
 class _SyncPageState extends State<SyncPage> with GeneralMixin {
   final SyncBloc syncBloc = Modular.get();
-  late StreamController<int> _progressController = StreamController.broadcast();
+  final SyncProgressBloc syncProgressBloc = Modular.get();
 
-  int countData = 24;
-
-  Duration delay = 1.seconds;
+  @override
+  void initState() {
+    syncProgressBloc.stream.listen((state) {
+      if (state is SyncProgressFailure) {
+        showFailure(
+          title: 'Đồng bộ thất bại',
+          icon: SvgPicture.asset(AppIcons.failure),
+          message: state.failure.message,
+          btnText: 'Thử lại',
+          onPressed: () => syncProgressBloc.add(SyncProgressStart()),
+        );
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
+    syncProgressBloc.close();
     super.dispose();
-  }
-
-  Stream<int> addStream() async* {
-    int count = 0;
-    yield count;
-    while (count < countData) {
-      await Future.delayed(delay);
-      yield count += 1;
-    }
-    await Future.delayed(delay);
-    yield countData;
   }
 
   List<FeatureEntity> _expectationSyncTask(
@@ -85,103 +90,23 @@ class _SyncPageState extends State<SyncPage> with GeneralMixin {
                       Flexible(
                           child: ExpectationTaskListView(
                               features: _expectationSyncTask(state.data))),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RichText(
-                                    text: TextSpan(
-                                        text: '24',
-                                        style: context.textTheme.caption1
-                                            ?.copyWith(
-                                                color: '414D55'.toColor()),
-                                        children: [
-                                      TextSpan(
-                                        text: ' data',
-                                        style: context.textTheme.caption2,
-                                      )
-                                    ])),
-                                SizedBox(height: 8.h),
-                                StreamBuilder<int>(
-                                    stream: _progressController.stream,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        return Text(
-                                          '0',
-                                          style: context.textTheme.caption1
-                                              ?.copyWith(
-                                                  color: AppColors.nobel),
-                                        );
-                                      }
-                                      if (snapshot.hasData) {
-                                        final value =
-                                            snapshot.data! / countData;
-                                        return Text(
-                                          '${(value * 100).toStringAsFixed(0)} %',
-                                          style: context.textTheme.caption1
-                                              ?.copyWith(
-                                                  color: AppColors.orange),
-                                        );
-                                      }
-
-                                      return SizedBox(
-                                        height: 16.8.sp,
-                                      );
-                                    })
-                              ],
-                            ),
-                            SizedBox(height: 8.h),
-                            StreamBuilder<int>(
-                                stream: _progressController.stream,
-                                initialData: 0,
-                                builder: (context, snapshot) {
-                                  double value = 1;
-
-                                  if (snapshot.hasData) {
-                                    value = (countData - snapshot.data!) /
-                                        countData;
-
-                                    return AnimatedProgressBar(
-                                      value: value,
-                                      width: context.screenWidth,
-                                      backgroundColor: 'E4EAF0'.toColor(),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          AppColors.orange,
-                                          AppColors.orange.withOpacity(0.8)
-                                        ],
-                                      ),
-                                      duration: snapshot.data == 0
-                                          ? Duration.zero
-                                          : delay,
-                                    );
-                                  }
-
-                                  return AnimatedProgressBar(
-                                    value: 0,
-                                    width: context.screenWidth,
-                                    backgroundColor: 'E4EAF0'.toColor(),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        AppColors.orange,
-                                        AppColors.orange.withOpacity(0.8)
-                                      ],
-                                    ),
-                                    duration: delay,
-                                  );
-                                })
-                          ],
-                        ),
-                      )
+                      BlocBuilder<SyncProgressBloc, SyncProgressState>(
+                        bloc: syncProgressBloc,
+                        builder: (context, state) {
+                          if (state is SyncProgressLoading) {
+                            return Padding(
+                              padding: EdgeInsets.fromLTRB(22.w, 32.h, 22.w, 0),
+                              child: LinearProgressIndicator(
+                                minHeight: 8.h,
+                                backgroundColor: AppColors.nobel,
+                                color: AppColors.orange,
+                                borderRadius: BorderRadius.circular(16.sqr),
+                              ),
+                            );
+                          }
+                          return SizedBox.shrink();
+                        },
+                      ),
                     ],
                   ),
                   decoration: BoxDecoration(
@@ -189,29 +114,35 @@ class _SyncPageState extends State<SyncPage> with GeneralMixin {
                       borderRadius: BorderRadius.circular(16.sqr)),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0, -2),
-                      blurRadius: 25.sqr,
-                      color: AppColors.black.withOpacity(0.15))
-                ]),
-                padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
-                child: FlatButton(
-                  onPressed: isCompleted
-                      ? null
-                      : () async {
-                          setState(() {
-                            _progressController = StreamController.broadcast();
-                          });
-                          await _progressController.addStream(addStream());
-                          _progressController.close();
-                        },
-                  name: 'Đồng bộ',
-                  color: AppColors.orange,
-                  disableColor: AppColors.potPourri,
-                  disableTextColor: AppColors.delRio,
-                ),
+              BlocBuilder<SyncProgressBloc, SyncProgressState>(
+                bloc: syncProgressBloc,
+                builder: (context, state) {
+                  if (state is SyncProgressLoading) {
+                    return SizedBox.shrink();
+                  }
+                  return Container(
+                    decoration:
+                        BoxDecoration(color: AppColors.white, boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, -2),
+                          blurRadius: 25.sqr,
+                          color: AppColors.black.withOpacity(0.15))
+                    ]),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
+                    child: FlatButton(
+                      onPressed: isCompleted
+                          ? null
+                          : () async {
+                              syncProgressBloc.add(SyncProgressStart());
+                            },
+                      name: 'Đồng bộ',
+                      color: AppColors.orange,
+                      disableColor: AppColors.potPourri,
+                      disableTextColor: AppColors.delRio,
+                    ),
+                  );
+                },
               )
             ],
           );

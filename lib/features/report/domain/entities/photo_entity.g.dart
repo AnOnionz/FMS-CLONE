@@ -32,29 +32,34 @@ const PhotoEntitySchema = CollectionSchema(
       name: r'dataUuid',
       type: IsarType.string,
     ),
-    r'featurePhotoId': PropertySchema(
+    r'featureId': PropertySchema(
       id: 3,
+      name: r'featureId',
+      type: IsarType.long,
+    ),
+    r'featurePhotoId': PropertySchema(
+      id: 4,
       name: r'featurePhotoId',
       type: IsarType.long,
     ),
     r'id': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'id',
       type: IsarType.long,
     ),
     r'image': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'image',
       type: IsarType.object,
       target: r'ImageCloud',
     ),
     r'path': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'path',
       type: IsarType.string,
     ),
     r'status': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'status',
       type: IsarType.string,
       enumMap: _PhotoEntitystatusEnumValueMap,
@@ -122,16 +127,17 @@ void _photoEntitySerialize(
   writer.writeLong(offsets[0], object.attendanceId);
   writer.writeDateTime(offsets[1], object.dataTimestamp);
   writer.writeString(offsets[2], object.dataUuid);
-  writer.writeLong(offsets[3], object.featurePhotoId);
-  writer.writeLong(offsets[4], object.id);
+  writer.writeLong(offsets[3], object.featureId);
+  writer.writeLong(offsets[4], object.featurePhotoId);
+  writer.writeLong(offsets[5], object.id);
   writer.writeObject<ImageCloud>(
-    offsets[5],
+    offsets[6],
     allOffsets,
     ImageCloudSchema.serialize,
     object.image,
   );
-  writer.writeString(offsets[6], object.path);
-  writer.writeString(offsets[7], object.status.name);
+  writer.writeString(offsets[7], object.path);
+  writer.writeString(offsets[8], object.status.name);
 }
 
 PhotoEntity _photoEntityDeserialize(
@@ -144,16 +150,17 @@ PhotoEntity _photoEntityDeserialize(
     attendanceId: reader.readLongOrNull(offsets[0]),
     dataTimestamp: reader.readDateTime(offsets[1]),
     dataUuid: reader.readString(offsets[2]),
-    featurePhotoId: reader.readLong(offsets[3]),
-    id: reader.readLongOrNull(offsets[4]),
+    featureId: reader.readLongOrNull(offsets[3]),
+    featurePhotoId: reader.readLong(offsets[4]),
+    id: reader.readLongOrNull(offsets[5]),
     image: reader.readObjectOrNull<ImageCloud>(
-      offsets[5],
+      offsets[6],
       ImageCloudSchema.deserialize,
       allOffsets,
     ),
-    path: reader.readStringOrNull(offsets[6]),
+    path: reader.readStringOrNull(offsets[7]),
     status:
-        _PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offsets[7])] ??
+        _PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offsets[8])] ??
             SyncStatus.synced,
   );
   return object;
@@ -173,18 +180,20 @@ P _photoEntityDeserializeProp<P>(
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
-    case 4:
       return (reader.readLongOrNull(offset)) as P;
+    case 4:
+      return (reader.readLong(offset)) as P;
     case 5:
+      return (reader.readLongOrNull(offset)) as P;
+    case 6:
       return (reader.readObjectOrNull<ImageCloud>(
         offset,
         ImageCloudSchema.deserialize,
         allOffsets,
       )) as P;
-    case 6:
-      return (reader.readStringOrNull(offset)) as P;
     case 7:
+      return (reader.readStringOrNull(offset)) as P;
+    case 8:
       return (_PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
           SyncStatus.synced) as P;
     default:
@@ -657,6 +666,80 @@ extension PhotoEntityQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'dataUuid',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      featureIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'featureId',
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      featureIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'featureId',
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      featureIdEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'featureId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      featureIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'featureId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      featureIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'featureId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterFilterCondition>
+      featureIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'featureId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -1193,6 +1276,18 @@ extension PhotoEntityQuerySortBy
     });
   }
 
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByFeatureIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.desc);
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> sortByFeaturePhotoId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featurePhotoId', Sort.asc);
@@ -1283,6 +1378,18 @@ extension PhotoEntityQuerySortThenBy
     });
   }
 
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByFeatureIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.desc);
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterSortBy> thenByFeaturePhotoId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featurePhotoId', Sort.asc);
@@ -1366,6 +1473,12 @@ extension PhotoEntityQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'featureId');
+    });
+  }
+
   QueryBuilder<PhotoEntity, PhotoEntity, QDistinct> distinctByFeaturePhotoId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'featurePhotoId');
@@ -1417,6 +1530,12 @@ extension PhotoEntityQueryProperty
   QueryBuilder<PhotoEntity, String, QQueryOperations> dataUuidProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataUuid');
+    });
+  }
+
+  QueryBuilder<PhotoEntity, int?, QQueryOperations> featureIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'featureId');
     });
   }
 

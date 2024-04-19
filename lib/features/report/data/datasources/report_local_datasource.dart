@@ -37,7 +37,7 @@ class ReportLocalDataSource
     final time = await Modular.get<NetworkTimeService>().betweenToday();
 
     return db.filter<PhotoEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance!.id)
+        .attendanceIdEqualTo(general.attendance?.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .statusEqualTo(SyncStatus.noSynced)
         .build());
