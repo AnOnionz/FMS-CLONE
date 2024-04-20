@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-import '../mixins/common.dart';
 import '/core/client/api_service.dart';
 import '/core/errors/app_exception.dart';
 import '/core/errors/status_code.dart';

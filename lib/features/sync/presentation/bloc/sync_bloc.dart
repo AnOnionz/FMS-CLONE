@@ -4,11 +4,16 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
+import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/note/domain/entities/note_entity.dart';
+import 'package:fms/features/note/domain/usecases/get_notes_no_synced_usecase.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:fms/features/report/domain/usecases/photos_no_synced_usecase.dart';
 
-import '../../../../core/mixins/common.dart';
+import '../../../../core/constant/type_def.dart';
 
 part 'sync_event.dart';
 part 'sync_state.dart';
@@ -16,21 +21,24 @@ part 'sync_state.dart';
 class SyncBloc extends Bloc<SyncEvent, SyncState>
     with LocalDatasource, GeneralDataMixin {
   final PhotosNoSyncedDataUsecase _photosNoSynced;
-  SyncBloc(this._photosNoSynced) : super(SyncState.init()) {
+  final GetNotesNoSyncedDataUsecase _notesNoSynced;
+  SyncBloc(this._photosNoSynced, this._notesNoSynced)
+      : super(SyncState.init()) {
     on<SyncStarted>((event, emit) {
-      _updateReportSync();
-      _reportSubscription =
+      _updatePhotoSync();
+      _updateNoteSync();
+      _photoSubscription =
           db.colection<PhotoEntity>().watchLazy().listen((event) async {
-        _updateReportSync();
+        _updatePhotoSync();
+      });
+      _noteSubscription =
+          db.colection<NoteEntity>().watchLazy().listen((event) async {
+        _updateNoteSync();
       });
     });
     on<SyncUpdated>((event, emit) async {
-      final Map<FeatureType, List<dynamic>> data = Map.from(state.data);
-      switch (event.type) {
-        case FeatureType.photography:
-          data[FeatureType.photography] = event.data;
-        default:
-      }
+      final Map<FeatureEntity, List<DataEnitity>> data = Map.from(state.data);
+
       final count = data.values.expand((element) => element).length;
       if (count == 0) {
         emit(SyncState.successfully());
@@ -39,18 +47,30 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
     });
   }
 
-  Future<void> _updateReportSync() async {
-    Fx.log('_updateReportSync');
-    await _photosNoSynced()
+  Future<void> _updatePhotoSync() async => await fold(_photosNoSynced());
+
+  Future<void> _updateNoteSync() async => await fold(_notesNoSynced());
+
+  Future<void> fold(Future<Result<List<DataEnitity>>> future) async {
+    await future
       ..fold((failure) => null, (data) {
-        add(SyncUpdated(type: FeatureType.photography, data: data));
+        final map = data.groupBy(
+          (photo) {
+            return photo.featureId!;
+          },
+        );
+        map.keys.forEach((id) {
+          add(SyncUpdated(feature: getFeature(id)!, data: map[id]!));
+        });
       });
   }
 
-  StreamSubscription<void>? _reportSubscription;
+  StreamSubscription<void>? _photoSubscription;
+  StreamSubscription<void>? _noteSubscription;
   @override
   Future<void> close() {
-    _reportSubscription?.cancel();
+    _photoSubscription?.cancel();
+    _noteSubscription?.cancel();
     return super.close();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/note/note_module.dart';
 import 'package:fms/features/report/report_module.dart';
 import 'package:fms/features/sync/data/repositories/sync_repository_impl.dart';
 import 'package:fms/features/sync/domain/usecases/sync_usecase.dart';
@@ -11,7 +12,7 @@ import '../../routes/routes.dart';
 class SyncModule extends Module {
   static const String route = '/synchronization/';
   @override
-  List<Module> get imports => [ReportModule()];
+  List<Module> get imports => [ReportModule(), NoteModule()];
 
   @override
   void exportedBinds(Injector i) {

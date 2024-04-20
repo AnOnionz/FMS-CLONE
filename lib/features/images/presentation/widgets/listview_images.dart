@@ -3,7 +3,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
-import 'image_dynamic.dart';
+import '../../domain/entities/image_dynamic.dart';
 import 'image_thumbnail_widget.dart';
 
 class ListViewImages extends StatelessWidget {

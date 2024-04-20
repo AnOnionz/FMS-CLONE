@@ -18,10 +18,10 @@ const CrwalQuantityEntitySchema = CollectionSchema(
   name: r'CrwalQuantityEntity',
   id: 5607932315756975443,
   properties: {
-    r'createdTime': PropertySchema(
+    r'attendanceId': PropertySchema(
       id: 0,
-      name: r'createdTime',
-      type: IsarType.dateTime,
+      name: r'attendanceId',
+      type: IsarType.long,
     ),
     r'dataTimestamp': PropertySchema(
       id: 1,
@@ -33,19 +33,24 @@ const CrwalQuantityEntitySchema = CollectionSchema(
       name: r'dataUuid',
       type: IsarType.string,
     ),
-    r'id': PropertySchema(
+    r'featureId': PropertySchema(
       id: 3,
+      name: r'featureId',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 4,
       name: r'id',
       type: IsarType.long,
     ),
     r'status': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'status',
       type: IsarType.string,
       enumMap: _CrwalQuantityEntitystatusEnumValueMap,
     ),
     r'values': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'values',
       type: IsarType.objectList,
       target: r'CrwaQuantitylValueEntity',
@@ -93,13 +98,14 @@ void _crwalQuantityEntitySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.createdTime);
+  writer.writeLong(offsets[0], object.attendanceId);
   writer.writeDateTime(offsets[1], object.dataTimestamp);
   writer.writeString(offsets[2], object.dataUuid);
-  writer.writeLong(offsets[3], object.id);
-  writer.writeString(offsets[4], object.status.name);
+  writer.writeLong(offsets[3], object.featureId);
+  writer.writeLong(offsets[4], object.id);
+  writer.writeString(offsets[5], object.status.name);
   writer.writeObjectList<CrwaQuantitylValueEntity>(
-    offsets[5],
+    offsets[6],
     allOffsets,
     CrwaQuantitylValueEntitySchema.serialize,
     object.values,
@@ -113,15 +119,16 @@ CrwalQuantityEntity _crwalQuantityEntityDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = CrwalQuantityEntity(
-    createdTime: reader.readDateTime(offsets[0]),
+    attendanceId: reader.readLongOrNull(offsets[0]),
     dataTimestamp: reader.readDateTime(offsets[1]),
     dataUuid: reader.readString(offsets[2]),
-    id: reader.readLongOrNull(offsets[3]),
+    featureId: reader.readLongOrNull(offsets[3]),
+    id: reader.readLongOrNull(offsets[4]),
     status: _CrwalQuantityEntitystatusValueEnumMap[
-            reader.readStringOrNull(offsets[4])] ??
+            reader.readStringOrNull(offsets[5])] ??
         SyncStatus.noSynced,
     values: reader.readObjectList<CrwaQuantitylValueEntity>(
-          offsets[5],
+          offsets[6],
           CrwaQuantitylValueEntitySchema.deserialize,
           allOffsets,
           CrwaQuantitylValueEntity(),
@@ -139,7 +146,7 @@ P _crwalQuantityEntityDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 1:
       return (reader.readDateTime(offset)) as P;
     case 2:
@@ -147,10 +154,12 @@ P _crwalQuantityEntityDeserializeProp<P>(
     case 3:
       return (reader.readLongOrNull(offset)) as P;
     case 4:
+      return (reader.readLongOrNull(offset)) as P;
+    case 5:
       return (_CrwalQuantityEntitystatusValueEnumMap[
               reader.readStringOrNull(offset)] ??
           SyncStatus.noSynced) as P;
-    case 5:
+    case 6:
       return (reader.readObjectList<CrwaQuantitylValueEntity>(
             offset,
             CrwaQuantitylValueEntitySchema.deserialize,
@@ -268,53 +277,71 @@ extension CrwalQuantityEntityQueryWhere
 extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     CrwalQuantityEntity, QFilterCondition> {
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
-      createdTimeEqualTo(DateTime value) {
+      attendanceIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'attendanceId',
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      attendanceIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'attendanceId',
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      attendanceIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdTime',
+        property: r'attendanceId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
-      createdTimeGreaterThan(
-    DateTime value, {
+      attendanceIdGreaterThan(
+    int? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'createdTime',
+        property: r'attendanceId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
-      createdTimeLessThan(
-    DateTime value, {
+      attendanceIdLessThan(
+    int? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'createdTime',
+        property: r'attendanceId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
-      createdTimeBetween(
-    DateTime lower,
-    DateTime upper, {
+      attendanceIdBetween(
+    int? lower,
+    int? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'createdTime',
+        property: r'attendanceId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -511,6 +538,80 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'dataUuid',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      featureIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'featureId',
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      featureIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'featureId',
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      featureIdEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'featureId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      featureIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'featureId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      featureIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'featureId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+      featureIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'featureId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -887,16 +988,16 @@ extension CrwalQuantityEntityQueryLinks on QueryBuilder<CrwalQuantityEntity,
 extension CrwalQuantityEntityQuerySortBy
     on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QSortBy> {
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
-      sortByCreatedTime() {
+      sortByAttendanceId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdTime', Sort.asc);
+      return query.addSortBy(r'attendanceId', Sort.asc);
     });
   }
 
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
-      sortByCreatedTimeDesc() {
+      sortByAttendanceIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdTime', Sort.desc);
+      return query.addSortBy(r'attendanceId', Sort.desc);
     });
   }
 
@@ -925,6 +1026,20 @@ extension CrwalQuantityEntityQuerySortBy
       sortByDataUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.desc);
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+      sortByFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+      sortByFeatureIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.desc);
     });
   }
 
@@ -960,16 +1075,16 @@ extension CrwalQuantityEntityQuerySortBy
 extension CrwalQuantityEntityQuerySortThenBy
     on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QSortThenBy> {
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
-      thenByCreatedTime() {
+      thenByAttendanceId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdTime', Sort.asc);
+      return query.addSortBy(r'attendanceId', Sort.asc);
     });
   }
 
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
-      thenByCreatedTimeDesc() {
+      thenByAttendanceIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdTime', Sort.desc);
+      return query.addSortBy(r'attendanceId', Sort.desc);
     });
   }
 
@@ -998,6 +1113,20 @@ extension CrwalQuantityEntityQuerySortThenBy
       thenByDataUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.desc);
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+      thenByFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+      thenByFeatureIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'featureId', Sort.desc);
     });
   }
 
@@ -1047,9 +1176,9 @@ extension CrwalQuantityEntityQuerySortThenBy
 extension CrwalQuantityEntityQueryWhereDistinct
     on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct> {
   QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
-      distinctByCreatedTime() {
+      distinctByAttendanceId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdTime');
+      return query.addDistinctBy(r'attendanceId');
     });
   }
 
@@ -1064,6 +1193,13 @@ extension CrwalQuantityEntityQueryWhereDistinct
       distinctByDataUuid({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataUuid', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+      distinctByFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'featureId');
     });
   }
 
@@ -1090,10 +1226,10 @@ extension CrwalQuantityEntityQueryProperty
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, DateTime, QQueryOperations>
-      createdTimeProperty() {
+  QueryBuilder<CrwalQuantityEntity, int?, QQueryOperations>
+      attendanceIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdTime');
+      return query.addPropertyName(r'attendanceId');
     });
   }
 
@@ -1108,6 +1244,13 @@ extension CrwalQuantityEntityQueryProperty
       dataUuidProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataUuid');
+    });
+  }
+
+  QueryBuilder<CrwalQuantityEntity, int?, QQueryOperations>
+      featureIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'featureId');
     });
   }
 

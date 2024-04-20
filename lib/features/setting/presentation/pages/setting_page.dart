@@ -23,7 +23,7 @@ class SettingPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 22.h),
         child: BlocBuilder<SettingCubit, SettingState>(
           bloc: cubit,
-          builder: (context, state) {
+          builder: (_, state) {
             return Column(
               children: [
                 SettingItem(
@@ -31,7 +31,9 @@ class SettingPage extends StatelessWidget {
                     name: 'Camera thay thế',
                     type: SettingType.toggle,
                     switchValue: state.settings.useCameraZ,
-                    onTap: () => cubit.cameraToggle()),
+                    onTap: () {
+                      cubit.cameraToggle();
+                    }),
                 SettingItem(
                     icon: SvgPicture.asset(AppIcons.fingerprint),
                     name: 'Khóa app',

@@ -6,19 +6,18 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
+import '../../../general/domain/entities/data_entity.dart';
 
 part 'photo_entity.g.dart';
 
 @collection
-class PhotoEntity {
+class PhotoEntity extends DataEnitity {
   Id get isarId => fastHash(dataUuid);
   int? id;
   String dataUuid;
   String? path;
-  int? attendanceId;
   @Index(type: IndexType.value)
   DateTime dataTimestamp;
-  int? featureId;
   int featurePhotoId;
   ImageCloud? image;
   @Enumerated(EnumType.name)
@@ -26,21 +25,23 @@ class PhotoEntity {
 
   PhotoEntity(
       {this.id,
-      this.attendanceId,
       required this.dataUuid,
       required this.dataTimestamp,
-      this.featureId,
       required this.featurePhotoId,
       this.image,
       this.path,
-      this.status = SyncStatus.synced});
+      this.status = SyncStatus.synced,
+      super.attendanceId,
+      super.featureId});
 
   factory PhotoEntity.fromMap(Map<String, dynamic> map) {
     return PhotoEntity(
       id: map['id'] as int,
       dataUuid: map['dataUuid'] as String,
       dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
-      featurePhotoId: map['featurePhotoId'] as int,
+      featurePhotoId: map['featurePhotoId'] != null
+          ? map['featurePhotoId'] as int
+          : map['featureMultimediaId'] as int,
       image: ImageCloud.fromMap(map['image'] as Map<String, dynamic>),
     );
   }

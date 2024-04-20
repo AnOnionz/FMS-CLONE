@@ -3,20 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 
 import '../../../../core/constant/colors.dart';
-import '../../../report/domain/entities/photo_entity.dart';
+import '../../../images/presentation/widgets/images.dart';
+import '../../domain/entities/note_entity.dart';
 import 'note_text_field.dart';
 
 class NoteItem extends StatefulWidget {
-  final String name;
-  final bool canNote;
-  final bool canTakeImge;
+  final FeatureEntity feature;
+  final FeatureMultimedia entity;
+  final NoteEntity note;
+  final bool isWatermark;
+  final void Function(ImageDynamic image) onAdded;
+  final void Function(ImageDynamic image) onDeleted;
   NoteItem(
       {super.key,
-      required this.name,
-      this.canNote = false,
-      this.canTakeImge = false});
+      required this.entity,
+      required this.feature,
+      required this.note,
+      required this.isWatermark,
+      required this.onAdded,
+      required this.onDeleted});
 
   @override
   State<NoteItem> createState() => _NoteItemState();
@@ -24,8 +32,7 @@ class NoteItem extends StatefulWidget {
 
 class _NoteItemState extends State<NoteItem> {
   final TextEditingController _controller = TextEditingController();
-  final List<PhotoEntity> _image = [];
-  final size = Size(60.h, 60.h);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,17 +44,39 @@ class _NoteItemState extends State<NoteItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${widget.name} ',
+            '${widget.entity.title} ',
             style: context.textTheme.h3?.copyWith(color: AppColors.black),
           ),
-          widget.canNote
-              ? Padding(
-                  padding: EdgeInsets.only(top: 16.h),
-                  child: NoteTextField(
-                    controller: _controller,
-                  ),
-                )
-              : const SizedBox(),
+          if (widget.entity.isTextFieldRequired!)
+            Padding(
+              padding: EdgeInsets.only(top: 16.h),
+              child: NoteTextField(
+                controller: _controller,
+              ),
+            ),
+          Padding(
+              padding: EdgeInsets.only(top: 20.h),
+              child: ListViewImages(
+                feature: widget.feature,
+                imagePickerButton: ImagePickerWidget(
+                  enable:
+                      widget.note.photos.length < widget.entity.maximumImages!,
+                  onChanged: widget.onAdded,
+                  isWatermarkRequired:
+                      widget.entity.isWatermarkRequired ?? false,
+                ),
+                images: widget.note.photos
+                    .map((e) => ImageDynamic(
+                        id: e.id,
+                        uuid: e.dataUuid,
+                        noteUuid: widget.note.dataUuid,
+                        dataTimestamp: e.dataTimestamp,
+                        path: e.path,
+                        networkImage: e.image))
+                    .toList(),
+                onDeleted: widget.onDeleted,
+              )),
+
           // widget.canTakeImge
           //     ? Padding(
           //         padding: EdgeInsets.only(top: 16.h),

@@ -60,6 +60,16 @@ class RequireTaskNotify extends StatelessWidget {
                     .map((item) => Text('    - ${item.name!}'))
                     .toList(),
               ),
+            if (feature.type ==
+                    FeatureType.multiSubjectMultimediaInformationCapturing &&
+                feature.featureMultimedias!.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: feature.featureMultimedias!
+                    .map((item) => Text('    - ${item.title!}'))
+                    .toList(),
+              ),
           ],
         ),
       ),

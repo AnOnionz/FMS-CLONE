@@ -9,7 +9,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../general/domain/entities/config_entity.dart';
-import '../../../general/domain/entities/general_entity.dart';
 import '../../domain/entities/attendance_entity.dart';
 
 class AttendanceRepositoryImpl extends Repository

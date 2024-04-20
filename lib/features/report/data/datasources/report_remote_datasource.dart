@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';

@@ -4,7 +4,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/get_attendance_usecase.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
@@ -29,15 +28,8 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
   final CreateGeneralUseCase _createGeneral;
   final ClearGeneralUseCase _clearGeneral;
   final GetGeneralUseCase _getGeneral;
-  final LocationService _locationService;
-  GeneralBloc(
-      this._locationService,
-      this._getConfig,
-      this._refreshGeneral,
-      this._getAttendance,
-      this._createGeneral,
-      this._clearGeneral,
-      this._getGeneral)
+  GeneralBloc(this._getConfig, this._refreshGeneral, this._getAttendance,
+      this._createGeneral, this._clearGeneral, this._getGeneral)
       : super(GeneralInitial()) {
     on<GeneralFetch>((event, emit) async {
       emit(GeneralLoading());

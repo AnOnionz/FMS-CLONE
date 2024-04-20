@@ -6,7 +6,6 @@ import 'package:fms/features/attendance/domain/usecases/attendance_usecase.dart'
 import 'package:fms/features/attendance/domain/usecases/get_attendance_usecase.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
-import '../../../../general/domain/entities/general_entity.dart';
 import '../../../../general/presentation/bloc/general_bloc.dart';
 
 part 'attendance_info_state.dart';

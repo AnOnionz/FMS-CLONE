@@ -20,8 +20,6 @@ import 'package:intl/intl.dart' as intl;
 
 import '../../constant/enum.dart';
 
-import '/core/mixins/extension/num_ext.dart';
-
 /// Extension Methods & Widgets for the strings
 extension StringExtension on String {
   ///Returns first letter of the string as Caps eg -> Flutter

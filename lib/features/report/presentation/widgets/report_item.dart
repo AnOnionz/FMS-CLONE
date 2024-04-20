@@ -5,7 +5,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
-import '../../../../core/widgets/image/images.dart';
+import '../../../images/presentation/widgets/images.dart';
 
 class ReportItem extends StatelessWidget {
   final FeaturePhoto entity;

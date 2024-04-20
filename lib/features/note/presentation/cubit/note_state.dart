@@ -1,10 +1,21 @@
 part of 'note_cubit.dart';
 
-abstract class NoteState extends Equatable {
+abstract class NoteState {
   const NoteState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class NoteInitial extends NoteState {}
+
+class NoteLoading extends NoteState {}
+
+class NoteFailure extends NoteState {
+  final Failure failure;
+
+  NoteFailure(this.failure);
+}
+
+class NoteSuccess extends NoteState {
+  final List<NoteEntity> photos;
+
+  NoteSuccess(this.photos);
+}

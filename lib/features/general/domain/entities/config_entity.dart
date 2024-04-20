@@ -2,10 +2,9 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:isar/isar.dart';
-
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -64,6 +63,7 @@ class FeatureEntity {
   final FeatureAttendance? featureAttendance;
   final List<FeatureQuantity>? featureQuantities;
   final List<FeaturePhoto>? featurePhotos;
+  final List<FeatureMultimedia>? featureMultimedias;
 
   FeatureEntity({
     this.id,
@@ -74,6 +74,7 @@ class FeatureEntity {
     this.featureAttendance,
     this.featureQuantities,
     this.featurePhotos,
+    this.featureMultimedias,
   });
 
   Map<String, dynamic> toMap() {
@@ -86,6 +87,7 @@ class FeatureEntity {
       'featureAttendance': featureAttendance?.toMap(),
       'featureQuantities': featureQuantities?.map((x) => x.toMap()).toList(),
       'featurePhotos': featurePhotos?.map((x) => x.toMap()).toList(),
+      'featureMultimedias': featureMultimedias?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -115,6 +117,14 @@ class FeatureEntity {
               ),
             )
           : null,
+      featureMultimedias: map['featureMultimedias'] != null
+          ? List<FeatureMultimedia>.from(
+              (map['featureMultimedias'] as List<dynamic>)
+                  .map<FeatureMultimedia?>(
+                (x) => FeatureMultimedia.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
     );
   }
 
@@ -122,11 +132,6 @@ class FeatureEntity {
 
   factory FeatureEntity.fromJson(String source) =>
       FeatureEntity.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos)';
-  }
 
   FeatureEntity copyWith({
     int? id,
@@ -137,6 +142,7 @@ class FeatureEntity {
     FeatureAttendance? featureAttendance,
     List<FeatureQuantity>? featureQuantities,
     List<FeaturePhoto>? featurePhotos,
+    List<FeatureMultimedia>? featureMultimedias,
   }) {
     return FeatureEntity(
       id: id ?? this.id,
@@ -148,7 +154,13 @@ class FeatureEntity {
       featureAttendance: featureAttendance ?? this.featureAttendance,
       featureQuantities: featureQuantities ?? this.featureQuantities,
       featurePhotos: featurePhotos ?? this.featurePhotos,
+      featureMultimedias: featureMultimedias ?? this.featureMultimedias,
     );
+  }
+
+  @override
+  String toString() {
+    return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos, featureMultimedias: $featureMultimedias)';
   }
 }
 
@@ -307,6 +319,72 @@ class FeaturePhoto {
   @override
   String toString() {
     return 'FeaturePhoto(id: $id, ordinal: $ordinal, name: $name, description: $description, minimum: $minimum, maximum: $maximum, isWatermarkRequired: $isWatermarkRequired)';
+  }
+}
+
+@embedded
+class FeatureMultimedia {
+  final int? id;
+  final int? ordinal;
+  final String? title;
+  final String? description;
+  final int? minimumImages;
+  final int? maximumImages;
+  final bool? isWatermarkRequired;
+  final bool? isTextFieldRequired;
+
+  FeatureMultimedia({
+    this.id,
+    this.ordinal,
+    this.title,
+    this.description,
+    this.minimumImages,
+    this.maximumImages,
+    this.isWatermarkRequired,
+    this.isTextFieldRequired,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'ordinal': ordinal,
+      'title': title,
+      'description': description,
+      'minimumImages': minimumImages,
+      'maximumImages': maximumImages,
+      'isWatermarkRequired': isWatermarkRequired,
+      'isTextFieldRequired': isTextFieldRequired,
+    };
+  }
+
+  factory FeatureMultimedia.fromMap(Map<String, dynamic> map) {
+    return FeatureMultimedia(
+      id: map['id'] != null ? map['id'] as int : null,
+      ordinal: map['ordinal'] != null ? map['ordinal'] as int : null,
+      title: map['title'] != null ? map['title'] as String : null,
+      description:
+          map['description'] != null ? map['description'] as String : null,
+      minimumImages:
+          map['minimumImages'] != null ? map['minimumImages'] as int : null,
+      maximumImages:
+          map['maximumImages'] != null ? map['maximumImages'] as int : null,
+      isWatermarkRequired: map['isWatermarkRequired'] != null
+          ? map['isWatermarkRequired'] as bool
+          : null,
+      isTextFieldRequired: map['isTextFieldRequired'] != null
+          ? map['isTextFieldRequired'] as bool
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FeatureMultimedia.fromJson(String source) =>
+      FeatureMultimedia.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'FeatureMultimedia(id: $id, ordinal: $ordinal, title: $title, description: $description, minimumImages: $minimumImages, maximumImages: $maximumImages, isWatermarkRequired: $isWatermarkRequired, isTextFieldRequired: $isTextFieldRequired)';
   }
 }
 

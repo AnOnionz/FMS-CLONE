@@ -102,7 +102,6 @@ class _ReportPageState extends State<ReportPage> {
                                         path: file.path,
                                         featurePhotoId: photoItem.id!,
                                         status: SyncStatus.noSynced));
-
                                     setState(() {});
                                   },
                                   onDeleted: (image) {

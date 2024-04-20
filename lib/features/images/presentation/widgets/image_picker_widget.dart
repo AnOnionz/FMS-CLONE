@@ -9,10 +9,10 @@ import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../constant/colors.dart';
-import '../../constant/icons.dart';
-import '../../services/network_time/network_time_service.dart';
-import 'image_dynamic.dart';
+import '../../../../core/constant/colors.dart';
+import '../../../../core/constant/icons.dart';
+import '../../../../core/services/network_time/network_time_service.dart';
+import '../../domain/entities/image_dynamic.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final bool enable;

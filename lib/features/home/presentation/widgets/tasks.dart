@@ -13,7 +13,7 @@ class Tasks extends StatefulWidget {
   State<Tasks> createState() => _TasksState();
 }
 
-class _TasksState extends State<Tasks> with GeneralMixin {
+class _TasksState extends State<Tasks> with GeneralDataMixin {
   late final tasks = general.config.features
       ?.where((feature) => feature.type != null && !feature.type!.isAssistance)
       .toList();

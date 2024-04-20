@@ -79,6 +79,7 @@ const GeneralEntitySchema = CollectionSchema(
     r'Product': ProductSchema,
     r'ProductPackaging': ProductPackagingSchema,
     r'FeaturePhoto': FeaturePhotoSchema,
+    r'FeatureMultimedia': FeatureMultimediaSchema,
     r'BoothEntity': BoothEntitySchema,
     r'AttendanceEntity': AttendanceEntitySchema,
     r'AttendanceData': AttendanceDataSchema,

@@ -13,7 +13,7 @@ class CommonFeature extends StatefulWidget {
   State<CommonFeature> createState() => _CommonFeatureState();
 }
 
-class _CommonFeatureState extends State<CommonFeature> with GeneralMixin {
+class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
   late final tasks = general.config.features
       ?.where((feature) => feature.type != null && feature.type!.isAssistance)
       .toList();

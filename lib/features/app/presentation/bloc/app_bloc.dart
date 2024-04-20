@@ -62,22 +62,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  void _checkLockStatus(AppSuccess appState) {
-    final navigationHistory = Modular.to.navigateHistory;
-    bool isLockedRoute = false;
-
-    if (navigationHistory.isNotEmpty) {
-      final lastRoute = navigationHistory.last;
-      isLockedRoute = lastRoute.name.startsWith('/lock/');
-    }
-
-    if (appState.isLocked && !isLockedRoute) {
-      Modular.to.pushNamed('/lock/', arguments: false, forRoot: true);
-    } else if (!appState.isLocked && isLockedRoute) {
-      Modular.to.pop();
-    }
-  }
-
   Future<void> _checkAuthenticationStatus(AuthenticationStatus status) async {
     if (status == AuthenticationStatus.authenticated) {
       await _generalRepository.getLocalGeneral()

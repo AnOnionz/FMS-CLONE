@@ -8,8 +8,8 @@ abstract class SyncEvent {
 class SyncStarted extends SyncEvent {}
 
 class SyncUpdated extends SyncEvent {
-  final FeatureType type;
+  final FeatureEntity feature;
   final List<dynamic> data;
 
-  SyncUpdated({required this.type, required this.data});
+  SyncUpdated({required this.feature, required this.data});
 }

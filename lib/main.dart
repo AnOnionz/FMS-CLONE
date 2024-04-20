@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
+import 'package:fms/features/note/domain/entities/note_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import 'core/database/database.dart';
-import 'core/database/file_metadata.dart';
 import 'core/database/local_value.dart';
 import 'features/app/app_module.dart';
 import 'features/app/presentation/pages/app.dart';
@@ -19,10 +19,10 @@ void main() async {
     LocalValueSchema,
     UserModelSchema,
     SettingAppSchema,
-    FileWithMetaDataSchema,
     GeneralEntitySchema,
     PhotoEntitySchema,
-    CrwalQuantityEntitySchema
+    NoteEntitySchema,
+    CrwalQuantityEntitySchema,
   ]);
   runApp(ModularApp(
       module: AppModule(),

@@ -1,9 +1,9 @@
 import '../../../../core/constant/type_def.dart';
 import '../../../general/domain/entities/config_entity.dart';
-import '../../../general/domain/entities/general_entity.dart';
 
 abstract class DeleteImageRepository {
-  Future<Result<void>> deleteImage(
+  Future<Result<void>> deletePhoto(
       {required FeatureEntity feature, required int id, required String uuid});
-  Future<Result<void>> deleteLocalImage({required String uuid});
+  Future<Result<void>> deleteLocalPhoto(
+      {required String uuid, String? noteUuid});
 }

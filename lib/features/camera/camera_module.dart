@@ -6,7 +6,7 @@ import 'camera_custom.dart';
 
 class CameraModule extends Module {
   static const String route = '/camera/';
-  static const String preview = '/preview';
+  static const String preview = 'preview';
 
   @override
   void routes(RouteManager r) {

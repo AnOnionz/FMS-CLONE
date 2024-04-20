@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'package:collection/collection.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -11,11 +9,10 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
+import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_progress_bloc.dart';
-
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
@@ -29,7 +26,7 @@ class SyncPage extends StatefulWidget {
   State<SyncPage> createState() => _SyncPageState();
 }
 
-class _SyncPageState extends State<SyncPage> with GeneralMixin {
+class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
   final SyncBloc syncBloc = Modular.get();
   final SyncProgressBloc syncProgressBloc = Modular.get();
 
@@ -56,13 +53,11 @@ class _SyncPageState extends State<SyncPage> with GeneralMixin {
   }
 
   List<FeatureEntity> _expectationSyncTask(
-      Map<FeatureType, List<dynamic>> map) {
+      Map<FeatureEntity, List<DataEnitity>> map) {
     final List<FeatureEntity> features = [];
     map.entries.forEach((element) {
       if (element.value.isNotEmpty) {
-        final feature = general.config.features!
-            .firstWhereOrNull((feature) => feature.type == element.key);
-        if (feature != null) features.add(feature);
+        features.add(element.key);
       }
     });
     return features;
@@ -153,33 +148,37 @@ class _SyncPageState extends State<SyncPage> with GeneralMixin {
 
   Widget _syncStatus(bool isSynchronized) {
     if (isSynchronized) {
-      return Column(
+      return FadeIn(
+          animate: isSynchronized,
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                AppIcons.upload,
+                colorFilter: ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16.h),
+                child: Text(
+                  'Tất cả dữ liệu đã được đồng bộ',
+                  style: context.textTheme.h3,
+                ),
+              ),
+            ],
+          ));
+    }
+    return FadeIn(
+      child: Column(
         children: [
-          SvgPicture.asset(
-            AppIcons.upload,
-            colorFilter: ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
-          ),
+          SvgPicture.asset(AppIcons.upload),
           Padding(
             padding: EdgeInsets.only(top: 16.h),
             child: Text(
-              'Tất cả dữ liệu đã được đồng bộ',
-              style: context.textTheme.h3,
+              'Yêu cầu đồng bộ dữ liệu',
+              style: context.textTheme.h3?.copyWith(color: AppColors.orange),
             ),
           ),
         ],
-      );
-    }
-    return Column(
-      children: [
-        SvgPicture.asset(AppIcons.upload),
-        Padding(
-          padding: EdgeInsets.only(top: 16.h),
-          child: Text(
-            'Yêu cầu đồng bộ dữ liệu',
-            style: context.textTheme.h3?.copyWith(color: AppColors.orange),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

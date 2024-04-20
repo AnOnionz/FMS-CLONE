@@ -4,6 +4,8 @@ import 'package:fms/features/app/presentation/pages/app_page.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
+import 'package:fms/features/camera/camera_custom.dart';
+import 'package:fms/features/camera/camera_module.dart';
 import 'package:fms/features/crawl/crawl.module.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/lock/lock_module.dart';
@@ -41,6 +43,7 @@ class AppModule extends Module {
   void routes(r) {
     r.child(Routes.root,
         child: (_) => const AppPage(), transition: TransitionType.fadeIn);
+
     r.module(Routes.admin,
         module: AdminModule(), transition: TransitionType.fadeIn);
     r.module(SignModule.route, module: SignModule());
@@ -78,5 +81,7 @@ class AppModule extends Module {
         module: IndividualStatisticModule(), transition: TransitionType.fadeIn);
     r.module(LockModule.route,
         module: LockModule(), transition: TransitionType.fadeIn);
+    r.module(CameraModule.route,
+        module: CameraModule(), transition: TransitionType.noTransition);
   }
 }

@@ -1,20 +1,19 @@
 import 'dart:convert';
 
 import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/mixins/fx.dart';
-import 'package:isar/isar.dart';
-
 import 'package:fms/core/utilities/parser.dart';
+import 'package:isar/isar.dart';
 
 part 'crawl_quantity_entity.g.dart';
 
 @collection
 class CrwalQuantityEntity {
-  Id get isarId => fastHash(createdTime.millisecondsSinceEpoch.toString());
+  Id get isarId => fastHash(dataUuid);
   final int? id;
   final String dataUuid;
+  final int? featureId;
+  final int? attendanceId;
   final DateTime dataTimestamp;
-  final DateTime createdTime;
   final List<CrwaQuantitylValueEntity> values;
   @Enumerated(EnumType.name)
   final SyncStatus status;
@@ -22,8 +21,9 @@ class CrwalQuantityEntity {
   CrwalQuantityEntity(
       {required this.id,
       required this.dataUuid,
+      this.featureId,
+      this.attendanceId,
       required this.dataTimestamp,
-      required this.createdTime,
       required this.values,
       this.status = SyncStatus.noSynced});
 
@@ -40,7 +40,6 @@ class CrwalQuantityEntity {
         id: map['id'] != null ? map['id'] as int : null,
         dataUuid: map['dataUuid'] as String,
         dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
-        createdTime: DateTime.parse(map['dataTimestamp'] as String).dMy(),
         values: List<CrwaQuantitylValueEntity>.from(
           (map['values'] as List<int>).map<CrwaQuantitylValueEntity>(
             (x) => CrwaQuantitylValueEntity.fromMap(x as Map<String, dynamic>),
@@ -56,21 +55,25 @@ class CrwalQuantityEntity {
 
   CrwalQuantityEntity copyWith({
     int? id,
-    String? dataUuid,
-    DateTime? dataTimestamp,
     List<CrwaQuantitylValueEntity>? values,
+    int? featureId,
+    int? attendanceId,
+    SyncStatus? status,
   }) {
     return CrwalQuantityEntity(
-        id: id ?? this.id,
-        dataUuid: dataUuid ?? this.dataUuid,
-        dataTimestamp: dataTimestamp ?? this.dataTimestamp,
-        values: values ?? this.values,
-        createdTime: createdTime);
+      id: id ?? this.id,
+      dataUuid: dataUuid,
+      dataTimestamp: dataTimestamp,
+      featureId: featureId ?? this.featureId,
+      attendanceId: attendanceId ?? this.attendanceId,
+      status: status ?? this.status,
+      values: values ?? this.values,
+    );
   }
 
   @override
   String toString() {
-    return 'CrwalQuantityEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, createdTime: $createdTime, values: $values)';
+    return 'CrwalQuantityEntity(id: $id, dataUuid: $dataUuid, featureId: $featureId, attendanceId: $attendanceId, dataTimestamp: $dataTimestamp, values: $values, status: $status)';
   }
 }
 

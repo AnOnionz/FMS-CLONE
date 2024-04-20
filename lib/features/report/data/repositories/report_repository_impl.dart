@@ -59,7 +59,6 @@ class ReportRepositoryImpl extends Repository
             }
           }
         });
-
         return Right(Never);
       },
       onFailure: (failure) {

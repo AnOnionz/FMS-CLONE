@@ -1,6 +1,6 @@
 import 'package:fms/core/utilities/parser.dart';
-import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
+import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:fms/features/work_place/domain/entities/project_entity.dart';
 

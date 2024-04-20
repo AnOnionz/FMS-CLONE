@@ -1,7 +1,4 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/features/general/general_module.dart';
-import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
-import 'package:fms/features/report/report_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 
 import '../../routes/routes.dart';

@@ -9,10 +9,10 @@ import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/home/presentation/widgets/notifications.dart';
+import 'package:fms/features/note/domain/usecases/get_notes_not_completed_usecase.dart';
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/sync/sync_module.dart';
-import '../../../report/domain/usecases/photos_no_synced_usecase.dart';
 import '../../domain/entities/general_item_data.dart';
 
 part 'necessary_event.dart';
@@ -21,9 +21,11 @@ part 'necessary_state.dart';
 class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     with GeneralDataMixin {
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
+  final GetNotesNotCompletedUsecase getNotesNotCompleted;
   final SyncBloc _syncBloc;
   StreamSubscription<NecessaryState>? subscription;
-  NecessaryBloc(this.getPhotosNotCompleted, this._syncBloc)
+  NecessaryBloc(
+      this._syncBloc, this.getPhotosNotCompleted, this.getNotesNotCompleted)
       : super(NecessaryInit()) {
     on<NecessaryIn>(onNecessaryIn);
     on<NecessaryOut>(onNecessaryOut);
@@ -187,6 +189,15 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       if (dependentFeature != null) {
         if (dependentFeature.type == FeatureType.photography) {
           await getPhotosNotCompleted(dependentFeature)
+            ..fold((failure) {}, (data) {
+              if (data != null) {
+                features.add(data);
+              }
+            });
+        }
+        if (dependentFeature.type ==
+            FeatureType.multiSubjectMultimediaInformationCapturing) {
+          await getNotesNotCompleted(dependentFeature)
             ..fold((failure) {}, (data) {
               if (data != null) {
                 features.add(data);

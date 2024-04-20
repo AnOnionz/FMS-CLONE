@@ -8,7 +8,6 @@ import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
-import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/common_info.dart';
@@ -16,7 +15,6 @@ import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
 import 'package:fms/features/home/presentation/widgets/tasks.dart';
 
 import '../../../general/presentation/bloc/general_bloc.dart';
-import '../../domain/entities/general_item_data.dart';
 import '../bloc/necessary_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,7 +24,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with GeneralMixin {
+class _HomePageState extends State<HomePage> with GeneralDataMixin {
   final NecessaryBloc _necessaryBloc = Modular.get();
   final bloc = Modular.get<GeneralBloc>();
 

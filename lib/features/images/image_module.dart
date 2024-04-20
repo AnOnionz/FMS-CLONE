@@ -14,11 +14,11 @@ class ImageModule extends Module {
   List<Module> get imports => [CoreModule()];
   @override
   void binds(Injector i) {
-    i.addLazySingleton(DeleteImageRemoteDataSource.new);
-    i.addLazySingleton(DeleteImageLocalDataSource.new);
-    i.addLazySingleton(DeleteImageRepositoryImpl.new);
-    i.addLazySingleton(DeleteImageUseCase.new);
-    i.addLazySingleton(DeleteLocalImageUseCase.new);
+    i.addLazySingleton(DeletePhotoRemoteDataSource.new);
+    i.addLazySingleton(DeletePhotoLocalDataSource.new);
+    i.addLazySingleton(DeletePhotoRepositoryImpl.new);
+    i.addLazySingleton(DeletePhotoUseCase.new);
+    i.addLazySingleton(DeleteLocalPhotoUseCase.new);
     i.add<DeleteImageBloc>(DeleteImageBloc.new);
   }
 }

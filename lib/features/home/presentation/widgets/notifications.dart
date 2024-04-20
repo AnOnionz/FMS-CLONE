@@ -1,10 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/sync/sync_module.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/utilities/overlay.dart';

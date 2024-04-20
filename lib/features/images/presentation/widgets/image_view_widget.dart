@@ -13,9 +13,9 @@ import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/images/presentation/bloc/delete_image_bloc.dart';
 
-import '../../constant/colors.dart';
-import '../../constant/icons.dart';
-import 'image_dynamic.dart';
+import '../../../../core/constant/colors.dart';
+import '../../../../core/constant/icons.dart';
+import '../../domain/entities/image_dynamic.dart';
 
 class ImageViewWidget extends StatefulWidget {
   final ImageDynamic image;

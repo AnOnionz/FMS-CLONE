@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -21,8 +20,6 @@ class RedeemGiftCustomerPage extends StatefulWidget {
 class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
     with AutomaticKeepAliveClientMixin {
   final _formKey = GlobalKey<FormState>();
-  final ValueNotifier<List<XFile>> _imageInvoice = ValueNotifier([]);
-  final ValueNotifier<List<XFile>> _imageExchange = ValueNotifier([]);
   final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _invoiceCodeController = TextEditingController();

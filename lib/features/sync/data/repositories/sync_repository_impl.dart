@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:fms/core/constant/type_def.dart';
-import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/usecase/either.dart';
+import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/report/data/repositories/report_repository_impl.dart';
 import 'package:fms/features/sync/domain/repositories/sync_repository.dart';
 
 import '../../../../core/constant/enum.dart';
+import '../../../general/domain/entities/config_entity.dart';
 
 class SyncRepositoryImpl extends Repository
     with GeneralDataMixin
@@ -19,7 +20,7 @@ class SyncRepositoryImpl extends Repository
 
   @override
   Future<Result<void>> synchronized(
-      {required Map<FeatureType, List<dynamic>> data}) async {
+      {required Map<FeatureEntity, List<DataEnitity>> data}) async {
     return todo(
       () async {
         final List<Future<void>> futures = [];
@@ -28,8 +29,8 @@ class SyncRepositoryImpl extends Repository
         final map = data..removeWhere((key, value) => value.isEmpty);
 
         /// get synchronized of feature
-        map.keys.forEach((element) {
-          switch (element) {
+        map.keys.forEach((feature) {
+          switch (feature.type) {
             case FeatureType.photography:
               futures.add(_reportRepository.synchronized());
             default:
