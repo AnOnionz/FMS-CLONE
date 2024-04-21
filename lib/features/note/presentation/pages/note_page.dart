@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/core/widgets/app_bar.dart';
@@ -18,7 +22,6 @@ import '../../../../core/widgets/data_load_error_widget.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../../../report/domain/entities/photo_entity.dart';
-import '../../../report/presentation/cubit/report_cubit.dart';
 import '../widgets/note_item.dart';
 
 class NotePage extends StatefulWidget {
@@ -29,7 +32,7 @@ class NotePage extends StatefulWidget {
   State<NotePage> createState() => _NotePageState();
 }
 
-class _NotePageState extends State<NotePage> {
+class _NotePageState extends State<NotePage> with LocalDatasource {
   final networkTimeService = Modular.get<NetworkTimeService>();
   List<FeatureMultimedia> get featureMultimedias =>
       widget.entity.feature.featureMultimedias ?? [];
@@ -37,10 +40,17 @@ class _NotePageState extends State<NotePage> {
   final NoteCubit _cubit = Modular.get();
 
   late final Map<int, NoteEntity> notes = {};
+  late final Map<int, List<PhotoEntity>> photos = {};
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
+  Completer<bool> _completer = Completer();
 
-  bool get isActive =>
-      notes.values.any((note) => note.photos.isNotEmpty || note.value != null);
+  bool get isNoteActive => notes.values.any((note) =>
+      !note.value.isEmptyOrNull && note.status == SyncStatus.noSynced);
+  bool get isPhotoActive => photos.values.any((notePhotos) =>
+      notePhotos.isNotEmpty &&
+      notePhotos.any((photo) => photo.status == SyncStatus.noSynced));
+
+  bool get isActive => isNoteActive || isPhotoActive;
 
   @override
   void initState() {
@@ -53,20 +63,33 @@ class _NotePageState extends State<NotePage> {
         general: widget.entity.general, feature: widget.entity.feature);
   }
 
-  Future<void> onFetchSuccess(List<NoteEntity> data) async {
-    final timestamp = await networkTimeService.ntpDateTime();
-    widget.entity.feature.featureMultimedias!.forEach((featureNote) {
-      final note = data.firstWhereOrNull(
-          (element) => element.featureMultimediaId == featureNote.id!);
+  Future<void> onFetchSuccess(
+      (List<NoteEntity> notes, List<PhotoEntity> photos) data) async {
+    await Future.forEach(widget.entity.feature.featureMultimedias!,
+        (featureMultimedia) async {
+      await Future.delayed(100.milliseconds);
+      final timestamp = await networkTimeService.ntpDateTime();
+      final note = data.$1.firstWhereOrNull(
+          (element) => element.featureMultimediaId == featureMultimedia.id!);
       setState(() {
-        notes[featureNote.id!] = note ??
+        notes[featureMultimedia.id!] = note ??
             NoteEntity(
-                dataUuid: Uuid().v1(),
-                dataTimestamp: timestamp,
-                featureMultimediaId: featureNote.id!,
-                status: SyncStatus.noSynced);
+              dataUuid: Uuid().v1(),
+              dataTimestamp: timestamp,
+              featureMultimediaId: featureMultimedia.id!,
+            );
       });
     });
+    final photoGroup = data.$2.groupBy<int, PhotoEntity>((photo) {
+      return photo.featurePhotoId;
+    });
+
+    widget.entity.feature.featureMultimedias!.forEach((featureMultimedia) {
+      setState(() {
+        photos[featureMultimedia.id!] = photoGroup[featureMultimedia.id!] ?? [];
+      });
+    });
+    if (!_completer.isCompleted) _completer.complete(true);
   }
 
   @override
@@ -88,11 +111,11 @@ class _NotePageState extends State<NotePage> {
                   bloc: _cubit,
                   listener: (context, state) {
                     if (state is NoteSuccess) {
-                      onFetchSuccess(state.photos);
+                      onFetchSuccess(state.data);
                     }
                   },
                   builder: (context, state) {
-                    if (state is ReportSuccess) {
+                    if (state is NoteSuccess && _completer.isCompleted) {
                       return CustomScrollView(
                         physics: kPhysics,
                         slivers: [
@@ -102,40 +125,56 @@ class _NotePageState extends State<NotePage> {
                                 itemCount: widget
                                     .entity.feature.featureMultimedias!.length,
                                 itemBuilder: (context, index) {
-                                  final noteItem = widget.entity.feature
-                                      .featureMultimedias![index];
+                                  final featureMultimedia = widget.entity
+                                      .feature.featureMultimedias![index];
+                                  final noteItem =
+                                      notes[featureMultimedia.id!]!;
                                   return NoteItem(
-                                    entity: noteItem,
+                                    entity: featureMultimedia,
+                                    note: noteItem,
                                     feature: widget.entity.feature,
-                                    note: notes[noteItem.id!]!,
-                                    onAdded: (file) async {
-                                      notes[noteItem.id!]!.photos.add(
+                                    photos: photos[featureMultimedia.id!]!,
+                                    onChangeTextfield: (value) {
+                                      noteItem.value = value;
+                                      notes[featureMultimedia.id!] =
+                                          noteItem.copyWith(
+                                              value: value,
+                                              status: SyncStatus.noSynced);
+                                      setState(() {});
+                                    },
+                                    onPickImage: (file) async {
+                                      photos[featureMultimedia.id!]!.add(
                                           PhotoEntity(
                                               dataUuid: Uuid().v1(),
-                                              dataTimestamp: file.dataTimestamp,
-                                              path: file.path,
-                                              featurePhotoId: noteItem.id!,
                                               featureId:
                                                   widget.entity.feature.id,
                                               attendanceId: widget.entity
                                                   .general.attendance!.id,
+                                              dataTimestamp: file.dataTimestamp,
+                                              path: file.path,
+                                              featurePhotoId:
+                                                  featureMultimedia.id!,
                                               status: SyncStatus.noSynced));
+                                      notes[featureMultimedia.id!] =
+                                          noteItem.copyWith(
+                                              status: SyncStatus.noSynced);
                                       setState(() {});
                                     },
-                                    onDeleted: (image) {
-                                      notes[noteItem.id!]!.photos.removeWhere(
-                                          (element) =>
+                                    onDeleteImage: (image) {
+                                      photos[featureMultimedia.id!]!
+                                          .removeWhere((element) =>
                                               element.dataUuid == image.uuid);
                                       setState(() {});
                                     },
-                                    isWatermark: noteItem.isWatermarkRequired!,
+                                    isWatermark:
+                                        featureMultimedia.isWatermarkRequired!,
                                   );
                                 },
                               ))
                         ],
                       );
                     }
-                    if (state is ReportFailure) {
+                    if (state is NoteFailure) {
                       return Center(
                         child:
                             DataLoadErrorWidget(onPressed: () => fetchNotes()),
@@ -157,7 +196,11 @@ class _NotePageState extends State<NotePage> {
                   onPressed: isActive
                       ? () {
                           _cubit.saveNotes(
-                              items: notes.values.toList(),
+                              notes: notes.values.toList(),
+                              photos: photos.values
+                                  .toList()
+                                  .expand((element) => element)
+                                  .toList(),
                               feature: widget.entity.feature);
                         }
                       : null,

@@ -31,9 +31,9 @@ class _ReportPageState extends State<ReportPage> {
   late final Map<int, List<PhotoEntity>> reports = {};
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
-  bool get isActive => reports.values.any((photos) => photos.isNotEmpty
-      // && photos.any((photo) => photo.status == SyncStatus.noSynced)
-      );
+  bool get isActive => reports.values.any((photos) =>
+      photos.isNotEmpty &&
+      photos.any((photo) => photo.status == SyncStatus.noSynced));
 
   @override
   void initState() {
@@ -97,11 +97,11 @@ class _ReportPageState extends State<ReportPage> {
                                   photos: reports[photoItem.id!]!,
                                   onAdded: (file) async {
                                     reports[photoItem.id!]!.add(PhotoEntity(
-                                        dataUuid: Uuid().v1(),
-                                        dataTimestamp: file.dataTimestamp,
-                                        path: file.path,
-                                        featurePhotoId: photoItem.id!,
-                                        status: SyncStatus.noSynced));
+                                      dataUuid: Uuid().v1(),
+                                      dataTimestamp: file.dataTimestamp,
+                                      path: file.path,
+                                      featurePhotoId: photoItem.id!,
+                                    ));
                                     setState(() {});
                                   },
                                   onDeleted: (image) {

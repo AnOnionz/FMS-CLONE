@@ -5,5 +5,5 @@ import '../../../../core/constant/type_def.dart';
 
 abstract class SyncRepository {
   Future<Result<void>> synchronized(
-      {required Map<FeatureEntity, List<DataEnitity>> data});
+      {required Map<FeatureEntity, List<DataEntity>> data});
 }

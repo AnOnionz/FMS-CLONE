@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -37,8 +36,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
       });
     });
     on<SyncUpdated>((event, emit) async {
-      final Map<FeatureEntity, List<DataEnitity>> data = Map.from(state.data);
-
+      final Map<FeatureEntity, List<DataEntity>> data = Map.from(state.data);
+      data[event.feature] = event.data;
       final count = data.values.expand((element) => element).length;
       if (count == 0) {
         emit(SyncState.successfully());
@@ -51,16 +50,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
 
   Future<void> _updateNoteSync() async => await fold(_notesNoSynced());
 
-  Future<void> fold(Future<Result<List<DataEnitity>>> future) async {
+  Future<void> fold(Future<Result<Map<int, List<DataEntity>>>> future) async {
     await future
       ..fold((failure) => null, (data) {
-        final map = data.groupBy(
-          (photo) {
-            return photo.featureId!;
-          },
-        );
-        map.keys.forEach((id) {
-          add(SyncUpdated(feature: getFeature(id)!, data: map[id]!));
+        data.keys.forEach((id) {
+          add(SyncUpdated(feature: getFeature(id)!, data: data[id]!));
         });
       });
   }

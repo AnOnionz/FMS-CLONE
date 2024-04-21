@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/type_def.dart';
+import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/repository/repository.dart';
 
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -7,40 +8,66 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/note/data/datasources/note_local_datasource.dart';
 
 import 'package:fms/features/note/domain/entities/note_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/constant/enum.dart';
+import '../../../../core/mixins/common.dart';
 import '../../../../core/usecase/either.dart';
 import '../../domain/repositories/note_repository.dart';
 import '../datasources/note_remote_datasource.dart';
 
 class NoteRepositoryImpl extends Repository
-    with GeneralDataMixin
+    with GeneralDataMixin, LocalDatasource
     implements NoteRepository {
   final NoteLocalDataSource _local;
   final NoteRemoteDataSource _remote;
 
   NoteRepositoryImpl(this._local, this._remote);
   @override
-  Future<Result<List<NoteEntity>>> allNotes(
+  Future<Result<(List<NoteEntity> notes, List<PhotoEntity> photos)>> allNotes(
       {required FeatureEntity feature}) async {
     return todo(() async {
-      final localPhotos = await _local.getNotesLocal();
-      if (localPhotos.isNotEmpty) {
-        return Right(localPhotos);
+      List<NoteEntity> notes;
+      List<PhotoEntity> photos;
+
+      notes = await _local.getNotesByFeature(feature);
+
+      if (notes.isNotEmpty) {
+        photos = notes
+            .map((note) => note.photos)
+            .expand((element) => element)
+            .toList();
+        return Right((notes, photos));
       }
-      final photos = await _remote.allNotes(general: general, feature: feature);
-      return Right(photos);
+      notes = await _remote.allNotes(general: general, feature: feature);
+      photos = await _remote.allPhotos(general: general, feature: feature);
+
+      return Right((notes, photos));
     });
   }
 
   @override
   Future<Result<void>> createNotes(
-      {required List<NoteEntity> notes, required FeatureEntity feature}) async {
+      {required List<NoteEntity> notes,
+      required List<PhotoEntity> photos,
+      required FeatureEntity feature}) async {
     return todo(
       () async {
-        notes.forEach((element) {
-          element.attendanceId = general.attendance!.id;
-          element.featureId = feature.id;
+        photos.forEach((photo) {
+          photo.attendanceId = general.attendance!.id;
+          photo.featureId = feature.id;
+          _local.cachePhotosToLocal(photo);
+        });
+
+        notes.forEach((note) {
+          note.attendanceId = general.attendance!.id;
+          note.featureId = feature.id;
+          final photosOfNote = photos.where(
+              (photo) => photo.featurePhotoId == note.featureMultimediaId);
+
+          note.photos.addAll(photosOfNote);
+          _local.cacheNoteToLocal(note);
+          db.writeTxnSync(() => note.photos.saveSync());
         });
 
         await Future.forEach(notes, (note) async {
@@ -55,8 +82,7 @@ class NoteRepositoryImpl extends Repository
                         id: report.id,
                         image: report.image,
                         status: SyncStatus.synced);
-
-                    note.photos.saveSync();
+                    _local.cachePhotosToLocal(photo);
                   }
                 }
               });
@@ -67,14 +93,12 @@ class NoteRepositoryImpl extends Repository
 
             if (report != null) {
               note = note.copyWith(id: report.id, status: SyncStatus.synced);
+
               _local.cacheNoteToLocal(note);
             }
           }
         });
         return Right(Never);
-      },
-      onFailure: (failure) {
-        _local.cacheNotesToLocal(notes);
       },
     );
   }
@@ -83,7 +107,7 @@ class NoteRepositoryImpl extends Repository
   Future<Result<FeatureEntity?>> getNotesNotCompleted(
       {required FeatureEntity feature}) {
     return todo(() async {
-      final localNotes = await _local.getNotesLocal();
+      final localNotes = await _local.getNotesByFeature(feature);
       if (localNotes.isEmpty) {
         final reportFeature = feature.copyWith(featurePhotos: []);
         return Right(reportFeature);
@@ -115,10 +139,18 @@ class NoteRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<List<NoteEntity>>> noSyncedData() async {
+  Future<Result<Map<int, List<NoteEntity>>>> noSyncedData() async {
     return todo(() async {
-      final localNotes = await _local.getNotesNoSynced();
-      return Right(localNotes);
+      final localPhotos = await _local.getNotes();
+
+      final map = localPhotos.groupListsBy((element) => element.featureId!);
+      map.entries.forEach(
+        (element) {
+          element.value
+              .removeWhere((element) => element.status == SyncStatus.synced);
+        },
+      );
+      return Right(map);
     });
   }
 

@@ -142,7 +142,7 @@ NoteEntity _noteEntityDeserialize(
     id: reader.readLongOrNull(offsets[5]),
     status:
         _NoteEntitystatusValueEnumMap[reader.readStringOrNull(offsets[6])] ??
-            SyncStatus.synced,
+            SyncStatus.noSynced,
     value: reader.readStringOrNull(offsets[7]),
   );
   return object;
@@ -169,7 +169,7 @@ P _noteEntityDeserializeProp<P>(
       return (reader.readLongOrNull(offset)) as P;
     case 6:
       return (_NoteEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
-          SyncStatus.synced) as P;
+          SyncStatus.noSynced) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     default:

@@ -20,7 +20,7 @@ class SyncRepositoryImpl extends Repository
 
   @override
   Future<Result<void>> synchronized(
-      {required Map<FeatureEntity, List<DataEnitity>> data}) async {
+      {required Map<FeatureEntity, List<DataEntity>> data}) async {
     return todo(
       () async {
         final List<Future<void>> futures = [];

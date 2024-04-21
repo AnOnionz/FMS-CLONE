@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -24,7 +25,7 @@ class ReportRepositoryImpl extends Repository
   Future<Result<List<PhotoEntity>>> allPhotos(
       {required FeatureEntity feature}) async {
     return todo(() async {
-      final localPhotos = await _local.getPhotosLocal();
+      final localPhotos = await _local.getPhotosByFeature(feature);
       if (localPhotos.isNotEmpty) {
         return Right(localPhotos);
       }
@@ -71,7 +72,7 @@ class ReportRepositoryImpl extends Repository
   Future<Result<FeatureEntity?>> getPhotosNotCompleted(
       {required FeatureEntity feature}) {
     return todo(() async {
-      final localPhotos = await _local.getPhotosLocal();
+      final localPhotos = await _local.getPhotosByFeature(feature);
       if (localPhotos.isEmpty) {
         final reportFeature = feature.copyWith(featurePhotos: []);
         return Right(reportFeature);
@@ -101,16 +102,24 @@ class ReportRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<List<PhotoEntity>>> noSyncedData() async {
+  Future<Result<Map<int, List<PhotoEntity>>>> noSyncedData() async {
     return todo(() async {
-      final localPhotos = await _local.getPhotosNoSynced();
-      return Right(localPhotos);
+      final localPhotos = await _local.getPhotos();
+
+      final map = localPhotos.groupListsBy((element) => element.featureId!);
+      map.entries.forEach(
+        (element) {
+          element.value
+              .removeWhere((element) => element.status == SyncStatus.synced);
+        },
+      );
+      return Right(map);
     });
   }
 
   @override
   Future<void> synchronized() async {
-    final photosNoSynced = await _local.getPhotosNoSynced();
+    final photosNoSynced = await _local.getPhotos();
 
     await Future.forEach(photosNoSynced, (photo) async {
       final report = await _remote.createPhoto(photo: photo, general: general);

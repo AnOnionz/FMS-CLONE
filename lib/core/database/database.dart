@@ -64,6 +64,10 @@ final class Database {
     return _isar!.collection<T>();
   }
 
+  void writeTxnSync<T>(T Function() callback, {bool silent = false}) {
+    _isar!.writeTxnSync(callback, silent: silent);
+  }
+
   List<T> where<T>(
       QueryBuilder<T, T, QAfterWhereClause> Function(
               QueryBuilder<T, T, QWhere> where)

@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:fms/core/constant/enum.dart';
@@ -11,7 +10,7 @@ import '../../../general/domain/entities/data_entity.dart';
 part 'photo_entity.g.dart';
 
 @collection
-class PhotoEntity extends DataEnitity {
+class PhotoEntity extends DataEntity {
   Id get isarId => fastHash(dataUuid);
   int? id;
   String dataUuid;
@@ -30,7 +29,7 @@ class PhotoEntity extends DataEnitity {
       required this.featurePhotoId,
       this.image,
       this.path,
-      this.status = SyncStatus.synced,
+      this.status = SyncStatus.noSynced,
       super.attendanceId,
       super.featureId});
 

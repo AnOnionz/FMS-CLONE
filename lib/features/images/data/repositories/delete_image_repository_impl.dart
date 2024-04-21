@@ -26,14 +26,13 @@ class DeletePhotoRepositoryImpl extends Repository
     return todo(() async {
       if (feature.type == FeatureType.photography) {
         await _remote.deletePhoto(feature: feature, general: general, id: id);
-        await _local.deleteLocalPhoto(uuid: uuid);
       }
       if (feature.type ==
           FeatureType.multiSubjectMultimediaInformationCapturing) {
         await _remote.deleteNotePhoto(
             feature: feature, general: general, id: id);
-        await _local.deleteLocalNotePhoto(uuid: uuid, noteUuid: noteUuid);
       }
+      await _local.deleteLocalPhoto(uuid: uuid);
       return Right(Never);
     });
   }
@@ -42,11 +41,7 @@ class DeletePhotoRepositoryImpl extends Repository
   Future<Result<void>> deleteLocalPhoto(
       {required String uuid, String? noteUuid}) async {
     return todo(() async {
-      if (noteUuid != null) {
-        await _local.deleteLocalNotePhoto(uuid: uuid, noteUuid: noteUuid);
-      } else {
-        await _local.deleteLocalPhoto(uuid: uuid);
-      }
+      await _local.deleteLocalPhoto(uuid: uuid);
 
       return Right(Never);
     });

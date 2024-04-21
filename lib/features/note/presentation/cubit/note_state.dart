@@ -15,7 +15,7 @@ class NoteFailure extends NoteState {
 }
 
 class NoteSuccess extends NoteState {
-  final List<NoteEntity> photos;
+  final (List<NoteEntity> notes, List<PhotoEntity> photos) data;
 
-  NoteSuccess(this.photos);
+  NoteSuccess(this.data);
 }

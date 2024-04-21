@@ -5,7 +5,8 @@ import 'package:fms/core/responsive/responsive.dart';
 
 class NoteTextField extends StatelessWidget {
   final TextEditingController controller;
-  const NoteTextField({super.key, required this.controller});
+  final void Function(String value)? onChanged;
+  const NoteTextField({super.key, required this.controller, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class NoteTextField extends StatelessWidget {
       controller: controller,
       maxLines: 4,
       cursorHeight: 16.sp,
+      onChanged: onChanged,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
         hintText: 'Nội dung',

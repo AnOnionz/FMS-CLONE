@@ -25,8 +25,6 @@ class ReportItem extends StatelessWidget {
       required this.feature,
       required this.onDeleted});
 
-  bool get _isFixed => entity.minimum == entity.maximum;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,7 +42,7 @@ class ReportItem extends StatelessWidget {
                     ?.copyWith(color: AppColors.black),
                 children: [
                   TextSpan(
-                    text: _optinal(),
+                    text: _optinal(entity.minimum, entity.maximum),
                     style: context.textTheme.subtitle1
                         ?.copyWith(color: AppColors.orange),
                   ),
@@ -76,24 +74,23 @@ class ReportItem extends StatelessWidget {
                     .toList(),
                 onDeleted: onDeleted,
               )),
-          (entity.description != null)
-              ? Padding(
-                  padding: EdgeInsets.only(top: 20.h),
-                  child: Text(
-                    entity.description!,
-                    style: context.textTheme.caption2,
-                  ),
-                )
-              : SizedBox.shrink()
+          if (entity.description != null)
+            Padding(
+              padding: EdgeInsets.only(top: 20.h),
+              child: Text(
+                entity.description!,
+                style: context.textTheme.caption2,
+              ),
+            )
         ],
       ),
     );
   }
 
-  String _optinal() {
-    return switch (_isFixed) {
-      true => '(bắt buộc chụp ${entity.maximum} hình)',
-      false => '(chụp từ ${entity.minimum}-${entity.maximum} hình)',
+  String _optinal(int? min, int? max) {
+    return switch (min == max) {
+      true => '(bắt buộc chụp ${max} hình)',
+      false => '(chụp từ ${min}-${max} hình)',
     };
   }
 }

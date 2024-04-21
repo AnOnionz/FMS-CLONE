@@ -1,6 +1,6 @@
-class DataEnitity {
+class DataEntity {
   int? attendanceId;
   int? featureId;
 
-  DataEnitity({this.attendanceId, this.featureId});
+  DataEntity({this.attendanceId, this.featureId});
 }

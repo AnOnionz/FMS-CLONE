@@ -9,11 +9,10 @@ final class SyncState extends Equatable {
   const SyncState.successfully() : this._();
 
   const SyncState.expectation(
-      {required Map<FeatureEntity, List<DataEnitity>> data,
-      required int number})
+      {required Map<FeatureEntity, List<DataEntity>> data, required int number})
       : this._(data: data, status: SyncStatus.noSynced, number: number);
 
-  final Map<FeatureEntity, List<DataEnitity>> data;
+  final Map<FeatureEntity, List<DataEntity>> data;
   final SyncStatus status;
   final int number;
 

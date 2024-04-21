@@ -9,7 +9,7 @@ class SyncStarted extends SyncEvent {}
 
 class SyncUpdated extends SyncEvent {
   final FeatureEntity feature;
-  final List<dynamic> data;
+  final List<DataEntity> data;
 
   SyncUpdated({required this.feature, required this.data});
 }

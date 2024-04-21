@@ -14,7 +14,7 @@ abstract class INoteRemoteDataSource {
       {required PhotoEntity photo, required GeneralEntity general});
   Future<List<NoteEntity>> allNotes(
       {required GeneralEntity general, required FeatureEntity feature});
-  Future<List<PhotoEntity>> allPhotosOfNote(
+  Future<List<PhotoEntity>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature});
 }
 
@@ -79,7 +79,7 @@ class NoteRemoteDataSource extends ImagesRemoteDataSource
   }
 
   @override
-  Future<List<PhotoEntity>> allPhotosOfNote(
+  Future<List<PhotoEntity>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {
     final _resp = await dio.get(
         path:
