@@ -5,6 +5,7 @@ import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/usecase/either.dart';
 import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/note/data/repositories/note_repository_impl.dart';
 import 'package:fms/features/report/data/repositories/report_repository_impl.dart';
 import 'package:fms/features/sync/domain/repositories/sync_repository.dart';
 
@@ -15,8 +16,9 @@ class SyncRepositoryImpl extends Repository
     with GeneralDataMixin
     implements SyncRepository {
   final ReportRepositoryImpl _reportRepository;
+  final NoteRepositoryImpl _noteRepository;
 
-  SyncRepositoryImpl(this._reportRepository);
+  SyncRepositoryImpl(this._reportRepository, this._noteRepository);
 
   @override
   Future<Result<void>> synchronized(
@@ -33,6 +35,8 @@ class SyncRepositoryImpl extends Repository
           switch (feature.type) {
             case FeatureType.photography:
               futures.add(_reportRepository.synchronized());
+            case FeatureType.multiSubjectMultimediaInformationCapturing:
+              futures.add(_noteRepository.synchronized());
             default:
           }
         });

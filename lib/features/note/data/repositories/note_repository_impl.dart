@@ -11,7 +11,6 @@ import 'package:fms/features/note/domain/entities/note_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/constant/enum.dart';
-import '../../../../core/mixins/common.dart';
 import '../../../../core/usecase/either.dart';
 import '../../domain/repositories/note_repository.dart';
 import '../datasources/note_remote_datasource.dart';
@@ -159,6 +158,22 @@ class NoteRepositoryImpl extends Repository
     final notesNoSynced = await _local.getNotesNoSynced();
 
     await Future.forEach(notesNoSynced, (note) async {
+      if (note.photos.isNotEmpty) {
+        await Future.forEach(note.photos, (photo) async {
+          if (photo.status == SyncStatus.noSynced) {
+            final report =
+                await _remote.createPhoto(photo: photo, general: general);
+            if (report != null) {
+              photo = photo.copyWith(
+                  id: report.id,
+                  image: report.image,
+                  status: SyncStatus.synced);
+              _local.cachePhotosToLocal(photo);
+            }
+          }
+        });
+      }
+
       final report = await _remote.createNote(note: note, general: general);
       if (report != null) {
         note = note.copyWith(id: report.id, status: SyncStatus.synced);

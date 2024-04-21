@@ -16,10 +16,14 @@ class SyncModule extends Module {
 
   @override
   void exportedBinds(Injector i) {
-    i.addLazySingleton(SyncRepositoryImpl.new);
-    i.addLazySingleton(SyncUseCase.new);
     i.addSingleton(SyncBloc.new);
     i.add(SyncProgressBloc.new);
+  }
+
+  @override
+  void binds(Injector i) {
+    i.addLazySingleton(SyncRepositoryImpl.new);
+    i.addLazySingleton(SyncUseCase.new);
   }
 
   @override

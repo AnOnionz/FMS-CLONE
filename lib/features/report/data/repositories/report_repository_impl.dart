@@ -113,6 +113,7 @@ class ReportRepositoryImpl extends Repository
               .removeWhere((element) => element.status == SyncStatus.synced);
         },
       );
+
       return Right(map);
     });
   }
