@@ -73,21 +73,8 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
       children: <Widget>[
         Stack(
           children: [
-            (widget.image.networkImage != null)
+            (widget.image.path != null)
                 ? Align(
-                    child: CachedImage(
-                        placeholder: (p0, p1) => SizedBox(
-                              height: 300.h,
-                              width: context.screenWidth - 32.w,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AppIndicator(),
-                                ],
-                              ),
-                            ),
-                        imageUrl: widget.image.networkImage!.getImage()))
-                : Align(
                     child: Builder(builder: (context) {
                       final file = Image.file(File(widget.image.path!));
                       return ClipRRect(
@@ -99,7 +86,20 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                         ),
                       );
                     }),
-                  ),
+                  )
+                : Align(
+                    child: CachedImage(
+                        placeholder: (p0, p1) => SizedBox(
+                              height: 300.h,
+                              width: context.screenWidth - 32.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  AppIndicator(),
+                                ],
+                              ),
+                            ),
+                        imageUrl: widget.image.networkImage!.getImage())),
             if (_isImageLoaded)
               Positioned(
                 right: 10.h,

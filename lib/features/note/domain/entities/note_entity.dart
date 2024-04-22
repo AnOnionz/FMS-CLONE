@@ -21,6 +21,7 @@ class NoteEntity extends DataEntity {
   final int featureMultimediaId;
   final photos = IsarLinks<PhotoEntity>();
   String? value;
+  bool isTextFieldRequired;
   @Enumerated(EnumType.name)
   final SyncStatus status;
 
@@ -32,7 +33,8 @@ class NoteEntity extends DataEntity {
       super.featureId,
       required this.featureMultimediaId,
       this.value,
-      this.status = SyncStatus.noSynced});
+      this.isTextFieldRequired = false,
+      this.status = SyncStatus.isNoSynced});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -64,6 +66,7 @@ class NoteEntity extends DataEntity {
     DateTime? dataTimestamp,
     int? featureMultimediaId,
     String? value,
+    bool? isTextFieldRequired,
     SyncStatus? status,
   }) {
     return NoteEntity(
@@ -74,6 +77,7 @@ class NoteEntity extends DataEntity {
       featureId: featureId ?? this.featureId,
       featureMultimediaId: featureMultimediaId ?? this.featureMultimediaId,
       value: value ?? this.value,
+      isTextFieldRequired: isTextFieldRequired ?? this.isTextFieldRequired,
       status: status ?? this.status,
     );
   }

@@ -10,14 +10,14 @@ final class SyncState extends Equatable {
 
   const SyncState.expectation(
       {required Map<FeatureEntity, List<DataEntity>> data, required int number})
-      : this._(status: SyncStatus.noSynced, data: data, number: number);
+      : this._(status: SyncStatus.isNoSynced, data: data, number: number);
 
   final Map<FeatureEntity, List<DataEntity>> data;
   final SyncStatus status;
   final int number;
 
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, status, number];
 
   @override
   String toString() {

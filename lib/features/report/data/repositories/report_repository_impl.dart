@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
-import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/images/data/datasource/delete_image_local_remote_datasource.dart';
+import 'package:fms/features/images/data/datasource/delete_image_remote_datasource.dart';
 import 'package:fms/features/report/data/datasources/report_local_datasource.dart';
 import 'package:fms/features/report/data/datasources/report_remote_datasource.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
@@ -19,8 +21,11 @@ class ReportRepositoryImpl extends Repository
     implements ReportRepository {
   final ReportRemoteDataSource _remote;
   final ReportLocalDataSource _local;
+  final DeletePhotoRemoteDataSource _remotePhoto;
+  final DeletePhotoLocalDataSource _localPhoto;
 
-  ReportRepositoryImpl(this._remote, this._local);
+  ReportRepositoryImpl(
+      this._remote, this._local, this._remotePhoto, this._localPhoto);
   @override
   Future<Result<List<PhotoEntity>>> allPhotos(
       {required FeatureEntity feature}) async {
@@ -47,7 +52,15 @@ class ReportRepositoryImpl extends Repository
         });
 
         await Future.forEach(photos, (photo) async {
-          if (photo.status == SyncStatus.noSynced) {
+          if (photo.status == SyncStatus.isDeleted) {
+            if (photo.id != null) {
+              await _remotePhoto.deletePhoto(
+                  id: photo.id!, general: general, feature: feature);
+            }
+
+            _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
+          }
+          if (photo.status == SyncStatus.isNoSynced) {
             final report =
                 await _remote.createPhoto(photo: photo, general: general);
             if (report != null) {
@@ -73,6 +86,7 @@ class ReportRepositoryImpl extends Repository
       {required FeatureEntity feature}) {
     return todo(() async {
       final localPhotos = await _local.getPhotosByFeature(feature);
+
       if (localPhotos.isEmpty) {
         final reportFeature = feature.copyWith(featurePhotos: []);
         return Right(reportFeature);
@@ -87,7 +101,9 @@ class ReportRepositoryImpl extends Repository
         );
 
         feature.featurePhotos!.forEach((featurePhoto) {
-          final photos = photoGroup[featurePhoto.id!] ?? [];
+          final photos = (photoGroup[featurePhoto.id!] ?? [])
+              .where((element) => element.status != SyncStatus.isDeleted);
+
           if (photos.length < featurePhoto.minimum!) {
             featurePhotos.add(featurePhoto);
           }
@@ -119,15 +135,25 @@ class ReportRepositoryImpl extends Repository
   }
 
   @override
-  Future<void> synchronized() async {
-    final photosNoSynced = await _local.getPhotos();
+  Future<void> synchronized(FeatureEntity feature) async {
+    final photosNoSynced = await _local.getPhotosNotSynced(feature);
 
     await Future.forEach(photosNoSynced, (photo) async {
-      final report = await _remote.createPhoto(photo: photo, general: general);
-      if (report != null) {
-        photo = photo.copyWith(
-            id: report.id, image: report.image, status: SyncStatus.synced);
-        _local.cachePhotoToLocal(photo);
+      if (photo.status == SyncStatus.isDeleted) {
+        if (photo.id != null) {
+          await _remotePhoto.deletePhoto(
+              id: photo.id!, general: general, feature: feature);
+        }
+        _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
+      }
+      if (photo.status == SyncStatus.isNoSynced) {
+        final report =
+            await _remote.createPhoto(photo: photo, general: general);
+        if (report != null) {
+          photo = photo.copyWith(
+              id: report.id, image: report.image, status: SyncStatus.synced);
+          _local.cachePhotoToLocal(photo);
+        }
       }
     });
   }

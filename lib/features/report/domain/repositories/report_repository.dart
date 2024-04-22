@@ -10,5 +10,5 @@ abstract class ReportRepository {
   Future<Result<FeatureEntity?>> getPhotosNotCompleted(
       {required FeatureEntity feature});
   Future<Result<Map<int, List<PhotoEntity>>>> noSyncedData();
-  Future<void> synchronized();
+  Future<void> synchronized(FeatureEntity future);
 }

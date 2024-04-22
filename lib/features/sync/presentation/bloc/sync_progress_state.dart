@@ -1,11 +1,6 @@
 part of 'sync_progress_bloc.dart';
 
-sealed class SyncProgressState extends Equatable {
-  const SyncProgressState();
-
-  @override
-  List<Object> get props => [];
-}
+sealed class SyncProgressState {}
 
 final class SyncProgressInitial extends SyncProgressState {}
 

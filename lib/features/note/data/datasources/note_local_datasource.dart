@@ -12,9 +12,9 @@ import '../../domain/entities/note_entity.dart';
 
 abstract class INoteLocalDataSource {
   void cacheNoteToLocal(NoteEntity note);
-  void cachePhotosToLocal(PhotoEntity photo);
+  void cachePhotoToLocal(PhotoEntity photo);
   void cacheNotesToLocal(List<NoteEntity> notes);
-  Future<List<NoteEntity>> getNotesNoSynced();
+  Future<List<NoteEntity>> getNotesNoSynced(FeatureEntity feature);
   Future<List<NoteEntity>> getNotesByFeature(FeatureEntity feature);
   Future<List<NoteEntity>> getNotes();
   Future<List<PhotoEntity>> getPhotosByFuture(FeatureEntity feature);
@@ -40,13 +40,13 @@ class NoteLocalDataSource
   }
 
   @override
-  Future<List<NoteEntity>> getNotesNoSynced() async {
+  Future<List<NoteEntity>> getNotesNoSynced(FeatureEntity feature) async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
 
     return db.filter<NoteEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance?.id)
         .dataTimestampBetween(time.yesterday, time.today)
-        .statusEqualTo(SyncStatus.noSynced)
+        .statusEqualTo(SyncStatus.isNoSynced)
         .build());
   }
 
@@ -56,7 +56,7 @@ class NoteLocalDataSource
   }
 
   @override
-  void cachePhotosToLocal(PhotoEntity photo) {
+  void cachePhotoToLocal(PhotoEntity photo) {
     db.addObject<PhotoEntity>(photo);
   }
 

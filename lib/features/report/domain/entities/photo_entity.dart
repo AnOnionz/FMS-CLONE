@@ -29,7 +29,7 @@ class PhotoEntity extends DataEntity {
       required this.featurePhotoId,
       this.image,
       this.path,
-      this.status = SyncStatus.noSynced,
+      this.status = SyncStatus.isNoSynced,
       super.attendanceId,
       super.featureId});
 
@@ -74,6 +74,6 @@ class PhotoEntity extends DataEntity {
 
   @override
   String toString() {
-    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, attendanceId: $attendanceId, dataTimestamp: $dataTimestamp, featureId: $featureId, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
+    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, dataTimestamp: $dataTimestamp, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
   }
 }

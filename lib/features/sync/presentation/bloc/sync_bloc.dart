@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -26,6 +28,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
     on<SyncStarted>((event, emit) {
       _updatePhotoSync();
       _updateNoteSync();
+    });
+    on<SyncAddListener>((event, emit) {
       _photoSubscription =
           db.colection<PhotoEntity>().watchLazy().listen((event) async {
         _updatePhotoSync();
@@ -35,6 +39,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
         _updateNoteSync();
       });
     });
+
     on<SyncUpdated>((event, emit) async {
       final Map<FeatureEntity, List<DataEntity>> data = Map.from(state.data);
       data[event.feature] = event.data;
@@ -51,6 +56,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
   Future<void> _updateNoteSync() async => await fold(_notesNoSynced());
 
   Future<void> fold(Future<Result<Map<int, List<DataEntity>>>> future) async {
+    print(future.runtimeType);
     await future
       ..fold((failure) => null, (data) {
         data.keys.forEach((id) {

@@ -27,7 +27,7 @@ enum SettingType { none, toggle, transfer }
 
 enum StatisticType { sp, outlet, booth, employee }
 
-enum SyncStatus { noSynced, synced }
+enum SyncStatus { synced, isNoSynced, isDeleted }
 
 enum ImageType {
   original,

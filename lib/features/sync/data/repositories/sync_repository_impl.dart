@@ -25,24 +25,26 @@ class SyncRepositoryImpl extends Repository
       {required Map<FeatureEntity, List<DataEntity>> data}) async {
     return todo(
       () async {
-        final List<Future<void>> futures = [];
+        if (data.isNotEmpty) {
+          final List<Future<void>> futures = [];
 
-        /// get only feature has data no synced
-        final map = data..removeWhere((key, value) => value.isEmpty);
+          /// get only feature has data no synced
+          final map = data..removeWhere((key, value) => value.isEmpty);
 
-        /// get synchronized of feature
-        map.keys.forEach((feature) {
-          switch (feature.type) {
-            case FeatureType.photography:
-              futures.add(_reportRepository.synchronized());
-            case FeatureType.multiSubjectMultimediaInformationCapturing:
-              futures.add(_noteRepository.synchronized());
-            default:
-          }
-        });
-        await Future.forEach(futures, (future) async {
-          await future;
-        });
+          /// get synchronized of feature
+          map.keys.forEach((feature) {
+            switch (feature.type) {
+              case FeatureType.photography:
+                futures.add(_reportRepository.synchronized(feature));
+              case FeatureType.multiSubjectMultimediaInformationCapturing:
+                futures.add(_noteRepository.synchronized(feature));
+              default:
+            }
+          });
+          await Future.forEach(futures, (future) async {
+            await future;
+          });
+        }
 
         return Right(Never);
       },

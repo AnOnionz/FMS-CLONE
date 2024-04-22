@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +18,12 @@ import 'package:fms/features/work_place/work_place_module.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../core/constant/enum.dart';
 import '../../../../core/mixins/common.dart';
 import '../../../../core/services/connectivity/connectivity_service.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
 import '../../../authentication/presentation/blocs/authentication_bloc.dart';
+import '../../../sync/presentation/bloc/sync_progress_bloc.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
@@ -31,13 +34,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final NetworkTimeService _networkTimeService;
   final GeneralRepository _generalRepository;
   final SyncBloc _syncBloc;
+  final SyncProgressBloc _syncProgressBloc;
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
 
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
+  StreamSubscription<SyncState>? _syncSubscription;
 
-  AppBloc(this._authenticationBloc, this._connectivityService,
-      this._generalRepository, this._networkTimeService, this._syncBloc)
-      : super(const AppInitial()) {
+  AppBloc(
+    this._authenticationBloc,
+    this._connectivityService,
+    this._generalRepository,
+    this._networkTimeService,
+    this._syncBloc,
+    this._syncProgressBloc,
+  ) : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
     on<AppStarted>(_onAppStarted);
@@ -68,6 +78,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ..fold((failure) => Modular.to.navigate(WorkPlaceModule.route), (data) {
           if (data != null) {
             _syncBloc.add(SyncStarted());
+            _syncBloc.add(SyncAddListener());
             Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
           } else {
             Modular.to.navigate(WorkPlaceModule.route);
@@ -101,6 +112,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(const AppLoading());
     _startInternetConnectionService();
     _startNetworkTimeService();
+
+    _syncSubscription = _syncBloc.stream.listen((syncState) {
+      if (syncState.status == SyncStatus.isNoSynced) {
+        _syncProgressBloc.add(SyncProgressSilent(seconds: 30));
+        _syncSubscription?.cancel();
+      }
+    });
+    _syncProgressBloc.stream.listen((state) {
+      if (state is! SyncProgressLoading) {
+        _syncSubscription?.resume();
+      }
+    });
 
     _connectivityService.onConnectionChange.listen((status) async {
       Fx.log('Internet status: $status');

@@ -5,6 +5,8 @@ abstract class SyncEvent {
   const SyncEvent();
 }
 
+class SyncAddListener extends SyncEvent {}
+
 class SyncStarted extends SyncEvent {}
 
 class SyncUpdated extends SyncEvent {

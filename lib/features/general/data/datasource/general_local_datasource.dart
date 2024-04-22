@@ -18,7 +18,7 @@ class GeneralLocalDataSource implements IGeneralLocalDataSource {
 
   @override
   void clearGeneral() {
-    database.deleteCollection<GeneralEntity>();
+    database.clearCollection<GeneralEntity>();
   }
 
   @override

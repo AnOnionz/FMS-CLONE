@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -65,6 +66,7 @@ class ReportItem extends StatelessWidget {
                   isWatermarking: isWatermarking,
                 ),
                 images: photos
+                    .where((element) => element.status != SyncStatus.isDeleted)
                     .map((e) => ImageDynamic(
                         id: e.id,
                         uuid: e.dataUuid,

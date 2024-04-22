@@ -22,7 +22,7 @@ void main() async {
     GeneralEntitySchema,
     PhotoEntitySchema,
     NoteEntitySchema,
-    CrwalQuantityEntitySchema,
+    CrawlQuantityEntitySchema,
   ]);
   runApp(ModularApp(
       module: AppModule(),

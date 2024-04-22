@@ -47,14 +47,19 @@ const NoteEntitySchema = CollectionSchema(
       name: r'id',
       type: IsarType.long,
     ),
-    r'status': PropertySchema(
+    r'isTextFieldRequired': PropertySchema(
       id: 6,
+      name: r'isTextFieldRequired',
+      type: IsarType.bool,
+    ),
+    r'status': PropertySchema(
+      id: 7,
       name: r'status',
       type: IsarType.string,
       enumMap: _NoteEntitystatusEnumValueMap,
     ),
     r'value': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'value',
       type: IsarType.string,
     )
@@ -123,8 +128,9 @@ void _noteEntitySerialize(
   writer.writeLong(offsets[3], object.featureId);
   writer.writeLong(offsets[4], object.featureMultimediaId);
   writer.writeLong(offsets[5], object.id);
-  writer.writeString(offsets[6], object.status.name);
-  writer.writeString(offsets[7], object.value);
+  writer.writeBool(offsets[6], object.isTextFieldRequired);
+  writer.writeString(offsets[7], object.status.name);
+  writer.writeString(offsets[8], object.value);
 }
 
 NoteEntity _noteEntityDeserialize(
@@ -140,10 +146,11 @@ NoteEntity _noteEntityDeserialize(
     featureId: reader.readLongOrNull(offsets[3]),
     featureMultimediaId: reader.readLong(offsets[4]),
     id: reader.readLongOrNull(offsets[5]),
+    isTextFieldRequired: reader.readBoolOrNull(offsets[6]) ?? false,
     status:
-        _NoteEntitystatusValueEnumMap[reader.readStringOrNull(offsets[6])] ??
-            SyncStatus.noSynced,
-    value: reader.readStringOrNull(offsets[7]),
+        _NoteEntitystatusValueEnumMap[reader.readStringOrNull(offsets[7])] ??
+            SyncStatus.isNoSynced,
+    value: reader.readStringOrNull(offsets[8]),
   );
   return object;
 }
@@ -168,9 +175,11 @@ P _noteEntityDeserializeProp<P>(
     case 5:
       return (reader.readLongOrNull(offset)) as P;
     case 6:
-      return (_NoteEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
-          SyncStatus.noSynced) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 7:
+      return (_NoteEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
+          SyncStatus.isNoSynced) as P;
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -178,12 +187,14 @@ P _noteEntityDeserializeProp<P>(
 }
 
 const _NoteEntitystatusEnumValueMap = {
-  r'noSynced': r'noSynced',
   r'synced': r'synced',
+  r'isNoSynced': r'isNoSynced',
+  r'isDeleted': r'isDeleted',
 };
 const _NoteEntitystatusValueEnumMap = {
-  r'noSynced': SyncStatus.noSynced,
   r'synced': SyncStatus.synced,
+  r'isNoSynced': SyncStatus.isNoSynced,
+  r'isDeleted': SyncStatus.isDeleted,
 };
 
 Id _noteEntityGetId(NoteEntity object) {
@@ -841,6 +852,16 @@ extension NoteEntityQueryFilter
     });
   }
 
+  QueryBuilder<NoteEntity, NoteEntity, QAfterFilterCondition>
+      isTextFieldRequiredEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isTextFieldRequired',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<NoteEntity, NoteEntity, QAfterFilterCondition> isarIdEqualTo(
       Id value) {
     return QueryBuilder.apply(this, (query) {
@@ -1315,6 +1336,20 @@ extension NoteEntityQuerySortBy
     });
   }
 
+  QueryBuilder<NoteEntity, NoteEntity, QAfterSortBy>
+      sortByIsTextFieldRequired() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isTextFieldRequired', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterSortBy>
+      sortByIsTextFieldRequiredDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isTextFieldRequired', Sort.desc);
+    });
+  }
+
   QueryBuilder<NoteEntity, NoteEntity, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -1416,6 +1451,20 @@ extension NoteEntityQuerySortThenBy
     });
   }
 
+  QueryBuilder<NoteEntity, NoteEntity, QAfterSortBy>
+      thenByIsTextFieldRequired() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isTextFieldRequired', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterSortBy>
+      thenByIsTextFieldRequiredDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isTextFieldRequired', Sort.desc);
+    });
+  }
+
   QueryBuilder<NoteEntity, NoteEntity, QAfterSortBy> thenByIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.asc);
@@ -1493,6 +1542,13 @@ extension NoteEntityQueryWhereDistinct
     });
   }
 
+  QueryBuilder<NoteEntity, NoteEntity, QDistinct>
+      distinctByIsTextFieldRequired() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isTextFieldRequired');
+    });
+  }
+
   QueryBuilder<NoteEntity, NoteEntity, QDistinct> distinctByStatus(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1550,6 +1606,13 @@ extension NoteEntityQueryProperty
   QueryBuilder<NoteEntity, int?, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<NoteEntity, bool, QQueryOperations>
+      isTextFieldRequiredProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isTextFieldRequired');
     });
   }
 

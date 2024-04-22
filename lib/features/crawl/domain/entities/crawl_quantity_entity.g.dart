@@ -9,14 +9,14 @@ part of 'crawl_quantity_entity.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetCrwalQuantityEntityCollection on Isar {
-  IsarCollection<CrwalQuantityEntity> get crwalQuantityEntitys =>
+extension GetCrawlQuantityEntityCollection on Isar {
+  IsarCollection<CrawlQuantityEntity> get crawlQuantityEntitys =>
       this.collection();
 }
 
-const CrwalQuantityEntitySchema = CollectionSchema(
-  name: r'CrwalQuantityEntity',
-  id: 5607932315756975443,
+const CrawlQuantityEntitySchema = CollectionSchema(
+  name: r'CrawlQuantityEntity',
+  id: 4513806367770409850,
   properties: {
     r'attendanceId': PropertySchema(
       id: 0,
@@ -47,33 +47,33 @@ const CrwalQuantityEntitySchema = CollectionSchema(
       id: 5,
       name: r'status',
       type: IsarType.string,
-      enumMap: _CrwalQuantityEntitystatusEnumValueMap,
+      enumMap: _CrawlQuantityEntitystatusEnumValueMap,
     ),
     r'values': PropertySchema(
       id: 6,
       name: r'values',
       type: IsarType.objectList,
-      target: r'CrwaQuantitylValueEntity',
+      target: r'CrawlQuantitylValueEntity',
     )
   },
-  estimateSize: _crwalQuantityEntityEstimateSize,
-  serialize: _crwalQuantityEntitySerialize,
-  deserialize: _crwalQuantityEntityDeserialize,
-  deserializeProp: _crwalQuantityEntityDeserializeProp,
+  estimateSize: _crawlQuantityEntityEstimateSize,
+  serialize: _crawlQuantityEntitySerialize,
+  deserialize: _crawlQuantityEntityDeserialize,
+  deserializeProp: _crawlQuantityEntityDeserializeProp,
   idName: r'isarId',
   indexes: {},
   links: {},
   embeddedSchemas: {
-    r'CrwaQuantitylValueEntity': CrwaQuantitylValueEntitySchema
+    r'CrawlQuantitylValueEntity': CrawlQuantitylValueEntitySchema
   },
-  getId: _crwalQuantityEntityGetId,
-  getLinks: _crwalQuantityEntityGetLinks,
-  attach: _crwalQuantityEntityAttach,
+  getId: _crawlQuantityEntityGetId,
+  getLinks: _crawlQuantityEntityGetLinks,
+  attach: _crawlQuantityEntityAttach,
   version: '3.1.0+1',
 );
 
-int _crwalQuantityEntityEstimateSize(
-  CrwalQuantityEntity object,
+int _crawlQuantityEntityEstimateSize(
+  CrawlQuantityEntity object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -82,18 +82,18 @@ int _crwalQuantityEntityEstimateSize(
   bytesCount += 3 + object.status.name.length * 3;
   bytesCount += 3 + object.values.length * 3;
   {
-    final offsets = allOffsets[CrwaQuantitylValueEntity]!;
+    final offsets = allOffsets[CrawlQuantitylValueEntity]!;
     for (var i = 0; i < object.values.length; i++) {
       final value = object.values[i];
-      bytesCount += CrwaQuantitylValueEntitySchema.estimateSize(
+      bytesCount += CrawlQuantitylValueEntitySchema.estimateSize(
           value, offsets, allOffsets);
     }
   }
   return bytesCount;
 }
 
-void _crwalQuantityEntitySerialize(
-  CrwalQuantityEntity object,
+void _crawlQuantityEntitySerialize(
+  CrawlQuantityEntity object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -104,41 +104,41 @@ void _crwalQuantityEntitySerialize(
   writer.writeLong(offsets[3], object.featureId);
   writer.writeLong(offsets[4], object.id);
   writer.writeString(offsets[5], object.status.name);
-  writer.writeObjectList<CrwaQuantitylValueEntity>(
+  writer.writeObjectList<CrawlQuantitylValueEntity>(
     offsets[6],
     allOffsets,
-    CrwaQuantitylValueEntitySchema.serialize,
+    CrawlQuantitylValueEntitySchema.serialize,
     object.values,
   );
 }
 
-CrwalQuantityEntity _crwalQuantityEntityDeserialize(
+CrawlQuantityEntity _crawlQuantityEntityDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = CrwalQuantityEntity(
+  final object = CrawlQuantityEntity(
     attendanceId: reader.readLongOrNull(offsets[0]),
     dataTimestamp: reader.readDateTime(offsets[1]),
     dataUuid: reader.readString(offsets[2]),
     featureId: reader.readLongOrNull(offsets[3]),
     id: reader.readLongOrNull(offsets[4]),
-    status: _CrwalQuantityEntitystatusValueEnumMap[
+    status: _CrawlQuantityEntitystatusValueEnumMap[
             reader.readStringOrNull(offsets[5])] ??
-        SyncStatus.noSynced,
-    values: reader.readObjectList<CrwaQuantitylValueEntity>(
+        SyncStatus.isNoSynced,
+    values: reader.readObjectList<CrawlQuantitylValueEntity>(
           offsets[6],
-          CrwaQuantitylValueEntitySchema.deserialize,
+          CrawlQuantitylValueEntitySchema.deserialize,
           allOffsets,
-          CrwaQuantitylValueEntity(),
+          CrawlQuantitylValueEntity(),
         ) ??
         [],
   );
   return object;
 }
 
-P _crwalQuantityEntityDeserializeProp<P>(
+P _crawlQuantityEntityDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -156,15 +156,15 @@ P _crwalQuantityEntityDeserializeProp<P>(
     case 4:
       return (reader.readLongOrNull(offset)) as P;
     case 5:
-      return (_CrwalQuantityEntitystatusValueEnumMap[
+      return (_CrawlQuantityEntitystatusValueEnumMap[
               reader.readStringOrNull(offset)] ??
-          SyncStatus.noSynced) as P;
+          SyncStatus.isNoSynced) as P;
     case 6:
-      return (reader.readObjectList<CrwaQuantitylValueEntity>(
+      return (reader.readObjectList<CrawlQuantitylValueEntity>(
             offset,
-            CrwaQuantitylValueEntitySchema.deserialize,
+            CrawlQuantitylValueEntitySchema.deserialize,
             allOffsets,
-            CrwaQuantitylValueEntity(),
+            CrawlQuantitylValueEntity(),
           ) ??
           []) as P;
     default:
@@ -172,30 +172,32 @@ P _crwalQuantityEntityDeserializeProp<P>(
   }
 }
 
-const _CrwalQuantityEntitystatusEnumValueMap = {
-  r'noSynced': r'noSynced',
+const _CrawlQuantityEntitystatusEnumValueMap = {
   r'synced': r'synced',
+  r'isNoSynced': r'isNoSynced',
+  r'isDeleted': r'isDeleted',
 };
-const _CrwalQuantityEntitystatusValueEnumMap = {
-  r'noSynced': SyncStatus.noSynced,
+const _CrawlQuantityEntitystatusValueEnumMap = {
   r'synced': SyncStatus.synced,
+  r'isNoSynced': SyncStatus.isNoSynced,
+  r'isDeleted': SyncStatus.isDeleted,
 };
 
-Id _crwalQuantityEntityGetId(CrwalQuantityEntity object) {
+Id _crawlQuantityEntityGetId(CrawlQuantityEntity object) {
   return object.isarId;
 }
 
-List<IsarLinkBase<dynamic>> _crwalQuantityEntityGetLinks(
-    CrwalQuantityEntity object) {
+List<IsarLinkBase<dynamic>> _crawlQuantityEntityGetLinks(
+    CrawlQuantityEntity object) {
   return [];
 }
 
-void _crwalQuantityEntityAttach(
-    IsarCollection<dynamic> col, Id id, CrwalQuantityEntity object) {}
+void _crawlQuantityEntityAttach(
+    IsarCollection<dynamic> col, Id id, CrawlQuantityEntity object) {}
 
-extension CrwalQuantityEntityQueryWhereSort
-    on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QWhere> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterWhere>
+extension CrawlQuantityEntityQueryWhereSort
+    on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QWhere> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhere>
       anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
@@ -203,9 +205,9 @@ extension CrwalQuantityEntityQueryWhereSort
   }
 }
 
-extension CrwalQuantityEntityQueryWhere
-    on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QWhereClause> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterWhereClause>
+extension CrawlQuantityEntityQueryWhere
+    on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QWhereClause> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
       isarIdEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
@@ -215,7 +217,7 @@ extension CrwalQuantityEntityQueryWhere
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterWhereClause>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
       isarIdNotEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
@@ -238,7 +240,7 @@ extension CrwalQuantityEntityQueryWhere
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterWhereClause>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
       isarIdGreaterThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -247,7 +249,7 @@ extension CrwalQuantityEntityQueryWhere
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterWhereClause>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
       isarIdLessThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -256,7 +258,7 @@ extension CrwalQuantityEntityQueryWhere
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterWhereClause>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
       isarIdBetween(
     Id lowerIsarId,
     Id upperIsarId, {
@@ -274,9 +276,9 @@ extension CrwalQuantityEntityQueryWhere
   }
 }
 
-extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
-    CrwalQuantityEntity, QFilterCondition> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+extension CrawlQuantityEntityQueryFilter on QueryBuilder<CrawlQuantityEntity,
+    CrawlQuantityEntity, QFilterCondition> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       attendanceIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -285,7 +287,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       attendanceIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -294,7 +296,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       attendanceIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -304,7 +306,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       attendanceIdGreaterThan(
     int? value, {
     bool include = false,
@@ -318,7 +320,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       attendanceIdLessThan(
     int? value, {
     bool include = false,
@@ -332,7 +334,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       attendanceIdBetween(
     int? lower,
     int? upper, {
@@ -350,7 +352,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataTimestampEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -360,7 +362,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataTimestampGreaterThan(
     DateTime value, {
     bool include = false,
@@ -374,7 +376,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataTimestampLessThan(
     DateTime value, {
     bool include = false,
@@ -388,7 +390,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataTimestampBetween(
     DateTime lower,
     DateTime upper, {
@@ -406,7 +408,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -420,7 +422,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidGreaterThan(
     String value, {
     bool include = false,
@@ -436,7 +438,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidLessThan(
     String value, {
     bool include = false,
@@ -452,7 +454,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidBetween(
     String lower,
     String upper, {
@@ -472,7 +474,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -486,7 +488,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -500,7 +502,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -511,7 +513,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -522,7 +524,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -532,7 +534,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       dataUuidIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -542,7 +544,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       featureIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -551,7 +553,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       featureIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -560,7 +562,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       featureIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -570,7 +572,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       featureIdGreaterThan(
     int? value, {
     bool include = false,
@@ -584,7 +586,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       featureIdLessThan(
     int? value, {
     bool include = false,
@@ -598,7 +600,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       featureIdBetween(
     int? lower,
     int? upper, {
@@ -616,7 +618,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -625,7 +627,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       idIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -634,7 +636,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       idEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -644,7 +646,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       idGreaterThan(
     int? value, {
     bool include = false,
@@ -658,7 +660,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       idLessThan(
     int? value, {
     bool include = false,
@@ -672,7 +674,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       idBetween(
     int? lower,
     int? upper, {
@@ -690,7 +692,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       isarIdEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -700,7 +702,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       isarIdGreaterThan(
     Id value, {
     bool include = false,
@@ -714,7 +716,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       isarIdLessThan(
     Id value, {
     bool include = false,
@@ -728,7 +730,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       isarIdBetween(
     Id lower,
     Id upper, {
@@ -746,7 +748,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusEqualTo(
     SyncStatus value, {
     bool caseSensitive = true,
@@ -760,7 +762,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusGreaterThan(
     SyncStatus value, {
     bool include = false,
@@ -776,7 +778,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusLessThan(
     SyncStatus value, {
     bool include = false,
@@ -792,7 +794,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusBetween(
     SyncStatus lower,
     SyncStatus upper, {
@@ -812,7 +814,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -826,7 +828,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -840,7 +842,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -851,7 +853,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -862,7 +864,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -872,7 +874,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       statusIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -882,7 +884,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       valuesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
@@ -895,7 +897,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       valuesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
@@ -908,7 +910,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       valuesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
@@ -921,7 +923,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       valuesLengthLessThan(
     int length, {
     bool include = false,
@@ -937,7 +939,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       valuesLengthGreaterThan(
     int length, {
     bool include = false,
@@ -953,7 +955,7 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
       valuesLengthBetween(
     int lower,
     int upper, {
@@ -972,99 +974,99 @@ extension CrwalQuantityEntityQueryFilter on QueryBuilder<CrwalQuantityEntity,
   }
 }
 
-extension CrwalQuantityEntityQueryObject on QueryBuilder<CrwalQuantityEntity,
-    CrwalQuantityEntity, QFilterCondition> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterFilterCondition>
-      valuesElement(FilterQuery<CrwaQuantitylValueEntity> q) {
+extension CrawlQuantityEntityQueryObject on QueryBuilder<CrawlQuantityEntity,
+    CrawlQuantityEntity, QFilterCondition> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterFilterCondition>
+      valuesElement(FilterQuery<CrawlQuantitylValueEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'values');
     });
   }
 }
 
-extension CrwalQuantityEntityQueryLinks on QueryBuilder<CrwalQuantityEntity,
-    CrwalQuantityEntity, QFilterCondition> {}
+extension CrawlQuantityEntityQueryLinks on QueryBuilder<CrawlQuantityEntity,
+    CrawlQuantityEntity, QFilterCondition> {}
 
-extension CrwalQuantityEntityQuerySortBy
-    on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QSortBy> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+extension CrawlQuantityEntityQuerySortBy
+    on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QSortBy> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByAttendanceId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'attendanceId', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByAttendanceIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'attendanceId', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByDataTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByDataUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByDataUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByFeatureId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featureId', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByFeatureIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featureId', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       sortByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.desc);
@@ -1072,100 +1074,100 @@ extension CrwalQuantityEntityQuerySortBy
   }
 }
 
-extension CrwalQuantityEntityQuerySortThenBy
-    on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QSortThenBy> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+extension CrawlQuantityEntityQuerySortThenBy
+    on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QSortThenBy> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByAttendanceId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'attendanceId', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByAttendanceIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'attendanceId', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByDataTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataTimestamp', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByDataUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByDataUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataUuid', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByFeatureId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featureId', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByFeatureIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featureId', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByIsarIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.desc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QAfterSortBy>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterSortBy>
       thenByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.desc);
@@ -1173,44 +1175,44 @@ extension CrwalQuantityEntityQuerySortThenBy
   }
 }
 
-extension CrwalQuantityEntityQueryWhereDistinct
-    on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct> {
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+extension CrawlQuantityEntityQueryWhereDistinct
+    on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct> {
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct>
       distinctByAttendanceId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'attendanceId');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct>
       distinctByDataTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataTimestamp');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct>
       distinctByDataUuid({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataUuid', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct>
       distinctByFeatureId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'featureId');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct>
       distinctById() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QDistinct>
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QDistinct>
       distinctByStatus({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
@@ -1218,56 +1220,56 @@ extension CrwalQuantityEntityQueryWhereDistinct
   }
 }
 
-extension CrwalQuantityEntityQueryProperty
-    on QueryBuilder<CrwalQuantityEntity, CrwalQuantityEntity, QQueryProperty> {
-  QueryBuilder<CrwalQuantityEntity, int, QQueryOperations> isarIdProperty() {
+extension CrawlQuantityEntityQueryProperty
+    on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QQueryProperty> {
+  QueryBuilder<CrawlQuantityEntity, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, int?, QQueryOperations>
+  QueryBuilder<CrawlQuantityEntity, int?, QQueryOperations>
       attendanceIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'attendanceId');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, DateTime, QQueryOperations>
+  QueryBuilder<CrawlQuantityEntity, DateTime, QQueryOperations>
       dataTimestampProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataTimestamp');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, String, QQueryOperations>
+  QueryBuilder<CrawlQuantityEntity, String, QQueryOperations>
       dataUuidProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataUuid');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, int?, QQueryOperations>
+  QueryBuilder<CrawlQuantityEntity, int?, QQueryOperations>
       featureIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'featureId');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, int?, QQueryOperations> idProperty() {
+  QueryBuilder<CrawlQuantityEntity, int?, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, SyncStatus, QQueryOperations>
+  QueryBuilder<CrawlQuantityEntity, SyncStatus, QQueryOperations>
       statusProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'status');
     });
   }
 
-  QueryBuilder<CrwalQuantityEntity, List<CrwaQuantitylValueEntity>,
+  QueryBuilder<CrawlQuantityEntity, List<CrawlQuantitylValueEntity>,
       QQueryOperations> valuesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'values');
@@ -1282,9 +1284,9 @@ extension CrwalQuantityEntityQueryProperty
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-const CrwaQuantitylValueEntitySchema = Schema(
-  name: r'CrwaQuantitylValueEntity',
-  id: -6737740944530360459,
+const CrawlQuantitylValueEntitySchema = Schema(
+  name: r'CrawlQuantitylValueEntity',
+  id: -5197794866870597439,
   properties: {
     r'featureQuantityId': PropertySchema(
       id: 0,
@@ -1302,14 +1304,14 @@ const CrwaQuantitylValueEntitySchema = Schema(
       type: IsarType.long,
     )
   },
-  estimateSize: _crwaQuantitylValueEntityEstimateSize,
-  serialize: _crwaQuantitylValueEntitySerialize,
-  deserialize: _crwaQuantitylValueEntityDeserialize,
-  deserializeProp: _crwaQuantitylValueEntityDeserializeProp,
+  estimateSize: _crawlQuantitylValueEntityEstimateSize,
+  serialize: _crawlQuantitylValueEntitySerialize,
+  deserialize: _crawlQuantitylValueEntityDeserialize,
+  deserializeProp: _crawlQuantitylValueEntityDeserializeProp,
 );
 
-int _crwaQuantitylValueEntityEstimateSize(
-  CrwaQuantitylValueEntity object,
+int _crawlQuantitylValueEntityEstimateSize(
+  CrawlQuantitylValueEntity object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -1317,8 +1319,8 @@ int _crwaQuantitylValueEntityEstimateSize(
   return bytesCount;
 }
 
-void _crwaQuantitylValueEntitySerialize(
-  CrwaQuantitylValueEntity object,
+void _crawlQuantitylValueEntitySerialize(
+  CrawlQuantitylValueEntity object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -1328,13 +1330,13 @@ void _crwaQuantitylValueEntitySerialize(
   writer.writeLong(offsets[2], object.value);
 }
 
-CrwaQuantitylValueEntity _crwaQuantitylValueEntityDeserialize(
+CrawlQuantitylValueEntity _crawlQuantitylValueEntityDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = CrwaQuantitylValueEntity(
+  final object = CrawlQuantitylValueEntity(
     featureQuantityId: reader.readLongOrNull(offsets[0]),
     id: reader.readLongOrNull(offsets[1]),
     value: reader.readLongOrNull(offsets[2]),
@@ -1342,7 +1344,7 @@ CrwaQuantitylValueEntity _crwaQuantitylValueEntityDeserialize(
   return object;
 }
 
-P _crwaQuantitylValueEntityDeserializeProp<P>(
+P _crawlQuantitylValueEntityDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -1360,9 +1362,9 @@ P _crwaQuantitylValueEntityDeserializeProp<P>(
   }
 }
 
-extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
-    CrwaQuantitylValueEntity, CrwaQuantitylValueEntity, QFilterCondition> {
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+extension CrawlQuantitylValueEntityQueryFilter on QueryBuilder<
+    CrawlQuantitylValueEntity, CrawlQuantitylValueEntity, QFilterCondition> {
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> featureQuantityIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1371,7 +1373,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> featureQuantityIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -1380,7 +1382,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> featureQuantityIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1390,7 +1392,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> featureQuantityIdGreaterThan(
     int? value, {
     bool include = false,
@@ -1404,7 +1406,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> featureQuantityIdLessThan(
     int? value, {
     bool include = false,
@@ -1418,7 +1420,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> featureQuantityIdBetween(
     int? lower,
     int? upper, {
@@ -1436,7 +1438,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1445,7 +1447,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> idIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -1454,7 +1456,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> idEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1464,7 +1466,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> idGreaterThan(
     int? value, {
     bool include = false,
@@ -1478,7 +1480,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> idLessThan(
     int? value, {
     bool include = false,
@@ -1492,7 +1494,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> idBetween(
     int? lower,
     int? upper, {
@@ -1510,7 +1512,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> valueIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1519,7 +1521,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> valueIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -1528,7 +1530,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> valueEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1538,7 +1540,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> valueGreaterThan(
     int? value, {
     bool include = false,
@@ -1552,7 +1554,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> valueLessThan(
     int? value, {
     bool include = false,
@@ -1566,7 +1568,7 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
     });
   }
 
-  QueryBuilder<CrwaQuantitylValueEntity, CrwaQuantitylValueEntity,
+  QueryBuilder<CrawlQuantitylValueEntity, CrawlQuantitylValueEntity,
       QAfterFilterCondition> valueBetween(
     int? lower,
     int? upper, {
@@ -1585,5 +1587,5 @@ extension CrwaQuantitylValueEntityQueryFilter on QueryBuilder<
   }
 }
 
-extension CrwaQuantitylValueEntityQueryObject on QueryBuilder<
-    CrwaQuantitylValueEntity, CrwaQuantitylValueEntity, QFilterCondition> {}
+extension CrawlQuantitylValueEntityQueryObject on QueryBuilder<
+    CrawlQuantitylValueEntity, CrawlQuantitylValueEntity, QFilterCondition> {}

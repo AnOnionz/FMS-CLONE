@@ -29,7 +29,7 @@ final class Database {
     });
   }
 
-  void deleteCollection<T>() {
+  void clearCollection<T>() {
     _isar?.writeTxnSync(() {
       _isar?.collection<T>().clearSync();
     });

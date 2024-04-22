@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
+import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -9,14 +10,19 @@ import 'package:fms/core/usecase/either.dart';
 import 'package:fms/features/attendance/data/datasources/attendance_remote_datasource.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/authentication/data/datasources/auth_local_data_source.dart';
+import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/general/data/datasource/general_local_datasource.dart';
 import 'package:fms/features/general/data/datasource/general_remote_datasource.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/domain/repository/general_repository.dart';
+import 'package:fms/features/note/domain/entities/note_entity.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
-class GeneralRepository extends Repository implements IGeneralRepository {
+class GeneralRepository extends Repository
+    with LocalDatasource
+    implements IGeneralRepository {
   GeneralEntity? general;
   final AttendanceRemoteDataSource _attendanceRemote;
   final GeneralRemoteDatasorce _remote;
@@ -35,6 +41,9 @@ class GeneralRepository extends Repository implements IGeneralRepository {
     final time = await Modular.get<NetworkTimeService>().ntpDateTime();
     final dateNow = time.dMy();
     if (dateNow.isAfter(localGeneral.createdDate)) {
+      db.clearCollection<PhotoEntity>();
+      db.clearCollection<NoteEntity>();
+      db.clearCollection<CrawlQuantityEntity>();
       return Right(null);
     }
     general = localGeneral;

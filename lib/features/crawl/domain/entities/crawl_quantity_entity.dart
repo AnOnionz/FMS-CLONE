@@ -7,25 +7,25 @@ import 'package:isar/isar.dart';
 part 'crawl_quantity_entity.g.dart';
 
 @collection
-class CrwalQuantityEntity {
+class CrawlQuantityEntity {
   Id get isarId => fastHash(dataUuid);
   final int? id;
   final String dataUuid;
   final int? featureId;
   final int? attendanceId;
   final DateTime dataTimestamp;
-  final List<CrwaQuantitylValueEntity> values;
+  final List<CrawlQuantitylValueEntity> values;
   @Enumerated(EnumType.name)
   final SyncStatus status;
 
-  CrwalQuantityEntity(
+  CrawlQuantityEntity(
       {required this.id,
       required this.dataUuid,
       this.featureId,
       this.attendanceId,
       required this.dataTimestamp,
       required this.values,
-      this.status = SyncStatus.noSynced});
+      this.status = SyncStatus.isNoSynced});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -35,14 +35,14 @@ class CrwalQuantityEntity {
     };
   }
 
-  factory CrwalQuantityEntity.fromMap(Map<String, dynamic> map) {
-    return CrwalQuantityEntity(
+  factory CrawlQuantityEntity.fromMap(Map<String, dynamic> map) {
+    return CrawlQuantityEntity(
         id: map['id'] != null ? map['id'] as int : null,
         dataUuid: map['dataUuid'] as String,
         dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
-        values: List<CrwaQuantitylValueEntity>.from(
-          (map['values'] as List<int>).map<CrwaQuantitylValueEntity>(
-            (x) => CrwaQuantitylValueEntity.fromMap(x as Map<String, dynamic>),
+        values: List<CrawlQuantitylValueEntity>.from(
+          (map['values'] as List<int>).map<CrawlQuantitylValueEntity>(
+            (x) => CrawlQuantitylValueEntity.fromMap(x as Map<String, dynamic>),
           ),
         ),
         status: SyncStatus.synced);
@@ -50,17 +50,17 @@ class CrwalQuantityEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory CrwalQuantityEntity.fromJson(String source) =>
-      CrwalQuantityEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory CrawlQuantityEntity.fromJson(String source) =>
+      CrawlQuantityEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  CrwalQuantityEntity copyWith({
+  CrawlQuantityEntity copyWith({
     int? id,
-    List<CrwaQuantitylValueEntity>? values,
+    List<CrawlQuantitylValueEntity>? values,
     int? featureId,
     int? attendanceId,
     SyncStatus? status,
   }) {
-    return CrwalQuantityEntity(
+    return CrawlQuantityEntity(
       id: id ?? this.id,
       dataUuid: dataUuid,
       dataTimestamp: dataTimestamp,
@@ -78,12 +78,12 @@ class CrwalQuantityEntity {
 }
 
 @embedded
-class CrwaQuantitylValueEntity {
+class CrawlQuantitylValueEntity {
   int? id;
   int? featureQuantityId;
   int? value;
 
-  CrwaQuantitylValueEntity({
+  CrawlQuantitylValueEntity({
     this.id,
     this.featureQuantityId,
     this.value,
@@ -96,8 +96,8 @@ class CrwaQuantitylValueEntity {
     };
   }
 
-  factory CrwaQuantitylValueEntity.fromMap(Map<String, dynamic> map) {
-    return CrwaQuantitylValueEntity(
+  factory CrawlQuantitylValueEntity.fromMap(Map<String, dynamic> map) {
+    return CrawlQuantitylValueEntity(
       id: map['id'] != null ? map['id'] as int : null,
       featureQuantityId: map['featureQuantityId'] != null
           ? map['featureQuantityId'] as int
@@ -108,8 +108,8 @@ class CrwaQuantitylValueEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory CrwaQuantitylValueEntity.fromJson(String source) =>
-      CrwaQuantitylValueEntity.fromMap(
+  factory CrawlQuantitylValueEntity.fromJson(String source) =>
+      CrawlQuantitylValueEntity.fromMap(
           json.decode(source) as Map<String, dynamic>);
 
   @override

@@ -33,7 +33,9 @@ class _ReportPageState extends State<ReportPage> {
 
   bool get isActive => reports.values.any((photos) =>
       photos.isNotEmpty &&
-      photos.any((photo) => photo.status == SyncStatus.noSynced));
+      photos.any((photo) =>
+          photo.status == SyncStatus.isNoSynced ||
+          photo.status == SyncStatus.isDeleted));
 
   @override
   void initState() {
@@ -105,9 +107,10 @@ class _ReportPageState extends State<ReportPage> {
                                     setState(() {});
                                   },
                                   onDeleted: (image) {
-                                    reports[photoItem.id!]!.removeWhere(
-                                        (element) =>
+                                    final photo = reports[photoItem.id!]!
+                                        .firstWhere((element) =>
                                             element.dataUuid == image.uuid);
+                                    photo.status = SyncStatus.isDeleted;
                                     setState(() {});
                                   },
                                   isWatermark: photoItem.isWatermarkRequired!,

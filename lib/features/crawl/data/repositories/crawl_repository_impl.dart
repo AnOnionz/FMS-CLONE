@@ -18,8 +18,8 @@ class CrawlRepositoryImpl extends Repository
 
   CrawlRepositoryImpl(this._local, this._remote);
   @override
-  Future<Result<CrwalQuantityEntity>> crawlQuantities({
-    required CrwalQuantityEntity quantities,
+  Future<Result<CrawlQuantityEntity>> crawlQuantities({
+    required CrawlQuantityEntity quantities,
     required FeatureEntity feature,
   }) {
     return todo(
@@ -41,7 +41,7 @@ class CrawlRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<CrwalQuantityEntity?>> getQuantities(
+  Future<Result<CrawlQuantityEntity?>> getQuantities(
       {required FeatureEntity feature}) async {
     return todo(() async {
       final localCrawlQuantities = await _local.getQuantities();
@@ -68,7 +68,7 @@ class CrawlRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<List<CrwalQuantityEntity>>> noSyncedData() async {
+  Future<Result<List<CrawlQuantityEntity>>> noSyncedData() async {
     return todo(() async {
       final quantities = await _local.getQuantitiessNoSynced();
       return Right(quantities);

@@ -15,5 +15,5 @@ abstract class NoteRepository {
   Future<Result<FeatureEntity?>> getNotesNotCompleted(
       {required FeatureEntity feature});
   Future<Result<Map<int, List<NoteEntity>>>> noSyncedData();
-  Future<void> synchronized();
+  Future<void> synchronized(FeatureEntity feature);
 }

@@ -6,6 +6,7 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
 import '../../../../core/constant/colors.dart';
+import '../../../../core/constant/enum.dart';
 import '../../../images/presentation/widgets/images.dart';
 import '../../../report/domain/entities/photo_entity.dart';
 import '../../domain/entities/note_entity.dart';
@@ -69,14 +70,13 @@ class _NoteItemState extends State<NoteItem> {
                   ),
                 ]),
           ),
-          if (widget.entity.isTextFieldRequired!)
-            Padding(
-              padding: EdgeInsets.only(top: 16.h),
-              child: NoteTextField(
-                controller: _controller,
-                onChanged: widget.onChangeTextfield,
-              ),
+          Padding(
+            padding: EdgeInsets.only(top: 16.h),
+            child: NoteTextField(
+              controller: _controller,
+              onChanged: widget.onChangeTextfield,
             ),
+          ),
           if (widget.entity.minimumImages! > 0)
             Padding(
                 padding: EdgeInsets.only(top: 20.h),
@@ -89,6 +89,8 @@ class _NoteItemState extends State<NoteItem> {
                         widget.entity.isWatermarkRequired ?? false,
                   ),
                   images: widget.photos
+                      .where(
+                          (element) => element.status != SyncStatus.isDeleted)
                       .map((e) => ImageDynamic(
                           id: e.id,
                           uuid: e.dataUuid,

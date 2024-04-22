@@ -161,7 +161,7 @@ PhotoEntity _photoEntityDeserialize(
     path: reader.readStringOrNull(offsets[7]),
     status:
         _PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offsets[8])] ??
-            SyncStatus.noSynced,
+            SyncStatus.isNoSynced,
   );
   return object;
 }
@@ -195,19 +195,21 @@ P _photoEntityDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 8:
       return (_PhotoEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
-          SyncStatus.noSynced) as P;
+          SyncStatus.isNoSynced) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
 const _PhotoEntitystatusEnumValueMap = {
-  r'noSynced': r'noSynced',
   r'synced': r'synced',
+  r'isNoSynced': r'isNoSynced',
+  r'isDeleted': r'isDeleted',
 };
 const _PhotoEntitystatusValueEnumMap = {
-  r'noSynced': SyncStatus.noSynced,
   r'synced': SyncStatus.synced,
+  r'isNoSynced': SyncStatus.isNoSynced,
+  r'isDeleted': SyncStatus.isDeleted,
 };
 
 Id _photoEntityGetId(PhotoEntity object) {

@@ -13,7 +13,6 @@ class NoteTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       maxLines: 4,
-      cursorHeight: 16.sp,
       onChanged: onChanged,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),

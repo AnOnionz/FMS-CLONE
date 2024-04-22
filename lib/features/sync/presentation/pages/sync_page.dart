@@ -40,17 +40,11 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
           icon: SvgPicture.asset(AppIcons.failure),
           message: state.failure.message,
           btnText: 'Thử lại',
-          onPressed: () => syncProgressBloc.add(SyncProgressStart()),
+          onPressed: () => syncProgressBloc.add(SyncProgressSilent()),
         );
       }
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    syncProgressBloc.close();
-    super.dispose();
   }
 
   List<FeatureEntity> _expectationSyncTask(
@@ -71,7 +65,6 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
       body: BlocBuilder<SyncBloc, SyncState>(
         bloc: syncBloc,
         builder: (context, state) {
-          Fx.log(state.status);
           final isCompleted = state.status == SyncStatus.synced;
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,7 +124,7 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
                       onPressed: isCompleted
                           ? null
                           : () async {
-                              syncProgressBloc.add(SyncProgressStart());
+                              syncProgressBloc.add(SyncProgressSilent());
                             },
                       name: 'Đồng bộ',
                       color: AppColors.orange,

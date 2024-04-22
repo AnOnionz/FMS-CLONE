@@ -5,6 +5,8 @@ import 'package:fms/core/repository/repository.dart';
 
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/images/data/datasource/delete_image_local_remote_datasource.dart';
+import 'package:fms/features/images/data/datasource/delete_image_remote_datasource.dart';
 import 'package:fms/features/note/data/datasources/note_local_datasource.dart';
 
 import 'package:fms/features/note/domain/entities/note_entity.dart';
@@ -20,8 +22,11 @@ class NoteRepositoryImpl extends Repository
     implements NoteRepository {
   final NoteLocalDataSource _local;
   final NoteRemoteDataSource _remote;
+  final DeletePhotoRemoteDataSource _remotePhoto;
+  final DeletePhotoLocalDataSource _localPhoto;
 
-  NoteRepositoryImpl(this._local, this._remote);
+  NoteRepositoryImpl(
+      this._local, this._remote, this._remotePhoto, this._localPhoto);
   @override
   Future<Result<(List<NoteEntity> notes, List<PhotoEntity> photos)>> allNotes(
       {required FeatureEntity feature}) async {
@@ -55,7 +60,7 @@ class NoteRepositoryImpl extends Repository
         photos.forEach((photo) {
           photo.attendanceId = general.attendance!.id;
           photo.featureId = feature.id;
-          _local.cachePhotosToLocal(photo);
+          _local.cachePhotoToLocal(photo);
         });
 
         notes.forEach((note) {
@@ -70,10 +75,18 @@ class NoteRepositoryImpl extends Repository
         });
 
         await Future.forEach(notes, (note) async {
-          if (note.status == SyncStatus.noSynced) {
+          if (note.status == SyncStatus.isNoSynced) {
             if (note.photos.isNotEmpty) {
               await Future.forEach(note.photos, (photo) async {
-                if (photo.status == SyncStatus.noSynced) {
+                if (photo.status == SyncStatus.isDeleted) {
+                  if (photo.id != null) {
+                    await _remotePhoto.deleteNotePhoto(
+                        general: general, feature: feature, id: photo.id!);
+                  }
+
+                  _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
+                }
+                if (photo.status == SyncStatus.isNoSynced) {
                   final report =
                       await _remote.createPhoto(photo: photo, general: general);
                   if (report != null) {
@@ -81,7 +94,7 @@ class NoteRepositoryImpl extends Repository
                         id: report.id,
                         image: report.image,
                         status: SyncStatus.synced);
-                    _local.cachePhotosToLocal(photo);
+                    _local.cachePhotoToLocal(photo);
                   }
                 }
               });
@@ -121,7 +134,11 @@ class NoteRepositoryImpl extends Repository
               note.value == null &&
               featureMultimedia.isTextFieldRequired!;
           final bool isPhotoEmpty = note != null &&
-              note.photos.length < featureMultimedia.minimumImages!;
+              note.photos
+                      .where(
+                          (element) => element.status != SyncStatus.isDeleted)
+                      .length <
+                  featureMultimedia.minimumImages!;
 
           if (isTextEmpty || isPhotoEmpty) {
             featureMultimedias.add(featureMultimedia);
@@ -154,13 +171,21 @@ class NoteRepositoryImpl extends Repository
   }
 
   @override
-  Future<void> synchronized() async {
-    final notesNoSynced = await _local.getNotesNoSynced();
+  Future<void> synchronized(FeatureEntity feature) async {
+    final notesNoSynced = await _local.getNotesNoSynced(feature);
 
     await Future.forEach(notesNoSynced, (note) async {
       if (note.photos.isNotEmpty) {
         await Future.forEach(note.photos, (photo) async {
-          if (photo.status == SyncStatus.noSynced) {
+          if (photo.status == SyncStatus.isDeleted) {
+            if (photo.id != null) {
+              await _remotePhoto.deleteNotePhoto(
+                  general: general, feature: feature, id: photo.id!);
+            }
+
+            _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
+          }
+          if (photo.status == SyncStatus.isNoSynced) {
             final report =
                 await _remote.createPhoto(photo: photo, general: general);
             if (report != null) {
@@ -168,7 +193,7 @@ class NoteRepositoryImpl extends Repository
                   id: report.id,
                   image: report.image,
                   status: SyncStatus.synced);
-              _local.cachePhotosToLocal(photo);
+              _local.cachePhotoToLocal(photo);
             }
           }
         });

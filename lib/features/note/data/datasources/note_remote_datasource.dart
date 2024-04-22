@@ -1,3 +1,4 @@
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
@@ -39,6 +40,7 @@ class NoteRemoteDataSource extends ImagesRemoteDataSource
   Future<NoteEntity?> createNote(
       {required NoteEntity note, required GeneralEntity general}) async {
     final formData = note.toMap();
+
     final _resp = await dio.post(
         path:
             '/app/attendances/${general.attendance!.id}/features/${note.featureId}/multimedias',

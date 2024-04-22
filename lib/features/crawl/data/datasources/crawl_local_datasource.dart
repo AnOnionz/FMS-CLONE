@@ -8,35 +8,35 @@ import '../../../../core/services/network_time/network_time_service.dart';
 import '../../../general/presentation/page/mixin_general.dart';
 
 abstract class ICrawlLocalDatasource {
-  void cacheQuantitiesToLocal(CrwalQuantityEntity entity);
-  Future<List<CrwalQuantityEntity>> getQuantities();
-  Future<List<CrwalQuantityEntity>> getQuantitiessNoSynced();
+  void cacheQuantitiesToLocal(CrawlQuantityEntity entity);
+  Future<List<CrawlQuantityEntity>> getQuantities();
+  Future<List<CrawlQuantityEntity>> getQuantitiessNoSynced();
 }
 
 class CrawlLocalDatasource
     with LocalDatasource, GeneralDataMixin
     implements ICrawlLocalDatasource {
   @override
-  void cacheQuantitiesToLocal(CrwalQuantityEntity entity) {
-    db.addObject<CrwalQuantityEntity>(entity);
+  void cacheQuantitiesToLocal(CrawlQuantityEntity entity) {
+    db.addObject<CrawlQuantityEntity>(entity);
   }
 
   @override
-  Future<List<CrwalQuantityEntity>> getQuantities() async {
+  Future<List<CrawlQuantityEntity>> getQuantities() async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
-    return db.filter<CrwalQuantityEntity>((filter) => filter
+    return db.filter<CrawlQuantityEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance!.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .build());
   }
 
   @override
-  Future<List<CrwalQuantityEntity>> getQuantitiessNoSynced() async {
+  Future<List<CrawlQuantityEntity>> getQuantitiessNoSynced() async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
-    return db.filter<CrwalQuantityEntity>((filter) => filter
+    return db.filter<CrawlQuantityEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance!.id)
         .dataTimestampBetween(time.yesterday, time.today)
-        .statusEqualTo(SyncStatus.noSynced)
+        .statusEqualTo(SyncStatus.isNoSynced)
         .build());
   }
 }

@@ -6,18 +6,18 @@ import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/crawl_quantity_entity.dart';
 
 abstract class ICrawlRemoteDatasource {
-  Future<CrwalQuantityEntity?> crwalQuantities(
-      {required CrwalQuantityEntity quantities,
+  Future<CrawlQuantityEntity?> crwalQuantities(
+      {required CrawlQuantityEntity quantities,
       required GeneralEntity general});
-  Future<CrwalQuantityEntity?> getQuantities(
+  Future<CrawlQuantityEntity?> getQuantities(
       {required FeatureEntity feature, required GeneralEntity general});
 }
 
 class CrawlRemoteDatasource extends RemoteDatasource
     implements ICrawlRemoteDatasource {
   @override
-  Future<CrwalQuantityEntity?> crwalQuantities(
-      {required CrwalQuantityEntity quantities,
+  Future<CrawlQuantityEntity?> crwalQuantities(
+      {required CrawlQuantityEntity quantities,
       required GeneralEntity general}) async {
     final formData = quantities.toMap();
 
@@ -25,20 +25,20 @@ class CrawlRemoteDatasource extends RemoteDatasource
         path:
             '/app/attendances/${general.attendance!.id}/features/${quantities.featureId}/quantities',
         data: formData);
-    return parseJson<CrwalQuantityEntity>(
-        (json: _resp, fromJson: CrwalQuantityEntity.fromMap));
+    return parseJson<CrawlQuantityEntity>(
+        (json: _resp, fromJson: CrawlQuantityEntity.fromMap));
   }
 
   @override
-  Future<CrwalQuantityEntity?> getQuantities(
+  Future<CrawlQuantityEntity?> getQuantities(
       {required FeatureEntity feature, required GeneralEntity general}) async {
     final _resp = await dio.get(
         path:
             '/app/attendances/${general.attendance!.id}/features/${feature.id}/quantities');
 
-    return parseJson<CrwalQuantityEntity>((
+    return parseJson<CrawlQuantityEntity>((
       json: _resp,
-      fromJson: CrwalQuantityEntity.fromMap,
+      fromJson: CrawlQuantityEntity.fromMap,
     ));
   }
 }

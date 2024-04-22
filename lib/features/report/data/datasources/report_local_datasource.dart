@@ -12,6 +12,7 @@ abstract class IReportLocalDataSource {
   void cachePhotoToLocal(PhotoEntity photo);
   void cachePhotosToLocal(List<PhotoEntity> photos);
   Future<List<PhotoEntity>> getPhotos();
+  Future<List<PhotoEntity>> getPhotosNotSynced(FeatureEntity feature);
   Future<List<PhotoEntity>> getPhotosByFeature(FeatureEntity feature);
 }
 
@@ -21,6 +22,16 @@ class ReportLocalDataSource
   @override
   void cachePhotoToLocal(PhotoEntity photo) {
     db.addObject<PhotoEntity>(photo);
+  }
+
+  @override
+  Future<List<PhotoEntity>> getPhotos() async {
+    final time = await Modular.get<NetworkTimeService>().betweenToday();
+    return db.filter<PhotoEntity>((filter) => filter
+        .attendanceIdEqualTo(general.attendance!.id)
+        .dataTimestampBetween(time.yesterday, time.today)
+        .sortByDataTimestamp()
+        .build());
   }
 
   @override
@@ -35,12 +46,14 @@ class ReportLocalDataSource
   }
 
   @override
-  Future<List<PhotoEntity>> getPhotos() async {
+  Future<List<PhotoEntity>> getPhotosNotSynced(FeatureEntity feature) async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
 
     return db.filter<PhotoEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance?.id)
+        .featureIdEqualTo(feature.id)
         .dataTimestampBetween(time.yesterday, time.today)
+        .statusStartsWith('is')
         .build());
   }
 

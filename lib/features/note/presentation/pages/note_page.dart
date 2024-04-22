@@ -44,13 +44,15 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
   Completer<bool> _completer = Completer();
 
-  bool get isNoteActive => notes.values.any((note) =>
-      !note.value.isEmptyOrNull && note.status == SyncStatus.noSynced);
-  bool get isPhotoActive => photos.values.any((notePhotos) =>
-      notePhotos.isNotEmpty &&
-      notePhotos.any((photo) => photo.status == SyncStatus.noSynced));
+  bool get isNoteActive =>
+      notes.values.every((note) => switch (note.isTextFieldRequired) {
+            true => !note.value.isEmptyOrNull,
+            false => true
+          });
 
-  bool get isActive => isNoteActive || isPhotoActive;
+  bool get isActive =>
+      isNoteActive &&
+      notes.values.any((element) => element.status == SyncStatus.isNoSynced);
 
   @override
   void initState() {
@@ -72,12 +74,15 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       final note = data.$1.firstWhereOrNull(
           (element) => element.featureMultimediaId == featureMultimedia.id!);
       setState(() {
-        notes[featureMultimedia.id!] = note ??
-            NoteEntity(
-              dataUuid: Uuid().v1(),
-              dataTimestamp: timestamp,
-              featureMultimediaId: featureMultimedia.id!,
-            );
+        notes[featureMultimedia.id!] = note != null
+            ? note.copyWith(
+                isTextFieldRequired: featureMultimedia.isTextFieldRequired!)
+            : NoteEntity(
+                dataUuid: Uuid().v1(),
+                dataTimestamp: timestamp,
+                isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
+                featureMultimediaId: featureMultimedia.id!,
+              );
       });
     });
     final photoGroup = data.$2.groupBy<int, PhotoEntity>((photo) {
@@ -99,7 +104,7 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: DefaultAppBar(title: widget.entity.feature.name!),
         body: Padding(
           padding: EdgeInsets.only(top: 26.h),
@@ -139,31 +144,36 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                                       notes[featureMultimedia.id!] =
                                           noteItem.copyWith(
                                               value: value,
-                                              status: SyncStatus.noSynced);
+                                              status: SyncStatus.isNoSynced);
                                       setState(() {});
                                     },
                                     onPickImage: (file) async {
-                                      photos[featureMultimedia.id!]!.add(
-                                          PhotoEntity(
-                                              dataUuid: Uuid().v1(),
-                                              featureId:
-                                                  widget.entity.feature.id,
-                                              attendanceId: widget.entity
-                                                  .general.attendance!.id,
-                                              dataTimestamp: file.dataTimestamp,
-                                              path: file.path,
-                                              featurePhotoId:
-                                                  featureMultimedia.id!,
-                                              status: SyncStatus.noSynced));
+                                      photos[featureMultimedia.id!]!
+                                          .add(PhotoEntity(
+                                        dataUuid: Uuid().v1(),
+                                        featureId: widget.entity.feature.id,
+                                        attendanceId: widget
+                                            .entity.general.attendance!.id,
+                                        dataTimestamp: file.dataTimestamp,
+                                        path: file.path,
+                                        featurePhotoId: featureMultimedia.id!,
+                                      ));
                                       notes[featureMultimedia.id!] =
                                           noteItem.copyWith(
-                                              status: SyncStatus.noSynced);
+                                              status: SyncStatus.isNoSynced);
                                       setState(() {});
                                     },
                                     onDeleteImage: (image) {
-                                      photos[featureMultimedia.id!]!
-                                          .removeWhere((element) =>
-                                              element.dataUuid == image.uuid);
+                                      final photo =
+                                          photos[featureMultimedia.id!]!
+                                              .firstWhere((element) =>
+                                                  element.dataUuid ==
+                                                  image.uuid);
+
+                                      photo.status = SyncStatus.isDeleted;
+                                      notes[featureMultimedia.id!] =
+                                          noteItem.copyWith(
+                                              status: SyncStatus.isNoSynced);
                                       setState(() {});
                                     },
                                     isWatermark:

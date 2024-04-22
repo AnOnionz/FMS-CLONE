@@ -18,11 +18,10 @@ class DeletePhotoParams {
   final FeatureEntity feature;
   final int id;
   final String uuid;
-  String? noteUuid;
 
-  DeletePhotoParams(
-      {required this.feature,
-      required this.id,
-      required this.uuid,
-      this.noteUuid});
+  DeletePhotoParams({
+    required this.feature,
+    required this.id,
+    required this.uuid,
+  });
 }

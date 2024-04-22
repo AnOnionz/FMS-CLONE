@@ -52,6 +52,7 @@ class _BoothSelectionPageState extends State<BoothSelectionPage> {
       if (state is GeneralSuccess) {
         OverlayManager.hide();
         _syncBloc.add(SyncStarted());
+        _syncBloc.add(SyncAddListener());
         context.navigate(HomeModule.route);
       }
       if (state is GeneralFailure) {

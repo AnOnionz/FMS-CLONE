@@ -17,7 +17,7 @@ class SyncModule extends Module {
   @override
   void exportedBinds(Injector i) {
     i.addSingleton(SyncBloc.new);
-    i.add(SyncProgressBloc.new);
+    i.addSingleton(SyncProgressBloc.new);
   }
 
   @override
