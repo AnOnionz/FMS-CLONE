@@ -1,5 +1,4 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';

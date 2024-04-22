@@ -73,43 +73,8 @@ class NoteRepositoryImpl extends Repository
           _local.cacheNoteToLocal(note);
           db.writeTxnSync(() => note.photos.saveSync());
         });
+        await _uploadNotes(notes: notes, feature: feature);
 
-        await Future.forEach(notes, (note) async {
-          if (note.status == SyncStatus.isNoSynced) {
-            if (note.photos.isNotEmpty) {
-              await Future.forEach(note.photos, (photo) async {
-                if (photo.status == SyncStatus.isDeleted) {
-                  if (photo.id != null) {
-                    await _remotePhoto.deleteNotePhoto(
-                        general: general, feature: feature, id: photo.id!);
-                  }
-
-                  _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
-                }
-                if (photo.status == SyncStatus.isNoSynced) {
-                  final report =
-                      await _remote.createPhoto(photo: photo, general: general);
-                  if (report != null) {
-                    photo = photo.copyWith(
-                        id: report.id,
-                        image: report.image,
-                        status: SyncStatus.synced);
-                    _local.cachePhotoToLocal(photo);
-                  }
-                }
-              });
-            }
-
-            final report =
-                await _remote.createNote(note: note, general: general);
-
-            if (report != null) {
-              note = note.copyWith(id: report.id, status: SyncStatus.synced);
-
-              _local.cacheNoteToLocal(note);
-            }
-          }
-        });
         return Right(Never);
       },
     );
@@ -174,35 +139,41 @@ class NoteRepositoryImpl extends Repository
   Future<void> synchronized(FeatureEntity feature) async {
     final notesNoSynced = await _local.getNotesNoSynced(feature);
 
-    await Future.forEach(notesNoSynced, (note) async {
-      if (note.photos.isNotEmpty) {
-        await Future.forEach(note.photos, (photo) async {
-          if (photo.status == SyncStatus.isDeleted) {
-            if (photo.id != null) {
-              await _remotePhoto.deleteNotePhoto(
-                  general: general, feature: feature, id: photo.id!);
-            }
+    await _uploadNotes(notes: notesNoSynced, feature: feature);
+  }
 
-            _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
-          }
-          if (photo.status == SyncStatus.isNoSynced) {
-            final report =
-                await _remote.createPhoto(photo: photo, general: general);
-            if (report != null) {
-              photo = photo.copyWith(
-                  id: report.id,
-                  image: report.image,
-                  status: SyncStatus.synced);
-              _local.cachePhotoToLocal(photo);
+  Future<void> _uploadNotes(
+      {required List<NoteEntity> notes, required FeatureEntity feature}) async {
+    await Future.forEach(notes, (note) async {
+      if (note.status == SyncStatus.isNoSynced) {
+        if (note.photos.isNotEmpty) {
+          await Future.forEach(note.photos, (photo) async {
+            if (photo.status == SyncStatus.isDeleted) {
+              if (photo.id != null) {
+                await _remotePhoto.deleteNotePhoto(
+                    general: general, feature: feature, id: photo.id!);
+              }
+              _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
             }
-          }
-        });
-      }
+            if (photo.status == SyncStatus.isNoSynced) {
+              final report =
+                  await _remote.createPhoto(photo: photo, general: general);
+              if (report != null) {
+                photo = photo.copyWith(
+                    id: report.id,
+                    image: report.image,
+                    status: SyncStatus.synced);
+                _local.cachePhotoToLocal(photo);
+              }
+            }
+          });
+        }
 
-      final report = await _remote.createNote(note: note, general: general);
-      if (report != null) {
-        note = note.copyWith(id: report.id, status: SyncStatus.synced);
-        _local.cacheNoteToLocal(note);
+        final report = await _remote.createNote(note: note, general: general);
+        if (report != null) {
+          note = note.copyWith(id: report.id, status: SyncStatus.synced);
+          _local.cacheNoteToLocal(note);
+        }
       }
     });
   }

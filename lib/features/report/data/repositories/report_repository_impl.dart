@@ -50,29 +50,8 @@ class ReportRepositoryImpl extends Repository
           element.attendanceId = general.attendance!.id;
           element.featureId = feature.id;
         });
+        await _uploadReport(photos: photos, feature: feature);
 
-        await Future.forEach(photos, (photo) async {
-          if (photo.status == SyncStatus.isDeleted) {
-            if (photo.id != null) {
-              await _remotePhoto.deletePhoto(
-                  id: photo.id!, general: general, feature: feature);
-            }
-
-            _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
-          }
-          if (photo.status == SyncStatus.isNoSynced) {
-            final report =
-                await _remote.createPhoto(photo: photo, general: general);
-            if (report != null) {
-              photo = photo.copyWith(
-                  id: report.id,
-                  image: report.image,
-                  status: SyncStatus.synced);
-
-              _local.cachePhotoToLocal(photo);
-            }
-          }
-        });
         return Right(Never);
       },
       onFailure: (failure) {
@@ -137,8 +116,13 @@ class ReportRepositoryImpl extends Repository
   @override
   Future<void> synchronized(FeatureEntity feature) async {
     final photosNoSynced = await _local.getPhotosNotSynced(feature);
+    await _uploadReport(photos: photosNoSynced, feature: feature);
+  }
 
-    await Future.forEach(photosNoSynced, (photo) async {
+  Future<void> _uploadReport(
+      {required List<PhotoEntity> photos,
+      required FeatureEntity feature}) async {
+    await Future.forEach(photos, (photo) async {
       if (photo.status == SyncStatus.isDeleted) {
         if (photo.id != null) {
           await _remotePhoto.deletePhoto(

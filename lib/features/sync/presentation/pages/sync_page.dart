@@ -40,7 +40,7 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
           icon: SvgPicture.asset(AppIcons.failure),
           message: state.failure.message,
           btnText: 'Thử lại',
-          onPressed: () => syncProgressBloc.add(SyncProgressSilent()),
+          onPressed: () => syncProgressBloc.add(SyncProgressStart()),
         );
       }
     });
@@ -124,7 +124,7 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
                       onPressed: isCompleted
                           ? null
                           : () async {
-                              syncProgressBloc.add(SyncProgressSilent());
+                              syncProgressBloc.add(SyncProgressStart());
                             },
                       name: 'Đồng bộ',
                       color: AppColors.orange,
