@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/item_container.dart';
+import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/images.dart';
@@ -11,12 +12,18 @@ import '../../../../core/widgets/advanced_text_field.dart';
 import '../../../general/domain/entities/config_entity.dart';
 
 class CrawlItem extends StatefulWidget {
+  final FeatureEntity feature;
   final FeatureQuantity entity;
+  final CrawlQuantitylValueEntity quantityValue;
+  final void Function(String value) onChanged;
   final bool isLast;
   CrawlItem({
     super.key,
     required this.entity,
+    required this.feature,
+    required this.quantityValue,
     this.isLast = false,
+    required this.onChanged,
   });
 
   @override
@@ -24,7 +31,10 @@ class CrawlItem extends StatefulWidget {
 }
 
 class _CrawlItemState extends State<CrawlItem> {
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller = TextEditingController(
+      text: widget.quantityValue.value != null
+          ? widget.quantityValue.value.toString()
+          : null);
   bool get isItem => widget.entity.item != null;
 
   @override
@@ -62,6 +72,7 @@ class _CrawlItemState extends State<CrawlItem> {
           ),
           trailing: AdvancedTextField(
             controller: _controller,
+            onChanged: widget.onChanged,
             textInputAction:
                 widget.isLast ? TextInputAction.done : TextInputAction.next,
             unit: (isItem

@@ -8,11 +8,12 @@ import 'package:fms/features/sync/presentation/bloc/sync_progress_bloc.dart';
 import 'package:fms/features/sync/presentation/pages/sync_page.dart';
 
 import '../../routes/routes.dart';
+import '../crawl/crawl.module.dart';
 
 class SyncModule extends Module {
   static const String route = '/synchronization/';
   @override
-  List<Module> get imports => [ReportModule(), NoteModule()];
+  List<Module> get imports => [ReportModule(), NoteModule(), CrawlModule()];
 
   @override
   void exportedBinds(Injector i) {

@@ -19,7 +19,6 @@ import '../../../../core/styles/theme.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
-import '../../../general/domain/entities/config_entity.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../../../report/domain/entities/photo_entity.dart';
 import '../widgets/note_item.dart';
@@ -34,8 +33,6 @@ class NotePage extends StatefulWidget {
 
 class _NotePageState extends State<NotePage> with LocalDatasource {
   final networkTimeService = Modular.get<NetworkTimeService>();
-  List<FeatureMultimedia> get featureMultimedias =>
-      widget.entity.feature.featureMultimedias ?? [];
 
   final NoteCubit _cubit = Modular.get();
 
@@ -205,6 +202,7 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                 child: FlatButton(
                   onPressed: isActive
                       ? () {
+                          FocusManager.instance.primaryFocus?.unfocus();
                           _cubit.saveNotes(
                               notes: notes.values.toList(),
                               photos: photos.values

@@ -60,7 +60,11 @@ class ReportItem extends StatelessWidget {
               child: ListViewImages(
                 feature: feature,
                 imagePickerButton: ImagePickerWidget(
-                  enable: photos.length < entity.maximum!,
+                  enable: photos
+                          .where((element) =>
+                              element.status != SyncStatus.isDeleted)
+                          .length <
+                      entity.maximum!,
                   onChanged: onAdded,
                   isWatermarkRequired: isWatermark,
                   isWatermarking: isWatermarking,

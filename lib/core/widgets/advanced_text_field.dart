@@ -10,12 +10,14 @@ class AdvancedTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final String unit;
   final int maxLength;
+  final void Function(String value)? onChanged;
   const AdvancedTextField(
       {super.key,
       required this.controller,
       required this.unit,
       this.maxLength = 10,
-      this.textInputAction = TextInputAction.next});
+      this.textInputAction = TextInputAction.next,
+      this.onChanged});
 
   @override
   State<AdvancedTextField> createState() => _AdvancedTextFieldState();
@@ -53,6 +55,7 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      onChanged: widget.onChanged,
       focusNode: _focusNode,
       keyboardType: TextInputType.numberWithOptions(),
       cursorWidth: 0.54,

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,18 +104,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
   }
 
-  /// Starts the internet connection service.
-
   /// Callback function when an [AppStarted] event is emitted.
   Future<void> _onAppStarted(AppStarted event, Emitter<AppState> emit) async {
     emit(const AppLoading());
     _startInternetConnectionService();
     _startNetworkTimeService();
 
-    _syncSubscription = _syncBloc.stream.listen((syncState) {
+    _syncSubscription = _syncBloc.stream.listen((syncState) async {
       if (syncState.status == SyncStatus.isNoSynced) {
-        _syncProgressBloc.add(SyncProgressSilent(seconds: 30));
         _syncSubscription?.cancel();
+        await Future.delayed(
+          2.minutes,
+          () async => _syncProgressBloc.add(SyncProgressSilent()),
+        );
       }
     });
     _syncProgressBloc.stream.listen((state) {

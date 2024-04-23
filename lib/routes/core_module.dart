@@ -14,7 +14,7 @@ import '../core/utilities/bloc_obsever.dart';
 
 class CoreModule extends Module {
   @override
-  void binds(i) {
+  void exportedBinds(i) {
     i.addSingleton<DioClient>(DioClient.new);
     i.addSingleton<LocationService>(LocationService.new,
         config: listenConfig());

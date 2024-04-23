@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
@@ -32,6 +33,7 @@ class CrawlRepositoryImpl extends Repository
           quantities =
               quantities.copyWith(id: response.id, status: SyncStatus.synced);
         }
+        _local.cacheQuantitiesToLocal(quantities);
         return Right(quantities);
       },
       onFailure: (failure) {
@@ -44,7 +46,7 @@ class CrawlRepositoryImpl extends Repository
   Future<Result<CrawlQuantityEntity?>> getQuantities(
       {required FeatureEntity feature}) async {
     return todo(() async {
-      final localCrawlQuantities = await _local.getQuantities();
+      final localCrawlQuantities = await _local.getQuantitiesByFeature(feature);
       if (localCrawlQuantities.isNotEmpty) {
         return Right(localCrawlQuantities.last);
       }
@@ -58,7 +60,7 @@ class CrawlRepositoryImpl extends Repository
   Future<Result<FeatureEntity?>> getQuantitiesNotCompleted(
       {required FeatureEntity feature}) async {
     return todo(() async {
-      final quantities = await _local.getQuantities();
+      final quantities = await _local.getQuantitiesByFeature(feature);
       if (quantities.isEmpty) {
         return Right(feature);
       } else {
@@ -68,16 +70,25 @@ class CrawlRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<List<CrawlQuantityEntity>>> noSyncedData() async {
+  Future<Result<Map<int, List<CrawlQuantityEntity>>>> noSyncedData() async {
     return todo(() async {
-      final quantities = await _local.getQuantitiessNoSynced();
-      return Right(quantities);
+      final localPhotos = await _local.getQuantities();
+
+      final map = localPhotos.groupListsBy((element) => element.featureId!);
+      map.entries.forEach(
+        (element) {
+          element.value
+              .removeWhere((element) => element.status == SyncStatus.synced);
+        },
+      );
+
+      return Right(map);
     });
   }
 
   @override
-  Future<void> synchronized() async {
-    final quantitiesNoSynced = await _local.getQuantitiessNoSynced();
+  Future<void> synchronized(FeatureEntity feature) async {
+    final quantitiesNoSynced = await _local.getQuantitiessNoSynced(feature);
 
     await Future.forEach(quantitiesNoSynced, (quantities) async {
       final response = await _remote.crwalQuantities(

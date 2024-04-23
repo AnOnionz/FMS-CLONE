@@ -1,17 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/utilities/parser.dart';
+import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:isar/isar.dart';
 
 part 'crawl_quantity_entity.g.dart';
 
 @collection
-class CrawlQuantityEntity {
+class CrawlQuantityEntity extends DataEntity {
   Id get isarId => fastHash(dataUuid);
   final int? id;
   final String dataUuid;
+  @Index(unique: true, replace: true)
   final int? featureId;
+  @Index(unique: true, replace: true)
   final int? attendanceId;
   final DateTime dataTimestamp;
   final List<CrawlQuantitylValueEntity> values;
@@ -19,7 +23,7 @@ class CrawlQuantityEntity {
   final SyncStatus status;
 
   CrawlQuantityEntity(
-      {required this.id,
+      {this.id,
       required this.dataUuid,
       this.featureId,
       this.attendanceId,
@@ -31,7 +35,7 @@ class CrawlQuantityEntity {
     return <String, dynamic>{
       'dataUuid': dataUuid,
       'dataTimestamp': dataTimestamp.toUtc().toIso8601String(),
-      'values': values.map((x) => x.toMap()).toList(),
+      'values': values.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -41,7 +45,7 @@ class CrawlQuantityEntity {
         dataUuid: map['dataUuid'] as String,
         dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
         values: List<CrawlQuantitylValueEntity>.from(
-          (map['values'] as List<int>).map<CrawlQuantitylValueEntity>(
+          (map['values'] as List<dynamic>).map<CrawlQuantitylValueEntity>(
             (x) => CrawlQuantitylValueEntity.fromMap(x as Map<String, dynamic>),
           ),
         ),
@@ -73,7 +77,7 @@ class CrawlQuantityEntity {
 
   @override
   String toString() {
-    return 'CrwalQuantityEntity(id: $id, dataUuid: $dataUuid, featureId: $featureId, attendanceId: $attendanceId, dataTimestamp: $dataTimestamp, values: $values, status: $status)';
+    return 'CrawlQuantityEntity(id: $id, dataUuid: $dataUuid, featureId: $featureId, attendanceId: $attendanceId, dataTimestamp: $dataTimestamp, values: $values, status: $status)';
   }
 }
 

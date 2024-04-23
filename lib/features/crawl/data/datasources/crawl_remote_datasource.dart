@@ -1,6 +1,7 @@
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 
 import '../../../../core/data_source/remote_datasource.dart';
+import '../../../../core/mixins/common.dart';
 import '../../../../core/utilities/parser.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/crawl_quantity_entity.dart';
@@ -20,6 +21,7 @@ class CrawlRemoteDatasource extends RemoteDatasource
       {required CrawlQuantityEntity quantities,
       required GeneralEntity general}) async {
     final formData = quantities.toMap();
+    Fx.log(formData);
 
     final _resp = await dio.post(
         path:

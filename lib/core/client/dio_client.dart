@@ -21,7 +21,7 @@ class DioClient extends ApiService {
       connectTimeout: kTimeOutDuration,
       receiveTimeout: kTimeOutDuration,
       sendTimeout: kTimeOutDuration,
-      contentType: Headers.formUrlEncodedContentType,
+      contentType: Headers.jsonContentType,
       validateStatus: (int? status) => status != null,
     ),
   );
@@ -172,7 +172,7 @@ class DioClient extends ApiService {
     String? message;
 
     if (response.data != null && response.data is Map) {
-      message = (response.data as Map)['message'] as String?;
+      message = ((response.data as Map)['message'] as dynamic).toString();
     }
     final Exception e =
         Exception(response.data ?? 'Dio client transform response');

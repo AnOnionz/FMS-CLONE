@@ -43,7 +43,8 @@ void showRequiredSync(VoidCallback onPressed) {
   showFailure(
     title: 'Yêu cầu đồng bộ dữ liệu',
     icon: SvgPicture.asset(AppIcons.requiredTask),
-    message: 'Yêu cầu đồng bộ dữ liệu trước khi chấm công ra',
+    message:
+        'Vẫn còn dữ liệu chưa được đồng bộ, yêu cầu đồng bộ tất cả dữ liệu trước khi chấm công ra.',
     btnText: 'Đến trang đồng bộ',
     onPressed: onPressed,
   );

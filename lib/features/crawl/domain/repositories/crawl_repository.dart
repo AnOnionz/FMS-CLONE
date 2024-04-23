@@ -12,6 +12,6 @@ abstract class CrawlRepository {
   });
   Future<Result<FeatureEntity?>> getQuantitiesNotCompleted(
       {required FeatureEntity feature});
-  Future<Result<List<CrawlQuantityEntity>>> noSyncedData();
-  Future<void> synchronized();
+  Future<Result<Map<int, List<CrawlQuantityEntity>>>> noSyncedData();
+  Future<void> synchronized(FeatureEntity feature);
 }

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
+import 'package:fms/features/crawl/domain/usecases/get_quantities_not_completed_usecase.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -22,10 +23,12 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     with GeneralDataMixin {
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
   final GetNotesNotCompletedUsecase getNotesNotCompleted;
+  final GetQuantitiesNotCompletedUsecase getQuantitiesNotCompleted;
+
   final SyncBloc _syncBloc;
   StreamSubscription<NecessaryState>? subscription;
-  NecessaryBloc(
-      this._syncBloc, this.getPhotosNotCompleted, this.getNotesNotCompleted)
+  NecessaryBloc(this._syncBloc, this.getPhotosNotCompleted,
+      this.getNotesNotCompleted, this.getQuantitiesNotCompleted)
       : super(NecessaryInit()) {
     on<NecessaryIn>(onNecessaryIn);
     on<NecessaryOut>(onNecessaryOut);
@@ -120,11 +123,28 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
   Future<void> onNecessaryOut(NecessaryOut event, emit) async {
     final features =
         await checkTasksNotCompleted(feature: event.feature, general: general);
-    features.removeWhere(
-        (element) => element.type == FeatureType.attendanceClockingOut);
-    if (features.isNotEmpty) {
+
+    final tasks = features.where((element) =>
+        element.type != FeatureType.attendanceClockingOut &&
+        element.type != FeatureType.synchronization);
+
+    if (tasks.isNotEmpty) {
+      features.removeWhere((element) =>
+          element.type == FeatureType.attendanceClockingOut ||
+          element.type == FeatureType.synchronization);
       emit(NecessaryLockOut(features: features));
+      return;
     }
+
+    ///check sync
+    final featureSync = features.firstWhereOrNull(
+        (element) => element.type == FeatureType.synchronization);
+
+    if (featureSync != null) {
+      emit(NecessarySync(onClose: () {}));
+      return;
+    }
+
     if (features.isEmpty) {
       emit(NecessaryUnfastenOut(action: event.action));
     }
@@ -141,25 +161,27 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     }
 
     ///  check tasks
-    final tasks = features
-        .where((feature) => feature.type != FeatureType.attendanceClockingOut);
+    final tasks = features.where((feature) =>
+        feature.type != FeatureType.attendanceClockingOut &&
+        feature.type != FeatureType.synchronization);
+
     if (tasks.isNotEmpty) {
-      features.removeWhere(
-          (element) => element.type == FeatureType.attendanceClockingOut);
+      features.removeWhere((element) =>
+          element.type == FeatureType.attendanceClockingOut ||
+          element.type == FeatureType.synchronization);
       emit(NecessaryTask(onClose: event.onClose, features: features));
       return;
     }
+    print(tasks);
 
     ///check sync
     final featureSync = general.config.features!.firstWhereOrNull(
         (element) => element.type == FeatureType.synchronization);
-    if (featureSync != null) {
-      final hasSynced = _syncBloc.state.number > 0;
 
-      if (hasSynced) {
-        emit(NecessarySync(onClose: event.onClose));
-        return;
-      }
+    if (featureSync != null &&
+        _syncBloc.state.status == SyncStatus.isNoSynced) {
+      emit(NecessarySync(onClose: event.onClose));
+      return;
     }
 
     /// check attendance out
@@ -203,6 +225,22 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
                 features.add(data);
               }
             });
+        }
+        if (dependentFeature.type ==
+            FeatureType.multiSubjectMultimediaInformationCapturing) {
+          await getQuantitiesNotCompleted(dependentFeature)
+            ..fold((failure) {}, (data) {
+              if (data != null) {
+                features.add(data);
+              }
+            });
+        }
+
+        if (dependentFeature.type == FeatureType.synchronization) {
+          final hasSynced = _syncBloc.state.status == SyncStatus.isNoSynced;
+          if (hasSynced) {
+            features.add(dependentFeature);
+          }
         }
         if (dependentFeature.type == FeatureType.attendanceClockingOut) {
           if (general.attendance != null &&

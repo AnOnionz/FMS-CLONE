@@ -61,7 +61,34 @@ const CrawlQuantityEntitySchema = CollectionSchema(
   deserialize: _crawlQuantityEntityDeserialize,
   deserializeProp: _crawlQuantityEntityDeserializeProp,
   idName: r'isarId',
-  indexes: {},
+  indexes: {
+    r'featureId': IndexSchema(
+      id: 4158295584251905753,
+      name: r'featureId',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'featureId',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
+    r'attendanceId': IndexSchema(
+      id: -5047753669473436316,
+      name: r'attendanceId',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'attendanceId',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {
     r'CrawlQuantitylValueEntity': CrawlQuantitylValueEntitySchema
@@ -195,12 +222,142 @@ List<IsarLinkBase<dynamic>> _crawlQuantityEntityGetLinks(
 void _crawlQuantityEntityAttach(
     IsarCollection<dynamic> col, Id id, CrawlQuantityEntity object) {}
 
+extension CrawlQuantityEntityByIndex on IsarCollection<CrawlQuantityEntity> {
+  Future<CrawlQuantityEntity?> getByFeatureId(int? featureId) {
+    return getByIndex(r'featureId', [featureId]);
+  }
+
+  CrawlQuantityEntity? getByFeatureIdSync(int? featureId) {
+    return getByIndexSync(r'featureId', [featureId]);
+  }
+
+  Future<bool> deleteByFeatureId(int? featureId) {
+    return deleteByIndex(r'featureId', [featureId]);
+  }
+
+  bool deleteByFeatureIdSync(int? featureId) {
+    return deleteByIndexSync(r'featureId', [featureId]);
+  }
+
+  Future<List<CrawlQuantityEntity?>> getAllByFeatureId(
+      List<int?> featureIdValues) {
+    final values = featureIdValues.map((e) => [e]).toList();
+    return getAllByIndex(r'featureId', values);
+  }
+
+  List<CrawlQuantityEntity?> getAllByFeatureIdSync(List<int?> featureIdValues) {
+    final values = featureIdValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'featureId', values);
+  }
+
+  Future<int> deleteAllByFeatureId(List<int?> featureIdValues) {
+    final values = featureIdValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'featureId', values);
+  }
+
+  int deleteAllByFeatureIdSync(List<int?> featureIdValues) {
+    final values = featureIdValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'featureId', values);
+  }
+
+  Future<Id> putByFeatureId(CrawlQuantityEntity object) {
+    return putByIndex(r'featureId', object);
+  }
+
+  Id putByFeatureIdSync(CrawlQuantityEntity object, {bool saveLinks = true}) {
+    return putByIndexSync(r'featureId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByFeatureId(List<CrawlQuantityEntity> objects) {
+    return putAllByIndex(r'featureId', objects);
+  }
+
+  List<Id> putAllByFeatureIdSync(List<CrawlQuantityEntity> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'featureId', objects, saveLinks: saveLinks);
+  }
+
+  Future<CrawlQuantityEntity?> getByAttendanceId(int? attendanceId) {
+    return getByIndex(r'attendanceId', [attendanceId]);
+  }
+
+  CrawlQuantityEntity? getByAttendanceIdSync(int? attendanceId) {
+    return getByIndexSync(r'attendanceId', [attendanceId]);
+  }
+
+  Future<bool> deleteByAttendanceId(int? attendanceId) {
+    return deleteByIndex(r'attendanceId', [attendanceId]);
+  }
+
+  bool deleteByAttendanceIdSync(int? attendanceId) {
+    return deleteByIndexSync(r'attendanceId', [attendanceId]);
+  }
+
+  Future<List<CrawlQuantityEntity?>> getAllByAttendanceId(
+      List<int?> attendanceIdValues) {
+    final values = attendanceIdValues.map((e) => [e]).toList();
+    return getAllByIndex(r'attendanceId', values);
+  }
+
+  List<CrawlQuantityEntity?> getAllByAttendanceIdSync(
+      List<int?> attendanceIdValues) {
+    final values = attendanceIdValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'attendanceId', values);
+  }
+
+  Future<int> deleteAllByAttendanceId(List<int?> attendanceIdValues) {
+    final values = attendanceIdValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'attendanceId', values);
+  }
+
+  int deleteAllByAttendanceIdSync(List<int?> attendanceIdValues) {
+    final values = attendanceIdValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'attendanceId', values);
+  }
+
+  Future<Id> putByAttendanceId(CrawlQuantityEntity object) {
+    return putByIndex(r'attendanceId', object);
+  }
+
+  Id putByAttendanceIdSync(CrawlQuantityEntity object,
+      {bool saveLinks = true}) {
+    return putByIndexSync(r'attendanceId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByAttendanceId(List<CrawlQuantityEntity> objects) {
+    return putAllByIndex(r'attendanceId', objects);
+  }
+
+  List<Id> putAllByAttendanceIdSync(List<CrawlQuantityEntity> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'attendanceId', objects, saveLinks: saveLinks);
+  }
+}
+
 extension CrawlQuantityEntityQueryWhereSort
     on QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QWhere> {
   QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhere>
       anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhere>
+      anyFeatureId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'featureId'),
+      );
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhere>
+      anyAttendanceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'attendanceId'),
+      );
     });
   }
 }
@@ -270,6 +427,236 @@ extension CrawlQuantityEntityQueryWhere
         lower: lowerIsarId,
         includeLower: includeLower,
         upper: upperIsarId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'featureId',
+        value: [null],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureId',
+        lower: [null],
+        includeLower: false,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdEqualTo(int? featureId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'featureId',
+        value: [featureId],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdNotEqualTo(int? featureId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureId',
+              lower: [],
+              upper: [featureId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureId',
+              lower: [featureId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureId',
+              lower: [featureId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureId',
+              lower: [],
+              upper: [featureId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdGreaterThan(
+    int? featureId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureId',
+        lower: [featureId],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdLessThan(
+    int? featureId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureId',
+        lower: [],
+        upper: [featureId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      featureIdBetween(
+    int? lowerFeatureId,
+    int? upperFeatureId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureId',
+        lower: [lowerFeatureId],
+        includeLower: includeLower,
+        upper: [upperFeatureId],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'attendanceId',
+        value: [null],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'attendanceId',
+        lower: [null],
+        includeLower: false,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdEqualTo(int? attendanceId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'attendanceId',
+        value: [attendanceId],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdNotEqualTo(int? attendanceId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'attendanceId',
+              lower: [],
+              upper: [attendanceId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'attendanceId',
+              lower: [attendanceId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'attendanceId',
+              lower: [attendanceId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'attendanceId',
+              lower: [],
+              upper: [attendanceId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdGreaterThan(
+    int? attendanceId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'attendanceId',
+        lower: [attendanceId],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdLessThan(
+    int? attendanceId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'attendanceId',
+        lower: [],
+        upper: [attendanceId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<CrawlQuantityEntity, CrawlQuantityEntity, QAfterWhereClause>
+      attendanceIdBetween(
+    int? lowerAttendanceId,
+    int? upperAttendanceId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'attendanceId',
+        lower: [lowerAttendanceId],
+        includeLower: includeLower,
+        upper: [upperAttendanceId],
         includeUpper: includeUpper,
       ));
     });

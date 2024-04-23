@@ -107,10 +107,17 @@ class _ReportPageState extends State<ReportPage> {
                                     setState(() {});
                                   },
                                   onDeleted: (image) {
-                                    final photo = reports[photoItem.id!]!
-                                        .firstWhere((element) =>
-                                            element.dataUuid == image.uuid);
-                                    photo.status = SyncStatus.isDeleted;
+                                    if (image.id != null) {
+                                      final photo = reports[photoItem.id!]!
+                                          .firstWhere((element) =>
+                                              element.dataUuid == image.uuid);
+                                      photo.status = SyncStatus.isDeleted;
+                                    } else {
+                                      reports[photoItem.id!]!.removeWhere(
+                                          (photo) =>
+                                              photo.dataUuid == image.uuid);
+                                    }
+                                    print(reports[photoItem.id!]!);
                                     setState(() {});
                                   },
                                   isWatermark: photoItem.isWatermarkRequired!,

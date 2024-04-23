@@ -83,7 +83,11 @@ class _NoteItemState extends State<NoteItem> {
                 child: ListViewImages(
                   feature: widget.feature,
                   imagePickerButton: ImagePickerWidget(
-                    enable: widget.photos.length < widget.entity.maximumImages!,
+                    enable: widget.photos
+                            .where((element) =>
+                                element.status != SyncStatus.isDeleted)
+                            .length <
+                        widget.entity.maximumImages!,
                     onChanged: widget.onPickImage,
                     isWatermarkRequired:
                         widget.entity.isWatermarkRequired ?? false,

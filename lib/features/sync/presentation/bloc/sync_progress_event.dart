@@ -11,7 +11,5 @@ sealed class SyncProgressEvent extends Equatable {
 class SyncProgressStart extends SyncProgressEvent {}
 
 class SyncProgressSilent extends SyncProgressEvent {
-  final int seconds;
-
-  SyncProgressSilent({this.seconds = 0});
+  SyncProgressSilent();
 }

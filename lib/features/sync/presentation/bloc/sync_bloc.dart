@@ -7,6 +7,7 @@ import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -16,6 +17,7 @@ import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:fms/features/report/domain/usecases/photos_no_synced_usecase.dart';
 
 import '../../../../core/constant/type_def.dart';
+import '../../../crawl/domain/usecases/quantities_no_synced_usecase.dart';
 
 part 'sync_event.dart';
 part 'sync_state.dart';
@@ -24,11 +26,13 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
     with LocalDatasource, GeneralDataMixin {
   final PhotosNoSyncedDataUsecase _photosNoSynced;
   final GetNotesNoSyncedDataUsecase _notesNoSynced;
-  SyncBloc(this._photosNoSynced, this._notesNoSynced)
+  final GetQuantitiesNoSyncedDataUsecase _quantitiesNoSynced;
+  SyncBloc(this._photosNoSynced, this._notesNoSynced, this._quantitiesNoSynced)
       : super(SyncState.init()) {
     on<SyncStarted>((event, emit) {
       _updatePhotoSync();
       _updateNoteSync();
+      _updateQuantitySync();
     });
     on<SyncAddListener>((event, emit) {
       _photoSubscription =
@@ -38,6 +42,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
       _noteSubscription =
           db.colection<NoteEntity>().watchLazy().listen((event) async {
         _updateNoteSync();
+      });
+      _quantitiesSubscription =
+          db.colection<CrawlQuantityEntity>().watchLazy().listen((event) async {
+        _updateQuantitySync();
       });
     });
 
@@ -56,6 +64,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
 
   Future<void> _updateNoteSync() async => await fold(_notesNoSynced());
 
+  Future<void> _updateQuantitySync() async => await fold(_quantitiesNoSynced());
+
   Future<void> fold(Future<Result<Map<int, List<DataEntity>>>> future) async {
     print(future.runtimeType);
     await future
@@ -68,10 +78,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
 
   StreamSubscription<void>? _photoSubscription;
   StreamSubscription<void>? _noteSubscription;
+  StreamSubscription<void>? _quantitiesSubscription;
   @override
   Future<void> close() {
     _photoSubscription?.cancel();
     _noteSubscription?.cancel();
+    _quantitiesSubscription?.cancel();
     return super.close();
   }
 }

@@ -74,6 +74,6 @@ class PhotoEntity extends DataEntity {
 
   @override
   String toString() {
-    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, path: $path, dataTimestamp: $dataTimestamp, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
+    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, status: $status)';
   }
 }

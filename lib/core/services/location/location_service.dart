@@ -16,9 +16,6 @@ import './../../../core/mixins/common.dart';
 int kDistanceFilter = 15;
 
 final class LocationService extends ChangeNotifier {
-  LocationService() {
-    _currentLocation = getPositionLocal();
-  }
   final permissionManager = PermissionManager();
 
   final GeolocatorPlatform _geolocator = GeolocatorPlatform.instance;
@@ -220,17 +217,17 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<String> placeString() async {
-    final _localPosition = getPositionLocal();
+    final _position = await getCurrentPosition();
 
-    if (_localPosition == null) {
-      return 'Vị trí không xác định';
+    if (_position == null) {
+      return '\nVị trí không xác định';
     }
     try {
-      final place = await placemark(_localPosition);
+      final place = await placemark(_position);
       return place;
     } catch (e) {
       return database.getValue(Keys.LOCATION_STRING) ??
-          'Vị trí không xác định';
+          '\nVị trí không xác định';
     }
   }
 

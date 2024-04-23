@@ -37,37 +37,38 @@ class ImagePickerWidget extends StatefulWidget {
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final MediaService _service = MediaService();
   final NetworkTimeService _timeService = Modular.get();
-
   late ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
   Future<void> _takeImage() async {
-    final file = await _service.pickImage(720, 1280, 90);
-    if (file != null) {
-      final time = await _timeService.ntpDateTime();
-      if (widget.isWatermarkRequired) {
-        isWatermarking.value = true;
-        widget.isWatermarking?.value = true;
-        try {
-          final fileWithWatermark = await _service.addWatermark(file);
+    if (isWatermarking.value == false) {
+      final file = await _service.pickImage(720, 1280, 90);
+      if (file != null) {
+        final time = await _timeService.ntpDateTime();
+        if (widget.isWatermarkRequired) {
+          isWatermarking.value = true;
+          widget.isWatermarking?.value = true;
+          try {
+            final fileWithWatermark = await _service.addWatermark(file);
+            final image = ImageDynamic(
+              uuid: Uuid().v1(),
+              path: fileWithWatermark.path,
+              dataTimestamp: time,
+            );
+            isWatermarking.value = false;
+            widget.isWatermarking?.value = false;
+            widget.onChanged(image);
+          } catch (e) {
+            isWatermarking.value = false;
+            widget.isWatermarking?.value = false;
+          }
+        } else {
           final image = ImageDynamic(
             uuid: Uuid().v1(),
-            path: fileWithWatermark.path,
+            path: file.path,
             dataTimestamp: time,
           );
-          isWatermarking.value = false;
-          widget.isWatermarking?.value = false;
           widget.onChanged(image);
-        } catch (e) {
-          isWatermarking.value = false;
-          widget.isWatermarking?.value = false;
         }
-      } else {
-        final image = ImageDynamic(
-          uuid: Uuid().v1(),
-          path: file.path,
-          dataTimestamp: time,
-        );
-        widget.onChanged(image);
       }
     }
   }
