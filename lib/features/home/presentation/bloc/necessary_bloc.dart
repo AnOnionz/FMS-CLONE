@@ -227,7 +227,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
             });
         }
         if (dependentFeature.type ==
-            FeatureType.multiSubjectMultimediaInformationCapturing) {
+            FeatureType.multipleEntitiesQuantityCapturing) {
           await getQuantitiesNotCompleted(dependentFeature)
             ..fold((failure) {}, (data) {
               if (data != null) {

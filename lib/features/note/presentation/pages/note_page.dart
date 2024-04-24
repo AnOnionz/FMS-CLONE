@@ -64,6 +64,7 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
 
   Future<void> onFetchSuccess(
       (List<NoteEntity> notes, List<PhotoEntity> photos) data) async {
+    print(data.$2);
     await Future.forEach(widget.entity.feature.featureMultimedias!,
         (featureMultimedia) async {
       await Future.delayed(100.milliseconds);
@@ -73,10 +74,16 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       setState(() {
         notes[featureMultimedia.id!] = note != null
             ? note.copyWith(
+                dataUuid: Uuid().v1(),
+                dataTimestamp: timestamp,
+                attendanceId: widget.entity.general.attendance!.id,
+                featureId: widget.entity.feature.id,
                 isTextFieldRequired: featureMultimedia.isTextFieldRequired!)
             : NoteEntity(
                 dataUuid: Uuid().v1(),
                 dataTimestamp: timestamp,
+                attendanceId: widget.entity.general.attendance!.id,
+                featureId: widget.entity.feature.id,
                 isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
                 featureMultimediaId: featureMultimedia.id!,
               );
@@ -87,9 +94,11 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
     });
 
     widget.entity.feature.featureMultimedias!.forEach((featureMultimedia) {
-      setState(() {
-        photos[featureMultimedia.id!] = photoGroup[featureMultimedia.id!] ?? [];
+      photos[featureMultimedia.id!] = photoGroup[featureMultimedia.id!] ?? [];
+      photos[featureMultimedia.id!]!.forEach((element) {
+        element = element.copyWith(featureId: widget.entity.feature.id);
       });
+      setState(() {});
     });
     if (!_completer.isCompleted) _completer.complete(true);
   }
@@ -148,9 +157,9 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                                       photos[featureMultimedia.id!]!
                                           .add(PhotoEntity(
                                         dataUuid: Uuid().v1(),
-                                        featureId: widget.entity.feature.id,
+                                        featureId: widget.entity.feature.id!,
                                         attendanceId: widget
-                                            .entity.general.attendance!.id,
+                                            .entity.general.attendance!.id!,
                                         dataTimestamp: file.dataTimestamp,
                                         path: file.path,
                                         featurePhotoId: featureMultimedia.id!,

@@ -69,21 +69,7 @@ const NoteEntitySchema = CollectionSchema(
   deserialize: _noteEntityDeserialize,
   deserializeProp: _noteEntityDeserializeProp,
   idName: r'isarId',
-  indexes: {
-    r'dataTimestamp': IndexSchema(
-      id: 5857465224912740492,
-      name: r'dataTimestamp',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'dataTimestamp',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    )
-  },
+  indexes: {},
   links: {
     r'photos': LinkSchema(
       id: 5455002113520122781,
@@ -216,14 +202,6 @@ extension NoteEntityQueryWhereSort
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
-
-  QueryBuilder<NoteEntity, NoteEntity, QAfterWhere> anyDataTimestamp() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'dataTimestamp'),
-      );
-    });
-  }
 }
 
 extension NoteEntityQueryWhere
@@ -292,97 +270,6 @@ extension NoteEntityQueryWhere
         lower: lowerIsarId,
         includeLower: includeLower,
         upper: upperIsarId,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause> dataTimestampEqualTo(
-      DateTime dataTimestamp) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'dataTimestamp',
-        value: [dataTimestamp],
-      ));
-    });
-  }
-
-  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
-      dataTimestampNotEqualTo(DateTime dataTimestamp) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'dataTimestamp',
-              lower: [],
-              upper: [dataTimestamp],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'dataTimestamp',
-              lower: [dataTimestamp],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'dataTimestamp',
-              lower: [dataTimestamp],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'dataTimestamp',
-              lower: [],
-              upper: [dataTimestamp],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
-      dataTimestampGreaterThan(
-    DateTime dataTimestamp, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'dataTimestamp',
-        lower: [dataTimestamp],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause> dataTimestampLessThan(
-    DateTime dataTimestamp, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'dataTimestamp',
-        lower: [],
-        upper: [dataTimestamp],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause> dataTimestampBetween(
-    DateTime lowerDataTimestamp,
-    DateTime upperDataTimestamp, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'dataTimestamp',
-        lower: [lowerDataTimestamp],
-        includeLower: includeLower,
-        upper: [upperDataTimestamp],
         includeUpper: includeUpper,
       ));
     });

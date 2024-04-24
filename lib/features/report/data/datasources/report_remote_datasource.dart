@@ -8,7 +8,9 @@ import '../../domain/entities/photo_entity.dart';
 
 abstract class IReportRemoteDataSource {
   Future<PhotoEntity?> createPhoto(
-      {required PhotoEntity photo, required GeneralEntity general});
+      {required PhotoEntity photo,
+      required GeneralEntity general,
+      required FeatureEntity feature});
   Future<List<PhotoEntity>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature});
 }
@@ -32,7 +34,9 @@ class ReportRemoteDataSource extends ImagesRemoteDataSource
 
   @override
   Future<PhotoEntity?> createPhoto(
-      {required PhotoEntity photo, required GeneralEntity general}) async {
+      {required PhotoEntity photo,
+      required GeneralEntity general,
+      required FeatureEntity feature}) async {
     Map<String, dynamic> formData;
 
     if (photo.image != null) {
@@ -58,7 +62,7 @@ class ReportRemoteDataSource extends ImagesRemoteDataSource
 
     final _resp = await dio.post(
         path:
-            '/app/attendances/${general.attendance!.id}/features/${photo.featureId}/photos',
+            '/app/attendances/${general.attendance!.id}/features/${feature.id}/photos',
         data: formData);
     return parseJson<PhotoEntity>((json: _resp, fromJson: PhotoEntity.fromMap));
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
@@ -22,6 +24,7 @@ class SyncProgressBloc extends Bloc<SyncProgressEvent, SyncProgressState> {
       await _synchronized(_syncBloc.state.data)
         ..fold((failure) => emit(SyncProgressFailure(failure)), (data) {
           emit(SyncProgressSuccess());
+          _timer?.cancel();
         });
     }, transformer: droppable());
 
@@ -32,12 +35,16 @@ class SyncProgressBloc extends Bloc<SyncProgressEvent, SyncProgressState> {
         await _synchronized(_syncBloc.state.data)
           ..fold((failure) async {
             emit(SyncProgressSuccess());
-            Future.delayed(5.minutes, () async => add(SyncProgressSilent()));
+            _timer?.cancel();
+            _timer = Timer(Duration(seconds: 180), () {
+              add(SyncProgressSilent());
+            });
           }, (data) {
             emit(SyncProgressSuccess());
-            _syncBloc.add(SyncStarted());
           });
       }
     }, transformer: droppable());
   }
+
+  Timer? _timer;
 }

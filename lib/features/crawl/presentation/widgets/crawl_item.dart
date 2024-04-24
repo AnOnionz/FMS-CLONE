@@ -31,10 +31,6 @@ class CrawlItem extends StatefulWidget {
 }
 
 class _CrawlItemState extends State<CrawlItem> {
-  late final TextEditingController _controller = TextEditingController(
-      text: widget.quantityValue.value != null
-          ? widget.quantityValue.value.toString()
-          : null);
   bool get isItem => widget.entity.item != null;
 
   @override
@@ -71,7 +67,9 @@ class _CrawlItemState extends State<CrawlItem> {
             ],
           ),
           trailing: AdvancedTextField(
-            controller: _controller,
+            initialValue: widget.quantityValue.value != null
+                ? widget.quantityValue.value.toString()
+                : null,
             onChanged: widget.onChanged,
             textInputAction:
                 widget.isLast ? TextInputAction.done : TextInputAction.next,

@@ -40,7 +40,6 @@ class _SamplingBoxState extends State<SamplingBox> {
           ],
         ),
         trailing: AdvancedTextField(
-          controller: _controller,
           unit: 'Lon',
         ));
   }

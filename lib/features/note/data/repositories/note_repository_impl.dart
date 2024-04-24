@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/repository/repository.dart';
+import 'package:fms/core/services/network_time/network_time_service.dart';
 
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -11,6 +13,7 @@ import 'package:fms/features/note/data/datasources/note_local_datasource.dart';
 
 import 'package:fms/features/note/domain/entities/note_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/enum.dart';
 import '../../../../core/usecase/either.dart';
@@ -58,20 +61,17 @@ class NoteRepositoryImpl extends Repository
     return todo(
       () async {
         photos.forEach((photo) {
-          photo.attendanceId = general.attendance!.id;
-          photo.featureId = feature.id;
           _local.cachePhotoToLocal(photo);
         });
 
-        notes.forEach((note) {
-          note.attendanceId = general.attendance!.id;
-          note.featureId = feature.id;
+        notes.forEach((note) async {
           final photosOfNote = photos.where(
               (photo) => photo.featurePhotoId == note.featureMultimediaId);
 
           note.photos.addAll(photosOfNote);
           _local.cacheNoteToLocal(note);
           db.writeTxnSync(() => note.photos.saveSync());
+          print(note.photos);
         });
         await _uploadNotes(notes: notes, feature: feature);
 
@@ -138,7 +138,7 @@ class NoteRepositoryImpl extends Repository
   @override
   Future<void> synchronized(FeatureEntity feature) async {
     final notesNoSynced = await _local.getNotesNoSynced(feature);
-
+    print(notesNoSynced);
     await _uploadNotes(notes: notesNoSynced, feature: feature);
   }
 
@@ -156,8 +156,8 @@ class NoteRepositoryImpl extends Repository
               _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
             }
             if (photo.status == SyncStatus.isNoSynced) {
-              final report =
-                  await _remote.createPhoto(photo: photo, general: general);
+              final report = await _remote.createPhoto(
+                  photo: photo, general: general, feature: feature);
               if (report != null) {
                 photo = photo.copyWith(
                     id: report.id,

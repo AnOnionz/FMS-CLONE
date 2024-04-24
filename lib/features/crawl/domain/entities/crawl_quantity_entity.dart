@@ -14,9 +14,9 @@ class CrawlQuantityEntity extends DataEntity {
   final int? id;
   final String dataUuid;
   @Index(unique: true, replace: true)
-  final int? featureId;
+  int? attendanceId;
   @Index(unique: true, replace: true)
-  final int? attendanceId;
+  int? featureId;
   final DateTime dataTimestamp;
   final List<CrawlQuantitylValueEntity> values;
   @Enumerated(EnumType.name)

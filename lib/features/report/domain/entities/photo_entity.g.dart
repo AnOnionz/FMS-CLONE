@@ -71,10 +71,23 @@ const PhotoEntitySchema = CollectionSchema(
   deserializeProp: _photoEntityDeserializeProp,
   idName: r'isarId',
   indexes: {
+    r'dataUuid': IndexSchema(
+      id: 7393523466773124745,
+      name: r'dataUuid',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'dataUuid',
+          type: IndexType.value,
+          caseSensitive: true,
+        )
+      ],
+    ),
     r'dataTimestamp': IndexSchema(
       id: 5857465224912740492,
       name: r'dataTimestamp',
-      unique: false,
+      unique: true,
       replace: false,
       properties: [
         IndexPropertySchema(
@@ -223,11 +236,76 @@ List<IsarLinkBase<dynamic>> _photoEntityGetLinks(PhotoEntity object) {
 void _photoEntityAttach(
     IsarCollection<dynamic> col, Id id, PhotoEntity object) {}
 
+extension PhotoEntityByIndex on IsarCollection<PhotoEntity> {
+  Future<PhotoEntity?> getByDataTimestamp(DateTime dataTimestamp) {
+    return getByIndex(r'dataTimestamp', [dataTimestamp]);
+  }
+
+  PhotoEntity? getByDataTimestampSync(DateTime dataTimestamp) {
+    return getByIndexSync(r'dataTimestamp', [dataTimestamp]);
+  }
+
+  Future<bool> deleteByDataTimestamp(DateTime dataTimestamp) {
+    return deleteByIndex(r'dataTimestamp', [dataTimestamp]);
+  }
+
+  bool deleteByDataTimestampSync(DateTime dataTimestamp) {
+    return deleteByIndexSync(r'dataTimestamp', [dataTimestamp]);
+  }
+
+  Future<List<PhotoEntity?>> getAllByDataTimestamp(
+      List<DateTime> dataTimestampValues) {
+    final values = dataTimestampValues.map((e) => [e]).toList();
+    return getAllByIndex(r'dataTimestamp', values);
+  }
+
+  List<PhotoEntity?> getAllByDataTimestampSync(
+      List<DateTime> dataTimestampValues) {
+    final values = dataTimestampValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'dataTimestamp', values);
+  }
+
+  Future<int> deleteAllByDataTimestamp(List<DateTime> dataTimestampValues) {
+    final values = dataTimestampValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'dataTimestamp', values);
+  }
+
+  int deleteAllByDataTimestampSync(List<DateTime> dataTimestampValues) {
+    final values = dataTimestampValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'dataTimestamp', values);
+  }
+
+  Future<Id> putByDataTimestamp(PhotoEntity object) {
+    return putByIndex(r'dataTimestamp', object);
+  }
+
+  Id putByDataTimestampSync(PhotoEntity object, {bool saveLinks = true}) {
+    return putByIndexSync(r'dataTimestamp', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByDataTimestamp(List<PhotoEntity> objects) {
+    return putAllByIndex(r'dataTimestamp', objects);
+  }
+
+  List<Id> putAllByDataTimestampSync(List<PhotoEntity> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'dataTimestamp', objects, saveLinks: saveLinks);
+  }
+}
+
 extension PhotoEntityQueryWhereSort
     on QueryBuilder<PhotoEntity, PhotoEntity, QWhere> {
   QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhere> anyDataUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'dataUuid'),
+      );
     });
   }
 
@@ -308,6 +386,143 @@ extension PhotoEntityQueryWhere
         upper: upperIsarId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidEqualTo(
+      String dataUuid) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'dataUuid',
+        value: [dataUuid],
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidNotEqualTo(
+      String dataUuid) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataUuid',
+              lower: [],
+              upper: [dataUuid],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataUuid',
+              lower: [dataUuid],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataUuid',
+              lower: [dataUuid],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'dataUuid',
+              lower: [],
+              upper: [dataUuid],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidGreaterThan(
+    String dataUuid, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataUuid',
+        lower: [dataUuid],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidLessThan(
+    String dataUuid, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataUuid',
+        lower: [],
+        upper: [dataUuid],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidBetween(
+    String lowerDataUuid,
+    String upperDataUuid, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataUuid',
+        lower: [lowerDataUuid],
+        includeLower: includeLower,
+        upper: [upperDataUuid],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidStartsWith(
+      String DataUuidPrefix) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'dataUuid',
+        lower: [DataUuidPrefix],
+        upper: ['$DataUuidPrefix\u{FFFFF}'],
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause> dataUuidIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'dataUuid',
+        value: [''],
+      ));
+    });
+  }
+
+  QueryBuilder<PhotoEntity, PhotoEntity, QAfterWhereClause>
+      dataUuidIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.lessThan(
+              indexName: r'dataUuid',
+              upper: [''],
+            ))
+            .addWhereClause(IndexWhereClause.greaterThan(
+              indexName: r'dataUuid',
+              lower: [''],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.greaterThan(
+              indexName: r'dataUuid',
+              lower: [''],
+            ))
+            .addWhereClause(IndexWhereClause.lessThan(
+              indexName: r'dataUuid',
+              upper: [''],
+            ));
+      }
     });
   }
 

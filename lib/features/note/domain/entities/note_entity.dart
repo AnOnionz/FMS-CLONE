@@ -15,10 +15,11 @@ part 'note_entity.g.dart';
 class NoteEntity extends DataEntity {
   Id get isarId => fastHash(dataUuid);
   int? id;
-  final String dataUuid;
-  @Index(type: IndexType.value)
-  final DateTime dataTimestamp;
+  String dataUuid;
+  DateTime dataTimestamp;
   final int featureMultimediaId;
+  int? attendanceId;
+  int? featureId;
   final photos = IsarLinks<PhotoEntity>();
   String? value;
   bool isTextFieldRequired;
@@ -28,9 +29,9 @@ class NoteEntity extends DataEntity {
   NoteEntity(
       {this.id,
       required this.dataUuid,
-      super.attendanceId,
+      this.attendanceId,
       required this.dataTimestamp,
-      super.featureId,
+      this.featureId,
       required this.featureMultimediaId,
       this.value,
       this.isTextFieldRequired = false,
@@ -84,6 +85,6 @@ class NoteEntity extends DataEntity {
 
   @override
   String toString() {
-    return 'NoteEntity(id: $id, photos: ${photos.iterator} dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, featureMultimediaId: $featureMultimediaId, value: $value, status: $status)';
+    return 'NoteEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, featureId: $featureId, attendanceId: $attendanceId, featureMultimediaId: $featureMultimediaId, value: $value, isTextFieldRequired: $isTextFieldRequired, status: $status)';
   }
 }

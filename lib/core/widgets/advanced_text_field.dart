@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -6,14 +7,14 @@ import 'package:fms/core/responsive/responsive.dart';
 import '../constant/colors.dart';
 
 class AdvancedTextField extends StatefulWidget {
-  final TextEditingController controller;
+  final String? initialValue;
   final TextInputAction? textInputAction;
   final String unit;
   final int maxLength;
   final void Function(String value)? onChanged;
   const AdvancedTextField(
       {super.key,
-      required this.controller,
+      this.initialValue,
       required this.unit,
       this.maxLength = 10,
       this.textInputAction = TextInputAction.next,
@@ -25,7 +26,18 @@ class AdvancedTextField extends StatefulWidget {
 
 class _AdvancedTextFieldState extends State<AdvancedTextField> {
   final FocusNode _focusNode = FocusNode();
-  bool get _hasValue => widget.controller.text != '';
+  late final _formatter = CurrencyTextInputFormatter.currency(
+    symbol: '',
+    onChange: (p0) {
+      widget.onChanged?.call(p0.replaceAll('.', ''));
+    },
+  );
+
+  late final TextEditingController _controller = TextEditingController(
+      text: widget.initialValue != null
+          ? _formatter.formatString(widget.initialValue!)
+          : null);
+  bool get _hasValue => _controller.text != '';
   bool _hasFocus = false;
 
   @override
@@ -54,9 +66,9 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: widget.controller,
-      onChanged: widget.onChanged,
       focusNode: _focusNode,
+      controller: _controller,
+      inputFormatters: [_formatter],
       keyboardType: TextInputType.numberWithOptions(),
       cursorWidth: 0.54,
       maxLength: widget.maxLength,
@@ -70,7 +82,6 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
       contextMenuBuilder: (context, _) => SizedBox.shrink(),
       style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
       decoration: InputDecoration(
-          hintText: '0',
           suffixIcon: Padding(
             padding: EdgeInsets.only(right: 12.w),
             child: Text(

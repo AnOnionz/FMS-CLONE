@@ -21,10 +21,10 @@ final class GoogleMapService extends ChangeNotifier implements MapService {
   }
 
   void loadStyle() {
-    rootBundle.loadString('assets/map_styles.json').then((string) {
-      _mapStyleString = string;
-      notifyListeners();
-    });
+    // rootBundle.loadString('assets/map_styles.json').then((string) {
+    //   _mapStyleString = string;
+    //   notifyListeners();
+    // });
   }
 
   CameraPosition _initial = CameraPosition(
@@ -54,7 +54,7 @@ final class GoogleMapService extends ChangeNotifier implements MapService {
             notifyListeners();
             _controller!
                 .animateCamera(CameraUpdate.newCameraPosition(_initial));
-            value.setMapStyle(_mapStyleString);
+            // value.setMapStyle(_mapStyleString);
           });
         },
       );

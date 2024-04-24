@@ -38,6 +38,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
   StreamSubscription<SyncState>? _syncSubscription;
+  Timer? _timer;
 
   AppBloc(
     this._authenticationBloc,
@@ -112,16 +113,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     _syncSubscription = _syncBloc.stream.listen((syncState) async {
       if (syncState.status == SyncStatus.isNoSynced) {
-        _syncSubscription?.cancel();
-        await Future.delayed(
-          2.minutes,
-          () async => _syncProgressBloc.add(SyncProgressSilent()),
-        );
-      }
-    });
-    _syncProgressBloc.stream.listen((state) {
-      if (state is! SyncProgressLoading) {
-        _syncSubscription?.resume();
+        _timer?.cancel();
+        _timer = Timer(Duration(seconds: 120), () {
+          _syncProgressBloc.add(SyncProgressSilent());
+        });
+      } else {
+        _timer?.cancel();
       }
     });
 
@@ -244,6 +241,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> close() async {
     await _authenticationSubscription?.cancel();
     await _authenticationBloc.close();
+    await _syncSubscription?.cancel();
     return super.close();
   }
 }

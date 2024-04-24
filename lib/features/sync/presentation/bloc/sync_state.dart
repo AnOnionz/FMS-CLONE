@@ -17,7 +17,7 @@ final class SyncState extends Equatable {
   final int number;
 
   @override
-  List<Object?> get props => [data, status, number];
+  List<Object?> get props => [status];
 
   @override
   String toString() {

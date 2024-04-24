@@ -114,6 +114,7 @@ class _CrawlPageState extends State<CrawlPage> {
                                     feature: widget.entity.feature,
                                     quantityValue: quantity,
                                     onChanged: (value) {
+                                      print(value);
                                       setState(() {
                                         quantity.value = int.tryParse(value);
                                       });

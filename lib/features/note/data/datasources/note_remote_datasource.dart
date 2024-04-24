@@ -1,4 +1,3 @@
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
@@ -12,7 +11,9 @@ abstract class INoteRemoteDataSource {
   Future<NoteEntity?> createNote(
       {required NoteEntity note, required GeneralEntity general});
   Future<PhotoEntity?> createPhoto(
-      {required PhotoEntity photo, required GeneralEntity general});
+      {required PhotoEntity photo,
+      required FeatureEntity feature,
+      required GeneralEntity general});
   Future<List<NoteEntity>> allNotes(
       {required GeneralEntity general, required FeatureEntity feature});
   Future<List<PhotoEntity>> allPhotos(
@@ -50,7 +51,9 @@ class NoteRemoteDataSource extends ImagesRemoteDataSource
 
   @override
   Future<PhotoEntity?> createPhoto(
-      {required PhotoEntity photo, required GeneralEntity general}) async {
+      {required PhotoEntity photo,
+      required FeatureEntity feature,
+      required GeneralEntity general}) async {
     Map<String, dynamic> formData;
     if (photo.image != null) {
       formData = {
@@ -75,7 +78,7 @@ class NoteRemoteDataSource extends ImagesRemoteDataSource
 
     final _resp = await dio.post(
         path:
-            '/app/attendances/${general.attendance!.id}/features/${photo.featureId}/multimedias/photos',
+            '/app/attendances/${general.attendance!.id}/features/${feature.id}/multimedias/photos',
         data: formData);
     return parseJson<PhotoEntity>((json: _resp, fromJson: PhotoEntity.fromMap));
   }

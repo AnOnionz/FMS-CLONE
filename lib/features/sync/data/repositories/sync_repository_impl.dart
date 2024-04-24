@@ -47,7 +47,7 @@ class SyncRepositoryImpl extends Repository
               default:
             }
           });
-          await Future.forEach(futures, (future) async {
+          futures.forEach((future) async {
             await future;
           });
         }

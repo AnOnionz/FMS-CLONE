@@ -45,6 +45,7 @@ class NoteLocalDataSource
 
     return db.filter<NoteEntity>((filter) => filter
         .attendanceIdEqualTo(general.attendance?.id)
+        .featureIdEqualTo(feature.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .statusEqualTo(SyncStatus.isNoSynced)
         .build());

@@ -67,8 +67,7 @@ class ReportRepositoryImpl extends Repository
       final localPhotos = await _local.getPhotosByFeature(feature);
 
       if (localPhotos.isEmpty) {
-        final reportFeature = feature.copyWith(featurePhotos: []);
-        return Right(reportFeature);
+        return Right(feature);
       }
       if (localPhotos.isNotEmpty) {
         final featurePhotos = <FeaturePhoto>[];
@@ -131,8 +130,8 @@ class ReportRepositoryImpl extends Repository
         _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
       }
       if (photo.status == SyncStatus.isNoSynced) {
-        final report =
-            await _remote.createPhoto(photo: photo, general: general);
+        final report = await _remote.createPhoto(
+            photo: photo, general: general, feature: feature);
         if (report != null) {
           photo = photo.copyWith(
               id: report.id, image: report.image, status: SyncStatus.synced);

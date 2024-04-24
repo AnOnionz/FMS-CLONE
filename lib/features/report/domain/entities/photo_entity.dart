@@ -13,9 +13,12 @@ part 'photo_entity.g.dart';
 class PhotoEntity extends DataEntity {
   Id get isarId => fastHash(dataUuid);
   int? id;
-  String dataUuid;
-  String? path;
   @Index(type: IndexType.value)
+  String dataUuid;
+  int? attendanceId;
+  int? featureId;
+  String? path;
+  @Index(unique: true)
   DateTime dataTimestamp;
   int featurePhotoId;
   ImageCloud? image;
@@ -30,8 +33,8 @@ class PhotoEntity extends DataEntity {
       this.image,
       this.path,
       this.status = SyncStatus.isNoSynced,
-      super.attendanceId,
-      super.featureId});
+      this.attendanceId,
+      this.featureId});
 
   factory PhotoEntity.fromMap(Map<String, dynamic> map) {
     return PhotoEntity(
