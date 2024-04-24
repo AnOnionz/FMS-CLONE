@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

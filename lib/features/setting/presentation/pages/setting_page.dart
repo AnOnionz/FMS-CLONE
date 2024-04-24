@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/styles/theme.dart';
-import 'package:fms/core/styles/theme_manager.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/setting/presentation/cubit/setting_cubit.dart';
 import 'package:fms/features/setting/presentation/widgets/setting_item.dart';

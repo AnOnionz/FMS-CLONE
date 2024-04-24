@@ -64,7 +64,6 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
 
   Future<void> onFetchSuccess(
       (List<NoteEntity> notes, List<PhotoEntity> photos) data) async {
-    print(data.$2);
     await Future.forEach(widget.entity.feature.featureMultimedias!,
         (featureMultimedia) async {
       await Future.delayed(100.milliseconds);

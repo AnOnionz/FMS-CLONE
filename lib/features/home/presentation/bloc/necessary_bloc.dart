@@ -172,7 +172,6 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       emit(NecessaryTask(onClose: event.onClose, features: features));
       return;
     }
-    print(tasks);
 
     ///check sync
     final featureSync = general.config.features!.firstWhereOrNull(

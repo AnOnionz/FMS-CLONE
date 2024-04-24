@@ -4,7 +4,6 @@ import 'package:fms/features/app/presentation/pages/app_page.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/attendance/attendance_out_module.dart';
 import 'package:fms/features/authentication/authentication_module.dart';
-import 'package:fms/features/camera/camera_custom.dart';
 import 'package:fms/features/camera/camera_module.dart';
 import 'package:fms/features/crawl/crawl.module.dart';
 import 'package:fms/features/home/home_module.dart';

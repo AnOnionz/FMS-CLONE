@@ -67,7 +67,7 @@ class _CrawlPageState extends State<CrawlPage> {
                 .toList());
     crawlQuantityEntity = crawlQuantities;
     setState(() {});
-    print(crawlQuantityEntity);
+
     if (!_completer.isCompleted) _completer.complete(true);
   }
 
@@ -114,7 +114,6 @@ class _CrawlPageState extends State<CrawlPage> {
                                     feature: widget.entity.feature,
                                     quantityValue: quantity,
                                     onChanged: (value) {
-                                      print(value);
                                       setState(() {
                                         quantity.value = int.tryParse(value);
                                       });

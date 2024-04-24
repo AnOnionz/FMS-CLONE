@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/core/mixins/common.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/data_entity.dart';
@@ -67,7 +64,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
   Future<void> _updateQuantitySync() async => await fold(_quantitiesNoSynced());
 
   Future<void> fold(Future<Result<Map<int, List<DataEntity>>>> future) async {
-    print(future.runtimeType);
     await future
       ..fold((failure) => null, (data) {
         data.keys.forEach((id) {

@@ -14,7 +14,6 @@ class SamplingBox extends StatefulWidget {
 }
 
 class _SamplingBoxState extends State<SamplingBox> {
-  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return ItemContainer(

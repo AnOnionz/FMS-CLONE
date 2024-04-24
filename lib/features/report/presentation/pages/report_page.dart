@@ -117,7 +117,7 @@ class _ReportPageState extends State<ReportPage> {
                                           (photo) =>
                                               photo.dataUuid == image.uuid);
                                     }
-                                    print(reports[photoItem.id!]!);
+
                                     setState(() {});
                                   },
                                   isWatermark: photoItem.isWatermarkRequired!,

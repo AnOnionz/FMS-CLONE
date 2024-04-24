@@ -22,7 +22,6 @@ import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_
 import 'package:fms/features/attendance/presentation/widgets/attendance_history.dart';
 import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rive/rive.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
 import '../../../../core/widgets/app_bar.dart';

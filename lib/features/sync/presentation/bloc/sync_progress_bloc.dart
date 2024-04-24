@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/sync/domain/usecases/sync_usecase.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 
