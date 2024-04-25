@@ -61,14 +61,14 @@ void showRequiredTaskBeforeLogout({required VoidCallback onPressed}) {
 void showRequiredTask(
     {required List<FeatureEntity> features,
     required VoidCallback onPressed,
-    bool forSignout = false}) {
+    FeatureEntity? feature}) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
           icon: SvgPicture.asset(AppIcons.requiredTask),
           title: 'Chưa hoàn thành công việc',
           message: RequireTaskNotify(
             features: features,
-            forLogout: forSignout,
+            feature: feature,
           ),
           action: OutlineButton(
               onPressed: () {

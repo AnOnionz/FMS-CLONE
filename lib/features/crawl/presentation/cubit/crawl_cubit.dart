@@ -28,7 +28,9 @@ class CrawlCubit extends Cubit<CrawlState> {
       showSuccess(title: 'Lưu thành công');
     }, (data) async {
       await getQuantities(feature)
-        ..fold((failure) => null, (data) async => emit(CrawlSuccess(data)));
+        ..fold((failure) async {
+          print(failure);
+        }, (data) async => emit(CrawlSuccess(data)));
       OverlayManager.hide();
       showSuccess(title: 'Lưu thành công');
     });

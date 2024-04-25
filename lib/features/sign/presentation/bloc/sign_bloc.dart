@@ -45,7 +45,7 @@ class SignBloc extends Bloc<SignEvent, SignState> {
       if (credentials == null) {
         return emit(SignCancel());
       } else {
-        _authenticationBloc.add(AuthenticationLoginSuccess(credentials));
+        _authenticationBloc.add(AuthenticationLogin(credentials));
         return emit(SignSuccess(SignStatus.logged));
       }
     });
@@ -62,7 +62,7 @@ class SignBloc extends Bloc<SignEvent, SignState> {
     }, (success) async {
       if (success) {
         OverlayManager.showLoading();
-        _authenticationBloc.add(AuthenticationLogoutSuccess());
+        _authenticationBloc.add(AuthenticationLogout());
         return emit(SignSuccess(SignStatus.loggedOut));
       }
     });

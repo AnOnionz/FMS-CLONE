@@ -35,7 +35,6 @@ class NoteLocalDataSource
         .attendanceIdEqualTo(general.attendance!.id)
         .featureIdEqualTo(feature.id)
         .dataTimestampBetween(time.yesterday, time.today)
-        .sortByDataTimestamp()
         .build());
   }
 

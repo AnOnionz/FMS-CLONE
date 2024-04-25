@@ -114,7 +114,7 @@ class ReportRepositoryImpl extends Repository
   @override
   Future<void> synchronized(FeatureEntity feature) async {
     final photosNoSynced = await _local.getPhotosNotSynced(feature);
-    await _uploadReport(photos: photosNoSynced, feature: feature);
+    return await _uploadReport(photos: photosNoSynced, feature: feature);
   }
 
   Future<void> _uploadReport(

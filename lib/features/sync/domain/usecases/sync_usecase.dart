@@ -9,7 +9,7 @@ class SyncUseCase extends UseCase<void, Map<FeatureEntity, List<DataEntity>>> {
 
   SyncUseCase(this._syncRepository);
   @override
-  Future<Result<void>> call(Map<FeatureEntity, List<DataEntity>> params) async {
-    return await _syncRepository.synchronized(data: params);
+  Future<Result<void>> call(Map<FeatureEntity, List<DataEntity>> params) {
+    return _syncRepository.synchronized(data: params);
   }
 }

@@ -99,6 +99,7 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                                 ],
                               ),
                             ),
+                        errorWidget: (p0, p1, p2) => SizedBox(),
                         imageUrl: widget.image.networkImage!.getImage())),
             if (_isImageLoaded)
               Positioned(

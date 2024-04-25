@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/enum.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
@@ -32,9 +34,7 @@ class _CrawlPageState extends State<CrawlPage> {
 
   CrawlQuantityEntity? crawlQuantityEntity = null;
 
-  bool get isActive =>
-      crawlQuantityEntity?.values.any((element) => element.value != null) ??
-      false;
+  bool get isActive => crawlQuantityEntity?.status == SyncStatus.isNoSynced;
 
   Completer<bool> _completer = Completer();
 
@@ -50,22 +50,20 @@ class _CrawlPageState extends State<CrawlPage> {
   }
 
   Future<void> onFetchSuccess(CrawlQuantityEntity? data) async {
-    List<CrawlQuantitylValueEntity>? quantities;
+    Fx.log(data);
     if (data != null) {
-      quantities = data.values
-        ..map((featureQuantity) => CrawlQuantitylValueEntity(
-            featureQuantityId: featureQuantity.id)).toList();
+      crawlQuantityEntity = data;
+    } else {
+      final timestamp = await networkTimeService.ntpDateTime();
+      final crawlQuantities = CrawlQuantityEntity(
+          dataUuid: Uuid().v1(),
+          dataTimestamp: timestamp,
+          values: widget.entity.feature.featureQuantities!
+              .map((featureQuantity) => CrawlQuantitylValueEntity(
+                  featureQuantityId: featureQuantity.id))
+              .toList());
+      crawlQuantityEntity = crawlQuantities;
     }
-    final timestamp = await networkTimeService.ntpDateTime();
-    final crawlQuantities = CrawlQuantityEntity(
-        dataUuid: Uuid().v1(),
-        dataTimestamp: timestamp,
-        values: quantities ??
-            widget.entity.feature.featureQuantities!
-                .map((featureQuantity) => CrawlQuantitylValueEntity(
-                    featureQuantityId: featureQuantity.id))
-                .toList());
-    crawlQuantityEntity = crawlQuantities;
     setState(() {});
 
     if (!_completer.isCompleted) _completer.complete(true);
@@ -116,6 +114,10 @@ class _CrawlPageState extends State<CrawlPage> {
                                     onChanged: (value) {
                                       setState(() {
                                         quantity.value = int.tryParse(value);
+
+                                        crawlQuantityEntity =
+                                            crawlQuantityEntity!.copyWith(
+                                                status: SyncStatus.isNoSynced);
                                       });
                                     },
                                     isLast: index ==

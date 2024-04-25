@@ -33,22 +33,6 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
   @override
   void initState() {
     syncBloc.add(SyncStarted());
-    syncProgressBloc.stream.distinct().listen((state) {
-      if (state is SyncProgressFailure) {
-        showFailure(
-          title: 'Đồng bộ thất bại',
-          icon: SvgPicture.asset(AppIcons.failure),
-          message: state.failure.message,
-          btnText: 'Thử lại',
-          onPressed: () async {
-            await Future.delayed(
-              300.milliseconds,
-              () => syncProgressBloc.add(SyncProgressStart()),
-            );
-          },
-        );
-      }
-    });
     super.initState();
   }
 
@@ -85,8 +69,25 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
                       Flexible(
                           child: ExpectationTaskListView(
                               features: _expectationSyncTask(state.data))),
-                      BlocBuilder<SyncProgressBloc, SyncProgressState>(
+                      BlocConsumer<SyncProgressBloc, SyncProgressState>(
                         bloc: syncProgressBloc,
+                        listener: (context, state) {
+                          if (state is SyncProgressFailure) {
+                            showFailure(
+                              title: 'Đồng bộ thất bại',
+                              icon: SvgPicture.asset(AppIcons.failure),
+                              message: state.failure.message,
+                              btnText: 'Thử lại',
+                              onPressed: () async {
+                                await Future.delayed(
+                                  300.milliseconds,
+                                  () =>
+                                      syncProgressBloc.add(SyncProgressStart()),
+                                );
+                              },
+                            );
+                          }
+                        },
                         builder: (context, state) {
                           if (state is SyncProgressLoading) {
                             return Padding(

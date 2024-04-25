@@ -47,6 +47,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         if (widget.isWatermarkRequired) {
           isWatermarking.value = true;
           widget.isWatermarking?.value = true;
+
           try {
             final fileWithWatermark = await _service.addWatermark(file);
             final image = ImageDynamic(
@@ -56,6 +57,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             );
             isWatermarking.value = false;
             widget.isWatermarking?.value = false;
+
             widget.onChanged(image);
           } catch (e) {
             isWatermarking.value = false;

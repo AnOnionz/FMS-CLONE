@@ -19,8 +19,10 @@ final class NecessaryUnfastenIn extends NecessaryStateHasData {
 }
 
 final class NecessaryLockOut extends NecessaryState {
+  final FeatureEntity feature;
   final List<FeatureEntity> features;
   NecessaryLockOut({
+    required this.feature,
     required this.features,
   });
 }

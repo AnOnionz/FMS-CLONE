@@ -20,7 +20,7 @@ class CrawlQuantityEntity extends DataEntity {
   final DateTime dataTimestamp;
   final List<CrawlQuantitylValueEntity> values;
   @Enumerated(EnumType.name)
-  final SyncStatus status;
+  SyncStatus status;
 
   CrawlQuantityEntity(
       {this.id,
@@ -41,15 +41,15 @@ class CrawlQuantityEntity extends DataEntity {
 
   factory CrawlQuantityEntity.fromMap(Map<String, dynamic> map) {
     return CrawlQuantityEntity(
-        id: map['id'] != null ? map['id'] as int : null,
-        dataUuid: map['dataUuid'] as String,
-        dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
-        values: List<CrawlQuantitylValueEntity>.from(
-          (map['values'] as List<dynamic>).map<CrawlQuantitylValueEntity>(
-            (x) => CrawlQuantitylValueEntity.fromMap(x as Map<String, dynamic>),
-          ),
+      id: map['id'] != null ? map['id'] as int : null,
+      dataUuid: map['dataUuid'] as String,
+      dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
+      values: List<CrawlQuantitylValueEntity>.from(
+        (map['values'] as List<dynamic>).map<CrawlQuantitylValueEntity>(
+          (x) => CrawlQuantitylValueEntity.fromMap(x as Map<String, dynamic>),
         ),
-        status: SyncStatus.synced);
+      ),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -59,6 +59,8 @@ class CrawlQuantityEntity extends DataEntity {
 
   CrawlQuantityEntity copyWith({
     int? id,
+    DateTime? dataTimestamp,
+    String? dataUuid,
     List<CrawlQuantitylValueEntity>? values,
     int? featureId,
     int? attendanceId,
@@ -66,8 +68,8 @@ class CrawlQuantityEntity extends DataEntity {
   }) {
     return CrawlQuantityEntity(
       id: id ?? this.id,
-      dataUuid: dataUuid,
-      dataTimestamp: dataTimestamp,
+      dataUuid: dataUuid ?? this.dataUuid,
+      dataTimestamp: dataTimestamp ?? this.dataTimestamp,
       featureId: featureId ?? this.featureId,
       attendanceId: attendanceId ?? this.attendanceId,
       status: status ?? this.status,

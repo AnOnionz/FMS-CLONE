@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/popup.dart';
+import 'package:fms/features/authentication/presentation/blocs/authentication_bloc.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 

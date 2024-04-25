@@ -1,7 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
+import 'package:fms/core/services/network_time/network_time_service.dart';
 
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -11,6 +14,7 @@ import 'package:fms/features/note/data/datasources/note_local_datasource.dart';
 
 import 'package:fms/features/note/domain/entities/note_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/enum.dart';
 import '../../../../core/usecase/either.dart';
@@ -57,20 +61,9 @@ class NoteRepositoryImpl extends Repository
       required FeatureEntity feature}) async {
     return todo(
       () async {
-        photos.forEach((photo) {
-          _local.cachePhotoToLocal(photo);
-        });
-
-        notes.forEach((note) async {
-          final photosOfNote = photos.where(
-              (photo) => photo.featurePhotoId == note.featureMultimediaId);
-
-          note.photos.addAll(photosOfNote);
-          _local.cacheNoteToLocal(note);
-          db.writeTxnSync(() => note.photos.saveSync());
-        });
-        await _uploadNotes(notes: notes, feature: feature);
-
+        await _cacheNotes(notes: notes, photos: photos, feature: feature);
+        final notesNoSynced = await _local.getNotesNoSynced(feature);
+        await _uploadNotes(notes: notesNoSynced, feature: feature);
         return Right(Never);
       },
     );
@@ -100,7 +93,7 @@ class NoteRepositoryImpl extends Repository
                           (element) => element.status != SyncStatus.isDeleted)
                       .length <
                   featureMultimedia.minimumImages!;
-
+          Fx.log(note);
           if (isTextEmpty || isPhotoEmpty) {
             featureMultimedias.add(featureMultimedia);
           }
@@ -136,6 +129,31 @@ class NoteRepositoryImpl extends Repository
     final notesNoSynced = await _local.getNotesNoSynced(feature);
 
     await _uploadNotes(notes: notesNoSynced, feature: feature);
+  }
+
+  Future<void> _cacheNotes(
+      {required List<NoteEntity> notes,
+      required List<PhotoEntity> photos,
+      required FeatureEntity feature}) async {
+    photos.forEach((photo) {
+      photo = photo.copyWith(
+          featureId: feature.id, attendanceId: general.attendance!.id);
+      _local.cachePhotoToLocal(photo);
+    });
+    await Future.forEach(notes, (note) async {
+      final photosOfNote = photos
+          .where((photo) => photo.featurePhotoId == note.featureMultimediaId);
+
+      final time = await Modular.get<NetworkTimeService>().ntpDateTime();
+      note = note.copyWith(
+          dataUuid: Uuid().v1(),
+          dataTimestamp: time,
+          featureId: feature.id,
+          attendanceId: general.attendance!.id);
+      _local.cacheNoteToLocal(note);
+      note.photos.addAll(photosOfNote);
+      db.writeTxnSync(() => note.photos.saveSync());
+    });
   }
 
   Future<void> _uploadNotes(

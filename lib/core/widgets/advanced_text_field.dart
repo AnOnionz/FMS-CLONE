@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,8 +74,10 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
       keyboardType: TextInputType.numberWithOptions(),
       cursorWidth: 0.54,
       maxLength: widget.maxLength,
+      cursorHeight: 16.8.sp,
       maxLengthEnforcement: MaxLengthEnforcement.enforced,
       textInputAction: widget.textInputAction,
+      textAlignVertical: TextAlignVertical.center,
       buildCounter: (context,
               {required currentLength,
               required isFocused,
@@ -82,6 +86,9 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
       contextMenuBuilder: (context, _) => SizedBox.shrink(),
       style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
       decoration: InputDecoration(
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
+          isCollapsed: true,
           suffixIcon: Padding(
             padding: EdgeInsets.only(right: 12.w),
             child: Text(

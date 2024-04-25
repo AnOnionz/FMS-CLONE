@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
@@ -7,7 +8,9 @@ import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/crawl/domain/repositories/crawl_repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../../core/services/network_time/network_time_service.dart';
 import '../../../../core/usecase/either.dart';
 import '../datasources/crawl_remote_datasource.dart';
 
@@ -25,8 +28,12 @@ class CrawlRepositoryImpl extends Repository
   }) {
     return todo(
       () async {
+        final time = await Modular.get<NetworkTimeService>().ntpDateTime();
         quantities = quantities.copyWith(
-            featureId: feature.id, attendanceId: general.attendance?.id);
+            dataTimestamp: time,
+            dataUuid: Uuid().v1(),
+            featureId: feature.id,
+            attendanceId: general.attendance?.id);
         final response = await _remote.crwalQuantities(
             quantities: quantities, general: general);
         if (response != null) {
@@ -90,7 +97,7 @@ class CrawlRepositoryImpl extends Repository
   Future<void> synchronized(FeatureEntity feature) async {
     final quantitiesNoSynced = await _local.getQuantitiessNoSynced(feature);
 
-    await Future.forEach(quantitiesNoSynced, (quantities) async {
+    return await Future.forEach(quantitiesNoSynced, (quantities) async {
       final response = await _remote.crwalQuantities(
           quantities: quantities, general: general);
       if (response != null) {

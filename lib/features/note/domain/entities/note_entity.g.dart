@@ -69,7 +69,21 @@ const NoteEntitySchema = CollectionSchema(
   deserialize: _noteEntityDeserialize,
   deserializeProp: _noteEntityDeserializeProp,
   idName: r'isarId',
-  indexes: {},
+  indexes: {
+    r'featureMultimediaId': IndexSchema(
+      id: -2293587288900741103,
+      name: r'featureMultimediaId',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'featureMultimediaId',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
   links: {
     r'photos': LinkSchema(
       id: 5455002113520122781,
@@ -195,11 +209,78 @@ void _noteEntityAttach(IsarCollection<dynamic> col, Id id, NoteEntity object) {
   object.photos.attach(col, col.isar.collection<PhotoEntity>(), r'photos', id);
 }
 
+extension NoteEntityByIndex on IsarCollection<NoteEntity> {
+  Future<NoteEntity?> getByFeatureMultimediaId(int featureMultimediaId) {
+    return getByIndex(r'featureMultimediaId', [featureMultimediaId]);
+  }
+
+  NoteEntity? getByFeatureMultimediaIdSync(int featureMultimediaId) {
+    return getByIndexSync(r'featureMultimediaId', [featureMultimediaId]);
+  }
+
+  Future<bool> deleteByFeatureMultimediaId(int featureMultimediaId) {
+    return deleteByIndex(r'featureMultimediaId', [featureMultimediaId]);
+  }
+
+  bool deleteByFeatureMultimediaIdSync(int featureMultimediaId) {
+    return deleteByIndexSync(r'featureMultimediaId', [featureMultimediaId]);
+  }
+
+  Future<List<NoteEntity?>> getAllByFeatureMultimediaId(
+      List<int> featureMultimediaIdValues) {
+    final values = featureMultimediaIdValues.map((e) => [e]).toList();
+    return getAllByIndex(r'featureMultimediaId', values);
+  }
+
+  List<NoteEntity?> getAllByFeatureMultimediaIdSync(
+      List<int> featureMultimediaIdValues) {
+    final values = featureMultimediaIdValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'featureMultimediaId', values);
+  }
+
+  Future<int> deleteAllByFeatureMultimediaId(
+      List<int> featureMultimediaIdValues) {
+    final values = featureMultimediaIdValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'featureMultimediaId', values);
+  }
+
+  int deleteAllByFeatureMultimediaIdSync(List<int> featureMultimediaIdValues) {
+    final values = featureMultimediaIdValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'featureMultimediaId', values);
+  }
+
+  Future<Id> putByFeatureMultimediaId(NoteEntity object) {
+    return putByIndex(r'featureMultimediaId', object);
+  }
+
+  Id putByFeatureMultimediaIdSync(NoteEntity object, {bool saveLinks = true}) {
+    return putByIndexSync(r'featureMultimediaId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByFeatureMultimediaId(List<NoteEntity> objects) {
+    return putAllByIndex(r'featureMultimediaId', objects);
+  }
+
+  List<Id> putAllByFeatureMultimediaIdSync(List<NoteEntity> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'featureMultimediaId', objects,
+        saveLinks: saveLinks);
+  }
+}
+
 extension NoteEntityQueryWhereSort
     on QueryBuilder<NoteEntity, NoteEntity, QWhere> {
   QueryBuilder<NoteEntity, NoteEntity, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterWhere> anyFeatureMultimediaId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'featureMultimediaId'),
+      );
     });
   }
 }
@@ -270,6 +351,99 @@ extension NoteEntityQueryWhere
         lower: lowerIsarId,
         includeLower: includeLower,
         upper: upperIsarId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
+      featureMultimediaIdEqualTo(int featureMultimediaId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'featureMultimediaId',
+        value: [featureMultimediaId],
+      ));
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
+      featureMultimediaIdNotEqualTo(int featureMultimediaId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureMultimediaId',
+              lower: [],
+              upper: [featureMultimediaId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureMultimediaId',
+              lower: [featureMultimediaId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureMultimediaId',
+              lower: [featureMultimediaId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'featureMultimediaId',
+              lower: [],
+              upper: [featureMultimediaId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
+      featureMultimediaIdGreaterThan(
+    int featureMultimediaId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureMultimediaId',
+        lower: [featureMultimediaId],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
+      featureMultimediaIdLessThan(
+    int featureMultimediaId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureMultimediaId',
+        lower: [],
+        upper: [featureMultimediaId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<NoteEntity, NoteEntity, QAfterWhereClause>
+      featureMultimediaIdBetween(
+    int lowerFeatureMultimediaId,
+    int upperFeatureMultimediaId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'featureMultimediaId',
+        lower: [lowerFeatureMultimediaId],
+        includeLower: includeLower,
+        upper: [upperFeatureMultimediaId],
         includeUpper: includeUpper,
       ));
     });

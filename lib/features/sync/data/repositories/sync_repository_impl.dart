@@ -36,27 +36,21 @@ class SyncRepositoryImpl extends Repository
           final map = data..removeWhere((key, value) => value.isEmpty);
 
           /// get synchronized of feature
-          map.keys.forEach((feature) {
+          await Future.forEach(map.keys, (feature) async {
+            print(feature.name);
             switch (feature.type) {
               case FeatureType.photography:
-                futures.add(_reportRepository.synchronized(feature));
+                await _reportRepository.synchronized(feature);
               case FeatureType.multiSubjectMultimediaInformationCapturing:
-                futures.add(_noteRepository.synchronized(feature));
+                await _noteRepository.synchronized(feature);
               case FeatureType.multipleEntitiesQuantityCapturing:
-                futures.add(_crawlRepository.synchronized(feature));
+                await _crawlRepository.synchronized(feature);
               default:
             }
-          });
-          futures.forEach((future) async {
-            await future;
           });
         }
 
         return Right(Never);
-      },
-      useInternet: true,
-      onFailure: (failure) {
-        Fx.log(failure);
       },
     );
   }

@@ -40,6 +40,9 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
+    isWatermarking.addListener(() {
+      print(2321321312323);
+    });
     fetchPhotos();
   }
 
@@ -148,22 +151,26 @@ class _ReportPageState extends State<ReportPage> {
                     color: AppColors.black.withOpacity(0.15))
               ]),
               padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-              child: FlatButton(
-                onPressed: isActive
-                    ? () {
-                        _cubit.savePhotos(
-                            items: reports.values
-                                .toList()
-                                .expand((element) => element)
-                                .toList(),
-                            feature: widget.entity.feature);
-                      }
-                    : null,
-                name: 'Lưu',
-                color: AppColors.orange,
-                disableColor: AppColors.potPourri,
-                disableTextColor: AppColors.delRio,
-              ),
+              child: ValueListenableBuilder(
+                  valueListenable: isWatermarking,
+                  builder: (context, value, _) {
+                    return FlatButton(
+                      onPressed: isWatermarking.value == false && isActive
+                          ? () {
+                              _cubit.savePhotos(
+                                  items: reports.values
+                                      .toList()
+                                      .expand((element) => element)
+                                      .toList(),
+                                  feature: widget.entity.feature);
+                            }
+                          : null,
+                      name: 'Lưu',
+                      color: AppColors.orange,
+                      disableColor: AppColors.potPourri,
+                      disableTextColor: AppColors.delRio,
+                    );
+                  }),
             )
           ],
         ),

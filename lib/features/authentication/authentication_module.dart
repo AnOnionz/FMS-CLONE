@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/authentication/domain/usecases/logout_success_usecase%20copy.dart';
 
 import '../../routes/core_module.dart';
 import 'data/datasources/auth_local_data_source.dart';
@@ -27,6 +28,7 @@ class AuthenticationModule extends Module {
     i.addLazySingleton<ChangePassUsecase>(ChangePassUsecase.new);
     i.addLazySingleton(HasValidCredentialsUsecase.new);
     i.addLazySingleton(GetCredentialsUsecase.new);
+    i.addLazySingleton(LogoutSuccessUsecase.new);
     i.addLazySingleton<AuthenticationBloc>(AuthenticationBloc.new);
   }
 }

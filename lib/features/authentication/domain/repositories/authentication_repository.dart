@@ -16,4 +16,5 @@ abstract class AuthenticationRepository {
   Future<Result<Credentials>> getCredentials();
   Future<Result<bool>> hasValidCredentials();
   Future<Result<bool>> logout();
+  Result<bool> logoutSuccess();
 }

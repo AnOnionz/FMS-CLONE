@@ -7,10 +7,9 @@ import 'package:fms/core/responsive/responsive.dart';
 import '../../../general/domain/entities/config_entity.dart';
 
 class RequireTaskNotify extends StatelessWidget {
-  final bool forLogout;
+  final FeatureEntity? feature;
   final List<FeatureEntity> features;
-  const RequireTaskNotify(
-      {super.key, required this.features, this.forLogout = false});
+  const RequireTaskNotify({super.key, required this.features, this.feature});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +29,10 @@ class RequireTaskNotify extends StatelessWidget {
                   .mapIndexed(
                       (feature, index) => _item(context, feature, index))
                   .toList(),
-              if (forLogout)
-                Text(
-                  'Yêu cầu hoàn thành công việc trước khi đăng xuất',
-                  style:
-                      context.textTheme.body1!.copyWith(color: AppColors.nero),
-                )
+              Text(
+                'Yêu cầu hoàn thành công việc trước khi ${feature == null ? 'đăng xuất' : feature!.name!.toLowerCase()}',
+                style: context.textTheme.body1!.copyWith(color: AppColors.nero),
+              )
             ]),
       ),
     );

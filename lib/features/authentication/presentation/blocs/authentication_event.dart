@@ -4,10 +4,10 @@ sealed class AuthenticationEvent {}
 
 class AuthenticationStarted extends AuthenticationEvent {}
 
-final class AuthenticationLogoutSuccess extends AuthenticationEvent {}
+final class AuthenticationLogout extends AuthenticationEvent {}
 
-final class AuthenticationLoginSuccess extends AuthenticationEvent {
+final class AuthenticationLogin extends AuthenticationEvent {
   final Credentials credentials;
 
-  AuthenticationLoginSuccess(this.credentials);
+  AuthenticationLogin(this.credentials);
 }

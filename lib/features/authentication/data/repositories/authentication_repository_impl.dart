@@ -55,10 +55,15 @@ class AuthenticationRepositoryImpl extends Repository
   @override
   Future<Result<bool>> logout() async {
     final success = await _remote.logout();
+    return Right(success);
+  }
+
+  @override
+  Result<bool> logoutSuccess() {
     _credentials = null;
     _local.clearToken();
     _dio.clearBearerAuth();
-    return Right(success);
+    return Right(true);
   }
 
   @override

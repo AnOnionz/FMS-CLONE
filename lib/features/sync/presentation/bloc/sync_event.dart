@@ -14,4 +14,9 @@ class SyncUpdated extends SyncEvent {
   final List<DataEntity> data;
 
   SyncUpdated({required this.feature, required this.data});
+
+  @override
+  String toString() {
+    return 'SyncUpdated(feature: ${feature.name} , data: $data )';
+  }
 }

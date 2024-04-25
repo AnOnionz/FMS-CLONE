@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -71,21 +72,15 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       final note = data.$1.firstWhereOrNull(
           (element) => element.featureMultimediaId == featureMultimedia.id!);
       setState(() {
-        notes[featureMultimedia.id!] = note != null
-            ? note.copyWith(
-                dataUuid: Uuid().v1(),
-                dataTimestamp: timestamp,
-                attendanceId: widget.entity.general.attendance!.id,
-                featureId: widget.entity.feature.id,
-                isTextFieldRequired: featureMultimedia.isTextFieldRequired!)
-            : NoteEntity(
-                dataUuid: Uuid().v1(),
-                dataTimestamp: timestamp,
-                attendanceId: widget.entity.general.attendance!.id,
-                featureId: widget.entity.feature.id,
-                isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
-                featureMultimediaId: featureMultimedia.id!,
-              );
+        notes[featureMultimedia.id!] = note ??
+            NoteEntity(
+              dataUuid: Uuid().v1(),
+              dataTimestamp: timestamp,
+              attendanceId: widget.entity.general.attendance!.id,
+              featureId: widget.entity.feature.id,
+              isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
+              featureMultimediaId: featureMultimedia.id!,
+            );
       });
     });
     final photoGroup = data.$2.groupBy<int, PhotoEntity>((photo) {
@@ -183,6 +178,10 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                                     },
                                     isWatermark:
                                         featureMultimedia.isWatermarkRequired!,
+                                    isWatermarking:
+                                        featureMultimedia.isWatermarkRequired!
+                                            ? isWatermarking
+                                            : null,
                                   );
                                 },
                               ))
@@ -207,24 +206,28 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                       color: AppColors.black.withOpacity(0.15))
                 ]),
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
-                child: FlatButton(
-                  onPressed: isActive
-                      ? () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          _cubit.saveNotes(
-                              notes: notes.values.toList(),
-                              photos: photos.values
-                                  .toList()
-                                  .expand((element) => element)
-                                  .toList(),
-                              feature: widget.entity.feature);
-                        }
-                      : null,
-                  name: 'Lưu',
-                  color: AppColors.orange,
-                  disableColor: AppColors.potPourri,
-                  disableTextColor: AppColors.delRio,
-                ),
+                child: ValueListenableBuilder(
+                    valueListenable: isWatermarking,
+                    builder: (context, value, _) {
+                      return FlatButton(
+                        onPressed: isWatermarking.value == false && isActive
+                            ? () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                _cubit.saveNotes(
+                                    notes: notes.values.toList(),
+                                    photos: photos.values
+                                        .toList()
+                                        .expand((element) => element)
+                                        .toList(),
+                                    feature: widget.entity.feature);
+                              }
+                            : null,
+                        name: 'Lưu',
+                        color: AppColors.orange,
+                        disableColor: AppColors.potPourri,
+                        disableTextColor: AppColors.delRio,
+                      );
+                    }),
               )
             ],
           ),

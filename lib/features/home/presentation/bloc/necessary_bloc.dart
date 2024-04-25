@@ -51,6 +51,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       }
       if (state is NecessaryLockOut) {
         showRequiredTask(
+          feature: state.feature,
           features: state.features,
           onPressed: () {
             Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
@@ -70,7 +71,6 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       if (state is NecessaryTask) {
         showRequiredTask(
           features: state.features,
-          forSignout: true,
           onPressed: () {
             state.onClose();
             Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
@@ -132,7 +132,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       features.removeWhere((element) =>
           element.type == FeatureType.attendanceClockingOut ||
           element.type == FeatureType.synchronization);
-      emit(NecessaryLockOut(features: features));
+      emit(NecessaryLockOut(features: features, feature: event.feature));
       return;
     }
 
@@ -169,6 +169,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       features.removeWhere((element) =>
           element.type == FeatureType.attendanceClockingOut ||
           element.type == FeatureType.synchronization);
+
       emit(NecessaryTask(onClose: event.onClose, features: features));
       return;
     }

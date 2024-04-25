@@ -4,6 +4,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
+import 'package:fms/features/authentication/domain/usecases/logout_success_usecase%20copy.dart';
 import 'package:fms/features/authentication/domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/get_credentials_usecase.dart';
 import '../../domain/usecases/has_valid_credentials_usecase.dart';
@@ -15,6 +16,7 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc(
       {required LogoutUsecase logoutUsecase,
+      required LogoutSuccessUsecase logoutSuccess,
       required LoginUsecase loginUsecase,
       required HasValidCredentialsUsecase hasValidCredentialsUsecase,
       required GetCredentialsUsecase getCredentialsUsecase,
@@ -43,15 +45,16 @@ class AuthenticationBloc
       transformer: droppable(),
     );
 
-    on<AuthenticationLoginSuccess>(
+    on<AuthenticationLogin>(
       (event, emit) async {
         emit(AuthenticationState.authenticated(event.credentials));
       },
       transformer: droppable(),
     );
 
-    on<AuthenticationLogoutSuccess>(
+    on<AuthenticationLogout>(
       (event, emit) async {
+        await logoutSuccess();
         emit(const AuthenticationState.unauthenticated());
       },
       transformer: droppable(),

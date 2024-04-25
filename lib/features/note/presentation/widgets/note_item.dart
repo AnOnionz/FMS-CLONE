@@ -18,6 +18,7 @@ class NoteItem extends StatefulWidget {
   final NoteEntity note;
   final List<PhotoEntity> photos;
   final bool isWatermark;
+  final ValueNotifier<bool>? isWatermarking;
   final void Function(ImageDynamic image) onPickImage;
   final void Function(ImageDynamic image) onDeleteImage;
   final void Function(String value) onChangeTextfield;
@@ -30,7 +31,8 @@ class NoteItem extends StatefulWidget {
       required this.onPickImage,
       required this.onDeleteImage,
       required this.onChangeTextfield,
-      required this.photos});
+      required this.photos,
+      this.isWatermarking});
 
   @override
   State<NoteItem> createState() => _NoteItemState();
@@ -91,6 +93,7 @@ class _NoteItemState extends State<NoteItem> {
                     onChanged: widget.onPickImage,
                     isWatermarkRequired:
                         widget.entity.isWatermarkRequired ?? false,
+                    isWatermarking: widget.isWatermarking,
                   ),
                   images: widget.photos
                       .where(

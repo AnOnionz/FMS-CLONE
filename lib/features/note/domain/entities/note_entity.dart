@@ -13,10 +13,11 @@ part 'note_entity.g.dart';
 
 @collection
 class NoteEntity extends DataEntity {
-  Id get isarId => fastHash(dataUuid);
+  Id get isarId => fastHash(featureMultimediaId.toString());
   int? id;
   String dataUuid;
   DateTime dataTimestamp;
+  @Index(unique: true, replace: true)
   final int featureMultimediaId;
   int? attendanceId;
   int? featureId;
@@ -85,6 +86,6 @@ class NoteEntity extends DataEntity {
 
   @override
   String toString() {
-    return 'NoteEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, featureId: $featureId, attendanceId: $attendanceId, featureMultimediaId: $featureMultimediaId, value: $value, isTextFieldRequired: $isTextFieldRequired, status: $status)';
+    return 'NoteEntity(id: $id, photos: $photos dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, featureId: $featureId, attendanceId: $attendanceId, featureMultimediaId: $featureMultimediaId, value: $value, isTextFieldRequired: $isTextFieldRequired, status: $status)';
   }
 }

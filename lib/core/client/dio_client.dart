@@ -4,6 +4,8 @@ import 'dart:io';
 // import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/authentication/presentation/blocs/authentication_bloc.dart';
 
 import '/core/client/api_service.dart';
 import '/core/errors/app_exception.dart';
@@ -41,6 +43,15 @@ class DioClient extends ApiService {
         responseBody: true,
       ),
     );
+    _http.interceptors.add(InterceptorsWrapper(
+      onResponse: (response, handler) {
+        if (response.statusCode == StatusCode.UNAUTHORIZED) {
+          Modular.get<AuthenticationBloc>().add(AuthenticationLogout());
+        } else {
+          handler.next(response);
+        }
+      },
+    ));
     // http.httpClientAdapter = IOHttpClientAdapter(
     //   createHttpClient: () {
     //     final client = HttpClient(
