@@ -13,19 +13,20 @@ part 'note_entity.g.dart';
 
 @collection
 class NoteEntity extends DataEntity {
-  Id get isarId => fastHash(featureMultimediaId.toString());
+  Id get isarId => fastHash(keys.join('-'));
   int? id;
   String dataUuid;
   DateTime dataTimestamp;
-  @Index(unique: true, replace: true)
-  final int featureMultimediaId;
   int? attendanceId;
   int? featureId;
+  final int featureMultimediaId;
   final photos = IsarLinks<PhotoEntity>();
   String? value;
   bool isTextFieldRequired;
   @Enumerated(EnumType.name)
   final SyncStatus status;
+  @Index(unique: true, replace: true)
+  List<int> get keys => [attendanceId!, featureId!, featureMultimediaId];
 
   NoteEntity(
       {this.id,

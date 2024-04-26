@@ -11,8 +11,7 @@ class AppLifecycleObserver extends StatefulWidget {
   State<AppLifecycleObserver> createState() => _AppLifecycleObserverState();
 }
 
-class _AppLifecycleObserverState extends State<AppLifecycleObserver>
-    with WidgetsBindingObserver {
+class _AppLifecycleObserverState extends State<AppLifecycleObserver> {
   late final AppLifecycleListener _listener;
 
   final ValueNotifier<AppLifecycleState> lifecycleListenable =

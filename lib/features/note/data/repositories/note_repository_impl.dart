@@ -73,6 +73,12 @@ class NoteRepositoryImpl extends Repository
   Future<Result<FeatureEntity?>> getNotesNotCompleted(
       {required FeatureEntity feature}) {
     return todo(() async {
+      if (feature.featureMultimedias!.every((element) {
+        return element.isTextFieldRequired == false &&
+            element.minimumImages! == 0;
+      })) {
+        return Right(null);
+      }
       final localNotes = await _local.getNotesByFeature(feature);
       if (localNotes.isEmpty) {
         final reportFeature = feature.copyWith(featurePhotos: []);
@@ -93,7 +99,7 @@ class NoteRepositoryImpl extends Repository
                           (element) => element.status != SyncStatus.isDeleted)
                       .length <
                   featureMultimedia.minimumImages!;
-          Fx.log(note);
+
           if (isTextEmpty || isPhotoEmpty) {
             featureMultimedias.add(featureMultimedia);
           }
@@ -111,9 +117,10 @@ class NoteRepositoryImpl extends Repository
   @override
   Future<Result<Map<int, List<NoteEntity>>>> noSyncedData() async {
     return todo(() async {
-      final localPhotos = await _local.getNotes();
+      Fx.log(general);
+      final localNotes = await _local.getNotes();
 
-      final map = localPhotos.groupListsBy((element) => element.featureId!);
+      final map = localNotes.groupListsBy((element) => element.featureId!);
       map.entries.forEach(
         (element) {
           element.value

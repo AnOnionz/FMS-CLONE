@@ -13,12 +13,10 @@ part 'photo_entity.g.dart';
 class PhotoEntity extends DataEntity {
   Id get isarId => fastHash(dataUuid);
   int? id;
-  @Index(type: IndexType.value)
   String dataUuid;
   int? attendanceId;
   int? featureId;
   String? path;
-  @Index(unique: true)
   DateTime dataTimestamp;
   int featurePhotoId;
   ImageCloud? image;

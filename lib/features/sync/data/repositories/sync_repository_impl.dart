@@ -37,7 +37,6 @@ class SyncRepositoryImpl extends Repository
 
           /// get synchronized of feature
           await Future.forEach(map.keys, (feature) async {
-            print(feature.name);
             switch (feature.type) {
               case FeatureType.photography:
                 await _reportRepository.synchronized(feature);

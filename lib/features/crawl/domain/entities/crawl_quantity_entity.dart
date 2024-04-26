@@ -10,17 +10,17 @@ part 'crawl_quantity_entity.g.dart';
 
 @collection
 class CrawlQuantityEntity extends DataEntity {
-  Id get isarId => fastHash(dataUuid);
+  Id get isarId => fastHash(keys.join('-'));
   final int? id;
   final String dataUuid;
-  @Index(unique: true, replace: true)
   int? attendanceId;
-  @Index(unique: true, replace: true)
   int? featureId;
   final DateTime dataTimestamp;
   final List<CrawlQuantitylValueEntity> values;
   @Enumerated(EnumType.name)
   SyncStatus status;
+  @Index(type: IndexType.value)
+  List<int> get keys => [attendanceId!, featureId!];
 
   CrawlQuantityEntity(
       {this.id,

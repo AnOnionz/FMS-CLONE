@@ -11,7 +11,6 @@ final class GoogleMapService extends ChangeNotifier implements MapService {
   GoogleMapController? _controller;
   final Completer<GoogleMapController> _completer = Completer();
   EdgeInsets _padding = EdgeInsets.zero;
-  String? _mapStyleString;
 
   static const _initPosition = LatLng(15.6283721, 106.6830262);
 

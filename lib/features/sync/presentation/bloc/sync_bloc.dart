@@ -28,6 +28,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
   SyncBloc(this._photosNoSynced, this._notesNoSynced, this._quantitiesNoSynced)
       : super(SyncState.init()) {
     on<SyncStarted>((event, emit) {
+      emit(SyncState.successfully());
       _updatePhotoSync();
       _updateNoteSync();
       _updateQuantitySync();
@@ -50,7 +51,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
     on<SyncUpdated>((event, emit) async {
       final Map<FeatureEntity, List<DataEntity>> data = Map.from(state.data);
       data[event.feature] = event.data;
+      Fx.log(data);
       final count = data.values.expand((element) => element).length;
+
       if (count == 0) {
         emit(SyncState.successfully());
       } else

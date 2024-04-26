@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fms/core/errors/failure.dart';
 
 import 'package:fms/core/utilities/overlay.dart';

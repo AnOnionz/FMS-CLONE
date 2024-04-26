@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -43,10 +42,15 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
   Completer<bool> _completer = Completer();
 
   bool get isNoteActive =>
-      notes.values.every((note) => switch (note.isTextFieldRequired) {
-            true => !note.value.isEmptyOrNull,
-            false => true
-          });
+      widget.entity.feature.featureMultimedias!.every((element) =>
+                  element.isTextFieldRequired == false &&
+                  element.minimumImages == 0) &&
+              notes.values.every((element) => element.value == null)
+          ? false
+          : notes.values.every((note) => switch (note.isTextFieldRequired) {
+                true => !note.value.isEmptyOrNull,
+                false => true
+              });
 
   bool get isActive =>
       isNoteActive &&
