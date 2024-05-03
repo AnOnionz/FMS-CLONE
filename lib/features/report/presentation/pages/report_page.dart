@@ -2,6 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
@@ -12,8 +14,10 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
+import '../../../../core/constant/icons.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
+import '../../../../core/widgets/popup.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../cubit/report_cubit.dart';
 
@@ -40,9 +44,6 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
-    isWatermarking.addListener(() {
-      print(2321321312323);
-    });
     fetchPhotos();
   }
 
@@ -81,6 +82,20 @@ class _ReportPageState extends State<ReportPage> {
                 listener: (context, state) {
                   if (state is ReportSuccess) {
                     onFetchSuccess(state.photos);
+                  }
+                  if (state is ReportFailure) {
+                    showFailure(
+                      title: 'Tải dữ liệu thất bại',
+                      icon: SvgPicture.asset(AppIcons.failure),
+                      message: state.failure.message,
+                      btnText: 'Thử lại',
+                      onPressed: () async {
+                        await Future.delayed(
+                          300.milliseconds,
+                          () => fetchPhotos(),
+                        );
+                      },
+                    );
                   }
                 },
                 builder: (context, state) {

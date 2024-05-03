@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -15,10 +16,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
+import '../../../../core/constant/icons.dart';
 import '../../../../core/styles/theme.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
+import '../../../../core/widgets/popup.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../../../report/domain/entities/photo_entity.dart';
 import '../widgets/note_item.dart';
@@ -121,6 +124,20 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                   listener: (context, state) {
                     if (state is NoteSuccess) {
                       onFetchSuccess(state.data);
+                    }
+                    if (state is NoteFailure) {
+                      showFailure(
+                        title: 'Tải dữ liệu thất bại',
+                        icon: SvgPicture.asset(AppIcons.failure),
+                        message: state.failure.message,
+                        btnText: 'Thử lại',
+                        onPressed: () async {
+                          await Future.delayed(
+                            300.milliseconds,
+                            () => fetchNotes(),
+                          );
+                        },
+                      );
                     }
                   },
                   builder: (context, state) {

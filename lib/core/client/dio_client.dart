@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-// import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/authentication/presentation/blocs/authentication_bloc.dart';
@@ -13,9 +13,6 @@ import '/core/errors/status_code.dart';
 
 class DioClient extends ApiService {
   final cancelToken = CancelToken();
-
-  // final fingerprint =
-  //     'ee5ce1dfa7a53657c545c62b65802e4272878dabd65c0aadcf85783ebb0b4d5c';
 
   final Dio _http = Dio(
     BaseOptions(
@@ -29,20 +26,20 @@ class DioClient extends ApiService {
   );
 
   DioClient() {
-    HttpOverrides.global = MyHttpOverrides();
-
-    _http.interceptors.add(
-      LogInterceptor(
-        logPrint: (object) {
-          final RegExp pattern =
-              RegExp('.{1,800}'); // 800 is the size of each chunk
-          pattern
-              .allMatches(object.toString())
-              .forEach((RegExpMatch match) => debugPrint(match.group(0)));
-        },
-        responseBody: true,
-      ),
-    );
+    if (kDebugMode) {
+      _http.interceptors.add(
+        LogInterceptor(
+          logPrint: (object) {
+            final RegExp pattern =
+                RegExp('.{1,800}'); // 800 is the size of each chunk
+            pattern
+                .allMatches(object.toString())
+                .forEach((RegExpMatch match) => debugPrint(match.group(0)));
+          },
+          responseBody: true,
+        ),
+      );
+    }
     _http.interceptors.add(InterceptorsWrapper(
       onResponse: (response, handler) {
         if (response.statusCode == StatusCode.UNAUTHORIZED) {
@@ -52,26 +49,16 @@ class DioClient extends ApiService {
         }
       },
     ));
-    // http.httpClientAdapter = IOHttpClientAdapter(
-    //   createHttpClient: () {
-    //     final client = HttpClient(
-    //       context: SecurityContext(),
-    //     );
-    //     // You can test the intermediate / root cert here. We just ignore it.
-    //     client.badCertificateCallback = (cert, host, port) => true;
-    //     return client;
-    //   },
-    //   validateCertificate: (cert, host, port) {
-    //     // Check that the cert fingerprint matches the one we expect
-    //     // We definitely require _some_ certificate
-    //     if (cert == null) return false;
-    //     // Validate it any way you want. Here we only check that
-    //     // the fingerprint matches the OpenSSL SHA256.
-    //     final f = sha256.convert(cert.der).toString();
 
-    //     return fingerprint == f;
-    //   },
-    // );
+    _http.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient(
+          context: SecurityContext(),
+        );
+        client.badCertificateCallback = (cert, host, port) => true;
+        return client;
+      },
+    );
   }
 
   @override
@@ -238,14 +225,5 @@ class DioClient extends ApiService {
   @override
   void setValidateStatus(ValidateStatus validateStatus) {
     _http.options.validateStatus = validateStatus;
-  }
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }

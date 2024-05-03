@@ -65,6 +65,7 @@ class OutletSelectionPage extends StatelessWidget {
                     if (state is FetchWorkPlaceFailure) {
                       return Center(
                         child: DataLoadErrorWidget(
+                            backToHome: false,
                             onPressed: () => _fetchWorkPlaceBloc.add(
                                 FetchOutlets(
                                     workPlace: _workPlaceBloc.state.entity))),

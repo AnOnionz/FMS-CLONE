@@ -70,6 +70,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         if (state is FetchWorkPlaceFailure) {
                           return Center(
                             child: DataLoadErrorWidget(
+                                backToHome: false,
                                 onPressed: () => bloc.add(FetchProjects())),
                           );
                         }

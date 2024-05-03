@@ -42,7 +42,6 @@ class AppModule extends Module {
   void routes(r) {
     r.child(Routes.root,
         child: (_) => const AppPage(), transition: TransitionType.fadeIn);
-
     r.module(Routes.admin,
         module: AdminModule(), transition: TransitionType.fadeIn);
     r.module(SignModule.route, module: SignModule());

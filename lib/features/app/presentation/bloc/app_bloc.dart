@@ -125,9 +125,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _connectivityService.onConnectionChange.listen((status) async {
       Fx.log('Internet status: $status');
       if (status == InternetStatus.connected) {
-        Modular.get<DioClient>().setTimeout(kTimeOutDuration);
       } else {
-        Modular.get<DioClient>().setTimeout(2.seconds);
         if (OverlayManager.currentContext != null) {
           OverlayManager.showToast(
               msg: 'Không có kết nối internet',

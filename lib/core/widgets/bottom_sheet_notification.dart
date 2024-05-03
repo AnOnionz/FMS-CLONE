@@ -28,7 +28,9 @@ class BottomSheetNotification extends StatelessWidget {
         Text(title,
             style: context.textTheme.h2?.copyWith(color: AppColors.nightRider)),
         SizedBox(height: 8.h),
-        message ?? SizedBox(height: 37.h),
+        Flexible(
+          child: message ?? SizedBox(height: 37.h),
+        ),
         action
       ],
     );

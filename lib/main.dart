@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
@@ -9,15 +10,16 @@ import 'core/database/database.dart';
 import 'core/database/local_value.dart';
 import 'features/app/app_module.dart';
 import 'features/app/presentation/pages/app.dart';
-import 'features/authentication/data/models/user_model.dart';
 import 'features/general/domain/entities/general_entity.dart';
 import 'features/setting/domain/entities/setting_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   await Database.open([
     LocalValueSchema,
-    UserModelSchema,
     SettingAppSchema,
     GeneralEntitySchema,
     PhotoEntitySchema,

@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/work_place/presentation/widgets/booth_item.dart';
 
+import '../../../../core/constant/icons.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
 import '../bloc/fetch_work_place_bloc.dart';
@@ -57,9 +60,19 @@ class _BoothSelectionPageState extends State<BoothSelectionPage> {
       }
       if (state is GeneralFailure) {
         OverlayManager.hide();
-        OverlayManager.showSnackbar(
-            snackbar:
-                SnackBar(content: Text('Không tìm thấy cài đặt của dự án')));
+        showFailure(
+          title: 'Tải dữ liệu thất bại',
+          icon: SvgPicture.asset(AppIcons.failure),
+          message: state.failure?.message,
+          btnText: 'Thử lại',
+          onPressed: () async {
+            await Future.delayed(
+              300.milliseconds,
+              () => _generalBloc
+                  .add(GeneralFetch(workPlace: _workPlaceBloc.state.entity)),
+            );
+          },
+        );
       }
     });
   }
@@ -114,6 +127,7 @@ class _BoothSelectionPageState extends State<BoothSelectionPage> {
                     if (state is FetchWorkPlaceFailure) {
                       return Center(
                         child: DataLoadErrorWidget(
+                            backToHome: false,
                             onPressed: () => _fetchWorkPlaceBloc.add(
                                 FetchBooths(
                                     workPlace: _workPlaceBloc.state.entity))),

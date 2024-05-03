@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -21,17 +22,31 @@ class RequireTaskNotify extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Chưa hoàn thành công việc bắt buộc trong ngày:',
-                style: context.textTheme.body1!.copyWith(color: AppColors.nero),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4.h),
+                child: Text(
+                  'Chưa hoàn thành công việc bắt buộc trong ngày:',
+                  style:
+                      context.textTheme.body1!.copyWith(color: AppColors.nero),
+                ),
               ),
-              ...features
-                  .mapIndexed(
-                      (feature, index) => _item(context, feature, index))
-                  .toList(),
-              Text(
-                'Yêu cầu hoàn thành công việc trước khi ${feature == null ? 'đăng xuất' : feature!.name!.toLowerCase()}',
-                style: context.textTheme.body1!.copyWith(color: AppColors.nero),
+              Flexible(
+                child: ListView(
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  children: features
+                      .mapIndexed(
+                          (feature, index) => _item(context, feature, index))
+                      .toList(),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 4.h),
+                child: Text(
+                  'Yêu cầu hoàn thành công việc trước khi ${feature == null ? 'đăng xuất' : feature!.name!.toLowerCase()}',
+                  style:
+                      context.textTheme.body1!.copyWith(color: AppColors.nero),
+                ),
               )
             ]),
       ),

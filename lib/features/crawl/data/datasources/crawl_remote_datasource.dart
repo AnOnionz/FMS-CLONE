@@ -21,7 +21,6 @@ class CrawlRemoteDatasource extends RemoteDatasource
       {required CrawlQuantityEntity quantities,
       required GeneralEntity general}) async {
     final formData = quantities.toMap();
-    Fx.log(formData);
 
     final _resp = await dio.post(
         path:

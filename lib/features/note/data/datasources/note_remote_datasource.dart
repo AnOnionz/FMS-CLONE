@@ -42,7 +42,7 @@ class NoteRemoteDataSource extends ImagesRemoteDataSource
   Future<NoteEntity?> createNote(
       {required NoteEntity note, required GeneralEntity general}) async {
     final formData = note.toMap();
-    Fx.log(note);
+
     final _resp = await dio.post(
         path:
             '/app/attendances/${general.attendance!.id}/features/${note.featureId}/multimedias',

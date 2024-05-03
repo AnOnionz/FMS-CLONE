@@ -11,6 +11,10 @@ abstract class IDeteleImageRemoteDataSource {
       {required GeneralEntity general,
       required FeatureEntity feature,
       required int id});
+  Future<void> deleteOrderPhoto(
+      {required GeneralEntity general,
+      required FeatureEntity feature,
+      required int id});
 }
 
 class DeletePhotoRemoteDataSource extends RemoteDatasource
@@ -32,5 +36,15 @@ class DeletePhotoRemoteDataSource extends RemoteDatasource
     await dio.delete(
         path:
             '/app/attendances/${general.attendance!.id}/features/${feature.id}/multimedias/photos/$id');
+  }
+
+  @override
+  Future<void> deleteOrderPhoto(
+      {required GeneralEntity general,
+      required FeatureEntity feature,
+      required int id}) async {
+    await dio.delete(
+        path:
+            '/app/attendances/${general.attendance!.id}/features/${feature.id}/orders/photos/$id');
   }
 }

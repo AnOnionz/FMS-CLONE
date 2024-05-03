@@ -51,7 +51,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
     on<SyncUpdated>((event, emit) async {
       final Map<FeatureEntity, List<DataEntity>> data = Map.from(state.data);
       data[event.feature] = event.data;
-      Fx.log(data);
+
       final count = data.values.expand((element) => element).length;
 
       if (count == 0) {

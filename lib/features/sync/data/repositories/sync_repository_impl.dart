@@ -11,7 +11,6 @@ import 'package:fms/features/report/data/repositories/report_repository_impl.dar
 import 'package:fms/features/sync/domain/repositories/sync_repository.dart';
 
 import '../../../../core/constant/enum.dart';
-import '../../../../core/mixins/common.dart';
 import '../../../general/domain/entities/config_entity.dart';
 
 class SyncRepositoryImpl extends Repository
@@ -30,8 +29,6 @@ class SyncRepositoryImpl extends Repository
     return todo(
       () async {
         if (data.isNotEmpty) {
-          final List<Future<void>> futures = [];
-
           /// get only feature has data no synced
           final map = data..removeWhere((key, value) => value.isEmpty);
 

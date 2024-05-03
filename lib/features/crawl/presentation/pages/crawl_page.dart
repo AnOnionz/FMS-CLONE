@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/common.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
@@ -14,11 +16,13 @@ import 'package:fms/features/crawl/presentation/widgets/crawl_item.dart';
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../core/constant/icons.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
 import '../../../../core/styles/theme.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
+import '../../../../core/widgets/popup.dart';
 
 class CrawlPage extends StatefulWidget {
   final GeneralItemData entity;
@@ -34,23 +38,24 @@ class _CrawlPageState extends State<CrawlPage> {
 
   CrawlQuantityEntity? crawlQuantityEntity = null;
 
-  bool get isActive => crawlQuantityEntity?.status == SyncStatus.isNoSynced;
+  bool get isActive =>
+      crawlQuantityEntity?.status == SyncStatus.isNoSynced &&
+      crawlQuantityEntity!.values.any((value) => value.value != null);
 
   Completer<bool> _completer = Completer();
 
   @override
   void initState() {
     super.initState();
-    fetchuantities();
+    fetchQuantities();
   }
 
-  void fetchuantities() {
+  void fetchQuantities() {
     _cubit.fetchData(
         general: widget.entity.general, feature: widget.entity.feature);
   }
 
   Future<void> onFetchSuccess(CrawlQuantityEntity? data) async {
-    Fx.log(data);
     if (data != null) {
       crawlQuantityEntity = data;
     } else {
@@ -90,6 +95,20 @@ class _CrawlPageState extends State<CrawlPage> {
                   listener: (context, state) {
                     if (state is CrawlSuccess) {
                       onFetchSuccess(state.quantityEntity);
+                    }
+                    if (state is CrawlFailure) {
+                      showFailure(
+                        title: 'Tải dữ liệu thất bại',
+                        icon: SvgPicture.asset(AppIcons.failure),
+                        message: state.failure.message,
+                        btnText: 'Thử lại',
+                        onPressed: () async {
+                          await Future.delayed(
+                            300.milliseconds,
+                            () => fetchQuantities(),
+                          );
+                        },
+                      );
                     }
                   },
                   builder: (context, state) {
@@ -133,7 +152,7 @@ class _CrawlPageState extends State<CrawlPage> {
                     if (state is CrawlFailure) {
                       return Center(
                         child: DataLoadErrorWidget(
-                            onPressed: () => fetchuantities()),
+                            onPressed: () => fetchQuantities()),
                       );
                     }
                     return Center(child: AppIndicator());

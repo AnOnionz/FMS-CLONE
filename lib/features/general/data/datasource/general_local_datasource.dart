@@ -24,7 +24,7 @@ class GeneralLocalDataSource implements IGeneralLocalDataSource {
   @override
   GeneralEntity? getGeneral() {
     final general = database.getObject<GeneralEntity>();
-    Fx.log('general local: $general');
+
     return general;
   }
 }

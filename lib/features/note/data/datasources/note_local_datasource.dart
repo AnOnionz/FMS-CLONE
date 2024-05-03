@@ -32,7 +32,7 @@ class NoteLocalDataSource
   Future<List<NoteEntity>> getNotesByFeature(FeatureEntity feature) async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
     return db.filter<NoteEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance!.id)
+        .attendanceIdEqualTo(general.attendance?.id)
         .featureIdEqualTo(feature.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .build());
@@ -64,7 +64,7 @@ class NoteLocalDataSource
   Future<List<PhotoEntity>> getPhotosByFuture(FeatureEntity feature) async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
     return db.filter<PhotoEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance!.id)
+        .attendanceIdEqualTo(general.attendance?.id)
         .featureIdEqualTo(feature.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .sortByDataTimestamp()
@@ -75,7 +75,7 @@ class NoteLocalDataSource
   Future<List<NoteEntity>> getNotes() async {
     final time = await Modular.get<NetworkTimeService>().betweenToday();
     return db.filter<NoteEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance!.id)
+        .attendanceIdEqualTo(general.attendance?.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .sortByDataTimestamp()
         .build());
