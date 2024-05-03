@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/domain/usecases/get_attendance_usecase.dart';
@@ -74,6 +75,7 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
         if (data == null) {
           emit(GeneralFailure());
         } else {
+          Fx.log(data);
           emit(GeneralSuccess(general: data));
         }
       });

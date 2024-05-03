@@ -2,9 +2,11 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:isar/isar.dart';
+
+import 'package:fms/core/constant/enum.dart';
+import 'package:fms/core/mixins/common.dart';
+import 'package:fms/core/mixins/fx.dart';
 
 part 'config_entity.g.dart';
 
@@ -64,18 +66,25 @@ class FeatureEntity {
   final List<FeatureQuantity>? featureQuantities;
   final List<FeaturePhoto>? featurePhotos;
   final List<FeatureMultimedia>? featureMultimedias;
+  final FeatureOrder? featureOrder;
+  final List<FeatureScheme>? featureSchemes;
+  final List<FeatureCustomer>? featureCustomers;
+  final List<FeatureSampling>? featureSamplings;
 
-  FeatureEntity({
-    this.id,
-    this.name,
-    this.type,
-    this.ordinal,
-    this.dependentOnFeatureIds,
-    this.featureAttendance,
-    this.featureQuantities,
-    this.featurePhotos,
-    this.featureMultimedias,
-  });
+  FeatureEntity(
+      {this.id,
+      this.name,
+      this.type,
+      this.ordinal,
+      this.dependentOnFeatureIds,
+      this.featureAttendance,
+      this.featureQuantities,
+      this.featurePhotos,
+      this.featureMultimedias,
+      this.featureOrder,
+      this.featureSchemes,
+      this.featureCustomers,
+      this.featureSamplings});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -88,6 +97,10 @@ class FeatureEntity {
       'featureQuantities': featureQuantities?.map((x) => x.toMap()).toList(),
       'featurePhotos': featurePhotos?.map((x) => x.toMap()).toList(),
       'featureMultimedias': featureMultimedias?.map((x) => x.toMap()).toList(),
+      'featureOrder': featureOrder?.toMap(),
+      'featureSchemes': featureSchemes?.map((x) => x.toMap()).toList(),
+      'featureCustomers': featureCustomers?.map((x) => x.toMap()).toList(),
+      'featureSamplings': featureSamplings?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -122,6 +135,30 @@ class FeatureEntity {
               (map['featureMultimedias'] as List<dynamic>)
                   .map<FeatureMultimedia?>(
                 (x) => FeatureMultimedia.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      featureOrder: map['featureOrder'] != null
+          ? FeatureOrder.fromMap(map['featureOrder'] as Map<String, dynamic>)
+          : null,
+      featureSchemes: map['featureSchemes'] != null
+          ? List<FeatureScheme>.from(
+              (map['featureSchemes'] as List<dynamic>).map<FeatureScheme?>(
+                (x) => FeatureScheme.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      featureCustomers: map['featureCustomers'] != null
+          ? List<FeatureCustomer>.from(
+              (map['featureCustomers'] as List<dynamic>).map<FeatureCustomer?>(
+                (x) => FeatureCustomer.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      featureSamplings: map['featureSamplings'] != null
+          ? List<FeatureSampling>.from(
+              (map['featureSamplings'] as List<dynamic>).map<FeatureSampling?>(
+                (x) => FeatureSampling.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
@@ -389,20 +426,458 @@ class FeatureMultimedia {
 }
 
 @embedded
+class FeatureOrder {
+  final int? id;
+  final bool? hasPurchase;
+  final bool? hasExchange;
+  final bool? hasCustomer;
+  final bool? hasPhoto;
+  final bool? hasSampling;
+  final bool? isCustomerRequired;
+  final List<OrderProduct>? products;
+
+  FeatureOrder({
+    this.id,
+    this.hasPurchase,
+    this.hasExchange,
+    this.hasCustomer,
+    this.hasPhoto,
+    this.hasSampling,
+    this.isCustomerRequired,
+    this.products,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'hasPurchase': hasPurchase,
+      'hasExchange': hasExchange,
+      'hasCustomer': hasCustomer,
+      'hasPhoto': hasPhoto,
+      'hasSampling': hasSampling,
+      'isCustomerRequired': isCustomerRequired,
+      'products': products?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory FeatureOrder.fromMap(Map<String, dynamic> map) {
+    return FeatureOrder(
+      id: map['id'] != null ? map['id'] as int : null,
+      hasPurchase:
+          map['hasPurchase'] != null ? map['hasPurchase'] as bool : null,
+      hasExchange:
+          map['hasExchange'] != null ? map['hasExchange'] as bool : null,
+      hasCustomer:
+          map['hasCustomer'] != null ? map['hasCustomer'] as bool : null,
+      hasPhoto: map['hasPhoto'] != null ? map['hasPhoto'] as bool : null,
+      hasSampling:
+          map['hasSampling'] != null ? map['hasSampling'] as bool : null,
+      isCustomerRequired: map['isCustomerRequired'] != null
+          ? map['isCustomerRequired'] as bool
+          : null,
+      products: map['products'] != null
+          ? List<OrderProduct>.from(
+              (map['products'] as List<dynamic>).map<OrderProduct?>(
+                (x) => OrderProduct.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FeatureOrder.fromJson(String source) =>
+      FeatureOrder.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'FeatureOrder(id: $id, hasPurchase: $hasPurchase, hasExchange: $hasExchange, hasCustomer: $hasCustomer, hasPhoto: $hasPhoto, hasSampling: $hasSampling, isCustomerRequired: $isCustomerRequired, products: $products)';
+  }
+}
+
+@embedded
+class FeatureScheme {
+  final int? id;
+  final String? name;
+  final String? description;
+  final List<Exchange>? exchanges;
+
+  FeatureScheme({
+    this.id,
+    this.name,
+    this.description,
+    this.exchanges,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+      'exchanges': exchanges?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory FeatureScheme.fromMap(Map<String, dynamic> map) {
+    return FeatureScheme(
+      id: map['id'] != null ? map['id'] as int : null,
+      name: map['name'] != null ? map['name'] as String : null,
+      description:
+          map['description'] != null ? map['description'] as String : null,
+      exchanges: map['exchanges'] != null
+          ? List<Exchange>.from(
+              (map['exchanges'] as List<dynamic>).map<Exchange?>(
+                (x) => Exchange.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FeatureScheme.fromJson(String source) =>
+      FeatureScheme.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'FeatureScheme(id: $id, name: $name, description: $description, exchanges: $exchanges)';
+  }
+}
+
+@embedded
+class FeatureCustomer {
+  final int? id;
+  final String? name;
+  final String? description;
+  final int? ordinal;
+  final String? dataType;
+  final bool? isIdentity;
+  final bool? isRequired;
+  final List<Option>? options;
+
+  FeatureCustomer({
+    this.id,
+    this.name,
+    this.description,
+    this.ordinal,
+    this.dataType,
+    this.isIdentity,
+    this.isRequired,
+    this.options,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+      'ordinal': ordinal,
+      'dataType': dataType,
+      'isIdentity': isIdentity,
+      'isRequired': isRequired,
+      'options': options?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory FeatureCustomer.fromMap(Map<String, dynamic> map) {
+    return FeatureCustomer(
+      id: map['id'] != null ? map['id'] as int : null,
+      name: map['name'] != null ? map['name'] as String : null,
+      description:
+          map['description'] != null ? map['description'] as String : null,
+      ordinal: map['ordinal'] != null ? map['ordinal'] as int : null,
+      dataType: map['dataType'] != null ? map['dataType'] as String : null,
+      isIdentity: map['isIdentity'] != null ? map['isIdentity'] as bool : null,
+      isRequired: map['isRequired'] != null ? map['isRequired'] as bool : null,
+      options: map['options'] != null
+          ? List<Option>.from(
+              (map['options'] as List<dynamic>).map<Option?>(
+                (x) => Option.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FeatureCustomer.fromJson(String source) =>
+      FeatureCustomer.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'FeatureCustomer(id: $id, name: $name, description: $description, ordinal: $ordinal, dataType: $dataType, isIdentity: $isIdentity, isRequired: $isRequired, options: $options)';
+  }
+}
+
+@embedded
+class FeatureSampling {
+  final int? id;
+  final Product? product;
+  final ProductPackaging? productPackaging;
+  final int? ordinal;
+
+  FeatureSampling({
+    this.id,
+    this.product,
+    this.productPackaging,
+    this.ordinal,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'product': product?.toMap(),
+      'productPackaging': productPackaging?.toMap(),
+      'ordinal': ordinal,
+    };
+  }
+
+  factory FeatureSampling.fromMap(Map<String, dynamic> map) {
+    return FeatureSampling(
+      id: map['id'] != null ? map['id'] as int : null,
+      product: map['product'] != null
+          ? Product.fromMap(map['product'] as Map<String, dynamic>)
+          : null,
+      productPackaging: map['productPackaging'] != null
+          ? ProductPackaging.fromMap(
+              map['productPackaging'] as Map<String, dynamic>)
+          : null,
+      ordinal: map['ordinal'] != null ? map['ordinal'] as int : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FeatureSampling.fromJson(String source) =>
+      FeatureSampling.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'FeatureSampling(id: $id, product: $product, productPackaging: $productPackaging, ordinal: $ordinal)';
+  }
+}
+
+@embedded
+class Exchange {
+  final int? id;
+  final int? maxReceiveQuantity;
+  final int? reachAmount;
+  final String? logical;
+  final List<ExchangeCondition>? exchangeConditions;
+  final List<ExchangeProceed>? exchangeProceeds;
+
+  Exchange({
+    this.id,
+    this.maxReceiveQuantity,
+    this.reachAmount,
+    this.logical,
+    this.exchangeConditions,
+    this.exchangeProceeds,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'maxReceiveQuantity': maxReceiveQuantity,
+      'reachAmount': reachAmount,
+      'logical': logical,
+      'exchangeConditions': exchangeConditions?.map((x) => x.toMap()).toList(),
+      'exchangeProceeds': exchangeProceeds?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory Exchange.fromMap(Map<String, dynamic> map) {
+    return Exchange(
+      id: map['id'] != null ? map['id'] as int : null,
+      maxReceiveQuantity: map['maxReceiveQuantity'] != null
+          ? map['maxReceiveQuantity'] as int
+          : null,
+      reachAmount:
+          map['reachAmount'] != null ? map['reachAmount'] as int : null,
+      logical: map['logical'] != null ? map['logical'] as String : null,
+      exchangeConditions: map['exchangeConditions'] != null
+          ? List<ExchangeCondition>.from(
+              (map['exchangeConditions'] as List<dynamic>)
+                  .map<ExchangeCondition?>(
+                (x) => ExchangeCondition.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      exchangeProceeds: map['exchangeProceeds'] != null
+          ? List<ExchangeProceed>.from(
+              (map['exchangeProceeds'] as List<dynamic>).map<ExchangeProceed?>(
+                (x) => ExchangeProceed.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Exchange.fromJson(String source) =>
+      Exchange.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'Exchange(id: $id, maxReceiveQuantity: $maxReceiveQuantity, reachAmount: $reachAmount, logical: $logical, exchangeConditions: $exchangeConditions, exchangeProceeds: $exchangeProceeds)';
+  }
+}
+
+@embedded
+class ExchangeCondition {
+  final int? id;
+  final Product? product;
+  final ProductPackaging? productPackaging;
+  final int? quantity;
+
+  ExchangeCondition({
+    this.id,
+    this.product,
+    this.productPackaging,
+    this.quantity,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'product': product?.toMap(),
+      'productPackaging': productPackaging?.toMap(),
+      'quantity': quantity,
+    };
+  }
+
+  factory ExchangeCondition.fromMap(Map<String, dynamic> map) {
+    return ExchangeCondition(
+      id: map['id'] != null ? map['id'] as int : null,
+      product: map['product'] != null
+          ? Product.fromMap(map['product'] as Map<String, dynamic>)
+          : null,
+      productPackaging: map['productPackaging'] != null
+          ? ProductPackaging.fromMap(
+              map['productPackaging'] as Map<String, dynamic>)
+          : null,
+      quantity: map['quantity'] != null ? map['quantity'] as int : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ExchangeCondition.fromJson(String source) =>
+      ExchangeCondition.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'ExchangeCondition(id: $id, product: $product, productPackaging: $productPackaging, quantity: $quantity)';
+  }
+}
+
+@embedded
+class ExchangeProceed {
+  final int? id;
+  final Product? product;
+  final ProductPackaging? productPackaging;
+  final Item? item;
+  final int? quantity;
+
+  ExchangeProceed({
+    this.id,
+    this.product,
+    this.productPackaging,
+    this.item,
+    this.quantity,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'product': product?.toMap(),
+      'productPackaging': productPackaging?.toMap(),
+      'item': item?.toMap(),
+      'quantity': quantity,
+    };
+  }
+
+  factory ExchangeProceed.fromMap(Map<String, dynamic> map) {
+    return ExchangeProceed(
+      id: map['id'] != null ? map['id'] as int : null,
+      product: map['product'] != null
+          ? Product.fromMap(map['product'] as Map<String, dynamic>)
+          : null,
+      productPackaging: map['productPackaging'] != null
+          ? ProductPackaging.fromMap(
+              map['productPackaging'] as Map<String, dynamic>)
+          : null,
+      item: map['item'] != null
+          ? Item.fromMap(map['item'] as Map<String, dynamic>)
+          : null,
+      quantity: map['quantity'] != null ? map['quantity'] as int : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ExchangeProceed.fromJson(String source) =>
+      ExchangeProceed.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'ExchangeProceed(id: $id, product: $product, productPackaging: $productPackaging, item: $item, quantity: $quantity)';
+  }
+}
+
+@embedded
+class Option {
+  final int? id;
+  final String? name;
+
+  Option({
+    this.id,
+    this.name,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+    };
+  }
+
+  factory Option.fromMap(Map<String, dynamic> map) {
+    return Option(
+      id: map['id'] != null ? map['id'] as int : null,
+      name: map['name'] != null ? map['name'] as String : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Option.fromJson(String source) =>
+      Option.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'Option(id: $id, name: $name)';
+}
+
+@embedded
 class Item {
   final int? id;
   final String? name;
   final String? code;
   final String? unitName;
   final String? itemTypeName;
+  final String? imageUrl;
 
-  Item({
-    this.id,
-    this.name,
-    this.code,
-    this.unitName,
-    this.itemTypeName,
-  });
+  Item(
+      {this.id,
+      this.name,
+      this.code,
+      this.unitName,
+      this.itemTypeName,
+      this.imageUrl});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -411,17 +886,18 @@ class Item {
       'code': code,
       'unitName': unitName,
       'itemTypeName': itemTypeName,
+      'imageUrl': imageUrl
     };
   }
 
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
-      id: map['id'] as int,
-      name: map['name'] as String,
-      code: map['code'] as String,
-      unitName: map['unitName'] as String,
-      itemTypeName: map['itemTypeName'] as String,
-    );
+        id: map['id'] as int,
+        name: map['name'] as String,
+        code: map['code'] as String,
+        unitName: map['unitName'] as String,
+        itemTypeName: map['itemTypeName'] as String,
+        imageUrl: map['imageUrl'] as String?);
   }
 
   String toJson() => json.encode(toMap());
@@ -439,12 +915,14 @@ class Item {
 class Product {
   final int? id;
   final String? brandName;
+  final String? imageUrl;
   final String? name;
   final String? code;
 
   Product({
     this.id,
     this.brandName,
+    this.imageUrl,
     this.name,
     this.code,
   });
@@ -453,6 +931,7 @@ class Product {
     return <String, dynamic>{
       'id': id,
       'brandName': brandName,
+      'imageUrl': imageUrl,
       'name': name,
       'code': code,
     };
@@ -462,6 +941,7 @@ class Product {
     return Product(
       id: map['id'] as int,
       brandName: map['brandName'] as String,
+      imageUrl: map['imageUrl'] as String?,
       name: map['name'] as String,
       code: map['code'] as String,
     );
@@ -522,5 +1002,53 @@ class ProductPackaging {
   @override
   String toString() {
     return 'ProductPackaging(id: $id, barcode: $barcode, price: $price, rate: $rate, unitName: $unitName)';
+  }
+}
+
+@embedded
+class OrderProduct {
+  final int? id;
+  final Product? product;
+  final ProductPackaging? productPackaging;
+  final int? price;
+
+  OrderProduct({
+    this.id,
+    this.product,
+    this.productPackaging,
+    this.price,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'product': product?.toMap(),
+      'productPackaging': productPackaging?.toMap(),
+      'price': price,
+    };
+  }
+
+  factory OrderProduct.fromMap(Map<String, dynamic> map) {
+    return OrderProduct(
+      id: map['id'] != null ? map['id'] as int : null,
+      product: map['product'] != null
+          ? Product.fromMap(map['product'] as Map<String, dynamic>)
+          : null,
+      productPackaging: map['productPackaging'] != null
+          ? ProductPackaging.fromMap(
+              map['productPackaging'] as Map<String, dynamic>)
+          : null,
+      price: map['price'] != null ? map['price'] as int : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory OrderProduct.fromJson(String source) =>
+      OrderProduct.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'OrderProduct(id: $id, product: $product, productPackaging: $productPackaging, price: $price)';
   }
 }

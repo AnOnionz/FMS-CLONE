@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/core/mixins/common.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 
@@ -86,7 +86,7 @@ class NoteRepositoryImpl extends Repository
               (element) => element.featureMultimediaId == featureMultimedia.id);
 
           final bool isTextEmpty = note != null &&
-              note.value == null &&
+              note.value.isEmptyOrNull &&
               featureMultimedia.isTextFieldRequired!;
           final bool isPhotoEmpty = note != null &&
               featureMultimedia.minimumImages! > 0 &&
@@ -182,11 +182,12 @@ class NoteRepositoryImpl extends Repository
             }
           });
         }
-
-        final report = await _remote.createNote(note: note, general: general);
-        if (report != null) {
-          note = note.copyWith(id: report.id, status: SyncStatus.synced);
-          _local.cacheNoteToLocal(note);
+        if (!note.value.isEmptyOrNull) {
+          final report = await _remote.createNote(note: note, general: general);
+          if (report != null) {
+            note = note.copyWith(id: report.id, status: SyncStatus.synced);
+            _local.cacheNoteToLocal(note);
+          }
         }
       }
     });

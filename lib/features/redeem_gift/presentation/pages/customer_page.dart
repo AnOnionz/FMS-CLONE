@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -11,7 +12,9 @@ import '../widgets/customer/info_form.dart';
 
 class RedeemGiftCustomerPage extends StatefulWidget {
   final VoidCallback onNext;
-  const RedeemGiftCustomerPage({super.key, required this.onNext});
+  final FeatureEntity feature;
+  const RedeemGiftCustomerPage(
+      {super.key, required this.onNext, required this.feature});
 
   @override
   State<RedeemGiftCustomerPage> createState() => _RedeemGiftCustomerPageState();
@@ -27,6 +30,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print(widget.feature);
     return Column(
       children: [
         Expanded(
@@ -48,7 +52,7 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Thông tin mua hàng',
+                            'Thông tin định danh khách hàng',
                             style: context.textTheme.subtitle1,
                           ),
                           SvgPicture.asset(AppIcons.barcode)

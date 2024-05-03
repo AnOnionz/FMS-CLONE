@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -44,24 +45,23 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
   Completer<bool> _completer = Completer();
 
-  bool get isNoteActive =>
-      widget.entity.feature.featureMultimedias!.every((element) =>
-                  element.isTextFieldRequired == false &&
-                  element.minimumImages == 0) &&
-              notes.values.every((element) => element.value == null)
-          ? false
-          : notes.values.every((note) => switch (note.isTextFieldRequired) {
-                true => !note.value.isEmptyOrNull,
-                false => true
-              });
+  bool get isNoteActive => notes.values.any((note) {
+        return !note.value.isEmptyOrNull &&
+            note.status == SyncStatus.isNoSynced;
+      });
 
-  bool get isActive =>
-      isNoteActive &&
-      notes.values.any((element) => element.status == SyncStatus.isNoSynced);
+  bool get isPhotoActive => photos.values.any((photos) =>
+      photos.isNotEmpty &&
+      photos.any((photo) =>
+          photo.status == SyncStatus.isNoSynced ||
+          photo.status == SyncStatus.isDeleted));
+
+  bool get isActive => isNoteActive || isPhotoActive;
 
   @override
   void initState() {
     super.initState();
+
     fetchNotes();
   }
 
@@ -101,6 +101,7 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       });
       setState(() {});
     });
+
     if (!_completer.isCompleted) _completer.complete(true);
   }
 
@@ -185,16 +186,20 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                                       setState(() {});
                                     },
                                     onDeleteImage: (image) {
-                                      final photo =
-                                          photos[featureMultimedia.id!]!
-                                              .firstWhere((element) =>
-                                                  element.dataUuid ==
-                                                  image.uuid);
+                                      if (image.id != null) {
+                                        final photo =
+                                            photos[featureMultimedia.id!]!
+                                                .firstWhere((element) =>
+                                                    element.dataUuid ==
+                                                    image.uuid);
 
-                                      photo.status = SyncStatus.isDeleted;
-                                      notes[featureMultimedia.id!] =
-                                          noteItem.copyWith(
-                                              status: SyncStatus.isNoSynced);
+                                        photo.status = SyncStatus.isDeleted;
+                                      } else {
+                                        photos[featureMultimedia.id!]!
+                                            .removeWhere((photo) =>
+                                                photo.dataUuid == image.uuid);
+                                      }
+
                                       setState(() {});
                                     },
                                     isWatermark:

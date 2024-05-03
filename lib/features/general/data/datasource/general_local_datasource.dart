@@ -1,4 +1,3 @@
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 
 import '../../../../core/database/database.dart';

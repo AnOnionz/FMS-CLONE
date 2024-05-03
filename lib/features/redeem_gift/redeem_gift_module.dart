@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/home/domain/entities/general_item_data.dart';
 
 import '../../routes/routes.dart';
 import 'presentation/bloc/redeem_gift_bloc.dart';
@@ -8,7 +9,7 @@ import 'presentation/pages/redeem_gift_page.dart';
 import 'presentation/pages/success_page.dart';
 
 class RedeemGiftModule extends Module {
-  static const String route = '/redeem_gift/';
+  static const String route = '/customerInformationCapturing/';
   static const String success = 'success';
   static const String history = 'history';
   static const String historyDetail = 'history_detail';
@@ -23,7 +24,9 @@ class RedeemGiftModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => const RedeemGiftPage(),
+      child: (_) => RedeemGiftPage(
+        entity: r.args.data as GeneralItemData,
+      ),
     );
     r.child(
       Routes.root + success,

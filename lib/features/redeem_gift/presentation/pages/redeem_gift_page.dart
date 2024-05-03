@@ -6,6 +6,7 @@ import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/redeem_gift/presentation/pages/product_page.dart';
 import 'package:fms/features/redeem_gift/redeem_gift_module.dart';
 
+import '../../../home/domain/entities/general_item_data.dart';
 import '../widgets/custom_stepper.dart';
 import 'customer_page.dart';
 import 'receive_page.dart';
@@ -13,7 +14,8 @@ import 'review_page.dart';
 import 'sampling_page.dart';
 
 class RedeemGiftPage extends StatefulWidget {
-  const RedeemGiftPage({super.key});
+  final GeneralItemData entity;
+  const RedeemGiftPage({super.key, required this.entity});
 
   @override
   State<RedeemGiftPage> createState() => _RedeemGiftPageState();
@@ -22,13 +24,14 @@ class RedeemGiftPage extends StatefulWidget {
 class _RedeemGiftPageState extends State<RedeemGiftPage> {
   PageController controller = PageController();
   int _curr = 0;
-  late List<Widget> _list = <Widget>[
-    RedeemGiftProductPage(
-      key: PageStorageKey('product'),
-      onNext: onNext,
-    ),
+  late List<Widget> _body = <Widget>[
     RedeemGiftCustomerPage(
       key: PageStorageKey('customer'),
+      feature: widget.entity.feature,
+      onNext: onNext,
+    ),
+    RedeemGiftProductPage(
+      key: PageStorageKey('product'),
       onNext: onNext,
     ),
     RedeemGiftReceivePage(
@@ -46,8 +49,8 @@ class _RedeemGiftPageState extends State<RedeemGiftPage> {
   ];
 
   List<StepData> get steps => [
-        StepData(name: 'Sản phẩm'),
         StepData(name: 'Khách hàng'),
+        StepData(name: 'Sản phẩm'),
         StepData(name: 'Đổi quà'),
         StepData(name: 'Sampling'),
         StepData(name: 'Kiểm tra')
@@ -71,7 +74,7 @@ class _RedeemGiftPageState extends State<RedeemGiftPage> {
         resizeToAvoidBottomInset: false,
         appBar: DefaultAppBar(
           onBack: () => context.popUntil(HomeModule.route),
-          title: 'Ghi nhận thông tin khách hàng',
+          title: widget.entity.feature.name!,
         ),
         body: Column(
           children: [
@@ -81,7 +84,7 @@ class _RedeemGiftPageState extends State<RedeemGiftPage> {
             ),
             Expanded(
                 child: PageView(
-              children: _list,
+              children: _body,
               physics: NeverScrollableScrollPhysics(),
               controller: controller,
               onPageChanged: (num) {
