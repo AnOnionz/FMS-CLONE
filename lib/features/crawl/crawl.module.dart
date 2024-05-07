@@ -32,7 +32,7 @@ class CrawlModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => CrawlPage(entity: r.args.data as GeneralItemData),
+      child: (_) => CrawlPage(entity: r.args.data as GeneralFeatureData),
     );
   }
 }

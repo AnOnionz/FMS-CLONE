@@ -39,7 +39,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
         final action = () {
           Modular.to.pushNamed('/${state.feature.type!.name}/',
               arguments:
-                  GeneralItemData(general: general, feature: state.feature));
+                  GeneralFeatureData(general: general, feature: state.feature));
         };
         switch (state.feature.type) {
           case FeatureType.attendanceClockingIn:
@@ -61,7 +61,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       if (state is NecessaryUnfastenIn) {
         Modular.to.pushNamed('/${state.feature.type!.name}/',
             arguments:
-                GeneralItemData(general: general, feature: state.feature));
+                GeneralFeatureData(general: general, feature: state.feature));
       }
 
       if (state is NecessaryUnfastenOut) {
@@ -89,7 +89,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
         showRequiredAttendanceOut(() {
           Modular.to.pushNamed('/${state.feature.type!.name}/',
               arguments:
-                  GeneralItemData(general: general, feature: state.feature));
+                  GeneralFeatureData(general: general, feature: state.feature));
         });
       }
     });

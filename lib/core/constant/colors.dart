@@ -41,4 +41,5 @@ sealed class AppColors {
   static const Color fireBrick = Color(0xFFB3261E);
   static const Color whisper = Color(0xFFEBEBEB);
   static const Color midnightExpress = Color(0xFF252837);
+  static const Color silver = Color(0xFFC6C6C6);
 }

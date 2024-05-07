@@ -32,7 +32,7 @@ import '../../../images/presentation/widgets/images.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {
-  final GeneralItemData entity;
+  final GeneralFeatureData entity;
   final AttendanceType type;
 
   AttendancePage({super.key, required this.type, required this.entity});

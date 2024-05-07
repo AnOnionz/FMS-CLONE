@@ -24,7 +24,7 @@ import '../../../../core/widgets/data_load_error_widget.dart';
 import '../../../../core/widgets/popup.dart';
 
 class CrawlPage extends StatefulWidget {
-  final GeneralItemData entity;
+  final GeneralFeatureData entity;
   const CrawlPage({super.key, required this.entity});
 
   @override

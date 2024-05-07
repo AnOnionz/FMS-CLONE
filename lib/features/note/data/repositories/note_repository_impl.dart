@@ -86,8 +86,8 @@ class NoteRepositoryImpl extends Repository
               (element) => element.featureMultimediaId == featureMultimedia.id);
 
           final bool isTextEmpty = note != null &&
-              note.value.isEmptyOrNull &&
-              featureMultimedia.isTextFieldRequired!;
+              featureMultimedia.isTextFieldRequired! &&
+              note.value.isEmptyOrNull;
           final bool isPhotoEmpty = note != null &&
               featureMultimedia.minimumImages! > 0 &&
               note.photos

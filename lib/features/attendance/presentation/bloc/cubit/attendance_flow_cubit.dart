@@ -10,7 +10,7 @@ part 'attendance_flow_state.dart';
 class AttendanceFlowCubit extends Cubit<AttendanceFlowState> {
   AttendanceFlowCubit() : super(AttendanceFlowInitial());
 
-  void attendanceStarted(GeneralItemData entity) {
+  void attendanceStarted(GeneralFeatureData entity) {
     switch (entity.feature.featureAttendance!.isLocationRequired) {
       case true:
         Modular.to.pushNamed(AttendanceCoreModule.locate, arguments: entity);

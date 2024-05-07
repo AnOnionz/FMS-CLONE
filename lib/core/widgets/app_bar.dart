@@ -10,8 +10,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? action;
   final VoidCallback? onBack;
+  final Widget? iconBack;
   const DefaultAppBar(
-      {Key? key, required this.title, this.action, this.onBack});
+      {Key? key, required this.title, this.action, this.onBack, this.iconBack});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +32,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
             child: Padding(
               padding: EdgeInsets.only(left: 16.w),
-              child: SvgPicture.asset(
-                AppIcons.back,
-              ),
+              child: iconBack ??
+                  SvgPicture.asset(
+                    AppIcons.back,
+                  ),
             ),
           ),
           title: Padding(

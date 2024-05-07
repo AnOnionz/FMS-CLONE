@@ -21,18 +21,19 @@ class AttendanceOutModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => AttendanceFlowPage(entity: r.args.data as GeneralItemData),
+      child: (_) =>
+          AttendanceFlowPage(entity: r.args.data as GeneralFeatureData),
     );
     r.child(
       Routes.root + AttendanceCoreModule.locate,
       child: (_) =>
-          AttendanceLocatePage(entity: r.args.data as GeneralItemData),
+          AttendanceLocatePage(entity: r.args.data as GeneralFeatureData),
     );
     r.child(
       Routes.root + AttendanceCoreModule.attendance,
       child: (_) => AttendancePage(
           type: AttendanceType.CheckOut,
-          entity: r.args.data as GeneralItemData),
+          entity: r.args.data as GeneralFeatureData),
     );
   }
 }

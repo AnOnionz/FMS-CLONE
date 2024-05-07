@@ -22,7 +22,7 @@ import '../../../home/domain/entities/general_item_data.dart';
 import '../cubit/report_cubit.dart';
 
 class ReportPage extends StatefulWidget {
-  final GeneralItemData entity;
+  final GeneralFeatureData entity;
   ReportPage({super.key, required this.entity});
 
   @override

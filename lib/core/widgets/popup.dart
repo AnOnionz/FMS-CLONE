@@ -61,7 +61,7 @@ void showFailure({
 void showWarning({
   required String title,
   required Widget icon,
-  Widget? message,
+  String? message,
   required String btnText,
   required VoidCallback onPressed,
 }) {
@@ -69,7 +69,19 @@ void showWarning({
       body: BottomSheetNotification(
           icon: icon,
           title: title,
-          message: message,
+          message: message != null
+              ? Builder(builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 32.h),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.nero),
+                    ),
+                  );
+                })
+              : null,
           action: FlatButton(
               onPressed: () {
                 OverlayManager.hide();

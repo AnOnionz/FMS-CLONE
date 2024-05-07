@@ -35,7 +35,7 @@ class NoteModule extends Module {
     r.child(
       Routes.root,
       child: (_) => NotePage(
-        entity: r.args.data as GeneralItemData,
+        entity: r.args.data as GeneralFeatureData,
       ),
     );
   }

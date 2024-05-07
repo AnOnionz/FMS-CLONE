@@ -2,11 +2,10 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:isar/isar.dart';
-
+import 'package:flutter/material.dart';
 import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -138,8 +137,8 @@ class FeatureEntity {
               ),
             )
           : null,
-      featureOrder: map['featureOrder'] != null
-          ? FeatureOrder.fromMap(map['featureOrder'] as Map<String, dynamic>)
+      featureOrder: map['featureOrders'] != null
+          ? FeatureOrder.fromMap(map['featureOrders'] as Map<String, dynamic>)
           : null,
       featureSchemes: map['featureSchemes'] != null
           ? List<FeatureScheme>.from(
@@ -197,7 +196,7 @@ class FeatureEntity {
 
   @override
   String toString() {
-    return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos, featureMultimedias: $featureMultimedias)';
+    return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos, featureMultimedias: $featureMultimedias, featureOrder: $featureOrder, featureSchemes: $featureSchemes, featureCustomers: $featureCustomers, featureSamplings: $featureSamplings)';
   }
 }
 
@@ -567,6 +566,20 @@ class FeatureCustomer {
     this.isRequired,
     this.options,
   });
+
+  TextInputType inputType() {
+    switch (dataType) {
+      case 'string':
+        return TextInputType.text;
+      case 'email':
+        return TextInputType.emailAddress;
+      case 'number' || 'phoneNumber':
+        return TextInputType.number;
+
+      default:
+        return TextInputType.text;
+    }
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

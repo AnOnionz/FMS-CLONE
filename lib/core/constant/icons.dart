@@ -36,6 +36,7 @@ class AppIcons {
   static String history = 'history'.icon.svg;
   static String scan = 'scan'.icon.svg;
   static String close = 'close'.icon.svg;
+  static String closeRegular = 'close_regular'.icon.svg;
   static String clock = 'clock'.icon.svg;
   static String calendar = 'calendar'.icon.svg;
   static String lock = 'lock'.icon.svg;
@@ -65,4 +66,7 @@ class AppIcons {
   static String bin = 'bin'.icon.svg;
   static String binCircle = 'bin_circle'.icon.svg;
   static String requestSignout = 'request_signout'.icon.svg;
+  static String requestSkip = 'request_skip'.icon.svg;
+  static String requestClose = 'request_close'.icon.svg;
+  static String backStepArrow = 'back_step_arrow'.icon.svg;
 }

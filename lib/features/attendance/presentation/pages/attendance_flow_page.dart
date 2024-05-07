@@ -5,7 +5,7 @@ import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_flow_
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
 
 class AttendanceFlowPage extends StatefulWidget {
-  final GeneralItemData entity;
+  final GeneralFeatureData entity;
   const AttendanceFlowPage({super.key, required this.entity});
 
   @override

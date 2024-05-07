@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/note/domain/entities/note_entity.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import 'core/database/database.dart';
@@ -25,6 +26,7 @@ void main() async {
     PhotoEntitySchema,
     NoteEntitySchema,
     CrawlQuantityEntitySchema,
+    OrderEntitySchema
   ]);
   runApp(ModularApp(
       module: AppModule(),

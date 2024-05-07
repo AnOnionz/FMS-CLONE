@@ -16,7 +16,7 @@ import '../../../../core/widgets/button/outline.dart';
 import '../bloc/locate_cubit.dart';
 
 class AttendanceLocatePage extends StatefulWidget {
-  final GeneralItemData entity;
+  final GeneralFeatureData entity;
   const AttendanceLocatePage({super.key, required this.entity});
 
   @override

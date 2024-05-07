@@ -34,7 +34,7 @@ class ReportModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => ReportPage(entity: r.args.data as GeneralItemData),
+      child: (_) => ReportPage(entity: r.args.data as GeneralFeatureData),
     );
   }
 }
