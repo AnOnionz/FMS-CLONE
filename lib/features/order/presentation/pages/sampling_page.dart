@@ -6,15 +6,15 @@ import 'package:fms/features/order/presentation/widgets/sampling/sampling_box.da
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
 
-class RedeemGiftSamplingPage extends StatefulWidget {
+class OrderSamplingPage extends StatefulWidget {
   final VoidCallback onNext;
-  const RedeemGiftSamplingPage({super.key, required this.onNext});
+  const OrderSamplingPage({super.key, required this.onNext});
 
   @override
-  State<RedeemGiftSamplingPage> createState() => _RedeemGiftSamplingPageState();
+  State<OrderSamplingPage> createState() => _OrderSamplingPageState();
 }
 
-class _RedeemGiftSamplingPageState extends State<RedeemGiftSamplingPage>
+class _OrderSamplingPageState extends State<OrderSamplingPage>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {

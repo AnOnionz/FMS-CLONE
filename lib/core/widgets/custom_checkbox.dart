@@ -23,20 +23,19 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
         widget.onChanged?.call(!widget.value);
       },
       child: Container(
-        width: 24.h,
-        height: 24.h,
+        width: 24.w,
+        height: 24.w,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: AppColors.nobel,
+            color: widget.value ? AppColors.orange : AppColors.nobel,
           ),
         ),
         child: widget.value
             ? Center(
-                child: Icon(
-                  Icons.check,
-                  size: 16.h,
-                  color: AppColors.nobel,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.orange,
+                  radius: 6.w,
                 ),
               )
             : null,

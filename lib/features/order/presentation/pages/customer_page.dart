@@ -7,7 +7,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/home/presentation/widgets/general_feature_widget.dart';
 import 'package:fms/features/order/presentation/cubit/identify_cubit.dart';
 import 'package:fms/features/order/presentation/widgets/bottom_buttons.dart';
@@ -19,23 +18,22 @@ import '../../../../core/constant/icons.dart';
 import '../../../../core/styles/theme.dart';
 import '../../domain/entities/order_entity.dart';
 
-class RedeemGiftCustomerPage extends StatefulWidget {
+class OrderCustomerPage extends StatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
   final void Function(List<CustomerInfo> customers) onSaveData;
-  final FeatureEntity feature;
-  const RedeemGiftCustomerPage(
+
+  const OrderCustomerPage(
       {super.key,
       required this.onNext,
-      required this.feature,
       required this.onBack,
       required this.onSaveData});
 
   @override
-  State<RedeemGiftCustomerPage> createState() => _RedeemGiftCustomerPageState();
+  State<OrderCustomerPage> createState() => _OrderCustomerPageState();
 }
 
-class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
+class _OrderCustomerPageState extends State<OrderCustomerPage>
     with AutomaticKeepAliveClientMixin {
   final _formKey = GlobalKey<FormState>();
   List<CustomerInfo> _identifyFields = [];
@@ -52,6 +50,8 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final generalFeature = GeneralFeature.of(context).data;
     return Column(
       children: [
         Expanded(
@@ -81,15 +81,14 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                       ),
                     ),
                     IdentityForm(
-                      featureCustomers: widget.feature.featureCustomers!,
+                      featureCustomers:
+                          generalFeature.feature.featureCustomers!,
                       callback: (customerOrders) {
                         setState(() {
                           _identifyFields = customerOrders;
                         });
                       },
                       onIdentify: () {
-                        final generalFeature =
-                            GeneralFeature.of(context).generalFeatureData;
                         identifyCubit.identify(
                             identifyFields: _identifyFields,
                             attendanceId:
@@ -149,7 +148,8 @@ class _RedeemGiftCustomerPageState extends State<RedeemGiftCustomerPage>
                           ),
                           InfomationForm(
                             formKey: _formKey,
-                            featureCustomers: widget.feature.featureCustomers!,
+                            featureCustomers:
+                                generalFeature.feature.featureCustomers!,
                             customerInfos: state.customerInfos,
                             callback: (customerOrders) {
                               setState(() {

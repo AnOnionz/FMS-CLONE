@@ -5,17 +5,19 @@ import 'package:fms/features/order/data/datasources/order_local_datasource.dart'
 import 'package:fms/features/order/data/repositories/order_repository_impl.dart';
 import 'package:fms/features/order/domain/usecases/identify_customer_usecase.dart';
 import 'package:fms/features/order/presentation/cubit/identify_cubit.dart';
+import 'package:fms/features/order/presentation/pages/barcode_scanner_page.dart';
 
 import '../../routes/routes.dart';
 import 'data/datasources/order_remote_datasource.dart';
 import 'presentation/bloc/order_bloc.dart';
 import 'presentation/pages/history_exchange.dart';
 import 'presentation/pages/history_exchange_detail.dart';
-import 'presentation/pages/redeem_gift_page.dart';
+import 'presentation/pages/order_page.dart';
 import 'presentation/pages/success_page.dart';
 
 class OrderModule extends Module {
   static const String route = '/customerInformationCapturing/';
+  static const String productBarcodeScanner = 'product_barcode_scanner';
   static const String success = 'success';
   static const String history = 'history';
   static const String historyDetail = 'history_detail';
@@ -35,9 +37,13 @@ class OrderModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => RedeemGiftPage(
+      child: (_) => OrderPage(
         entity: r.args.data as GeneralFeatureData,
       ),
+    );
+    r.child(
+      Routes.root + productBarcodeScanner,
+      child: (_) => BarcodeScanner(),
     );
     r.child(
       Routes.root + success,

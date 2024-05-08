@@ -5,11 +5,11 @@ import '../../domain/entities/general_item_data.dart';
 class GeneralFeature extends InheritedWidget {
   const GeneralFeature({
     super.key,
-    required this.generalFeatureData,
+    required this.data,
     required super.child,
   });
 
-  final GeneralFeatureData generalFeatureData;
+  final GeneralFeatureData data;
 
   static GeneralFeature? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<GeneralFeature>();
@@ -22,6 +22,5 @@ class GeneralFeature extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(GeneralFeature oldWidget) =>
-      generalFeatureData != oldWidget.generalFeatureData;
+  bool updateShouldNotify(GeneralFeature oldWidget) => data != oldWidget.data;
 }

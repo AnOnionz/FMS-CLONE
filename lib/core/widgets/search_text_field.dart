@@ -57,19 +57,28 @@ class _SearchTextFieldState<T> extends State<SearchTextField<T>> {
           controller: controller,
           focusNode: focusNode,
           cursorHeight: 19.2.sp,
+          cursorWidth: 0.9,
+          textAlignVertical: TextAlignVertical.center,
+          style: context.textTheme.body1,
+          maxLength: 48,
+          buildCounter: (context,
+                  {required currentLength,
+                  required isFocused,
+                  required maxLength}) =>
+              null,
           decoration: InputDecoration(
               filled: true,
               fillColor: AppColors.white,
               hintText: widget.label,
               hintStyle: context.textTheme.body1,
+              isCollapsed: true,
               contentPadding:
-                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
+                  EdgeInsets.symmetric(horizontal: 18.w, vertical: 28.w),
               suffixIconConstraints: BoxConstraints(),
               suffixIcon: Padding(
                 padding: EdgeInsets.only(right: 16.w),
                 child: SvgPicture.asset(
                   AppIcons.search1,
-                  height: 24.h,
                   colorFilter:
                       ColorFilter.mode(AppColors.black, BlendMode.srcIn),
                 ),
@@ -85,11 +94,11 @@ class _SearchTextFieldState<T> extends State<SearchTextField<T>> {
       hideKeyboardOnDrag: true,
       itemBuilder: widget.itemBuilder,
       onSelected: (value) {
+        widget.onSelected(value);
         setState(() {
           _controller.clear();
           _suggestionsController.close();
         });
-        widget.onSelected(value);
       },
     );
   }

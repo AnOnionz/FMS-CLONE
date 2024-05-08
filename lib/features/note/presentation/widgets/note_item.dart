@@ -7,7 +7,7 @@ import 'package:fms/features/general/domain/entities/config_entity.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
-import '../../../images/presentation/widgets/images.dart';
+import '../../../images/presentation/widgets/image_view.dart';
 import '../../../report/domain/entities/photo_entity.dart';
 import '../../domain/entities/note_entity.dart';
 import 'note_text_field.dart';
@@ -79,7 +79,7 @@ class _NoteItemState extends State<NoteItem> {
               onChanged: widget.onChangeTextfield,
             ),
           ),
-          if (widget.entity.minimumImages! > 0)
+          if (widget.entity.maximumImages! > 0)
             Padding(
                 padding: EdgeInsets.only(top: 20.h),
                 child: ListViewImages(
@@ -122,7 +122,7 @@ class _NoteItemState extends State<NoteItem> {
   }
 
   String _optinal(int? min, int? max) {
-    if (min == 0) return '';
+    if (max == 0) return '';
     return switch (min == max) {
       true => '(bắt buộc chụp ${max} hình)',
       false => '(chụp từ ${min}-${max} hình)',

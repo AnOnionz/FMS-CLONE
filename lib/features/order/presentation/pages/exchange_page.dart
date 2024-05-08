@@ -10,17 +10,17 @@ import '../../../../core/widgets/button/flat.dart';
 import '../widgets/bottom_buttons.dart';
 import '../widgets/receive/gift_quantity_widget.dart';
 
-class RedeemGiftReceivePage extends StatefulWidget {
+class OrderExchangePage extends StatefulWidget {
   final VoidCallback onBack;
   final VoidCallback onNext;
-  const RedeemGiftReceivePage(
+  const OrderExchangePage(
       {super.key, required this.onNext, required this.onBack});
 
   @override
-  State<RedeemGiftReceivePage> createState() => _RedeemGiftReceivePageState();
+  State<OrderExchangePage> createState() => _OrderExchangePageState();
 }
 
-class _RedeemGiftReceivePageState extends State<RedeemGiftReceivePage>
+class _OrderExchangePageState extends State<OrderExchangePage>
     with AutomaticKeepAliveClientMixin {
   void _showSheetLimitGift(BuildContext context) {
     OverlayManager.showSheet(

@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
+import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../core/constant/colors.dart';
 import '../../../../../core/constant/images.dart';
 import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/empty_widget.dart';
 import '../../../../../core/widgets/item_container.dart';
+import '../../pages/purchase_page.dart';
 import '../input_quantity.dart';
+import 'order_product_image.dart';
 
 class SelectedProduct extends StatelessWidget {
-  final State state;
-  final List<int> items;
+  final State<OrderPurchasePage> state;
+  final List<PurchaseEntity> items;
 
-  const SelectedProduct({super.key, required this.items, required this.state});
+  const SelectedProduct({
+    super.key,
+    required this.items,
+    required this.state,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +40,9 @@ class SelectedProduct extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final item = items[index];
+
               return Dismissible(
-                key: Key(item.toString()),
+                key: ValueKey(item.featureOrderProductId.toString()),
                 onDismissed: (direction) {
                   // ignore: invalid_use_of_protected_member
                   state.setState(() {
@@ -40,29 +50,20 @@ class SelectedProduct extends StatelessWidget {
                   });
                 },
                 child: ItemContainer(
+                    key: ValueKey(item.orderProduct!.id!.toString()),
                     titleFlexible: false,
-                    leading: Image.asset(AppImages.loginBanner),
-                    title: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tên sản phẩm',
-                          style: context.textTheme.caption1,
-                        ),
-                        Text(
-                          'MA0001223',
-                          style: context.textTheme.caption2
-                              ?.copyWith(color: AppColors.nobel),
-                        ),
-                        Text(
-                          '200.000 vnd / thùng',
-                          style: context.textTheme.caption2,
-                        )
-                      ],
-                    ),
+                    leading:
+                        OrderProductImage(orderProduct: item.orderProduct!),
+                    title: OrderProductInfoWidget(product: item.orderProduct!),
                     trailing: InputQuantity(
-                      max: 100,
+                      value: item.quantity!,
+                      max: 10000,
+                      onValueChanged: (value) {
+                        // ignore: invalid_use_of_protected_member
+                        state.setState(() {
+                          item.updateQuantity(value);
+                        });
+                      },
                     )),
               );
             },

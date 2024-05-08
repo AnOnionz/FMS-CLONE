@@ -6,31 +6,44 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 class InputQuantity extends StatefulWidget {
+  final int value;
   final int max;
   final int min;
   final VoidCallback? onMax;
   final VoidCallback? onMin;
+  final Function(int value)? onValueChanged;
+
   final EdgeInsets? padding;
-  InputQuantity(
-      {super.key,
-      this.padding,
-      required this.max,
-      this.min = 0,
-      this.onMax,
-      this.onMin});
+
+  InputQuantity({
+    super.key,
+    this.padding,
+    required this.max,
+    this.min = 0,
+    this.onMax,
+    this.onMin,
+    this.onValueChanged,
+    required this.value,
+  });
 
   @override
   State<InputQuantity> createState() => _InputQuantityState();
 }
 
 class _InputQuantityState extends State<InputQuantity> {
-  int _value = 0;
+  late int _value = widget.value;
+  @override
+  void didUpdateWidget(covariant InputQuantity oldWidget) {
+    print('didUpdateWidget');
+    super.didUpdateWidget(oldWidget);
+  }
 
   void _increase() {
     if (_value < widget.max) {
       setState(() {
         _value += 1;
       });
+      widget.onValueChanged?.call(_value);
     } else {
       widget.onMax?.call();
     }
@@ -41,6 +54,7 @@ class _InputQuantityState extends State<InputQuantity> {
       setState(() {
         _value -= 1;
       });
+      widget.onValueChanged?.call(_value);
     } else {
       widget.onMin?.call();
     }

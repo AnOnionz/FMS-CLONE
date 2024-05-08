@@ -227,15 +227,22 @@ class CustomerOption {
 
 @embedded
 class PurchaseEntity {
-  final int? id;
-  final int? featureOrderProductId;
-  final int? quantity;
+  int? id;
+  int? featureOrderProductId;
+  int? quantity;
+  @ignore
+  final OrderProduct? orderProduct;
 
   PurchaseEntity({
     this.id,
     this.featureOrderProductId,
-    this.quantity,
+    this.quantity = 0,
+    this.orderProduct,
   });
+
+  void updateQuantity(int value) {
+    quantity = value;
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -270,11 +277,11 @@ class PurchaseEntity {
     int? quantity,
   }) {
     return PurchaseEntity(
-      id: id ?? this.id,
-      featureOrderProductId:
-          featureOrderProductId ?? this.featureOrderProductId,
-      quantity: quantity ?? this.quantity,
-    );
+        id: id ?? this.id,
+        featureOrderProductId:
+            featureOrderProductId ?? this.featureOrderProductId,
+        quantity: quantity ?? this.quantity,
+        orderProduct: orderProduct);
   }
 }
 

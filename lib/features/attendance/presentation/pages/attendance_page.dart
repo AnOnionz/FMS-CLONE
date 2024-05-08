@@ -28,7 +28,7 @@ import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/button/outline.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../../../home/home_module.dart';
-import '../../../images/presentation/widgets/images.dart';
+import '../../../images/presentation/widgets/image_view.dart';
 import '../widgets/time_box.dart';
 
 class AttendancePage extends StatefulWidget {

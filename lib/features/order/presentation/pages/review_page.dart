@@ -7,15 +7,15 @@ import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../widgets/exchange_detail.dart';
 
-class RedeemGiftReviewPage extends StatefulWidget {
+class OrderReviewPage extends StatefulWidget {
   final VoidCallback onNext;
-  const RedeemGiftReviewPage({super.key, required this.onNext});
+  const OrderReviewPage({super.key, required this.onNext});
 
   @override
-  State<RedeemGiftReviewPage> createState() => _RedeemGiftReviewPageState();
+  State<OrderReviewPage> createState() => _OrderReviewPageState();
 }
 
-class _RedeemGiftReviewPageState extends State<RedeemGiftReviewPage>
+class _OrderReviewPageState extends State<OrderReviewPage>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {

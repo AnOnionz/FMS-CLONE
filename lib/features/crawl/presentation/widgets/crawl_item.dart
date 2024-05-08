@@ -55,7 +55,7 @@ class _CrawlItemState extends State<CrawlItem> {
               Text(
                 isItem
                     ? widget.entity.item!.code!
-                    : widget.entity.product!.code!,
+                    : widget.entity.productPackaging!.barcode!,
                 style: context.textTheme.caption2
                     ?.copyWith(color: AppColors.nobel),
               ),

@@ -22,8 +22,8 @@ class ItemContainer extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-              height: 65.h,
-              width: 65.h,
+              height: 65.w,
+              width: 65.w,
               child: Stack(
                 children: [
                   Container(

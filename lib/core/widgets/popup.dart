@@ -27,14 +27,14 @@ void showSuccess({required String title}) {
 
 void showFailure({
   required String title,
-  required Widget icon,
+  Widget? icon,
   String? message,
   required String btnText,
   required VoidCallback onPressed,
 }) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
-          icon: icon,
+          icon: icon ?? SvgPicture.asset(AppIcons.failure),
           title: title,
           message: message != null
               ? Builder(builder: (context) {

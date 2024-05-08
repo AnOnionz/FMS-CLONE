@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 
 class CachedImage extends StatelessWidget {
@@ -36,7 +37,8 @@ class CachedImage extends StatelessWidget {
       height: height,
       color: color,
       colorBlendMode: colorBlendMode,
-      placeholder: placeholder ?? (context, url) => AppIndicator(),
+      placeholder:
+          placeholder ?? (context, url) => Center(child: AppIndicator()),
       useOldImageOnUrlChange: useOldImageOnUrlChange,
       fadeOutDuration:
           useFade ? const Duration(milliseconds: 500) : Duration.zero,

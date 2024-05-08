@@ -2,10 +2,12 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
+
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -137,8 +139,8 @@ class FeatureEntity {
               ),
             )
           : null,
-      featureOrder: map['featureOrders'] != null
-          ? FeatureOrder.fromMap(map['featureOrders'] as Map<String, dynamic>)
+      featureOrder: map['featureOrder'] != null
+          ? FeatureOrder.fromMap(map['featureOrder'] as Map<String, dynamic>)
           : null,
       featureSchemes: map['featureSchemes'] != null
           ? List<FeatureScheme>.from(
@@ -967,7 +969,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, brandName: $brandName, name: $name, code: $code)';
+    return 'Product(id: $id, brandName: $brandName, imageUrl: $imageUrl, name: $name, code: $code)';
   }
 }
 

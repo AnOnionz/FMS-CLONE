@@ -67,6 +67,7 @@ class GiftQuantityWidget extends StatelessWidget {
                   absorbing: !enable,
                   child: InputQuantity(
                     max: 5,
+                    value: 0,
                     onMax: onLimitGift,
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                   ),
