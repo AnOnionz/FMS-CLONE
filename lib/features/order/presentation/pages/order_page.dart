@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -128,7 +129,11 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<void> _init() async {
     final time = await _networkTimeService.ntpDateTime();
-    orderEntity = OrderEntity(dataUuid: Uuid().v1(), dataTimestamp: time);
+    orderEntity = OrderEntity(
+        dataUuid: Uuid().v1(),
+        dataTimestamp: time,
+        attendanceId: widget.entity.general.attendance!.id,
+        featureId: widget.entity.feature.id);
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(
@@ -149,6 +154,7 @@ class _OrderPageState extends State<OrderPage> {
           setState(() {
             orderEntity = orderEntity.copyWith(customerInfos: customers);
           });
+          Fx.log(orderEntity);
         },
       ));
     }
@@ -172,6 +178,7 @@ class _OrderPageState extends State<OrderPage> {
           setState(() {
             orderEntity = orderEntity.copyWith(purchases: purchases);
           });
+          Fx.log(orderEntity);
         },
       ));
     }

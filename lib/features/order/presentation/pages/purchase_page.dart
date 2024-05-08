@@ -258,7 +258,12 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: BottomButtons(
                   onBack: widget.onBack,
-                  onNext: items.length > 0 ? widget.onNext : null,
+                  onNext: items.any((element) => element.quantity! > 0)
+                      ? () {
+                          widget.onSaveData(items);
+                          widget.onNext();
+                        }
+                      : null,
                 ),
               )
             ],
