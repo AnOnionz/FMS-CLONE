@@ -18,8 +18,8 @@ import 'package:fms/features/order/presentation/pages/purchase_page.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../home/domain/entities/general_item_data.dart';
-import '../../../home/presentation/widgets/general_feature_widget.dart';
 import '../widgets/custom_stepper.dart';
+import '../widgets/data_feature_widget.dart';
 import 'customer_page.dart';
 import 'exchange_page.dart';
 import 'review_page.dart';
@@ -37,6 +37,7 @@ class _OrderPageState extends State<OrderPage> {
   final NetworkTimeService _networkTimeService =
       Modular.get<NetworkTimeService>();
   PageController controller = PageController();
+  Completer<OrderEntity> _completer = Completer();
   late OrderEntity orderEntity;
   late List<Widget> _body = [];
   late List<StepData> _steps = [];
@@ -45,8 +46,8 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   void onNext() {
@@ -86,6 +87,7 @@ class _OrderPageState extends State<OrderPage> {
                       onPressed: () {
                         _steps[_curr].setState(StepperState.ignored);
                         onNext();
+                        setState(() {});
                       }),
                   child: Text(
                     'Skip',
@@ -106,21 +108,23 @@ class _OrderPageState extends State<OrderPage> {
                   ignoredColor: 'FFC737'.toColor(),
                   primaryColor: '0043CE'.toColor(),
                 )),
-            Expanded(
-                child: GeneralFeature(
-              data: widget.entity,
-              child: PageView(
-                children: _body,
-                physics: NeverScrollableScrollPhysics(),
-                controller: controller,
-                onPageChanged: (num) {
-                  setState(() {
-                    _curr = num;
-                    _steps[_curr].setState(StepperState.editing);
-                  });
-                },
-              ),
-            )),
+            if (_completer.isCompleted)
+              Expanded(
+                  child: DataFeature(
+                data: widget.entity,
+                order: orderEntity,
+                child: PageView(
+                  children: _body,
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: controller,
+                  onPageChanged: (num) {
+                    setState(() {
+                      _curr = num;
+                      _steps[_curr].setState(StepperState.editing);
+                    });
+                  },
+                ),
+              )),
           ],
         ),
       ),
@@ -129,11 +133,14 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<void> _init() async {
     final time = await _networkTimeService.ntpDateTime();
+
     orderEntity = OrderEntity(
         dataUuid: Uuid().v1(),
         dataTimestamp: time,
         attendanceId: widget.entity.general.attendance!.id,
         featureId: widget.entity.feature.id);
+
+    _completer.complete(orderEntity);
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(
@@ -178,7 +185,6 @@ class _OrderPageState extends State<OrderPage> {
           setState(() {
             orderEntity = orderEntity.copyWith(purchases: purchases);
           });
-          Fx.log(orderEntity);
         },
       ));
     }
@@ -187,7 +193,9 @@ class _OrderPageState extends State<OrderPage> {
       _body.add(OrderExchangePage(
         key: PageStorageKey('exchange'),
         onBack: onBack,
-        onNext: onNext,
+        onNext: () {
+          onNext();
+        },
       ));
     }
     if (widget.entity.feature.featureOrder?.hasSampling == true) {

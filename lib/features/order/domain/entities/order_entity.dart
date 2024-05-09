@@ -25,6 +25,11 @@ class OrderEntity extends DataEntity {
   @ignore
   final List<PhotoEntity>? photos;
 
+  int get totalPrice => (purchases ?? []).fold(
+      0,
+      (previousValue, element) =>
+          previousValue + (element.quantity! * element.orderProduct!.price!));
+
   OrderEntity(
       {required this.dataUuid,
       required this.dataTimestamp,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -23,7 +24,7 @@ class InputQuantity extends StatefulWidget {
     this.onMax,
     this.onMin,
     this.onValueChanged,
-    required this.value,
+    this.value = 0,
   });
 
   @override
@@ -32,11 +33,6 @@ class InputQuantity extends StatefulWidget {
 
 class _InputQuantityState extends State<InputQuantity> {
   late int _value = widget.value;
-  @override
-  void didUpdateWidget(covariant InputQuantity oldWidget) {
-    print('didUpdateWidget');
-    super.didUpdateWidget(oldWidget);
-  }
 
   void _increase() {
     if (_value < widget.max) {

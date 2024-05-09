@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -10,7 +9,6 @@ import 'package:fms/features/order/presentation/widgets/product/order_product_in
 import 'package:fuzzy/fuzzy.dart';
 
 import '../../../../../core/constant/colors.dart';
-import '../../../../../core/constant/images.dart';
 import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/button/flat.dart';
 import '../../../../../core/widgets/custom_checkbox.dart';

@@ -10,7 +10,7 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/home/presentation/widgets/general_feature_widget.dart';
+import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/product/concur_product.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
@@ -38,7 +38,7 @@ class OrderPurchasePage extends StatefulWidget {
 class _OrderPurchasePageState extends State<OrderPurchasePage>
     with AutomaticKeepAliveClientMixin {
   late final products =
-      GeneralFeature.of(context).data.feature.featureOrder!.products ?? [];
+      DataFeature.of(context).data.feature.featureOrder!.products ?? [];
 
   final items = <PurchaseEntity>[];
   final selectedItems = <OrderProduct>[];
@@ -48,6 +48,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
     ..removeWhere((key, value) => value.length < 2);
 
   Future<void> _scanProductBarcode() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final _barcode = await context.nextRoute(OrderModule.productBarcodeScanner);
 
     if (_barcode == null) return;
@@ -61,6 +62,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
     } else {
       showFailure(
           title: 'Mã barcode không tồn tại',
+          message: 'Không tìm thấy mã barcode trong hệ thống',
           btnText: 'Quét lại',
           onPressed: () =>
               Future.delayed(300.milliseconds, () => _scanProductBarcode()));
@@ -68,6 +70,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
   }
 
   Future<void> _showSheetSelectProduct() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final _product =
         await OverlayManager.showSheet(body: SelectProduct(products: products));
     if (_product != null) {

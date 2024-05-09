@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/features/home/presentation/widgets/general_feature_widget.dart';
+import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/presentation/cubit/identify_cubit.dart';
 import 'package:fms/features/order/presentation/widgets/bottom_buttons.dart';
 import 'package:fms/features/order/presentation/widgets/customer/Identity_form.dart';
@@ -51,7 +51,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final generalFeature = GeneralFeature.of(context).data;
+    final generalFeature = DataFeature.of(context).data;
     return Column(
       children: [
         Expanded(
