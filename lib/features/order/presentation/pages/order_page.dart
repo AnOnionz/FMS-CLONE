@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -155,6 +156,7 @@ class _OrderPageState extends State<OrderPage> {
             _steps[_curr].setState(StepperState.completed);
           }
           onNext();
+          Fx.log(orderEntity.customerInfos);
         },
         onSaveData: (customers) {
           setState(() {

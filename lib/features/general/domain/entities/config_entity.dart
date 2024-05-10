@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:isar/isar.dart';
+import 'package:string_validator_plus/string_validator_plus.dart';
+
+import '../../../../core/constant/type_def.dart';
 
 part 'config_entity.g.dart';
 
@@ -581,6 +584,54 @@ class FeatureCustomer {
     }
   }
 
+  ValidateField? validate() {
+    switch (dataType) {
+      case 'email':
+        return (String? value) {
+          // The regular expression pattern to match email addresses
+          final RegExp regex = RegExp(
+              r'^[_A-Za-z0-9-+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})\$*(\s?)');
+
+          // If the input value is null, assign an empty string to the variable
+          final emailNonNullValue = value ?? '';
+
+          // Check if the email is empty
+          if (emailNonNullValue.isEmpty) {
+            return "Email can't be empty";
+          }
+          // Check if the email format matches the regular expression
+          else if (!regex.hasMatch(emailNonNullValue)) {
+            return 'Email chưa chính xác';
+          }
+
+          // If the email is valid, return null (no error message)
+          return null;
+        };
+      case 'phoneNumber':
+        return (String? value) {
+          final RegExp regex =
+              RegExp('/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/');
+
+          // If the input value is null, assign an empty string to the variable
+          final phoneNonNullValue = value ?? '';
+
+          // Check if the phone is empty
+          if (phoneNonNullValue.isEmpty) {
+            return "Phone number can't be empty";
+          }
+          // Check if the phone format matches the regular expression
+          else if (!regex.hasMatch(phoneNonNullValue)) {
+            return 'Số điện thoại chưa chính xác';
+          }
+          // If the phone is valid, return null (no error message)
+          return null;
+        };
+
+      default:
+        return null;
+    }
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -846,11 +897,9 @@ class ExchangeProceed {
 class Option {
   final int? id;
   final String? name;
-
-  Option({
-    this.id,
-    this.name,
-  });
+  @ignore
+  bool isChecked;
+  Option({this.id, this.name, this.isChecked = false});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

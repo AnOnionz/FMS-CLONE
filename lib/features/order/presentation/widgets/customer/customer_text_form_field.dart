@@ -3,22 +3,24 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/order/presentation/widgets/customer/customer_field.dart';
 
 import '../../../../../core/constant/colors.dart';
 
-class CustomerTextFormField extends CustomerField {
+class CustomerTextFormField extends StatefulWidget {
   final TextInputType textInputType;
   final TextInputAction textInputAction;
   final String? Function(String? value)? validate;
+  final String label;
+  final bool isRequired;
+  final Function(dynamic value) onChanged;
 
   const CustomerTextFormField(
       {super.key,
       required this.textInputAction,
       this.textInputType = TextInputType.text,
-      required super.isRequired,
-      required super.label,
-      required super.onChanged,
+      required this.isRequired,
+      required this.label,
+      required this.onChanged,
       this.validate});
 
   @override
@@ -56,16 +58,12 @@ class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
       onChanged: widget.onChanged,
       focusNode: _focusNode,
       validator: (value) {
-        if (widget.validate != null) {
+        if (widget.isRequired && widget.validate != null) {
           final error = widget.validate?.call(value);
           if (error != null) {
-            setState(() {
-              isValid = false;
-            });
+            isValid = false;
           } else {
-            setState(() {
-              isValid = true;
-            });
+            isValid = true;
           }
           return error;
         }

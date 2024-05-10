@@ -1562,6 +1562,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  string_validator_plus:
+    dependency: "direct main"
+    description:
+      name: string_validator_plus
+      sha256: "79c54cd55800d437f8a9a54ab741006b4ede880a2b28b0bf7226c376f61f4f2a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   stringr:
     dependency: transitive
     description:

@@ -14,3 +14,5 @@ typedef Function3<P0, P1, P2, R> = R Function(P0, P1, P2);
 typedef ValueUpdated<T> = T Function(T value);
 
 typedef ValueUpdatedOrNull<T> = T? Function(T? value);
+
+typedef ValidateField = String? Function(String? value);

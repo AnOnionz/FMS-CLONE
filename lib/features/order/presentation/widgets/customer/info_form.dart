@@ -5,7 +5,7 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../general/domain/entities/config_entity.dart';
 import '../../../domain/entities/order_entity.dart';
-import 'customer_text_form_field.dart';
+import 'customer_field.dart';
 
 class InfomationForm extends StatefulWidget {
   final GlobalKey formKey;
@@ -29,11 +29,11 @@ class _InfomationFormState extends State<InfomationForm> {
       .where((featureCustomer) => !featureCustomer.isIdentity!)
       .sorted((a, b) => a.ordinal! - b.ordinal!);
 
-  late final List<CustomerInfo> customerOrders;
+  late final List<CustomerInfo> customerInfos;
 
   @override
   void initState() {
-    customerOrders = featureCustomers.map((e) {
+    customerInfos = featureCustomers.map((e) {
       final info = widget.customerInfos.lastWhereOrNull(
           (customerInfo) => customerInfo.featureCustomerId == e.id);
 
@@ -44,7 +44,7 @@ class _InfomationFormState extends State<InfomationForm> {
           options: info?.options);
     }).toList();
 
-    Future.delayed(300.milliseconds, () => widget.callback(customerOrders));
+    Future.delayed(300.milliseconds, () => widget.callback(customerInfos));
     super.initState();
   }
 
@@ -55,24 +55,17 @@ class _InfomationFormState extends State<InfomationForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...customerOrders.mapIndexed((index, currentValue) {
+            ...customerInfos.mapIndexed((index, currentValue) {
               final featureCustomer = featureCustomers[index];
-              final islast = index == featureCustomers.length - 1;
+              final isLast = index == featureCustomers.length - 1;
               return Padding(
-                padding: EdgeInsets.only(bottom: islast ? 0 : 18.h),
-                child: CustomerTextFormField(
-                  label: featureCustomer.name!,
-                  isRequired: featureCustomer.isRequired!,
-                  onChanged: (value) {
-                    setState(() {
-                      customerOrders[index] = customerOrders[index]
-                          .copyWith(value: value.toString());
-                      widget.callback(customerOrders);
-                    });
-                  },
-                  textInputType: featureCustomer.inputType(),
-                  textInputAction:
-                      islast ? TextInputAction.done : TextInputAction.next,
+                padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
+                child: CustomerField(
+                  featureCustomer: featureCustomer,
+                  isLast: isLast,
+                  index: index,
+                  callback: widget.callback,
+                  customerInfos: customerInfos,
                 ),
               );
             }).toList(),

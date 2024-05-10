@@ -162,7 +162,12 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: BottomButtons(
               onBack: widget.onBack,
-              onNext: widget.onNext,
+              onNext: _exchangeEntites.any((exchange) => exchange.quantity! > 0)
+                  ? () {
+                      widget.onSaveData(_exchangeEntites);
+                      widget.onNext();
+                    }
+                  : null,
             ),
           ),
         )

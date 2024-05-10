@@ -52,147 +52,152 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    return Column(
-      children: [
-        Expanded(
-            child: CustomScrollView(
-          physics: kPhysics,
-          slivers: [
-            SliverToBoxAdapter(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.w),
-                margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(10.sqr)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 20.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Thông tin định danh khách hàng',
-                            style: context.textTheme.subtitle1,
-                          ),
-                          SvgPicture.asset(AppIcons.barcode)
-                        ],
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: Column(
+        children: [
+          Expanded(
+              child: CustomScrollView(
+            physics: kPhysics,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.w),
+                  margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
+                  decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(10.sqr)),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Thông tin định danh khách hàng',
+                              style: context.textTheme.subtitle1,
+                            ),
+                            SvgPicture.asset(AppIcons.barcode)
+                          ],
+                        ),
                       ),
-                    ),
-                    IdentityForm(
-                      featureCustomers:
-                          generalFeature.feature.featureCustomers!,
-                      callback: (customerOrders) {
-                        setState(() {
-                          _identifyFields = customerOrders;
-                        });
-                      },
-                      onIdentify: () {
-                        identifyCubit.identify(
-                            identifyFields: _identifyFields,
-                            attendanceId:
-                                generalFeature.general.attendance!.id!,
-                            featureId: generalFeature.feature.id!);
-                      },
-                    ),
-                  ],
+                      IdentityForm(
+                        featureCustomers:
+                            generalFeature.feature.featureCustomers!,
+                        callback: (customerOrders) {
+                          setState(() {
+                            _identifyFields = customerOrders;
+                          });
+                        },
+                        onIdentify: () {
+                          identifyCubit.identify(
+                              identifyFields: _identifyFields,
+                              attendanceId:
+                                  generalFeature.general.attendance!.id!,
+                              featureId: generalFeature.feature.id!);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: BlocBuilder<IdentifyCubit, IdentifyState>(
-                bloc: identifyCubit,
-                builder: (context, state) {
-                  if (state is IdentifyLoading) {
-                    return Container(
-                      padding: EdgeInsets.all(24.h),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 16.h),
-                      decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(10.sqr)),
-                      child: AppIndicator(),
-                    );
-                  }
-                  if (state is IdentifySuccess) {
-                    return Container(
-                      padding: EdgeInsets.all(24.h),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 16.h),
-                      decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(10.sqr)),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 20.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Thông tin khách hàng',
-                                  style: context.textTheme.subtitle1,
-                                ),
-                                Text(
-                                  state.customerInfos.isNotEmpty
-                                      ? 'khách cũ'
-                                      : 'khách mới',
-                                  style: context.textTheme.caption2?.copyWith(
-                                      color: state.customerInfos.isNotEmpty
-                                          ? AppColors.orange
-                                          : AppColors.royalBlue),
-                                ),
-                              ],
+              SliverToBoxAdapter(
+                child: BlocBuilder<IdentifyCubit, IdentifyState>(
+                  bloc: identifyCubit,
+                  builder: (context, state) {
+                    if (state is IdentifyLoading) {
+                      return Container(
+                        padding: EdgeInsets.all(24.h),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 16.h),
+                        decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(10.sqr)),
+                        child: AppIndicator(),
+                      );
+                    }
+                    if (state is IdentifySuccess) {
+                      return Container(
+                        padding: EdgeInsets.all(24.h),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 16.h),
+                        decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(10.sqr)),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 20.h),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Thông tin khách hàng',
+                                    style: context.textTheme.subtitle1,
+                                  ),
+                                  Text(
+                                    state.customerInfos.isNotEmpty
+                                        ? 'khách cũ'
+                                        : 'khách mới',
+                                    style: context.textTheme.caption2?.copyWith(
+                                        color: state.customerInfos.isNotEmpty
+                                            ? AppColors.orange
+                                            : AppColors.royalBlue),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          InfomationForm(
-                            formKey: _formKey,
-                            featureCustomers:
-                                generalFeature.feature.featureCustomers!,
-                            customerInfos: state.customerInfos,
-                            callback: (customerOrders) {
-                              setState(() {
-                                _infoFields = customerOrders;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
-              ),
-            )
-          ],
-        )),
-        Container(
-          decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-            BoxShadow(
-                offset: Offset(0, -2),
-                blurRadius: 25,
-                color: AppColors.black.withOpacity(0.15))
-          ]),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            child: Builder(builder: (context) {
-              final isValidate = identifyCubit.state is IdentifySuccess &&
-                  _infoFields.every((element) => validate(element));
-              return BottomButtons(
-                onBack: () {},
-                onNext: isValidate
-                    ? () {
-                        widget.onSaveData([..._identifyFields, ..._infoFields]);
-                        widget.onNext();
-                      }
-                    : null,
-              );
-            }),
-          ),
-        )
-      ],
+                            InfomationForm(
+                              formKey: _formKey,
+                              featureCustomers:
+                                  generalFeature.feature.featureCustomers!,
+                              customerInfos: state.customerInfos,
+                              callback: (customerOrders) {
+                                setState(() {
+                                  _infoFields = customerOrders;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
+                ),
+              )
+            ],
+          )),
+          Container(
+            decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, -2),
+                  blurRadius: 25,
+                  color: AppColors.black.withOpacity(0.15))
+            ]),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              child: Builder(builder: (context) {
+                final isValidate = identifyCubit.state is IdentifySuccess &&
+                    _infoFields.every((element) => validate(element));
+                return BottomButtons(
+                  onBack: () {},
+                  onNext: isValidate
+                      ? () {
+                          widget
+                              .onSaveData([..._identifyFields, ..._infoFields]);
+                          widget.onNext();
+                        }
+                      : null,
+                );
+              }),
+            ),
+          )
+        ],
+      ),
     );
   }
 
