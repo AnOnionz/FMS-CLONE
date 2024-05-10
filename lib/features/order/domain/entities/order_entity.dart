@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
@@ -130,19 +131,16 @@ class OrderEntity extends DataEntity {
 
 @embedded
 class CustomerInfo {
-  final int? id;
-  final int? featureCustomerId;
-  final String? value;
-  final List<CustomerOption>? options;
-  @ignore
-  final FeatureCustomer? featureCustomer;
+  int? id;
+  int? featureCustomerId;
+  String? value;
+  List<CustomerOption>? options;
 
   CustomerInfo({
     this.id,
     this.featureCustomerId,
     this.value,
     this.options,
-    this.featureCustomer,
   });
 
   Map<String, dynamic> toMap() {
@@ -188,11 +186,11 @@ class CustomerInfo {
     List<CustomerOption>? options,
   }) {
     return CustomerInfo(
-        id: id ?? this.id,
-        featureCustomerId: featureCustomerId ?? this.featureCustomerId,
-        value: value ?? this.value,
-        options: options ?? this.options,
-        featureCustomer: featureCustomer);
+      id: id ?? this.id,
+      featureCustomerId: featureCustomerId ?? this.featureCustomerId,
+      value: value ?? this.value,
+      options: options ?? this.options,
+    );
   }
 }
 
@@ -228,6 +226,17 @@ class CustomerOption {
   @override
   String toString() =>
       'CustomerOption(id: $id, featureCustomerOptionId: $featureCustomerOptionId)';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CustomerOption &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          featureCustomerOptionId == other.featureCustomerOptionId;
+
+  @override
+  int get hashCode => featureCustomerOptionId.hashCode;
 }
 
 @embedded

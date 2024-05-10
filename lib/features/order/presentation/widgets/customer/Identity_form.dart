@@ -4,20 +4,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/order/presentation/cubit/identify_cubit.dart';
 import 'package:fms/features/order/presentation/widgets/customer/customer_field.dart';
+import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
 import '../../../../general/domain/entities/config_entity.dart';
 import '../../../domain/entities/order_entity.dart';
 
 class IdentityForm extends StatefulWidget {
-  final List<FeatureCustomer> featureCustomers;
-  final Function(List<CustomerInfo> customerOrders) callback;
-  final VoidCallback onIdentify;
+  final Map<FeatureCustomer, CustomerInfo> fields;
+  final IdentifyCubit identifyCubit;
   const IdentityForm({
     Key? key,
-    required this.featureCustomers,
-    required this.callback,
-    required this.onIdentify,
+    required this.identifyCubit,
+    required this.fields,
   }) : super(key: key);
 
   @override
@@ -27,26 +27,23 @@ class IdentityForm extends StatefulWidget {
 class _IdentityFormState extends State<IdentityForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late final featureCustomers = widget.featureCustomers
-      .where((featureCustomer) => featureCustomer.isIdentity!)
-      .sorted((a, b) => a.ordinal! - b.ordinal!);
+  late final _fields =
+      widget.fields.entries.where((field) => field.key.isIdentity!).toList();
 
-  late final List<CustomerInfo> customerInfos;
+  late final generalFeature = DataFeature.of(context).data;
 
   @override
   void initState() {
-    customerInfos = featureCustomers
-        .map((e) => CustomerInfo(featureCustomerId: e.id, featureCustomer: e))
-        .toList();
-    Future.delayed(300.milliseconds, () => widget.callback(customerInfos));
     super.initState();
   }
 
-  bool validate(CustomerInfo customerInfo) {
-    if (customerInfo.featureCustomer!.isRequired!) {
-      return !customerInfo.value.isEmptyOrNull || customerInfo.options != null;
-    }
-    return true;
+  bool validate() {
+    return !_fields.any((field) {
+      if (field.key.isRequired!) {
+        return field.value.value.isEmptyOrNull && field.value.options == null;
+      }
+      return false;
+    });
   }
 
   @override
@@ -56,23 +53,19 @@ class _IdentityFormState extends State<IdentityForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...customerInfos.mapIndexed((index, currentValue) {
-              final featureCustomer = featureCustomers[index];
-              final isLast = index == customerInfos.length - 1;
+            ..._fields.mapIndexed((index, entry) {
+              final isLast = index == _fields.length - 1;
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
                 child: CustomerField(
-                  featureCustomer: featureCustomer,
+                  featureCustomer: entry.key,
                   isLast: isLast,
-                  index: index,
-                  callback: widget.callback,
-                  customerInfos: customerInfos,
+                  customerInfo: entry.value,
                 ),
               );
             }).toList(),
             Builder(builder: (context) {
-              final isValidate =
-                  customerInfos.every((element) => validate(element));
+              final isValidate = validate();
               return Padding(
                 padding: EdgeInsets.only(top: 24.h),
                 child: MaterialButton(
@@ -108,7 +101,13 @@ class _IdentityFormState extends State<IdentityForm> {
                   onPressed: isValidate
                       ? () {
                           FocusManager.instance.primaryFocus?.unfocus();
-                          widget.onIdentify();
+
+                          widget.identifyCubit.identify(
+                              identifyFields:
+                                  _fields.map((e) => e.value).toList(),
+                              attendanceId:
+                                  generalFeature.general.attendance!.id!,
+                              featureId: generalFeature.feature.id!);
                         }
                       : null,
                 ),

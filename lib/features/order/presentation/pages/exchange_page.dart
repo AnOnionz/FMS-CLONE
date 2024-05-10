@@ -28,7 +28,8 @@ class OrderExchangePage extends StatefulWidget {
 
 class _OrderExchangePageState extends State<OrderExchangePage> {
   int priceUsed = 0;
-  List<ExchangeEntity> _exchangeEntites = <ExchangeEntity>[];
+  late List<ExchangeEntity> _exchangeEntites =
+      DataFeature.of(context).order.exchanges ?? <ExchangeEntity>[];
 
   late final ExchangeController _exchangeController = ExchangeController(
       order: DataFeature.of(context).order,

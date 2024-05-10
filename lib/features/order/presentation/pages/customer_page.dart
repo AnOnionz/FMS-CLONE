@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,19 +14,23 @@ import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/mixins/common.dart';
 import '../../../../core/styles/theme.dart';
+import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/order_entity.dart';
 
 class OrderCustomerPage extends StatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
+
   final void Function(List<CustomerInfo> customers) onSaveData;
 
-  const OrderCustomerPage(
-      {super.key,
-      required this.onNext,
-      required this.onBack,
-      required this.onSaveData});
+  const OrderCustomerPage({
+    super.key,
+    required this.onNext,
+    required this.onBack,
+    required this.onSaveData,
+  });
 
   @override
   State<OrderCustomerPage> createState() => _OrderCustomerPageState();
@@ -35,23 +38,62 @@ class OrderCustomerPage extends StatefulWidget {
 
 class _OrderCustomerPageState extends State<OrderCustomerPage>
     with AutomaticKeepAliveClientMixin {
-  final _formKey = GlobalKey<FormState>();
-  List<CustomerInfo> _identifyFields = [];
-  List<CustomerInfo> _infoFields = [];
   final identifyCubit = Modular.get<IdentifyCubit>();
+  final _formKey = GlobalKey<FormState>();
+  late final featureCustomers = DataFeature.of(context)
+      .data
+      .feature
+      .featureCustomers!
+      .sorted((a, b) => a.ordinal! - b.ordinal!);
 
-  bool validate(CustomerInfo customerInfo) {
-    if (customerInfo.featureCustomer!.isRequired!) {
-      return !customerInfo.value.isEmptyOrNull || customerInfo.options != null;
-    }
-    return true;
+  late final List<CustomerInfo> customerInfos =
+      DataFeature.of(context).order.customerInfos ?? [];
+
+  Map<FeatureCustomer, CustomerInfo> _fields = {};
+
+  bool get validate => !_fields.entries.any((field) {
+        if (field.key.isRequired!) {
+          return field.value.value.isEmptyOrNull && field.value.options == null;
+        }
+        return false;
+      });
+
+  @override
+  void didChangeDependencies() {
+    featureCustomers.forEach((featureCustomer) {
+      final customerInfo = customerInfos.firstWhereOrNull(
+          (element) => element.featureCustomerId == featureCustomer.id);
+      _fields[featureCustomer] = customerInfo ??
+          CustomerInfo(
+            featureCustomerId: featureCustomer.id,
+          );
+    });
+    setState(() {});
+    super.didChangeDependencies();
   }
 
-  late final generalFeature = DataFeature.of(context).data;
+  void _handleCallback(List<CustomerInfo> customerInfos) {
+    if (customerInfos.isNotEmpty) {
+      _fields.entries.forEach((field) {
+        final customerInfo = customerInfos.firstWhereOrNull((element) =>
+            element.featureCustomerId == field.value.featureCustomerId);
+        if (customerInfo != null) {
+          _fields[field.key] = customerInfo;
+        }
+      });
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Column(
@@ -84,28 +126,21 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                         ),
                       ),
                       IdentityForm(
-                        featureCustomers:
-                            generalFeature.feature.featureCustomers!,
-                        callback: (customerOrders) {
-                          setState(() {
-                            _identifyFields = customerOrders;
-                          });
-                        },
-                        onIdentify: () {
-                          identifyCubit.identify(
-                              identifyFields: _identifyFields,
-                              attendanceId:
-                                  generalFeature.general.attendance!.id!,
-                              featureId: generalFeature.feature.id!);
-                        },
+                        fields: _fields,
+                        identifyCubit: identifyCubit,
                       ),
                     ],
                   ),
                 ),
               ),
               SliverToBoxAdapter(
-                child: BlocBuilder<IdentifyCubit, IdentifyState>(
+                child: BlocConsumer<IdentifyCubit, IdentifyState>(
                   bloc: identifyCubit,
+                  listener: (context, state) {
+                    if (state is IdentifySuccess) {
+                      _handleCallback(state.customerInfos);
+                    }
+                  },
                   builder: (context, state) {
                     if (state is IdentifyLoading) {
                       return Container(
@@ -152,14 +187,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                             ),
                             InfomationForm(
                               formKey: _formKey,
-                              featureCustomers:
-                                  generalFeature.feature.featureCustomers!,
-                              customerInfos: state.customerInfos,
-                              callback: (customerOrders) {
-                                setState(() {
-                                  _infoFields = customerOrders;
-                                });
-                              },
+                              fields: _fields,
                             ),
                           ],
                         ),
@@ -179,22 +207,20 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                   color: AppColors.black.withOpacity(0.15))
             ]),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-              child: Builder(builder: (context) {
-                final isValidate = identifyCubit.state is IdentifySuccess &&
-                    _infoFields.every((element) => validate(element));
-                return BottomButtons(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: BottomButtons(
                   onBack: () {},
-                  onNext: isValidate
+                  onNext: identifyCubit.state is IdentifySuccess && validate
                       ? () {
-                          widget
-                              .onSaveData([..._identifyFields, ..._infoFields]);
-                          widget.onNext();
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (_formKey.currentState!.validate()) {
+                            widget.onSaveData(
+                                _fields.entries.map((e) => e.value).toList());
+                            widget.onNext();
+                          }
                         }
                       : null,
-                );
-              }),
-            ),
+                )),
           )
         ],
       ),

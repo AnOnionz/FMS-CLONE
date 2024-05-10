@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 
 import '../../../../../core/constant/colors.dart';
@@ -8,10 +7,13 @@ import '../../../domain/entities/order_entity.dart';
 
 class CustomerCheckBoxGroup extends StatefulWidget {
   final FeatureCustomer featureCustomer;
-
-  final Function(dynamic value) onChanged;
+  final CustomerInfo customerInfo;
+  final Function(List<CustomerOption> value) onChanged;
   const CustomerCheckBoxGroup(
-      {super.key, required this.featureCustomer, required this.onChanged});
+      {super.key,
+      required this.featureCustomer,
+      required this.onChanged,
+      required this.customerInfo});
 
   @override
   State<CustomerCheckBoxGroup> createState() => _CustomerCheckBoxGroupState();
@@ -20,7 +22,8 @@ class CustomerCheckBoxGroup extends StatefulWidget {
 class _CustomerCheckBoxGroupState extends State<CustomerCheckBoxGroup> {
   late final _groupValue = widget.featureCustomer.options ?? [];
 
-  final List<CustomerOption> _selectedOptions = [];
+  late final List<CustomerOption> _selectedOptions =
+      widget.customerInfo.options ?? [];
 
   void onOptionSelected(Option option, bool isChecked) {
     option.isChecked = isChecked;
@@ -33,7 +36,7 @@ class _CustomerCheckBoxGroupState extends State<CustomerCheckBoxGroup> {
     }
 
     widget.onChanged(_selectedOptions);
-    Fx.log(_selectedOptions);
+
     setState(() {});
   }
 

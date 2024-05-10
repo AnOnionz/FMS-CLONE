@@ -88,6 +88,7 @@ class _OrderPageState extends State<OrderPage> {
                         _steps[_curr].setState(StepperState.ignored);
                         onNext();
                         setState(() {});
+                        Fx.log(orderEntity.customerInfos);
                       }),
                   child: Text(
                     'Skip',
@@ -133,14 +134,22 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<void> _init() async {
     final time = await _networkTimeService.ntpDateTime();
-
     orderEntity = OrderEntity(
         dataUuid: Uuid().v1(),
         dataTimestamp: time,
         attendanceId: widget.entity.general.attendance!.id,
-        featureId: widget.entity.feature.id);
-
-    _completer.complete(orderEntity);
+        featureId: widget.entity.feature.id,
+        customerInfos: [
+          CustomerInfo(featureCustomerId: 10, value: '1'),
+          CustomerInfo(featureCustomerId: 11, value: '2'),
+          CustomerInfo(featureCustomerId: 12, value: '1'),
+          CustomerInfo(featureCustomerId: 13, value: '2'),
+          CustomerInfo(featureCustomerId: 14, value: '1'),
+          CustomerInfo(featureCustomerId: 15, value: '2'),
+        ],
+        exchanges: [
+          ExchangeEntity(featureSchemeExchangeId: 15, quantity: 3)
+        ]);
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(
@@ -156,12 +165,12 @@ class _OrderPageState extends State<OrderPage> {
             _steps[_curr].setState(StepperState.completed);
           }
           onNext();
-          Fx.log(orderEntity.customerInfos);
         },
         onSaveData: (customers) {
           setState(() {
             orderEntity = orderEntity.copyWith(customerInfos: customers);
           });
+          print(orderEntity);
         },
       ));
     }
@@ -206,6 +215,7 @@ class _OrderPageState extends State<OrderPage> {
           setState(() {
             orderEntity = orderEntity.copyWith(exchanges: exchanges);
           });
+          Fx.log(orderEntity.exchanges);
         },
       ));
     }
@@ -250,6 +260,7 @@ class _OrderPageState extends State<OrderPage> {
         },
       ));
     }
+    _completer.complete(orderEntity);
     setState(() {});
   }
 }

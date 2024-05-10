@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../general/domain/entities/config_entity.dart';
@@ -9,42 +8,21 @@ import 'customer_field.dart';
 
 class InfomationForm extends StatefulWidget {
   final GlobalKey formKey;
-  final List<FeatureCustomer> featureCustomers;
-  final List<CustomerInfo> customerInfos;
-  final Function(List<CustomerInfo> customerOrders) callback;
+  final Map<FeatureCustomer, CustomerInfo> fields;
 
   const InfomationForm(
-      {super.key,
-      required this.formKey,
-      required this.featureCustomers,
-      required this.customerInfos,
-      required this.callback});
+      {super.key, required this.formKey, required this.fields});
 
   @override
   State<InfomationForm> createState() => _InfomationFormState();
 }
 
 class _InfomationFormState extends State<InfomationForm> {
-  late final featureCustomers = widget.featureCustomers
-      .where((featureCustomer) => !featureCustomer.isIdentity!)
-      .sorted((a, b) => a.ordinal! - b.ordinal!);
-
-  late final List<CustomerInfo> customerInfos;
+  late final _fields =
+      widget.fields.entries.where((field) => !field.key.isIdentity!).toList();
 
   @override
   void initState() {
-    customerInfos = featureCustomers.map((e) {
-      final info = widget.customerInfos.lastWhereOrNull(
-          (customerInfo) => customerInfo.featureCustomerId == e.id);
-
-      return CustomerInfo(
-          featureCustomerId: e.id,
-          featureCustomer: e,
-          value: info?.value,
-          options: info?.options);
-    }).toList();
-
-    Future.delayed(300.milliseconds, () => widget.callback(customerInfos));
     super.initState();
   }
 
@@ -55,17 +33,14 @@ class _InfomationFormState extends State<InfomationForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...customerInfos.mapIndexed((index, currentValue) {
-              final featureCustomer = featureCustomers[index];
-              final isLast = index == featureCustomers.length - 1;
+            ..._fields.mapIndexed((index, entry) {
+              final isLast = index == _fields.length - 1;
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
                 child: CustomerField(
-                  featureCustomer: featureCustomer,
+                  featureCustomer: entry.key,
                   isLast: isLast,
-                  index: index,
-                  callback: widget.callback,
-                  customerInfos: customerInfos,
+                  customerInfo: entry.value,
                 ),
               );
             }).toList(),

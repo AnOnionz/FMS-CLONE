@@ -7,10 +7,14 @@ import '../../../domain/entities/order_entity.dart';
 
 class CustomerRadioGroup extends StatefulWidget {
   final FeatureCustomer featureCustomer;
-  final Function(dynamic value) onChanged;
+  final CustomerInfo customerInfo;
+  final Function(List<CustomerOption> value) onChanged;
 
   const CustomerRadioGroup(
-      {super.key, required this.featureCustomer, required this.onChanged});
+      {super.key,
+      required this.featureCustomer,
+      required this.onChanged,
+      required this.customerInfo});
 
   @override
   State<CustomerRadioGroup> createState() => _CustomerRadioGroupState();
@@ -19,7 +23,8 @@ class CustomerRadioGroup extends StatefulWidget {
 class _CustomerRadioGroupState extends State<CustomerRadioGroup> {
   late final _groupValue = widget.featureCustomer.options ?? [];
 
-  CustomerOption? _selectedOption;
+  late CustomerOption? _selectedOption =
+      widget.customerInfo.options?.firstOrNull();
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +35,25 @@ class _CustomerRadioGroupState extends State<CustomerRadioGroup> {
           Text(widget.featureCustomer.name!),
         //
         for (final Option option in _groupValue)
-          RadioListTile(
+          RadioListTile<CustomerOption>(
             contentPadding: EdgeInsets.zero,
             title: Text(
               option.name ?? '',
               style: context.textTheme.body1
                   ?.copyWith(color: AppColors.black.withOpacity(0.85)),
             ),
-            fillColor: MaterialStatePropertyAll(_selectedOption == option
-                ? AppColors.orange
-                : 'D9D9D9'.toColor()),
-            value: option,
+            fillColor: MaterialStatePropertyAll(
+                _selectedOption?.featureCustomerOptionId == option.id
+                    ? AppColors.orange
+                    : 'D9D9D9'.toColor()),
+            value: CustomerOption(featureCustomerOptionId: option.id),
             groupValue: _selectedOption,
             onChanged: (value) {
               setState(() {
-                _selectedOption =
-                    CustomerOption(featureCustomerOptionId: option.id);
+                _selectedOption = value;
               });
-              widget.onChanged(_selectedOption);
+
+              widget.onChanged([_selectedOption!]);
             },
           )
       ],
