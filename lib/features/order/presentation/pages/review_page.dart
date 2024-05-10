@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/button/flat.dart';
@@ -9,7 +10,13 @@ import '../widgets/exchange_detail.dart';
 
 class OrderReviewPage extends StatefulWidget {
   final VoidCallback onNext;
-  const OrderReviewPage({super.key, required this.onNext});
+  final VoidCallback onBack;
+  final void Function(List<PhotoEntity> photos) onSaveData;
+  const OrderReviewPage(
+      {super.key,
+      required this.onNext,
+      required this.onBack,
+      required this.onSaveData});
 
   @override
   State<OrderReviewPage> createState() => _OrderReviewPageState();

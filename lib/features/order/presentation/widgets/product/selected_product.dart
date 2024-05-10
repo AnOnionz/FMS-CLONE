@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
-import 'package:intl/intl.dart';
 
-import '../../../../../core/constant/colors.dart';
-import '../../../../../core/constant/images.dart';
 import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/empty_widget.dart';
 import '../../../../../core/widgets/item_container.dart';

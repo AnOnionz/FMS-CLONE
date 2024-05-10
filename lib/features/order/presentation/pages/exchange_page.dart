@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
@@ -16,11 +15,12 @@ import '../widgets/receive/gift_quantity_widget.dart';
 class OrderExchangePage extends StatefulWidget {
   final VoidCallback onBack;
   final VoidCallback onNext;
-  const OrderExchangePage({
-    super.key,
-    required this.onNext,
-    required this.onBack,
-  });
+  final void Function(List<ExchangeEntity> exchanges) onSaveData;
+  const OrderExchangePage(
+      {super.key,
+      required this.onNext,
+      required this.onBack,
+      required this.onSaveData});
 
   @override
   State<OrderExchangePage> createState() => _OrderExchangePageState();
@@ -63,8 +63,6 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
         .fold(0, (previousValue, price) => previousValue + price);
 
     setState(() {});
-    Fx.log(_exchangeEntites);
-    Fx.log(priceUsed);
   }
 
   @override

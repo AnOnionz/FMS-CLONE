@@ -27,7 +27,7 @@ class InfomationForm extends StatefulWidget {
 class _InfomationFormState extends State<InfomationForm> {
   late final featureCustomers = widget.featureCustomers
       .where((featureCustomer) => !featureCustomer.isIdentity!)
-      .toList();
+      .sorted((a, b) => a.ordinal! - b.ordinal!);
 
   late final List<CustomerInfo> customerOrders;
 

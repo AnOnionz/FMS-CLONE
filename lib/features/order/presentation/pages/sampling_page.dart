@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
+import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/presentation/widgets/sampling/sampling_box.dart';
 
 import '../../../../core/constant/colors.dart';
@@ -8,7 +10,13 @@ import '../../../../core/widgets/button/flat.dart';
 
 class OrderSamplingPage extends StatefulWidget {
   final VoidCallback onNext;
-  const OrderSamplingPage({super.key, required this.onNext});
+  final VoidCallback onBack;
+  final void Function(List<SamplingEntity> samplings) onSaveData;
+  const OrderSamplingPage(
+      {super.key,
+      required this.onNext,
+      required this.onBack,
+      required this.onSaveData});
 
   @override
   State<OrderSamplingPage> createState() => _OrderSamplingPageState();
@@ -16,6 +24,9 @@ class OrderSamplingPage extends StatefulWidget {
 
 class _OrderSamplingPageState extends State<OrderSamplingPage>
     with AutomaticKeepAliveClientMixin {
+  late final _samplings =
+      DataFeature.of(context).data.feature.featureSamplings!;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);

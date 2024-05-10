@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/home/presentation/widgets/stat_chart.dart';
 
 import '../../../../core/constant/colors.dart';
 import 'kpi_chart.dart';
 
 class CommonInfo extends StatelessWidget {
-  const CommonInfo({super.key});
+  final GeneralEntity general;
+  const CommonInfo({super.key, required this.general});
 
   @override
   Widget build(BuildContext context) {
@@ -39,15 +41,17 @@ class CommonInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Emart Trường Chinh',
+                        general.outlet.name ?? '',
                         style: context.textTheme.subtitle1,
                       ),
                       SizedBox(height: 8.h),
-                      Text('Maoutlet001', style: context.textTheme.body2),
+                      Text(general.outlet.code ?? '',
+                          style: context.textTheme.body2),
                       SizedBox(height: 8.h),
-                      Text('Booth A', style: context.textTheme.body2),
+                      Text(general.booth.name ?? '',
+                          style: context.textTheme.body2),
                       SizedBox(height: 8.h),
-                      Text('123, Trường Chinh, Bình Thạnh, HCM',
+                      Text(general.outlet.address,
                           style: context.textTheme.body2)
                     ],
                   ),

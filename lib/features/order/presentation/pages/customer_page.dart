@@ -7,11 +7,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/presentation/cubit/identify_cubit.dart';
 import 'package:fms/features/order/presentation/widgets/bottom_buttons.dart';
 import 'package:fms/features/order/presentation/widgets/customer/Identity_form.dart';
 import 'package:fms/features/order/presentation/widgets/customer/info_form.dart';
+import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -47,11 +47,12 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
     return true;
   }
 
+  late final generalFeature = DataFeature.of(context).data;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    final generalFeature = DataFeature.of(context).data;
     return Column(
       children: [
         Expanded(

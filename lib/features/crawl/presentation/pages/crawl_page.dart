@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -34,7 +35,8 @@ class CrawlPage extends StatefulWidget {
 class _CrawlPageState extends State<CrawlPage> {
   final networkTimeService = Modular.get<NetworkTimeService>();
   final CrawlCubit _cubit = Modular.get();
-
+  late final featureQuantities = (widget.entity.feature.featureQuantities ?? [])
+      .sorted((a, b) => a.ordinal! - b.ordinal!);
   CrawlQuantityEntity? crawlQuantityEntity = null;
 
   bool get isActive =>
@@ -62,7 +64,7 @@ class _CrawlPageState extends State<CrawlPage> {
       final crawlQuantities = CrawlQuantityEntity(
           dataUuid: Uuid().v1(),
           dataTimestamp: timestamp,
-          values: widget.entity.feature.featureQuantities!
+          values: featureQuantities
               .map((featureQuantity) => CrawlQuantitylValueEntity(
                   featureQuantityId: featureQuantity.id))
               .toList());
@@ -118,11 +120,10 @@ class _CrawlPageState extends State<CrawlPage> {
                           SliverPadding(
                               padding: EdgeInsets.only(bottom: 5.h),
                               sliver: SliverList.builder(
-                                itemCount: widget
-                                    .entity.feature.featureQuantities!.length,
+                                itemCount: featureQuantities.length,
                                 itemBuilder: (context, index) {
-                                  final featureQuantity = widget
-                                      .entity.feature.featureQuantities![index];
+                                  final featureQuantity =
+                                      featureQuantities[index];
                                   final quantity =
                                       crawlQuantityEntity!.values[index];
                                   return CrawlItem(
@@ -138,10 +139,8 @@ class _CrawlPageState extends State<CrawlPage> {
                                                 status: SyncStatus.isNoSynced);
                                       });
                                     },
-                                    isLast: index ==
-                                        widget.entity.feature.featureQuantities!
-                                                .length -
-                                            1,
+                                    isLast:
+                                        index == featureQuantities.length - 1,
                                   );
                                 },
                               ))

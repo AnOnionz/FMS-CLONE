@@ -5,7 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -161,7 +160,6 @@ class _OrderPageState extends State<OrderPage> {
           setState(() {
             orderEntity = orderEntity.copyWith(customerInfos: customers);
           });
-          Fx.log(orderEntity);
         },
       ));
     }
@@ -194,7 +192,18 @@ class _OrderPageState extends State<OrderPage> {
         key: PageStorageKey('exchange'),
         onBack: onBack,
         onNext: () {
+          if (orderEntity.exchanges == null) {
+            _steps[_curr].setState(StepperState.ignored);
+          } else {
+            _steps[_curr].setState(StepperState.completed);
+          }
+
           onNext();
+        },
+        onSaveData: (exchanges) {
+          setState(() {
+            orderEntity = orderEntity.copyWith(exchanges: exchanges);
+          });
         },
       ));
     }
@@ -202,14 +211,41 @@ class _OrderPageState extends State<OrderPage> {
       _steps.add(StepData(name: 'Sampling'));
       _body.add(OrderSamplingPage(
         key: PageStorageKey('sampling'),
-        onNext: onNext,
+        onBack: onBack,
+        onNext: () {
+          if (orderEntity.samplings == null) {
+            _steps[_curr].setState(StepperState.ignored);
+          } else {
+            _steps[_curr].setState(StepperState.completed);
+          }
+
+          onNext();
+        },
+        onSaveData: (samplings) {
+          setState(() {
+            orderEntity = orderEntity.copyWith(samplings: samplings);
+          });
+        },
       ));
     }
     if (widget.entity.feature.featureOrder?.hasPhoto == true) {
       _steps.add(StepData(name: 'Chụp hình'));
       _body.add(OrderReviewPage(
         key: PageStorageKey('review'),
-        onNext: () => context.nextRoute(OrderModule.success),
+        onBack: onBack,
+        onNext: () {
+          if (orderEntity.photos == null) {
+            _steps[_curr].setState(StepperState.ignored);
+          } else {
+            _steps[_curr].setState(StepperState.completed);
+          }
+          context.nextRoute(OrderModule.success);
+        },
+        onSaveData: (photos) {
+          setState(() {
+            orderEntity = orderEntity.copyWith(photos: photos);
+          });
+        },
       ));
     }
     setState(() {});

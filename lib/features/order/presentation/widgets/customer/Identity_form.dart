@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -28,7 +29,7 @@ class _IdentityFormState extends State<IdentityForm> {
 
   late final featureCustomers = widget.featureCustomers
       .where((featureCustomer) => featureCustomer.isIdentity!)
-      .toList();
+      .sorted((a, b) => a.ordinal! - b.ordinal!);
 
   late final List<CustomerInfo> customerOrders;
 
@@ -55,7 +56,7 @@ class _IdentityFormState extends State<IdentityForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...customerOrders.mapIndexed((currentValue, index) {
+            ...customerOrders.mapIndexed((index, currentValue) {
               final featureCustomer = featureCustomers[index];
               final islast = index == customerOrders.length - 1;
               return Padding(

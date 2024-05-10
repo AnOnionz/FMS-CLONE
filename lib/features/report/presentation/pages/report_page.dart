@@ -32,6 +32,9 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   final ReportCubit _cubit = Modular.get();
 
+  late final featurePhotos = (widget.entity.feature.featurePhotos ?? [])
+      .sorted((a, b) => a.ordinal! - b.ordinal!);
+
   late final Map<int, List<PhotoEntity>> reports = {};
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
@@ -60,7 +63,7 @@ class _ReportPageState extends State<ReportPage> {
       },
     );
 
-    widget.entity.feature.featurePhotos!.forEach((featurePhoto) {
+    featurePhotos.forEach((featurePhoto) {
       setState(() {
         reports[featurePhoto.id!] = photoGroup[featurePhoto.id!] ?? [];
       });
@@ -106,11 +109,9 @@ class _ReportPageState extends State<ReportPage> {
                         SliverPadding(
                             padding: EdgeInsets.only(bottom: 5.h),
                             sliver: SliverList.builder(
-                              itemCount:
-                                  widget.entity.feature.featurePhotos!.length,
+                              itemCount: featurePhotos.length,
                               itemBuilder: (context, index) {
-                                final photoItem =
-                                    widget.entity.feature.featurePhotos![index];
+                                final photoItem = featurePhotos[index];
                                 return ReportItem(
                                   entity: photoItem,
                                   feature: widget.entity.feature,

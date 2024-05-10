@@ -60,6 +60,11 @@ const OrderEntitySchema = CollectionSchema(
       name: r'samplings',
       type: IsarType.objectList,
       target: r'SamplingEntity',
+    ),
+    r'totalPrice': PropertySchema(
+      id: 8,
+      name: r'totalPrice',
+      type: IsarType.long,
     )
   },
   estimateSize: _orderEntityEstimateSize,
@@ -189,6 +194,7 @@ void _orderEntitySerialize(
     SamplingEntitySchema.serialize,
     object.samplings,
   );
+  writer.writeLong(offsets[8], object.totalPrice);
 }
 
 OrderEntity _orderEntityDeserialize(
@@ -273,6 +279,8 @@ P _orderEntityDeserializeProp<P>(
         allOffsets,
         SamplingEntity(),
       )) as P;
+    case 8:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1195,6 +1203,62 @@ extension OrderEntityQueryFilter
       );
     });
   }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      totalPriceEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalPrice',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      totalPriceGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalPrice',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      totalPriceLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalPrice',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      totalPriceBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalPrice',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension OrderEntityQueryObject
@@ -1343,6 +1407,18 @@ extension OrderEntityQuerySortBy
       return query.addSortBy(r'featureId', Sort.desc);
     });
   }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByTotalPrice() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPrice', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByTotalPriceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPrice', Sort.desc);
+    });
+  }
 }
 
 extension OrderEntityQuerySortThenBy
@@ -1408,6 +1484,18 @@ extension OrderEntityQuerySortThenBy
       return query.addSortBy(r'isarId', Sort.desc);
     });
   }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByTotalPrice() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPrice', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByTotalPriceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPrice', Sort.desc);
+    });
+  }
 }
 
 extension OrderEntityQueryWhereDistinct
@@ -1434,6 +1522,12 @@ extension OrderEntityQueryWhereDistinct
   QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByFeatureId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'featureId');
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByTotalPrice() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalPrice');
     });
   }
 }
@@ -1496,6 +1590,12 @@ extension OrderEntityQueryProperty
       samplingsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'samplings');
+    });
+  }
+
+  QueryBuilder<OrderEntity, int, QQueryOperations> totalPriceProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalPrice');
     });
   }
 }

@@ -36,9 +36,10 @@ class NotePage extends StatefulWidget {
 
 class _NotePageState extends State<NotePage> with LocalDatasource {
   final networkTimeService = Modular.get<NetworkTimeService>();
-
   final NoteCubit _cubit = Modular.get();
-
+  late final featureMultimedias =
+      (widget.entity.feature.featureMultimedias ?? [])
+          .sorted((a, b) => a.ordinal! - b.ordinal!);
   late final Map<int, NoteEntity> notes = {};
   late final Map<int, List<PhotoEntity>> photos = {};
   final ValueNotifier<bool> isWatermarking = ValueNotifier(false);
@@ -71,8 +72,7 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
 
   Future<void> onFetchSuccess(
       (List<NoteEntity> notes, List<PhotoEntity> photos) data) async {
-    await Future.forEach(widget.entity.feature.featureMultimedias!,
-        (featureMultimedia) async {
+    await Future.forEach(featureMultimedias, (featureMultimedia) async {
       await Future.delayed(100.milliseconds);
       final timestamp = await networkTimeService.ntpDateTime();
       final note = data.$1.firstWhereOrNull(
@@ -80,20 +80,20 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       setState(() {
         notes[featureMultimedia.id!] = note ??
             NoteEntity(
-              dataUuid: Uuid().v1(),
-              dataTimestamp: timestamp,
-              attendanceId: widget.entity.general.attendance!.id,
-              featureId: widget.entity.feature.id,
-              isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
-              featureMultimediaId: featureMultimedia.id!,
-            );
+                dataUuid: Uuid().v1(),
+                dataTimestamp: timestamp,
+                attendanceId: widget.entity.general.attendance!.id,
+                featureId: widget.entity.feature.id,
+                isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
+                featureMultimediaId: featureMultimedia.id!,
+                status: SyncStatus.synced);
       });
     });
     final photoGroup = data.$2.groupBy<int, PhotoEntity>((photo) {
       return photo.featurePhotoId;
     });
 
-    widget.entity.feature.featureMultimedias!.forEach((featureMultimedia) {
+    featureMultimedias.forEach((featureMultimedia) {
       photos[featureMultimedia.id!] = photoGroup[featureMultimedia.id!] ?? [];
       photos[featureMultimedia.id!]!.forEach((element) {
         element = element.copyWith(featureId: widget.entity.feature.id);
@@ -148,11 +148,10 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                           SliverPadding(
                               padding: EdgeInsets.only(bottom: 5.h),
                               sliver: SliverList.builder(
-                                itemCount: widget
-                                    .entity.feature.featureMultimedias!.length,
+                                itemCount: featureMultimedias.length,
                                 itemBuilder: (context, index) {
-                                  final featureMultimedia = widget.entity
-                                      .feature.featureMultimedias![index];
+                                  final featureMultimedia =
+                                      featureMultimedias[index];
                                   final noteItem =
                                       notes[featureMultimedia.id!]!;
                                   return NoteItem(
