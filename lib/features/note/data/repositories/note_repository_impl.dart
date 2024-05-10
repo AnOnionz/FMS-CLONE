@@ -74,36 +74,30 @@ class NoteRepositoryImpl extends Repository
       {required FeatureEntity feature}) {
     return todo(() async {
       final localNotes = await _local.getNotesByFeature(feature);
-      if (localNotes.isEmpty) {
-        final reportFeature = feature.copyWith(featurePhotos: []);
-        return Right(reportFeature);
-      }
-      if (localNotes.isNotEmpty) {
-        final featureMultimedias = <FeatureMultimedia>[];
 
-        feature.featureMultimedias!.forEach((featureMultimedia) {
-          final note = localNotes.firstWhereOrNull(
-              (element) => element.featureMultimediaId == featureMultimedia.id);
+      final featureMultimedias = <FeatureMultimedia>[];
 
-          final bool isTextEmpty = note != null &&
-              featureMultimedia.isTextFieldRequired! &&
-              note.value.isEmptyOrNull;
-          final bool isPhotoEmpty = note != null &&
-              featureMultimedia.minimumImages! > 0 &&
-              note.photos
-                      .where(
-                          (element) => element.status != SyncStatus.isDeleted)
-                      .length <
-                  featureMultimedia.minimumImages!;
+      feature.featureMultimedias!.forEach((featureMultimedia) {
+        final note = localNotes.firstWhereOrNull(
+            (element) => element.featureMultimediaId == featureMultimedia.id);
 
-          if (isTextEmpty || isPhotoEmpty) {
-            featureMultimedias.add(featureMultimedia);
-          }
-        });
-        if (featureMultimedias.length > 0) {
-          return Right(
-              feature.copyWith(featureMultimedias: featureMultimedias));
+        final bool isTextEmpty = featureMultimedia.isTextFieldRequired! &&
+            ((note != null && note.value.isEmptyOrNull) || note == null);
+        final bool isPhotoEmpty = featureMultimedia.minimumImages! > 0 &&
+            ((note != null &&
+                    note.photos
+                            .where((element) =>
+                                element.status != SyncStatus.isDeleted)
+                            .length <
+                        featureMultimedia.minimumImages!) ||
+                note == null);
+
+        if (isTextEmpty || isPhotoEmpty) {
+          featureMultimedias.add(featureMultimedia);
         }
+      });
+      if (featureMultimedias.length > 0) {
+        return Right(feature.copyWith(featureMultimedias: featureMultimedias));
       }
 
       return Right(null);

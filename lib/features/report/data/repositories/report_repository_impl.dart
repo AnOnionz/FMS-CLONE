@@ -65,29 +65,25 @@ class ReportRepositoryImpl extends Repository
     return todo(() async {
       final localPhotos = await _local.getPhotosByFeature(feature);
 
-      if (localPhotos.isEmpty) {
-        return Right(feature);
-      }
-      if (localPhotos.isNotEmpty) {
-        final featurePhotos = <FeaturePhoto>[];
-        final photoGroup = groupBy<PhotoEntity, int>(
-          localPhotos,
-          (photo) {
-            return photo.featurePhotoId;
-          },
-        );
+      final featurePhotos = <FeaturePhoto>[];
+      final photoGroup = groupBy<PhotoEntity, int>(
+        localPhotos,
+        (photo) {
+          return photo.featurePhotoId;
+        },
+      );
 
-        feature.featurePhotos!.forEach((featurePhoto) {
-          final photos = (photoGroup[featurePhoto.id!] ?? [])
-              .where((element) => element.status != SyncStatus.isDeleted);
+      feature.featurePhotos!.forEach((featurePhoto) {
+        final photos = (photoGroup[featurePhoto.id!] ?? [])
+            .where((element) => element.status != SyncStatus.isDeleted);
 
-          if (photos.length < featurePhoto.minimum!) {
-            featurePhotos.add(featurePhoto);
-          }
-        });
-        if (featurePhotos.length > 0) {
-          return Right(feature.copyWith(featurePhotos: featurePhotos));
+        if (featurePhoto.minimum! > 0 &&
+            photos.length < featurePhoto.minimum!) {
+          featurePhotos.add(featurePhoto);
         }
+      });
+      if (featurePhotos.length > 0) {
+        return Right(feature.copyWith(featurePhotos: featurePhotos));
       }
 
       return Right(null);
