@@ -17,7 +17,10 @@ class BottomButtons extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: onBack,
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              onBack();
+            },
             child: Container(
                 height: 56.h,
                 width: 56.h,
@@ -32,7 +35,12 @@ class BottomButtons extends StatelessWidget {
           ),
           Expanded(
             child: FlatButton(
-              onPressed: onNext,
+              onPressed: onNext != null
+                  ? () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      onNext!.call();
+                    }
+                  : null,
               name: 'Tiếp tục',
               color: AppColors.orange,
               disableTextColor: AppColors.delRio,

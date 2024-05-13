@@ -28,9 +28,9 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
   final FocusNode _focusNode = FocusNode();
   late final _formatter = CurrencyTextInputFormatter.currency(
     symbol: '',
-    onChange: (p0) {
-      widget.onChanged?.call(p0.replaceAll('.', ''));
-    },
+    // onChange: (p0) {
+    //   widget.onChanged?.call(p0.replaceAll('.', ''));
+    // },
   );
 
   late final TextEditingController _controller = TextEditingController(
@@ -40,20 +40,34 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
   bool get _hasValue => _controller.text != '';
   bool _hasFocus = false;
 
+  void onChanged() {
+    widget.onChanged?.call(_controller.value.text);
+  }
+
+  void onFocus() {
+    if (_focusNode.hasFocus) {
+      setState(() {
+        _hasFocus = true;
+      });
+    } else {
+      setState(() {
+        _hasFocus = false;
+      });
+    }
+  }
+
   @override
   void initState() {
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        setState(() {
-          _hasFocus = true;
-        });
-      } else {
-        setState(() {
-          _hasFocus = false;
-        });
-      }
-    });
+    _focusNode.addListener(onFocus);
+    _controller.addListener(onChanged);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(onFocus);
+    _controller.removeListener(onChanged);
+    super.dispose();
   }
 
   final activeBorder = OutlineInputBorder(
@@ -85,7 +99,7 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
       style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
       decoration: InputDecoration(
           contentPadding:
-              EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
+              EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.w),
           isCollapsed: true,
           suffixIcon: Padding(
             padding: EdgeInsets.only(right: 12.w),

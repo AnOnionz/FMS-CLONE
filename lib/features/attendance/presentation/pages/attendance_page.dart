@@ -84,7 +84,13 @@ class _AttendancePageState extends State<AttendancePage> {
   bool get isWatermarkRequired =>
       widget.entity.feature.featureAttendance!.isWatermarkRequired ?? false;
 
-  bool get isActive => attendanceInfoLoaded == true && _imageDynamic != null;
+  bool get isActive =>
+      attendanceInfoLoaded == true &&
+      switch (isWatermarkRequired) {
+        true => isWatermarking.value == false,
+        false => true
+      } &&
+      switch (isPhotoRequired) { true => _imageDynamic != null, false => true };
 
   void _getInfo() {
     cubit.getInfo(feature: widget.entity.feature);

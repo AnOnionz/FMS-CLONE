@@ -90,25 +90,29 @@ class _SelectProductState extends State<SelectProduct> {
                 sliver: SliverList.builder(
                   itemCount: _products.length,
                   itemBuilder: (context, index) {
-                    final product = _products[index];
+                    final orderProduct = _products[index];
                     return Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
-                      child: ItemContainer(
+                      child: PurchaseContainer(
                         titleFlexible: false,
                         trailing: CustomCheckbox(
-                          value: selectedId == product.id,
+                          value: selectedId == orderProduct.id,
                           onChanged: (value) {
                             if (value)
-                              selectedId = product.id;
+                              selectedId = orderProduct.id;
                             else
                               selectedId = null;
 
                             setState(() {});
                           },
                         ),
-                        leading: OrderProductImage(orderProduct: product),
-                        title: OrderProductInfoWidget(product: product),
+                        leading:
+                            OrderProductImage(product: orderProduct.product!),
+                        title: OrderProductInfoWidget(
+                            product: orderProduct.product!,
+                            productPackaging: orderProduct.productPackaging!,
+                            price: orderProduct.price!),
                       ),
                     );
                   },

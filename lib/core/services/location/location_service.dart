@@ -147,7 +147,7 @@ final class LocationService extends ChangeNotifier {
 
   Future<Position?> getCurrentPosition() async {
     try {
-      final hasPermission = await _handlePermission().timeout(10.seconds);
+      final hasPermission = await _handlePermission().timeout(15.seconds);
 
       if (!hasPermission) {
         return null;
@@ -155,7 +155,7 @@ final class LocationService extends ChangeNotifier {
 
       final userLocation = await _geolocator
           .getCurrentPosition(locationSettings: _getLocationSettings())
-          .timeout(10.seconds);
+          .timeout(15.seconds);
 
       positionUpdate(userLocation);
       placemark(userLocation).then((value) {

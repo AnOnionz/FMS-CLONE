@@ -9,7 +9,7 @@ import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
-import 'package:fms/features/report/presentation/widgets/report_item.dart';
+import 'package:fms/features/report/presentation/widgets/photo_item.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/colors.dart';
@@ -112,7 +112,7 @@ class _ReportPageState extends State<ReportPage> {
                               itemCount: featurePhotos.length,
                               itemBuilder: (context, index) {
                                 final photoItem = featurePhotos[index];
-                                return ReportItem(
+                                return PhotoItem(
                                   entity: photoItem,
                                   feature: widget.entity.feature,
                                   photos: reports[photoItem.id!]!,

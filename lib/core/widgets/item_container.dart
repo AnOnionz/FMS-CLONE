@@ -4,12 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/responsive/utilities/flex_extention.dart';
 
-class ItemContainer extends StatelessWidget {
+class PurchaseContainer extends StatelessWidget {
   final Widget leading;
   final Widget trailing;
   final Widget title;
   final bool titleFlexible;
-  ItemContainer(
+  PurchaseContainer(
       {super.key,
       required this.trailing,
       required this.title,
@@ -35,7 +35,7 @@ class ItemContainer extends StatelessWidget {
                 ],
               )),
           SizedBox(
-            width: 18.w,
+            width: 18.h,
           ),
           Expanded(
               child: Row(

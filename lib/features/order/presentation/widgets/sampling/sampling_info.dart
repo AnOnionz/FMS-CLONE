@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/constant/colors.dart';
 
-final productPriceFormat = NumberFormat.currency(
-  symbol: '',
-);
-
-class OrderProductInfoWidget extends StatelessWidget {
-  final int price;
+class SamplingInfoWidget extends StatelessWidget {
   final Product product;
   final ProductPackaging productPackaging;
-  const OrderProductInfoWidget(
-      {super.key,
-      required this.product,
-      required this.productPackaging,
-      required this.price});
+  const SamplingInfoWidget({
+    super.key,
+    required this.product,
+    required this.productPackaging,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +28,7 @@ class OrderProductInfoWidget extends StatelessWidget {
           style: context.textTheme.caption2?.copyWith(color: AppColors.nobel),
         ),
         Text(
-          '${productPriceFormat.format(price)} vnd / ${productPackaging.unitName}',
+          product.brandName!,
           style: context.textTheme.caption2,
         )
       ],

@@ -60,11 +60,6 @@ const OrderEntitySchema = CollectionSchema(
       name: r'samplings',
       type: IsarType.objectList,
       target: r'SamplingEntity',
-    ),
-    r'totalPrice': PropertySchema(
-      id: 8,
-      name: r'totalPrice',
-      type: IsarType.long,
     )
   },
   estimateSize: _orderEntityEstimateSize,
@@ -74,9 +69,9 @@ const OrderEntitySchema = CollectionSchema(
   idName: r'isarId',
   indexes: {},
   links: {
-    r'lcoalPhotos': LinkSchema(
-      id: 2926993346189133668,
-      name: r'lcoalPhotos',
+    r'localPhotos': LinkSchema(
+      id: -2352276160358198710,
+      name: r'localPhotos',
       target: r'PhotoEntity',
       single: false,
     )
@@ -194,7 +189,6 @@ void _orderEntitySerialize(
     SamplingEntitySchema.serialize,
     object.samplings,
   );
-  writer.writeLong(offsets[8], object.totalPrice);
 }
 
 OrderEntity _orderEntityDeserialize(
@@ -279,8 +273,6 @@ P _orderEntityDeserializeProp<P>(
         allOffsets,
         SamplingEntity(),
       )) as P;
-    case 8:
-      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -291,13 +283,13 @@ Id _orderEntityGetId(OrderEntity object) {
 }
 
 List<IsarLinkBase<dynamic>> _orderEntityGetLinks(OrderEntity object) {
-  return [object.lcoalPhotos];
+  return [object.localPhotos];
 }
 
 void _orderEntityAttach(
     IsarCollection<dynamic> col, Id id, OrderEntity object) {
-  object.lcoalPhotos
-      .attach(col, col.isar.collection<PhotoEntity>(), r'lcoalPhotos', id);
+  object.localPhotos
+      .attach(col, col.isar.collection<PhotoEntity>(), r'localPhotos', id);
 }
 
 extension OrderEntityQueryWhereSort
@@ -1203,62 +1195,6 @@ extension OrderEntityQueryFilter
       );
     });
   }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      totalPriceEqualTo(int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'totalPrice',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      totalPriceGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'totalPrice',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      totalPriceLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'totalPrice',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      totalPriceBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'totalPrice',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
 }
 
 extension OrderEntityQueryObject
@@ -1294,56 +1230,56 @@ extension OrderEntityQueryObject
 
 extension OrderEntityQueryLinks
     on QueryBuilder<OrderEntity, OrderEntity, QFilterCondition> {
-  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> lcoalPhotos(
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> localPhotos(
       FilterQuery<PhotoEntity> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'lcoalPhotos');
+      return query.link(q, r'localPhotos');
     });
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      lcoalPhotosLengthEqualTo(int length) {
+      localPhotosLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'lcoalPhotos', length, true, length, true);
+      return query.linkLength(r'localPhotos', length, true, length, true);
     });
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      lcoalPhotosIsEmpty() {
+      localPhotosIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'lcoalPhotos', 0, true, 0, true);
+      return query.linkLength(r'localPhotos', 0, true, 0, true);
     });
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      lcoalPhotosIsNotEmpty() {
+      localPhotosIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'lcoalPhotos', 0, false, 999999, true);
+      return query.linkLength(r'localPhotos', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      lcoalPhotosLengthLessThan(
+      localPhotosLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'lcoalPhotos', 0, true, length, include);
+      return query.linkLength(r'localPhotos', 0, true, length, include);
     });
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      lcoalPhotosLengthGreaterThan(
+      localPhotosLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'lcoalPhotos', length, include, 999999, true);
+      return query.linkLength(r'localPhotos', length, include, 999999, true);
     });
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      lcoalPhotosLengthBetween(
+      localPhotosLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1351,7 +1287,7 @@ extension OrderEntityQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'lcoalPhotos', lower, includeLower, upper, includeUpper);
+          r'localPhotos', lower, includeLower, upper, includeUpper);
     });
   }
 }
@@ -1405,18 +1341,6 @@ extension OrderEntityQuerySortBy
   QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByFeatureIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'featureId', Sort.desc);
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByTotalPrice() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'totalPrice', Sort.asc);
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByTotalPriceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'totalPrice', Sort.desc);
     });
   }
 }
@@ -1484,18 +1408,6 @@ extension OrderEntityQuerySortThenBy
       return query.addSortBy(r'isarId', Sort.desc);
     });
   }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByTotalPrice() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'totalPrice', Sort.asc);
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByTotalPriceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'totalPrice', Sort.desc);
-    });
-  }
 }
 
 extension OrderEntityQueryWhereDistinct
@@ -1522,12 +1434,6 @@ extension OrderEntityQueryWhereDistinct
   QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByFeatureId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'featureId');
-    });
-  }
-
-  QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByTotalPrice() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'totalPrice');
     });
   }
 }
@@ -1590,12 +1496,6 @@ extension OrderEntityQueryProperty
       samplingsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'samplings');
-    });
-  }
-
-  QueryBuilder<OrderEntity, int, QQueryOperations> totalPriceProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'totalPrice');
     });
   }
 }

@@ -15,6 +15,7 @@ import '../input_quantity.dart';
 
 class GiftQuantityWidget extends StatefulWidget {
   final Exchange exchange;
+  final List<OrderProduct> products;
   final ExchangeController controller;
   final int priceUsed;
   final int value;
@@ -23,8 +24,9 @@ class GiftQuantityWidget extends StatefulWidget {
 
   const GiftQuantityWidget(
       {super.key,
-      required this.exchange,
       required this.controller,
+      required this.exchange,
+      required this.products,
       required this.priceUsed,
       required this.value,
       required this.onQuantityChanged});
@@ -40,7 +42,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
 
   bool isValid() {
     if (_exchange.reachAmount != null &&
-        widget.controller.order.totalPrice -
+        widget.controller.order.totalPrice(widget.products) -
                 (widget.value > 0 ? 0 : widget.priceUsed) <
             _exchange.reachAmount!) {
       return false;

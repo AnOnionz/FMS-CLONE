@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:collection/collection.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
@@ -22,14 +22,17 @@ class OrderEntity extends DataEntity {
   final List<PurchaseEntity>? purchases;
   final List<ExchangeEntity>? exchanges;
   final List<SamplingEntity>? samplings;
-  final lcoalPhotos = IsarLinks<PhotoEntity>();
+  final localPhotos = IsarLinks<PhotoEntity>();
   @ignore
   final List<PhotoEntity>? photos;
 
-  int get totalPrice => (purchases ?? []).fold(
-      0,
-      (previousValue, element) =>
-          previousValue + (element.quantity! * element.orderProduct!.price!));
+  int totalPrice(List<OrderProduct> products) {
+    return (purchases ?? []).fold(0, (previousValue, purchase) {
+      final product = products.firstWhereOrNull(
+          (element) => element.id == purchase.featureOrderProductId);
+      return previousValue + (purchase.quantity! * (product?.price ?? 0));
+    });
+  }
 
   OrderEntity(
       {required this.dataUuid,
@@ -244,14 +247,11 @@ class PurchaseEntity {
   int? id;
   int? featureOrderProductId;
   int? quantity;
-  @ignore
-  final OrderProduct? orderProduct;
 
   PurchaseEntity({
     this.id,
     this.featureOrderProductId,
     this.quantity = 0,
-    this.orderProduct,
   });
 
   void updateQuantity(int value) {
@@ -283,7 +283,7 @@ class PurchaseEntity {
 
   @override
   String toString() =>
-      'Purchase(id: $id, featureOrderProductId: $featureOrderProductId, quantity: $quantity)';
+      'PurchaseEntity(id: $id, featureOrderProductId: $featureOrderProductId, quantity: $quantity)';
 
   PurchaseEntity copyWith({
     int? id,
@@ -291,11 +291,11 @@ class PurchaseEntity {
     int? quantity,
   }) {
     return PurchaseEntity(
-        id: id ?? this.id,
-        featureOrderProductId:
-            featureOrderProductId ?? this.featureOrderProductId,
-        quantity: quantity ?? this.quantity,
-        orderProduct: orderProduct);
+      id: id ?? this.id,
+      featureOrderProductId:
+          featureOrderProductId ?? this.featureOrderProductId,
+      quantity: quantity ?? this.quantity,
+    );
   }
 }
 
@@ -354,9 +354,9 @@ class ExchangeEntity {
 
 @embedded
 class SamplingEntity {
-  final int? id;
-  final int? featureSamplingId;
-  final int? quantity;
+  int? id;
+  int? featureSamplingId;
+  int? quantity;
 
   SamplingEntity({
     this.id,

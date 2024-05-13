@@ -14,7 +14,6 @@ import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
-import '../../../../core/mixins/common.dart';
 import '../../../../core/styles/theme.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/order_entity.dart';
@@ -83,11 +82,6 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
       });
     }
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -212,7 +206,6 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                   onBack: () {},
                   onNext: identifyCubit.state is IdentifySuccess && validate
                       ? () {
-                          FocusManager.instance.primaryFocus?.unfocus();
                           if (_formKey.currentState!.validate()) {
                             widget.onSaveData(
                                 _fields.entries.map((e) => e.value).toList());

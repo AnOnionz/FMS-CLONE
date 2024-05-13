@@ -23,7 +23,7 @@ class HistoryExchangeDetailPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 30.h),
-        child: ExchangeDetail(),
+        // child: ExchangeDetail(),
       ),
     );
   }

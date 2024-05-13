@@ -13,11 +13,12 @@ class AttendanceFlowCubit extends Cubit<AttendanceFlowState> {
   void attendanceStarted(GeneralFeatureData entity) {
     switch (entity.feature.featureAttendance!.isLocationRequired) {
       case true:
-        Modular.to.pushNamed(AttendanceCoreModule.locate, arguments: entity);
+        Modular.to.pushReplacementNamed(AttendanceCoreModule.locate,
+            arguments: entity);
         break;
       default:
-        Modular.to
-            .pushNamed(AttendanceCoreModule.attendance, arguments: entity);
+        Modular.to.pushReplacementNamed(AttendanceCoreModule.attendance,
+            arguments: entity);
     }
   }
 }

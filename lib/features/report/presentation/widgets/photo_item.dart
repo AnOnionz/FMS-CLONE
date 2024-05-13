@@ -8,7 +8,7 @@ import 'package:fms/features/report/domain/entities/photo_entity.dart';
 
 import '../../../images/presentation/widgets/image_view.dart';
 
-class ReportItem extends StatelessWidget {
+class PhotoItem extends StatelessWidget {
   final FeaturePhoto entity;
   final FeatureEntity feature;
   final List<PhotoEntity> photos;
@@ -16,7 +16,7 @@ class ReportItem extends StatelessWidget {
   final ValueNotifier<bool>? isWatermarking;
   final void Function(ImageDynamic image) onAdded;
   final void Function(ImageDynamic image) onDeleted;
-  const ReportItem(
+  const PhotoItem(
       {super.key,
       required this.entity,
       required this.photos,

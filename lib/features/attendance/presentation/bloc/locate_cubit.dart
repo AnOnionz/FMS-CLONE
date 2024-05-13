@@ -13,6 +13,7 @@ class LocateCubit extends Cubit<LocateState> {
   Future<void> getLocation() async {
     emit(LocateInProgress());
     try {
+      locationService.enablePositionSubscription();
       final position = await locationService.getCurrentPosition();
       if (position == null) {
         if (!isClosed) {
@@ -30,5 +31,6 @@ class LocateCubit extends Cubit<LocateState> {
         emit(LocateFailue(error: UnknowFailure(e, null)));
       }
     }
+    locationService.cancelPositionSubscription();
   }
 }

@@ -5,19 +5,19 @@ import 'package:fms/core/widgets/cached_image.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
 class OrderProductImage extends StatelessWidget {
-  final OrderProduct orderProduct;
-  const OrderProductImage({super.key, required this.orderProduct});
+  final Product product;
+  const OrderProductImage({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    if (orderProduct.product!.imageUrl == null)
+    if (product.imageUrl == null)
       return Center(
           child: Image.asset(
         AppImages.product,
         width: 40.w,
       ));
     return CachedImage(
-      imageUrl: orderProduct.product!.imageUrl!,
+      imageUrl: product.imageUrl!,
       errorWidget: (p0, p1, p2) => Center(
           child: Image.asset(
         AppImages.product,

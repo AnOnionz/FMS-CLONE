@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
 
 import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/empty_widget.dart';
 import '../../../../../core/widgets/item_container.dart';
-import '../../pages/purchase_page.dart';
 import '../input_quantity.dart';
 import 'order_product_image.dart';
 
-class SelectedProduct extends StatelessWidget {
-  final State<OrderPurchasePage> state;
-  final List<PurchaseEntity> items;
+class SelectedProduct extends StatefulWidget {
+  final Map<OrderProduct, PurchaseEntity> items;
 
   const SelectedProduct({
     super.key,
     required this.items,
-    required this.state,
   });
 
   @override
+  State<SelectedProduct> createState() => _SelectedProductState();
+}
+
+class _SelectedProductState extends State<SelectedProduct> {
+  @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
+    if (widget.items.isEmpty) {
       return EmptyWidget();
     } else {
       return CustomScrollView(
@@ -30,34 +33,34 @@ class SelectedProduct extends StatelessWidget {
         physics: kPhysics,
         slivers: [
           SliverList.separated(
-            itemCount: items.length,
+            itemCount: widget.items.length,
             separatorBuilder: (context, index) => SizedBox(
               height: 22.h,
             ),
             itemBuilder: (context, index) {
-              final item = items[index];
-
+              final orderProduct = widget.items.keys.elementAt(index);
+              final purchase = widget.items.values.elementAt(index);
               return Dismissible(
-                key: ValueKey(item.featureOrderProductId.toString()),
+                key: UniqueKey(),
                 onDismissed: (direction) {
-                  // ignore: invalid_use_of_protected_member
-                  state.setState(() {
-                    items.removeAt(index);
+                  setState(() {
+                    widget.items.remove(orderProduct);
                   });
                 },
-                child: ItemContainer(
-                    key: ValueKey(item.orderProduct!.id!.toString()),
+                child: PurchaseContainer(
+                    key: ValueKey(orderProduct.id!.toString()),
                     titleFlexible: false,
-                    leading:
-                        OrderProductImage(orderProduct: item.orderProduct!),
-                    title: OrderProductInfoWidget(product: item.orderProduct!),
+                    leading: OrderProductImage(product: orderProduct.product!),
+                    title: OrderProductInfoWidget(
+                        product: orderProduct.product!,
+                        productPackaging: orderProduct.productPackaging!,
+                        price: orderProduct.price!),
                     trailing: InputQuantity(
-                      value: item.quantity!,
+                      value: purchase.quantity!,
                       max: 10000,
                       onValueChanged: (value) {
-                        // ignore: invalid_use_of_protected_member
-                        state.setState(() {
-                          item.updateQuantity(value);
+                        setState(() {
+                          purchase.updateQuantity(value);
                         });
                       },
                     )),

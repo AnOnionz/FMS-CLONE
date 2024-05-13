@@ -39,7 +39,7 @@ class StatisticSampling extends StatelessWidget {
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(16.sqr),
               ),
-              child: ItemContainer(
+              child: PurchaseContainer(
                   leading: Image.asset(AppImages.loginBanner),
                   title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

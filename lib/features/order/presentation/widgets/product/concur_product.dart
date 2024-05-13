@@ -49,11 +49,11 @@ class _ConcurProductState extends State<ConcurProduct> {
                 SliverList.builder(
                   itemCount: widget.products.length,
                   itemBuilder: (context, index) {
-                    final product = widget.products[index];
+                    final orderProduct = widget.products[index];
                     return Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
-                      child: ItemContainer(
+                      child: PurchaseContainer(
                         titleFlexible: false,
                         trailing: CustomCheckbox(
                           value: selectedIndex == index,
@@ -66,8 +66,12 @@ class _ConcurProductState extends State<ConcurProduct> {
                             setState(() {});
                           },
                         ),
-                        leading: OrderProductImage(orderProduct: product),
-                        title: OrderProductInfoWidget(product: product),
+                        leading:
+                            OrderProductImage(product: orderProduct.product!),
+                        title: OrderProductInfoWidget(
+                            product: orderProduct.product!,
+                            productPackaging: orderProduct.productPackaging!,
+                            price: orderProduct.price!),
                       ),
                     );
                   },

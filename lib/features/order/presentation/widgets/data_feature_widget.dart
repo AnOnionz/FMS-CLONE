@@ -20,7 +20,7 @@ class DataFeature extends InheritedWidget {
 
   static DataFeature of(BuildContext context) {
     final DataFeature? result = maybeOf(context);
-    assert(result != null, 'No GeneralFeature found in context');
+    assert(result != null, 'No DataFeature found in context');
     return result!;
   }
 

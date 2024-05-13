@@ -17,12 +17,15 @@ import 'package:fms/features/order/order_module.dart';
 import 'package:fms/features/order/presentation/pages/purchase_page.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../core/widgets/button/flat.dart';
+import '../../../../core/widgets/button/outline.dart';
 import '../../../home/domain/entities/general_item_data.dart';
 import '../widgets/custom_stepper.dart';
 import '../widgets/data_feature_widget.dart';
+import '../widgets/exchange_detail.dart';
 import 'customer_page.dart';
 import 'exchange_page.dart';
-import 'review_page.dart';
+import 'order_photo_page.dart';
 import 'sampling_page.dart';
 
 class OrderPage extends StatefulWidget {
@@ -44,6 +47,8 @@ class _OrderPageState extends State<OrderPage> {
 
   late int _curr = 0;
 
+  bool isSummary = false;
+
   @override
   void initState() {
     _init();
@@ -51,11 +56,43 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   void onNext() {
-    controller.nextPage(duration: 500.milliseconds, curve: Curves.ease);
+    if (_curr == _steps.length - 1) {
+      setState(() {
+        isSummary = true;
+      });
+    } else {
+      controller.nextPage(duration: 500.milliseconds, curve: Curves.ease);
+    }
   }
 
   void onBack() {
     controller.previousPage(duration: 500.milliseconds, curve: Curves.ease);
+  }
+
+  void onSkip(StepData step) {
+    switch (step.runtimeType) {
+      case CustomerStep:
+        orderEntity = orderEntity.copyWith(
+            customerInfos: orderEntity.customerInfos ?? []);
+        break;
+      case PurchaseStep:
+        orderEntity =
+            orderEntity.copyWith(purchases: orderEntity.purchases ?? []);
+        break;
+      case ExchangeStep:
+        orderEntity =
+            orderEntity.copyWith(exchanges: orderEntity.exchanges ?? []);
+        break;
+      case SamplingStep:
+        orderEntity =
+            orderEntity.copyWith(samplings: orderEntity.samplings ?? []);
+        break;
+      case PhotoStep:
+        orderEntity = orderEntity.copyWith(photos: orderEntity.photos ?? []);
+        break;
+    }
+    setState(() {});
+    onNext();
   }
 
   @override
@@ -76,7 +113,8 @@ class _OrderPageState extends State<OrderPage> {
               onPressed: () => context.popUntil(HomeModule.route)),
           iconBack: SvgPicture.asset(AppIcons.closeRegular),
           title: widget.entity.feature.name!,
-          action: widget.entity.feature.featureOrder!.isCustomerRequired!
+          action: isSummary ||
+                  widget.entity.feature.featureOrder!.isCustomerRequired!
               ? null
               : TextButton(
                   onPressed: () => showWarning(
@@ -85,54 +123,109 @@ class _OrderPageState extends State<OrderPage> {
                       icon: SvgPicture.asset(AppIcons.requestSkip),
                       btnText: 'Bỏ qua',
                       onPressed: () {
-                        _steps[_curr].setState(StepperState.ignored);
-                        onNext();
-                        setState(() {});
-                        Fx.log(orderEntity.customerInfos);
+                        onSkip(_steps[_curr]);
                       }),
                   child: Text(
                     'Skip',
                     style: context.textTheme.body1,
                   )),
         ),
-        body: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 22.h),
-                margin: EdgeInsets.fromLTRB(16.w, 35.h, 16.w, 8.h),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(10.sqr)),
-                child: CustomStepper(
-                  steps: _steps,
-                  current: _curr,
-                  ignoredColor: 'FFC737'.toColor(),
-                  primaryColor: '0043CE'.toColor(),
+        body: Builder(builder: (context) {
+          if (_completer.isCompleted && !isSummary)
+            return Column(
+              children: [
+                Container(
+                    padding: EdgeInsets.symmetric(vertical: 22.h),
+                    margin: EdgeInsets.fromLTRB(16.w, 35.h, 16.w, 8.h),
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(10.sqr)),
+                    child: CustomStepper(
+                      steps: _steps,
+                      order: orderEntity,
+                      current: _curr,
+                      ignoredColor: 'FFC737'.toColor(),
+                      primaryColor: '0043CE'.toColor(),
+                    )),
+                Expanded(
+                    child: DataFeature(
+                  data: widget.entity,
+                  order: orderEntity,
+                  child: PageView(
+                    children: _body,
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: controller,
+                    onPageChanged: (num) {
+                      setState(() {
+                        _curr = num;
+                      });
+                      Fx.log(orderEntity);
+                    },
+                  ),
                 )),
-            if (_completer.isCompleted)
-              Expanded(
-                  child: DataFeature(
-                data: widget.entity,
-                order: orderEntity,
-                child: PageView(
-                  children: _body,
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: controller,
-                  onPageChanged: (num) {
-                    setState(() {
-                      _curr = num;
-                      _steps[_curr].setState(StepperState.editing);
-                    });
-                  },
-                ),
-              )),
-          ],
-        ),
+              ],
+            );
+          if (_completer.isCompleted && isSummary)
+            return Padding(
+              padding: EdgeInsets.only(top: 26.h),
+              child: Column(
+                children: [
+                  Expanded(
+                      child: ExchangeDetail(
+                          order: orderEntity, generalFeature: widget.entity)),
+                  Container(
+                    padding: EdgeInsets.all(16.w),
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              offset: Offset(0, -2),
+                              blurRadius: 25,
+                              color: '000000'.toColor(0.15))
+                        ]),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: OutlineButton(
+                            onPressed: () {
+                              setState(() {
+                                isSummary = false;
+                                controller = controller =
+                                    PageController(initialPage: _curr);
+                              });
+                            },
+                            name: 'Quay lại',
+                            color: AppColors.orange,
+                          )),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Expanded(
+                            child: FlatButton(
+                              onPressed: () =>
+                                  context.nextRoute(OrderModule.success),
+                              name: 'Hoàn thành',
+                              color: AppColors.orange,
+                              disableTextColor: AppColors.delRio,
+                              disableColor: AppColors.potPourri,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          return SizedBox.shrink();
+        }),
       ),
     );
   }
 
   Future<void> _init() async {
+    int index = 0;
     final time = await _networkTimeService.ntpDateTime();
     orderEntity = OrderEntity(
         dataUuid: Uuid().v1(),
@@ -142,10 +235,9 @@ class _OrderPageState extends State<OrderPage> {
         customerInfos: [
           CustomerInfo(featureCustomerId: 10, value: '1'),
           CustomerInfo(featureCustomerId: 11, value: '2'),
-          CustomerInfo(featureCustomerId: 12, value: '1'),
-          CustomerInfo(featureCustomerId: 13, value: '2'),
-          CustomerInfo(featureCustomerId: 14, value: '1'),
-          CustomerInfo(featureCustomerId: 15, value: '2'),
+        ],
+        purchases: [
+          PurchaseEntity(featureOrderProductId: 11, quantity: 5)
         ],
         exchanges: [
           ExchangeEntity(featureSchemeExchangeId: 15, quantity: 3)
@@ -153,43 +245,25 @@ class _OrderPageState extends State<OrderPage> {
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(
-        StepData(name: 'K.Hàng', state: StepperState.editing),
+        CustomerStep(name: 'K.Hàng', index: index++),
       );
       _body.add(OrderCustomerPage(
         key: PageStorageKey('customer'),
         onBack: onBack,
-        onNext: () {
-          if (orderEntity.customerInfos == null) {
-            _steps[_curr].setState(StepperState.ignored);
-          } else {
-            _steps[_curr].setState(StepperState.completed);
-          }
-          onNext();
-        },
+        onNext: onNext,
         onSaveData: (customers) {
           setState(() {
             orderEntity = orderEntity.copyWith(customerInfos: customers);
           });
-          print(orderEntity);
         },
       ));
     }
     if (widget.entity.feature.featureOrder?.hasPurchase == true) {
-      _steps.add(StepData(name: 'Sản phẩm'));
+      _steps.add(PurchaseStep(name: 'Sản phẩm', index: index++));
       _body.add(OrderPurchasePage(
         key: PageStorageKey('product'),
-        onBack: () {
-          _steps[_curr].resetState();
-          onBack();
-        },
-        onNext: () {
-          if (orderEntity.purchases == null) {
-            _steps[_curr].setState(StepperState.ignored);
-          } else {
-            _steps[_curr].setState(StepperState.completed);
-          }
-          onNext();
-        },
+        onBack: onBack,
+        onNext: onNext,
         onSaveData: (purchases) {
           setState(() {
             orderEntity = orderEntity.copyWith(purchases: purchases);
@@ -198,41 +272,27 @@ class _OrderPageState extends State<OrderPage> {
       ));
     }
     if (widget.entity.feature.featureOrder?.hasExchange == true) {
-      _steps.add(StepData(name: 'Đổi quà'));
+      _steps.add(ExchangeStep(
+        name: 'Đổi quà',
+        index: index++,
+      ));
       _body.add(OrderExchangePage(
         key: PageStorageKey('exchange'),
         onBack: onBack,
-        onNext: () {
-          if (orderEntity.exchanges == null) {
-            _steps[_curr].setState(StepperState.ignored);
-          } else {
-            _steps[_curr].setState(StepperState.completed);
-          }
-
-          onNext();
-        },
+        onNext: onNext,
         onSaveData: (exchanges) {
           setState(() {
             orderEntity = orderEntity.copyWith(exchanges: exchanges);
           });
-          Fx.log(orderEntity.exchanges);
         },
       ));
     }
     if (widget.entity.feature.featureOrder?.hasSampling == true) {
-      _steps.add(StepData(name: 'Sampling'));
+      _steps.add(SamplingStep(name: 'Sampling', index: index++));
       _body.add(OrderSamplingPage(
         key: PageStorageKey('sampling'),
         onBack: onBack,
-        onNext: () {
-          if (orderEntity.samplings == null) {
-            _steps[_curr].setState(StepperState.ignored);
-          } else {
-            _steps[_curr].setState(StepperState.completed);
-          }
-
-          onNext();
-        },
+        onNext: onNext,
         onSaveData: (samplings) {
           setState(() {
             orderEntity = orderEntity.copyWith(samplings: samplings);
@@ -241,18 +301,11 @@ class _OrderPageState extends State<OrderPage> {
       ));
     }
     if (widget.entity.feature.featureOrder?.hasPhoto == true) {
-      _steps.add(StepData(name: 'Chụp hình'));
-      _body.add(OrderReviewPage(
-        key: PageStorageKey('review'),
+      _steps.add(PhotoStep(name: 'Chụp hình', index: index++));
+      _body.add(OrderPhotoPage(
+        key: PageStorageKey('order_photo'),
         onBack: onBack,
-        onNext: () {
-          if (orderEntity.photos == null) {
-            _steps[_curr].setState(StepperState.ignored);
-          } else {
-            _steps[_curr].setState(StepperState.completed);
-          }
-          context.nextRoute(OrderModule.success);
-        },
+        onNext: onNext,
         onSaveData: (photos) {
           setState(() {
             orderEntity = orderEntity.copyWith(photos: photos);
@@ -260,7 +313,8 @@ class _OrderPageState extends State<OrderPage> {
         },
       ));
     }
-    _completer.complete(orderEntity);
+
     setState(() {});
+    _completer.complete(orderEntity);
   }
 }

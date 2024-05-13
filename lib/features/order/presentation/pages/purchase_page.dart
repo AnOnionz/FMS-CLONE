@@ -10,8 +10,8 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/core/widgets/search_text_field.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
+import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/presentation/widgets/product/concur_product.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
 import 'package:fms/features/order/presentation/widgets/product/select_product.dart';
@@ -40,8 +40,9 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
   late final products =
       DataFeature.of(context).data.feature.featureOrder!.products ?? [];
 
-  final items = <PurchaseEntity>[];
-  final selectedItems = <OrderProduct>[];
+  late final purchases =
+      DataFeature.of(context).order.purchases ?? <PurchaseEntity>[];
+  final selectedItems = <OrderProduct, PurchaseEntity>{};
 
   late final concurProducts = groupBy<OrderProduct, String>(
       products, (product) => product.productPackaging!.barcode!)
@@ -79,38 +80,36 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
   }
 
   void onSelectedProduct(OrderProduct value) {
-    setState(() {
-      selectedItems.add(value);
-      updateItems(value);
-    });
-  }
-
-  void updateItems(OrderProduct value) {
-    if (items.map((e) => e.featureOrderProductId).contains(value.id)) {
-      final product =
-          items.firstWhere((item) => item.featureOrderProductId == value.id);
-
-      setState(() {
-        product.updateQuantity(product.quantity! + 1);
-      });
-      Fx.log(items);
+    if (selectedItems.containsKey(value)) {
+      final purchase = selectedItems[value]!;
+      purchase.updateQuantity(purchase.quantity! + 1);
     } else {
-      setState(() {
-        items.add(PurchaseEntity(
-            featureOrderProductId: value.id, orderProduct: value));
-      });
+      selectedItems[value] = PurchaseEntity(featureOrderProductId: value.id);
     }
+    setState(() {});
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    purchases.forEach((purchase) {
+      final product = products.firstWhereOrNull(
+          (element) => element.id == purchase.featureOrderProductId);
+      if (product != null) {
+        selectedItems[product] = purchase;
+      }
+    });
+    setState(() {});
+    super.didChangeDependencies();
   }
+
+  bool get validate => selectedItems.entries.any((item) {
+        return item.value.quantity! > 0;
+      });
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Fx.log(products);
+
     return Column(
       children: [
         Expanded(
@@ -212,8 +211,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                     Flexible(
                       child: SelectedProduct(
                         key: UniqueKey(),
-                        state: this,
-                        items: items,
+                        items: selectedItems,
                       ),
                     )
                   ],
@@ -242,12 +240,11 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                           ?.copyWith(color: AppColors.dimGray),
                     ),
                     Builder(builder: (context) {
-                      final total = items.fold(
+                      final total = selectedItems.entries.fold(
                           0,
                           (previousValue, element) =>
                               previousValue +
-                              (element.quantity! *
-                                  element.orderProduct!.price!));
+                              (element.value.quantity! * element.key.price!));
                       return Text(
                         '${productPriceFormat.format(total)} VNĐ',
                         style: context.textTheme.button1
@@ -261,9 +258,11 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: BottomButtons(
                   onBack: widget.onBack,
-                  onNext: items.any((element) => element.quantity! > 0)
+                  onNext: validate
                       ? () {
-                          widget.onSaveData(items);
+                          widget.onSaveData(selectedItems.entries
+                              .map((e) => e.value)
+                              .toList());
                           widget.onNext();
                         }
                       : null,

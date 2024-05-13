@@ -3,12 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
 
 class CustomStepper extends StatefulWidget {
   final int current;
+  final OrderEntity order;
   final List<StepData> steps;
   final Color ignoredColor;
   final Color primaryColor;
@@ -18,6 +19,7 @@ class CustomStepper extends StatefulWidget {
     required this.steps,
     required this.ignoredColor,
     required this.primaryColor,
+    required this.order,
   });
 
   @override
@@ -40,15 +42,13 @@ class _CustomStepperState extends State<CustomStepper> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: widget.steps
               .map(
-                (step) => ValueListenableBuilder(
-                  valueListenable: step,
-                  builder: (context, value, child) => StepContainer(
-                      width: _stepItemWidth,
-                      data: step,
-                      currentStep: widget.current,
-                      ignoredColor: widget.ignoredColor,
-                      primaryColor: widget.primaryColor),
-                ),
+                (step) => StepContainer(
+                    width: _stepItemWidth,
+                    name: step.name,
+                    state: step.getState(
+                        order: widget.order, currentIndex: widget.current),
+                    ignoredColor: widget.ignoredColor,
+                    primaryColor: widget.primaryColor),
               )
               .toList(),
         )
@@ -57,127 +57,211 @@ class _CustomStepperState extends State<CustomStepper> {
   }
 }
 
-class StepContainer extends StatefulWidget {
+class StepContainer extends StatelessWidget {
   final double width;
-  final StepData data;
-  final int currentStep;
+  final String name;
+  final StepperState state;
   final Color primaryColor;
   final Color ignoredColor;
 
   const StepContainer({
     super.key,
     required this.width,
-    required this.data,
-    required this.currentStep,
+    required this.name,
+    required this.state,
     required this.primaryColor,
     required this.ignoredColor,
   });
 
   @override
-  State<StepContainer> createState() => _StepContainerState();
-}
-
-class _StepContainerState extends State<StepContainer> {
-  late final StepData step = widget.data;
-
-  @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width,
+      width: width,
       child: Column(
         children: [
-          if (step.state == StepperState.disabled)
-            Container(
-              height: 20.w,
-              width: 20.w,
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.silver, width: 2.h)),
-            ),
-          if (step.state == StepperState.editing)
-            Container(
-              height: 20.w,
-              width: 20.w,
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: widget.primaryColor, width: 1.w)),
-              child: Container(
-                width: 4.w,
-                height: 4.w,
-                margin: EdgeInsets.all(7.w),
-                decoration: BoxDecoration(
-                    color: widget.primaryColor, shape: BoxShape.circle),
-              ),
-            ),
-          if (step.state == StepperState.completed)
-            Container(
-                height: 20.w,
-                width: 20.w,
-                decoration: BoxDecoration(
-                  color: widget.primaryColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.done,
-                  color: AppColors.white,
-                  size: 14.w,
-                )),
-          if (step.state == StepperState.ignored)
-            Container(
-                height: 20.w,
-                width: 20.w,
-                decoration: BoxDecoration(
-                  color: widget.ignoredColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.priority_high,
-                  color: AppColors.white,
-                  size: 14.w,
-                )),
+          _icon(),
           SizedBox(height: 10.h),
           Text(
-            widget.data.name,
+            name,
             style: context.textTheme.caption3?.copyWith(color: AppColors.nobel),
           )
         ],
       ),
     );
   }
+
+  Widget _icon() {
+    if (state == StepperState.editing)
+      return Container(
+        height: 20.w,
+        width: 20.w,
+        decoration: BoxDecoration(
+            color: AppColors.white,
+            shape: BoxShape.circle,
+            border: Border.all(color: primaryColor, width: 1.w)),
+        child: Container(
+          width: 4.w,
+          height: 4.w,
+          margin: EdgeInsets.all(7.w),
+          decoration:
+              BoxDecoration(color: primaryColor, shape: BoxShape.circle),
+        ),
+      );
+    if (state == StepperState.completed)
+      return Container(
+          height: 20.w,
+          width: 20.w,
+          decoration: BoxDecoration(
+            color: primaryColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.done,
+            color: AppColors.white,
+            size: 14.w,
+          ));
+    if (state == StepperState.ignored)
+      return Container(
+          height: 20.w,
+          width: 20.w,
+          decoration: BoxDecoration(
+            color: ignoredColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.priority_high,
+            color: AppColors.white,
+            size: 14.w,
+          ));
+
+    return Container(
+      height: 20.w,
+      width: 20.w,
+      decoration: BoxDecoration(
+          color: AppColors.white,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.silver, width: 2.h)),
+    );
+  }
 }
 
 enum StepperState { disabled, editing, completed, ignored }
 
-class StepData extends ValueNotifier<StepperState> with EquatableMixin {
+abstract class StepData extends Equatable {
   final String name;
-  StepperState state;
-  StepperState oldState;
+  final int index;
 
-  StepData(
-      {required this.name,
-      this.state = StepperState.disabled,
-      this.oldState = StepperState.disabled})
-      : super(state);
+  StepperState getState(
+      {required OrderEntity order, required int currentIndex});
 
-  void setState(StepperState state) {
-    this.oldState = this.state;
-    this.state = state;
-    Fx.log('set state $this');
-    notifyListeners();
-  }
-
-  void resetState() {
-    this.state = oldState;
-    Fx.log('reset state $this');
-    notifyListeners();
-  }
+  StepData({
+    required this.name,
+    required this.index,
+  });
 
   @override
-  String toString() =>
-      'StepData(name: $name, state: $state, oldState: $oldState)';
+  String toString() => 'StepData(name: $name, index: $index )';
 
   @override
-  List<Object?> get props => [state, name];
+  List<Object?> get props => [index, name];
+}
+
+class CustomerStep extends StepData {
+  CustomerStep({required super.name, required super.index});
+
+  @override
+  StepperState getState(
+      {required OrderEntity order, required int currentIndex}) {
+    if (currentIndex == index) {
+      return StepperState.editing;
+    }
+    if (order.customerInfos == null) {
+      return StepperState.disabled;
+    }
+    if (order.customerInfos!.isNotEmpty) {
+      return StepperState.completed;
+    }
+
+    return StepperState.ignored;
+  }
+}
+
+class PurchaseStep extends StepData {
+  PurchaseStep({required super.name, required super.index});
+
+  @override
+  StepperState getState(
+      {required OrderEntity order, required int currentIndex}) {
+    if (currentIndex == index) {
+      return StepperState.editing;
+    }
+    if (order.purchases == null) {
+      return StepperState.disabled;
+    }
+    if (order.purchases!.isNotEmpty) {
+      return StepperState.completed;
+    }
+
+    return StepperState.ignored;
+  }
+}
+
+class ExchangeStep extends StepData {
+  ExchangeStep({required super.name, required super.index});
+
+  @override
+  StepperState getState(
+      {required OrderEntity order, required int currentIndex}) {
+    if (currentIndex == index) {
+      return StepperState.editing;
+    }
+    if (order.exchanges == null) {
+      return StepperState.disabled;
+    }
+    if (order.exchanges!.isNotEmpty) {
+      return StepperState.completed;
+    }
+
+    return StepperState.ignored;
+  }
+}
+
+class SamplingStep extends StepData {
+  SamplingStep({required super.name, required super.index});
+
+  @override
+  StepperState getState(
+      {required OrderEntity order, required int currentIndex}) {
+    if (currentIndex == index) {
+      return StepperState.editing;
+    }
+    if (order.samplings == null) {
+      return StepperState.disabled;
+    }
+    if (order.samplings!.isNotEmpty) {
+      return StepperState.completed;
+    }
+
+    return StepperState.ignored;
+  }
+}
+
+class PhotoStep extends StepData {
+  PhotoStep({required super.name, required super.index});
+
+  @override
+  StepperState getState(
+      {required OrderEntity order, required int currentIndex}) {
+    if (currentIndex == index) {
+      return StepperState.editing;
+    }
+    if (order.photos == null) {
+      return StepperState.disabled;
+    }
+    if (order.photos!.isNotEmpty) {
+      return StepperState.completed;
+    }
+
+    return StepperState.ignored;
+  }
 }
