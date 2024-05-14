@@ -49,17 +49,28 @@ const OrderEntitySchema = CollectionSchema(
       name: r'featureId',
       type: IsarType.long,
     ),
-    r'purchases': PropertySchema(
+    r'id': PropertySchema(
       id: 6,
+      name: r'id',
+      type: IsarType.long,
+    ),
+    r'purchases': PropertySchema(
+      id: 7,
       name: r'purchases',
       type: IsarType.objectList,
       target: r'PurchaseEntity',
     ),
     r'samplings': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'samplings',
       type: IsarType.objectList,
       target: r'SamplingEntity',
+    ),
+    r'status': PropertySchema(
+      id: 9,
+      name: r'status',
+      type: IsarType.string,
+      enumMap: _OrderEntitystatusEnumValueMap,
     )
   },
   estimateSize: _orderEntityEstimateSize,
@@ -152,6 +163,7 @@ int _orderEntityEstimateSize(
       }
     }
   }
+  bytesCount += 3 + object.status.name.length * 3;
   return bytesCount;
 }
 
@@ -177,18 +189,20 @@ void _orderEntitySerialize(
     object.exchanges,
   );
   writer.writeLong(offsets[5], object.featureId);
+  writer.writeLong(offsets[6], object.id);
   writer.writeObjectList<PurchaseEntity>(
-    offsets[6],
+    offsets[7],
     allOffsets,
     PurchaseEntitySchema.serialize,
     object.purchases,
   );
   writer.writeObjectList<SamplingEntity>(
-    offsets[7],
+    offsets[8],
     allOffsets,
     SamplingEntitySchema.serialize,
     object.samplings,
   );
+  writer.writeString(offsets[9], object.status.name);
 }
 
 OrderEntity _orderEntityDeserialize(
@@ -214,18 +228,22 @@ OrderEntity _orderEntityDeserialize(
       ExchangeEntity(),
     ),
     featureId: reader.readLongOrNull(offsets[5]),
+    id: reader.readLongOrNull(offsets[6]),
     purchases: reader.readObjectList<PurchaseEntity>(
-      offsets[6],
+      offsets[7],
       PurchaseEntitySchema.deserialize,
       allOffsets,
       PurchaseEntity(),
     ),
     samplings: reader.readObjectList<SamplingEntity>(
-      offsets[7],
+      offsets[8],
       SamplingEntitySchema.deserialize,
       allOffsets,
       SamplingEntity(),
     ),
+    status:
+        _OrderEntitystatusValueEnumMap[reader.readStringOrNull(offsets[9])] ??
+            SyncStatus.isNoSynced,
   );
   return object;
 }
@@ -260,23 +278,39 @@ P _orderEntityDeserializeProp<P>(
     case 5:
       return (reader.readLongOrNull(offset)) as P;
     case 6:
+      return (reader.readLongOrNull(offset)) as P;
+    case 7:
       return (reader.readObjectList<PurchaseEntity>(
         offset,
         PurchaseEntitySchema.deserialize,
         allOffsets,
         PurchaseEntity(),
       )) as P;
-    case 7:
+    case 8:
       return (reader.readObjectList<SamplingEntity>(
         offset,
         SamplingEntitySchema.deserialize,
         allOffsets,
         SamplingEntity(),
       )) as P;
+    case 9:
+      return (_OrderEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
+          SyncStatus.isNoSynced) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _OrderEntitystatusEnumValueMap = {
+  r'synced': r'synced',
+  r'isNoSynced': r'isNoSynced',
+  r'isDeleted': r'isDeleted',
+};
+const _OrderEntitystatusValueEnumMap = {
+  r'synced': SyncStatus.synced,
+  r'isNoSynced': SyncStatus.isNoSynced,
+  r'isDeleted': SyncStatus.isDeleted,
+};
 
 Id _orderEntityGetId(OrderEntity object) {
   return object.isarId;
@@ -928,6 +962,75 @@ extension OrderEntityQueryFilter
     });
   }
 
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> isarIdEqualTo(
       Id value) {
     return QueryBuilder.apply(this, (query) {
@@ -1195,6 +1298,140 @@ extension OrderEntityQueryFilter
       );
     });
   }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> statusEqualTo(
+    SyncStatus value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      statusGreaterThan(
+    SyncStatus value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> statusLessThan(
+    SyncStatus value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> statusBetween(
+    SyncStatus lower,
+    SyncStatus upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'status',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      statusStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> statusEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> statusContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> statusMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'status',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      statusIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      statusIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'status',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension OrderEntityQueryObject
@@ -1343,6 +1580,30 @@ extension OrderEntityQuerySortBy
       return query.addSortBy(r'featureId', Sort.desc);
     });
   }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
+    });
+  }
 }
 
 extension OrderEntityQuerySortThenBy
@@ -1397,6 +1658,18 @@ extension OrderEntityQuerySortThenBy
     });
   }
 
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
   QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.asc);
@@ -1406,6 +1679,18 @@ extension OrderEntityQuerySortThenBy
   QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByIsarIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 }
@@ -1434,6 +1719,19 @@ extension OrderEntityQueryWhereDistinct
   QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByFeatureId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'featureId');
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'id');
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByStatus(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1485,6 +1783,12 @@ extension OrderEntityQueryProperty
     });
   }
 
+  QueryBuilder<OrderEntity, int?, QQueryOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'id');
+    });
+  }
+
   QueryBuilder<OrderEntity, List<PurchaseEntity>?, QQueryOperations>
       purchasesProperty() {
     return QueryBuilder.apply(this, (query) {
@@ -1496,6 +1800,12 @@ extension OrderEntityQueryProperty
       samplingsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'samplings');
+    });
+  }
+
+  QueryBuilder<OrderEntity, SyncStatus, QQueryOperations> statusProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'status');
     });
   }
 }

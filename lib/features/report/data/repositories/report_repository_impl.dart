@@ -35,6 +35,7 @@ class ReportRepositoryImpl extends Repository
       }
       final photos =
           await _remote.allPhotos(general: general, feature: feature);
+      ;
       return Right(photos);
     });
   }

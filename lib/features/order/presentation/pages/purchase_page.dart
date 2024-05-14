@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/format.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -212,6 +213,9 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                       child: SelectedProduct(
                         key: UniqueKey(),
                         items: selectedItems,
+                        onChanged: () {
+                          setState(() {});
+                        },
                       ),
                     )
                   ],
@@ -246,7 +250,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                               previousValue +
                               (element.value.quantity! * element.key.price!));
                       return Text(
-                        '${productPriceFormat.format(total)} VNĐ',
+                        '${kNumberFormater.formatString(total.toString())} VNĐ',
                         style: context.textTheme.button1
                             ?.copyWith(color: AppColors.nero),
                       );

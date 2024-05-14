@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,11 +10,13 @@ import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/order_module.dart';
+import 'package:fms/features/order/presentation/bloc/order_bloc.dart';
 import 'package:fms/features/order/presentation/pages/purchase_page.dart';
 import 'package:uuid/uuid.dart';
 
@@ -39,6 +42,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   final NetworkTimeService _networkTimeService =
       Modular.get<NetworkTimeService>();
+  final orderBloc = Modular.get<OrderBloc>();
   PageController controller = PageController();
   Completer<OrderEntity> _completer = Completer();
   late OrderEntity orderEntity;
@@ -52,6 +56,31 @@ class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
     _init();
+    orderBloc.stream.listen((state) {
+      if (state is OrderCreateLoading) {
+        OverlayManager.showLoading();
+      }
+      if (state is OrderCreateSuccess) {
+        OverlayManager.hide();
+        context.nextRoute(OrderModule.success, arguments: widget.entity);
+      }
+      if (state is OrderUpdateSuccess) {
+        OverlayManager.hide();
+        context.nextRoute(OrderModule.updateSuccess);
+      }
+      if (state is OrderUpdateFailure) {
+        OverlayManager.hide();
+        showFailure(
+            title: 'Chỉnh sửa thất bại',
+            icon: SvgPicture.asset(AppIcons.failure),
+            message: state.failure.message ??
+                'Phát sinh lỗi trong quá trình chỉnh sửa',
+            btnText: 'Thử lại',
+            onPressed: () {
+              orderBloc.add(UpdateOrder(order: orderEntity));
+            });
+      }
+    });
     super.initState();
   }
 
@@ -166,56 +195,66 @@ class _OrderPageState extends State<OrderPage> {
               ],
             );
           if (_completer.isCompleted && isSummary)
-            return Padding(
-              padding: EdgeInsets.only(top: 26.h),
-              child: Column(
-                children: [
-                  Expanded(
-                      child: ExchangeDetail(
-                          order: orderEntity, generalFeature: widget.entity)),
-                  Container(
-                    padding: EdgeInsets.all(16.w),
-                    decoration: BoxDecoration(
-                        color: AppColors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0, -2),
-                              blurRadius: 25,
-                              color: '000000'.toColor(0.15))
-                        ]),
-                    child: IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: OutlineButton(
-                            onPressed: () {
-                              setState(() {
-                                isSummary = false;
-                                controller = controller =
-                                    PageController(initialPage: _curr);
-                              });
-                            },
-                            name: 'Quay lại',
-                            color: AppColors.orange,
-                          )),
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          Expanded(
-                            child: FlatButton(
-                              onPressed: () =>
-                                  context.nextRoute(OrderModule.success),
-                              name: 'Hoàn thành',
+            return ZoomIn(
+              duration: 600.milliseconds,
+              child: Padding(
+                padding: EdgeInsets.only(top: 26.h),
+                child: Column(
+                  children: [
+                    Expanded(
+                        child: ExchangeDetail(
+                            order: orderEntity, generalFeature: widget.entity)),
+                    Container(
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                          color: AppColors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                offset: Offset(0, -2),
+                                blurRadius: 25,
+                                color: '000000'.toColor(0.15))
+                          ]),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: OutlineButton(
+                              onPressed: () {
+                                setState(() {
+                                  isSummary = false;
+                                  controller = controller =
+                                      PageController(initialPage: _curr);
+                                });
+                              },
+                              name: 'Quay lại',
                               color: AppColors.orange,
-                              disableTextColor: AppColors.delRio,
-                              disableColor: AppColors.potPourri,
+                            )),
+                            SizedBox(
+                              width: 8.w,
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              child: FlatButton(
+                                onPressed: () {
+                                  if (orderEntity.id != null) {
+                                    orderBloc
+                                        .add(UpdateOrder(order: orderEntity));
+                                  } else {
+                                    orderBloc
+                                        .add(CreateOrder(order: orderEntity));
+                                  }
+                                },
+                                name: 'Hoàn thành',
+                                color: AppColors.orange,
+                                disableTextColor: AppColors.delRio,
+                                disableColor: AppColors.potPourri,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             );
           return SizedBox.shrink();
@@ -228,20 +267,27 @@ class _OrderPageState extends State<OrderPage> {
     int index = 0;
     final time = await _networkTimeService.ntpDateTime();
     orderEntity = OrderEntity(
-        dataUuid: Uuid().v1(),
-        dataTimestamp: time,
-        attendanceId: widget.entity.general.attendance!.id,
-        featureId: widget.entity.feature.id,
-        customerInfos: [
-          CustomerInfo(featureCustomerId: 10, value: '1'),
-          CustomerInfo(featureCustomerId: 11, value: '2'),
-        ],
-        purchases: [
-          PurchaseEntity(featureOrderProductId: 11, quantity: 5)
-        ],
-        exchanges: [
-          ExchangeEntity(featureSchemeExchangeId: 15, quantity: 3)
-        ]);
+      dataUuid: Uuid().v1(),
+      dataTimestamp: time,
+      attendanceId: widget.entity.general.attendance!.id,
+      featureId: widget.entity.feature.id,
+      // customerInfos: [
+      //   CustomerInfo(featureCustomerId: 10, value: '1'),
+      //   CustomerInfo(featureCustomerId: 11, value: '2'),
+      //   CustomerInfo(featureCustomerId: 12),
+      //   CustomerInfo(featureCustomerId: 13),
+      //   CustomerInfo(featureCustomerId: 14, options: [
+      //     CustomerOption(featureCustomerOptionId: 4),
+      //     CustomerOption(featureCustomerOptionId: 5)
+      //   ])
+      // ]
+      // purchases: [
+      //   PurchaseEntity(featureOrderProductId: 11, quantity: 5)
+      // ],
+      // exchanges: [
+      //   ExchangeEntity(featureSchemeExchangeId: 15, quantity: 3)
+      // ]
+    );
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(

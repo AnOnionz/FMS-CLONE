@@ -11,11 +11,13 @@ import '../input_quantity.dart';
 import 'order_product_image.dart';
 
 class SelectedProduct extends StatefulWidget {
+  final VoidCallback onChanged;
   final Map<OrderProduct, PurchaseEntity> items;
 
   const SelectedProduct({
     super.key,
     required this.items,
+    required this.onChanged,
   });
 
   @override
@@ -45,6 +47,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                 onDismissed: (direction) {
                   setState(() {
                     widget.items.remove(orderProduct);
+                    widget.onChanged();
                   });
                 },
                 child: PurchaseContainer(
@@ -61,6 +64,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       onValueChanged: (value) {
                         setState(() {
                           purchase.updateQuantity(value);
+                          widget.onChanged();
                         });
                       },
                     )),

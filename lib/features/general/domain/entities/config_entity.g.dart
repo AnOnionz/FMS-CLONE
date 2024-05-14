@@ -8832,28 +8832,33 @@ const ItemSchema = Schema(
       name: r'code',
       type: IsarType.string,
     ),
-    r'id': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 1,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 2,
       name: r'id',
       type: IsarType.long,
     ),
     r'imageUrl': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'imageUrl',
       type: IsarType.string,
     ),
     r'itemTypeName': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'itemTypeName',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
     r'unitName': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'unitName',
       type: IsarType.string,
     )
@@ -8910,11 +8915,12 @@ void _itemSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.code);
-  writer.writeLong(offsets[1], object.id);
-  writer.writeString(offsets[2], object.imageUrl);
-  writer.writeString(offsets[3], object.itemTypeName);
-  writer.writeString(offsets[4], object.name);
-  writer.writeString(offsets[5], object.unitName);
+  writer.writeLong(offsets[1], object.hashCode);
+  writer.writeLong(offsets[2], object.id);
+  writer.writeString(offsets[3], object.imageUrl);
+  writer.writeString(offsets[4], object.itemTypeName);
+  writer.writeString(offsets[5], object.name);
+  writer.writeString(offsets[6], object.unitName);
 }
 
 Item _itemDeserialize(
@@ -8925,11 +8931,11 @@ Item _itemDeserialize(
 ) {
   final object = Item(
     code: reader.readStringOrNull(offsets[0]),
-    id: reader.readLongOrNull(offsets[1]),
-    imageUrl: reader.readStringOrNull(offsets[2]),
-    itemTypeName: reader.readStringOrNull(offsets[3]),
-    name: reader.readStringOrNull(offsets[4]),
-    unitName: reader.readStringOrNull(offsets[5]),
+    id: reader.readLongOrNull(offsets[2]),
+    imageUrl: reader.readStringOrNull(offsets[3]),
+    itemTypeName: reader.readStringOrNull(offsets[4]),
+    name: reader.readStringOrNull(offsets[5]),
+    unitName: reader.readStringOrNull(offsets[6]),
   );
   return object;
 }
@@ -8944,14 +8950,16 @@ P _itemDeserializeProp<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -9099,6 +9107,58 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'code',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -9771,18 +9831,23 @@ const ProductSchema = Schema(
       name: r'code',
       type: IsarType.string,
     ),
-    r'id': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 2,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 3,
       name: r'id',
       type: IsarType.long,
     ),
     r'imageUrl': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'imageUrl',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'name',
       type: IsarType.string,
     )
@@ -9834,9 +9899,10 @@ void _productSerialize(
 ) {
   writer.writeString(offsets[0], object.brandName);
   writer.writeString(offsets[1], object.code);
-  writer.writeLong(offsets[2], object.id);
-  writer.writeString(offsets[3], object.imageUrl);
-  writer.writeString(offsets[4], object.name);
+  writer.writeLong(offsets[2], object.hashCode);
+  writer.writeLong(offsets[3], object.id);
+  writer.writeString(offsets[4], object.imageUrl);
+  writer.writeString(offsets[5], object.name);
 }
 
 Product _productDeserialize(
@@ -9848,9 +9914,9 @@ Product _productDeserialize(
   final object = Product(
     brandName: reader.readStringOrNull(offsets[0]),
     code: reader.readStringOrNull(offsets[1]),
-    id: reader.readLongOrNull(offsets[2]),
-    imageUrl: reader.readStringOrNull(offsets[3]),
-    name: reader.readStringOrNull(offsets[4]),
+    id: reader.readLongOrNull(offsets[3]),
+    imageUrl: reader.readStringOrNull(offsets[4]),
+    name: reader.readStringOrNull(offsets[5]),
   );
   return object;
 }
@@ -9867,10 +9933,12 @@ P _productDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -10167,6 +10235,59 @@ extension ProductQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'code',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Product, Product, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Product, Product, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Product, Product, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Product, Product, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -10547,23 +10668,28 @@ const ProductPackagingSchema = Schema(
       name: r'barcode',
       type: IsarType.string,
     ),
-    r'id': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 1,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 2,
       name: r'id',
       type: IsarType.long,
     ),
     r'price': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'price',
       type: IsarType.long,
     ),
     r'rate': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'rate',
       type: IsarType.long,
     ),
     r'unitName': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'unitName',
       type: IsarType.string,
     )
@@ -10602,10 +10728,11 @@ void _productPackagingSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.barcode);
-  writer.writeLong(offsets[1], object.id);
-  writer.writeLong(offsets[2], object.price);
-  writer.writeLong(offsets[3], object.rate);
-  writer.writeString(offsets[4], object.unitName);
+  writer.writeLong(offsets[1], object.hashCode);
+  writer.writeLong(offsets[2], object.id);
+  writer.writeLong(offsets[3], object.price);
+  writer.writeLong(offsets[4], object.rate);
+  writer.writeString(offsets[5], object.unitName);
 }
 
 ProductPackaging _productPackagingDeserialize(
@@ -10616,10 +10743,10 @@ ProductPackaging _productPackagingDeserialize(
 ) {
   final object = ProductPackaging(
     barcode: reader.readStringOrNull(offsets[0]),
-    id: reader.readLongOrNull(offsets[1]),
-    price: reader.readLongOrNull(offsets[2]),
-    rate: reader.readLongOrNull(offsets[3]),
-    unitName: reader.readStringOrNull(offsets[4]),
+    id: reader.readLongOrNull(offsets[2]),
+    price: reader.readLongOrNull(offsets[3]),
+    rate: reader.readLongOrNull(offsets[4]),
+    unitName: reader.readStringOrNull(offsets[5]),
   );
   return object;
 }
@@ -10634,12 +10761,14 @@ P _productPackagingDeserializeProp<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
       return (reader.readLongOrNull(offset)) as P;
     case 3:
       return (reader.readLongOrNull(offset)) as P;
     case 4:
+      return (reader.readLongOrNull(offset)) as P;
+    case 5:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -10798,6 +10927,62 @@ extension ProductPackagingQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'barcode',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }

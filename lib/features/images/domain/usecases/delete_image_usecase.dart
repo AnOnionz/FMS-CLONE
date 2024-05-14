@@ -10,18 +10,22 @@ class DeletePhotoUseCase extends UseCase<void, DeletePhotoParams> {
   @override
   Future<Result<void>> call(DeletePhotoParams params) {
     return repository.deletePhoto(
-        feature: params.feature, id: params.id, uuid: params.uuid);
+        feature: params.feature,
+        id: params.id,
+        uuid: params.uuid,
+        orderId: params.orderId);
   }
 }
 
 class DeletePhotoParams {
   final FeatureEntity feature;
   final int id;
+  final int? orderId;
   final String uuid;
 
-  DeletePhotoParams({
-    required this.feature,
-    required this.id,
-    required this.uuid,
-  });
+  DeletePhotoParams(
+      {required this.feature,
+      required this.id,
+      required this.uuid,
+      this.orderId});
 }

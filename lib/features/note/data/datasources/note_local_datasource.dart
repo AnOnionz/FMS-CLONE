@@ -17,7 +17,6 @@ abstract class INoteLocalDataSource {
   Future<List<NoteEntity>> getNotesNoSynced(FeatureEntity feature);
   Future<List<NoteEntity>> getNotesByFeature(FeatureEntity feature);
   Future<List<NoteEntity>> getNotes();
-  Future<List<PhotoEntity>> getPhotosByFuture(FeatureEntity feature);
 }
 
 class NoteLocalDataSource
@@ -58,17 +57,6 @@ class NoteLocalDataSource
   @override
   void cachePhotoToLocal(PhotoEntity photo) {
     db.addObject<PhotoEntity>(photo);
-  }
-
-  @override
-  Future<List<PhotoEntity>> getPhotosByFuture(FeatureEntity feature) async {
-    final time = await Modular.get<NetworkTimeService>().betweenToday();
-    return db.filter<PhotoEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance?.id)
-        .featureIdEqualTo(feature.id)
-        .dataTimestampBetween(time.yesterday, time.today)
-        .sortByDataTimestamp()
-        .build());
   }
 
   @override

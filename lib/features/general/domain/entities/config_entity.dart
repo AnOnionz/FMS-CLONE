@@ -3,10 +3,11 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:isar/isar.dart';
 import 'package:string_validator_plus/string_validator_plus.dart';
+
+import 'package:fms/core/constant/enum.dart';
+import 'package:fms/core/mixins/fx.dart';
 
 import '../../../../core/constant/type_def.dart';
 
@@ -891,6 +892,22 @@ class ExchangeProceed {
   String toString() {
     return 'ExchangeProceed(id: $id, product: $product, productPackaging: $productPackaging, item: $item, quantity: $quantity)';
   }
+
+  ExchangeProceed copyWith({
+    int? id,
+    Product? product,
+    ProductPackaging? productPackaging,
+    Item? item,
+    int? quantity,
+  }) {
+    return ExchangeProceed(
+      id: id ?? this.id,
+      product: product ?? this.product,
+      productPackaging: productPackaging ?? this.productPackaging,
+      item: item ?? this.item,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 @embedded
@@ -971,6 +988,14 @@ class Item {
   String toString() {
     return 'Item(id: $id, name: $name, code: $code, unitName: $unitName, itemTypeName: $itemTypeName)';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Item && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 @embedded
@@ -988,6 +1013,14 @@ class Product {
     this.name,
     this.code,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Product && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => name.hashCode;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -1035,6 +1068,16 @@ class ProductPackaging {
     this.rate,
     this.unitName,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProductPackaging &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

@@ -37,7 +37,7 @@ class OrderCustomerPage extends StatefulWidget {
 
 class _OrderCustomerPageState extends State<OrderCustomerPage>
     with AutomaticKeepAliveClientMixin {
-  final identifyCubit = Modular.get<IdentifyCubit>();
+  final _identifyCubit = Modular.get<IdentifyCubit>();
   final _formKey = GlobalKey<FormState>();
   late final featureCustomers = DataFeature.of(context)
       .data
@@ -59,6 +59,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
 
   @override
   void didChangeDependencies() {
+    if (customerInfos.length > 0) _identifyCubit.setIdentify();
     featureCustomers.forEach((featureCustomer) {
       final customerInfo = customerInfos.firstWhereOrNull(
           (element) => element.featureCustomerId == featureCustomer.id);
@@ -87,7 +88,6 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Column(
@@ -121,7 +121,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                       ),
                       IdentityForm(
                         fields: _fields,
-                        identifyCubit: identifyCubit,
+                        identifyCubit: _identifyCubit,
                       ),
                     ],
                   ),
@@ -129,7 +129,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
               ),
               SliverToBoxAdapter(
                 child: BlocConsumer<IdentifyCubit, IdentifyState>(
-                  bloc: identifyCubit,
+                  bloc: _identifyCubit,
                   listener: (context, state) {
                     if (state is IdentifySuccess) {
                       _handleCallback(state.customerInfos);
@@ -204,7 +204,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: BottomButtons(
                   onBack: () {},
-                  onNext: identifyCubit.state is IdentifySuccess && validate
+                  onNext: _identifyCubit.state is IdentifySuccess && validate
                       ? () {
                           if (_formKey.currentState!.validate()) {
                             widget.onSaveData(

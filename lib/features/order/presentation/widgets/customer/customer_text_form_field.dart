@@ -38,8 +38,8 @@ class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
 
   @override
   void initState() {
-    _focusNode.addListener(_onTextFieldFocused);
     super.initState();
+    _focusNode.addListener(_onTextFieldFocused);
   }
 
   @override

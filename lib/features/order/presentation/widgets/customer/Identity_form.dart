@@ -58,6 +58,9 @@ class _IdentityFormState extends State<IdentityForm> {
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
                 child: CustomerField(
+                  onChanged: () {
+                    setState(() {});
+                  },
                   featureCustomer: entry.key,
                   isLast: isLast,
                   customerInfo: entry.value,

@@ -8,3 +8,15 @@ abstract class OrderState extends Equatable {
 }
 
 class OrderInitial extends OrderState {}
+
+class OrderCreateLoading extends OrderState {}
+
+class OrderCreateSuccess extends OrderState {}
+
+class OrderUpdateSuccess extends OrderState {}
+
+class OrderUpdateFailure extends OrderState {
+  final Failure failure;
+
+  OrderUpdateFailure(this.failure);
+}

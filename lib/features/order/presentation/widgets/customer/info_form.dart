@@ -22,11 +22,6 @@ class _InfomationFormState extends State<InfomationForm> {
       widget.fields.entries.where((field) => !field.key.isIdentity!).toList();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
         key: widget.formKey,
@@ -38,6 +33,9 @@ class _InfomationFormState extends State<InfomationForm> {
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
                 child: CustomerField(
+                  onChanged: () {
+                    setState(() {});
+                  },
                   featureCustomer: entry.key,
                   isLast: isLast,
                   customerInfo: entry.value,

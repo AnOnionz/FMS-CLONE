@@ -1,12 +1,41 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/presentation/widgets/review/review_container.dart';
 
 import '../../../../../core/constant/colors.dart';
+import '../../../../general/domain/entities/config_entity.dart';
+import '../../../domain/entities/order_entity.dart';
 
-class ReviewSampling extends StatelessWidget {
-  const ReviewSampling({super.key});
+class ReviewSampling extends StatefulWidget {
+  final List<FeatureSampling> featureSamplings;
+  final List<SamplingEntity>? samplings;
+  const ReviewSampling(
+      {super.key, required this.featureSamplings, required this.samplings});
+
+  @override
+  State<ReviewSampling> createState() => _ReviewSamplingState();
+}
+
+class _ReviewSamplingState extends State<ReviewSampling> {
+  final Map<FeatureSampling, SamplingEntity> _items = {};
+  late final int total;
+  @override
+  void initState() {
+    widget.samplings?.forEach((sampling) {
+      final item = widget.featureSamplings.firstWhereOrNull(
+          (element) => element.id == sampling.featureSamplingId);
+      if (item != null) {
+        _items[item] = sampling;
+      }
+    });
+    total = _items.entries.fold(
+        0,
+        (previousValue, element) =>
+            previousValue + (element.value.quantity ?? 0));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +52,9 @@ class ReviewSampling extends StatelessWidget {
             SizedBox(
               height: 14.h,
             ),
-            for (final int x in [1, 2, 3]) _SamplingInfoItem(),
+            for (final item in _items.entries)
+              _SamplingInfoItem(
+                  featureSampling: item.key, sampling: item.value),
             SizedBox(
               height: 6.h,
             ),
@@ -37,8 +68,8 @@ class ReviewSampling extends StatelessWidget {
                       ?.copyWith(color: AppColors.orange),
                 )),
                 Flexible(
-                    child: Text('x2',
-                        style: context.textTheme.button2
+                    child: Text(total > 0 ? 'x${total}' : '$total',
+                        style: context.textTheme.subtitle1
                             ?.copyWith(color: AppColors.orange)))
               ],
             )
@@ -48,7 +79,10 @@ class ReviewSampling extends StatelessWidget {
 }
 
 class _SamplingInfoItem extends StatelessWidget {
-  const _SamplingInfoItem();
+  final FeatureSampling featureSampling;
+  final SamplingEntity sampling;
+  const _SamplingInfoItem(
+      {required this.featureSampling, required this.sampling});
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +94,18 @@ class _SamplingInfoItem extends StatelessWidget {
           Expanded(
               flex: 5,
               child: Text(
-                'Sản phẩm A (lon)',
+                '${featureSampling.product!.name} (${featureSampling.productPackaging!.unitName})',
                 style: context.textTheme.body1,
               )),
           Expanded(
               flex: 3,
               child: Text(
-                'MA0001',
+                featureSampling.productPackaging!.barcode ?? '',
                 style: context.textTheme.body1,
               )),
           Flexible(
               child: Text(
-            'x3',
+            'x${sampling.quantity}',
             style: context.textTheme.body1,
           ))
         ],

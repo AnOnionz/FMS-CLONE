@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
@@ -53,6 +52,7 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
           );
     });
     setState(() {});
+
     super.didChangeDependencies();
   }
 
@@ -84,8 +84,7 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
                   ),
                   Expanded(
                       child: CustomScrollView(
-                    physics: RangeMaintainingScrollPhysics(
-                        parent: ClampingScrollPhysics()),
+                    physics: kPhysics,
                     slivers: [
                       SliverPadding(
                         padding: EdgeInsets.only(bottom: 16.h),
@@ -96,6 +95,7 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
                           itemBuilder: (context, index) {
                             final samplingProduct =
                                 _items.keys.elementAt(index);
+                            final sampling = _items.values.elementAt(index);
 
                             return PurchaseContainer(
                                 leading: OrderProductImage(
@@ -106,6 +106,9 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
                                       samplingProduct.productPackaging!,
                                 ),
                                 trailing: AdvancedTextField(
+                                  initialValue: sampling.quantity != null
+                                      ? sampling.quantity.toString()
+                                      : null,
                                   unit: samplingProduct
                                       .productPackaging!.unitName!,
                                   onChanged: (value) {

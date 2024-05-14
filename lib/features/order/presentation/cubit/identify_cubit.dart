@@ -20,7 +20,11 @@ class IdentifyCubit extends Cubit<IdentifyState> {
         customerIdentitys: identifyFields,
         attendanceId: attendanceId,
         featureId: featureId));
-    execute.fold((failure) => emit(IdentifySuccess([])),
-        (data) => emit(IdentifySuccess(data)));
+    execute.fold((failure) => emit(IdentifySuccess([], isNewCustomer: true)),
+        (data) => emit(IdentifySuccess(data, isNewCustomer: false)));
+  }
+
+  Future<void> setIdentify() async {
+    emit(IdentifySuccess([], isNewCustomer: false));
   }
 }

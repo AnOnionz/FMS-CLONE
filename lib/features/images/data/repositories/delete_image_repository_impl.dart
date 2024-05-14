@@ -21,6 +21,7 @@ class DeletePhotoRepositoryImpl extends Repository
   Future<Result<void>> deletePhoto(
       {required FeatureEntity feature,
       required int id,
+      int? orderId,
       required String uuid,
       String? noteUuid}) async {
     return todo(() async {
@@ -32,6 +33,7 @@ class DeletePhotoRepositoryImpl extends Repository
         await _remote.deleteNotePhoto(
             feature: feature, general: general, id: id);
       }
+
       await _local.deleteLocalPhoto(uuid: uuid);
       return Right(Never);
     });

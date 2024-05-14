@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
@@ -14,6 +15,7 @@ part 'order_entity.g.dart';
 @collection
 class OrderEntity extends DataEntity {
   Id get isarId => fastHash(dataUuid);
+  final int? id;
   final String dataUuid;
   final DateTime dataTimestamp;
   final int? attendanceId;
@@ -23,6 +25,9 @@ class OrderEntity extends DataEntity {
   final List<ExchangeEntity>? exchanges;
   final List<SamplingEntity>? samplings;
   final localPhotos = IsarLinks<PhotoEntity>();
+  @Enumerated(EnumType.name)
+  final SyncStatus status;
+
   @ignore
   final List<PhotoEntity>? photos;
 
@@ -37,19 +42,30 @@ class OrderEntity extends DataEntity {
   OrderEntity(
       {required this.dataUuid,
       required this.dataTimestamp,
+      this.id,
       this.attendanceId,
       this.featureId,
       this.customerInfos,
       this.purchases,
       this.exchanges,
       this.samplings,
-      this.photos});
+      this.photos,
+      this.status = SyncStatus.isNoSynced});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'dataUuid': dataUuid,
-      'dataTimestamp': dataTimestamp.millisecondsSinceEpoch,
-      'customerInfos': customerInfos?.map((x) => x.toMap()).toList(),
+      'dataTimestamp': dataTimestamp.toUtc().toIso8601String(),
+      'customers': customerInfos?.map((x) => x.toMap()).toList(),
+      'purchases': purchases?.map((x) => x.toMap()).toList(),
+      'exchanges': exchanges?.map((x) => x.toMap()).toList(),
+      'samplings': samplings?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  Map<String, dynamic> toUpdateMap() {
+    return <String, dynamic>{
+      'customers': customerInfos?.map((x) => x.toMap()).toList(),
       'purchases': purchases?.map((x) => x.toMap()).toList(),
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),
@@ -58,6 +74,7 @@ class OrderEntity extends DataEntity {
 
   factory OrderEntity.fromMap(Map<String, dynamic> map) {
     return OrderEntity(
+      id: map['id'] as int?,
       dataUuid: map['dataUuid'] as String,
       dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
       customerInfos: map['customerInfos'] != null
@@ -104,6 +121,7 @@ class OrderEntity extends DataEntity {
   }
 
   OrderEntity copyWith({
+    int? id,
     String? dataUuid,
     DateTime? dataTimestamp,
     int? attendanceId,
@@ -113,6 +131,7 @@ class OrderEntity extends DataEntity {
     List<ExchangeEntity>? exchanges,
     List<SamplingEntity>? samplings,
     List<PhotoEntity>? photos,
+    SyncStatus? status,
   }) {
     return OrderEntity(
         dataUuid: dataUuid ?? this.dataUuid,
@@ -123,7 +142,8 @@ class OrderEntity extends DataEntity {
         purchases: purchases ?? this.purchases,
         exchanges: exchanges ?? this.exchanges,
         samplings: samplings ?? this.samplings,
-        photos: photos ?? this.photos);
+        photos: photos ?? this.photos,
+        status: status ?? this.status);
   }
 
   String toJson() => json.encode(toMap());
@@ -148,20 +168,18 @@ class CustomerInfo {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'featureCustomerId': featureCustomerId,
       'value': value,
-      'options': options?.map((x) => x.toMap()).toList(),
+      'featureCustomerOptionIds':
+          options?.map((x) => x.featureCustomerOptionId).toList() ?? [],
     };
   }
 
   factory CustomerInfo.fromMap(Map<String, dynamic> map) {
     return CustomerInfo(
       id: map['id'] != null ? map['id'] as int : null,
-      featureCustomerId: map['featureCustomerId'] != null
-          ? map['featureCustomerId'] as int
-          : null,
-      value: map['value'] != null ? map['value'] as String : null,
+      featureCustomerId: map['featureCustomerId'] as int?,
+      value: map['value'] as String?,
       options: map['options'] != null
           ? List<CustomerOption>.from(
               (map['options'] as List<dynamic>).map<CustomerOption?>(
@@ -260,7 +278,6 @@ class PurchaseEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'featureOrderProductId': featureOrderProductId,
       'quantity': quantity,
     };
@@ -313,7 +330,6 @@ class ExchangeEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'featureSchemeExchangeId': featureSchemeExchangeId,
       'quantity': quantity,
     };
@@ -366,7 +382,6 @@ class SamplingEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'featureSamplingId': featureSamplingId,
       'quantity': quantity,
     };

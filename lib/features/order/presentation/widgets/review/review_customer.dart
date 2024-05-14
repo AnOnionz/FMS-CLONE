@@ -16,7 +16,9 @@ class ReviewCustomer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (customerInfos == null) return SizedBox.shrink();
+    featureCustomers.sort(
+      (a, b) => a.ordinal! - b.ordinal!,
+    );
     return ReviewContainer(
         margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 6.h),
         child: Column(
@@ -30,31 +32,50 @@ class ReviewCustomer extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            for (final customerInfo in customerInfos!)
-              _rowData(context, customerInfo)
+            for (final featureCustomer in featureCustomers)
+              _rowData(context, featureCustomer)
           ],
         ));
   }
 
-  Widget _rowData(BuildContext context, CustomerInfo customerInfo) {
-    final featureCustomer = featureCustomers.firstWhereOrNull(
-        (element) => element.id == customerInfo.featureCustomerId);
-    if (featureCustomer != null)
-      return Padding(
+  Widget _rowData(BuildContext context, FeatureCustomer featureCustomer) {
+    final customerInfo = (customerInfos ?? []).firstWhereOrNull(
+        (element) => element.featureCustomerId == featureCustomer.id);
+
+    return Padding(
         padding: EdgeInsets.only(top: 12.h),
-        child: RichText(
-            text: TextSpan(
-                text: '${featureCustomer.name} : ',
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
-                children: [
-              TextSpan(
-                text: customerInfo.value,
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.black),
-              )
-            ])),
-      );
-    return SizedBox.shrink();
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('${featureCustomer.name} : ',
+                  style: context.textTheme.body1
+                      ?.copyWith(color: AppColors.nobel)),
+              (customerInfo?.options ?? []).isEmpty
+                  ? Text(
+                      customerInfo?.value ?? '',
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.black),
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: customerInfo!.options!.map((option) {
+                        final options = featureCustomer.options!;
+                        final opt = options.firstWhereOrNull((element) =>
+                            element.id == option.featureCustomerOptionId);
+                        if (opt != null)
+                          return Text(
+                            ' - ${opt.name!}',
+                            style: context.textTheme.body1
+                                ?.copyWith(color: AppColors.black),
+                          );
+                        return SizedBox.shrink();
+                      }).toList(),
+                    )
+            ],
+          ),
+        ));
   }
 }

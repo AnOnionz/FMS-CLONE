@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/mixins/common.dart';
 import '../../../../general/domain/entities/config_entity.dart';
 import '../../../domain/entities/order_entity.dart';
 import 'customer_checkbox_group.dart';
@@ -11,11 +10,13 @@ class CustomerField extends StatefulWidget {
   final FeatureCustomer featureCustomer;
   final CustomerInfo customerInfo;
   final bool isLast;
+  final VoidCallback onChanged;
   const CustomerField({
     super.key,
     required this.featureCustomer,
     required this.isLast,
     required this.customerInfo,
+    required this.onChanged,
   });
 
   @override
@@ -29,6 +30,7 @@ class _CustomerFieldState extends State<CustomerField> {
       return CustomerCheckBoxGroup(
           customerInfo: widget.customerInfo,
           onChanged: (value) {
+            widget.onChanged();
             setState(() {
               widget.customerInfo.options = value;
             });
@@ -38,6 +40,7 @@ class _CustomerFieldState extends State<CustomerField> {
       return CustomerRadioGroup(
           customerInfo: widget.customerInfo,
           onChanged: (value) {
+            widget.onChanged();
             setState(() {
               widget.customerInfo.options = value;
             });
@@ -49,6 +52,7 @@ class _CustomerFieldState extends State<CustomerField> {
       label: widget.featureCustomer.name!,
       isRequired: widget.featureCustomer.isRequired!,
       onChanged: (value) {
+        widget.onChanged();
         setState(() {
           widget.customerInfo.value = value;
         });

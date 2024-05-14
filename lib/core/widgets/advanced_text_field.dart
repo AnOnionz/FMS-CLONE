@@ -1,6 +1,6 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fms/core/constant/format.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -26,16 +26,10 @@ class AdvancedTextField extends StatefulWidget {
 
 class _AdvancedTextFieldState extends State<AdvancedTextField> {
   final FocusNode _focusNode = FocusNode();
-  late final _formatter = CurrencyTextInputFormatter.currency(
-    symbol: '',
-    // onChange: (p0) {
-    //   widget.onChanged?.call(p0.replaceAll('.', ''));
-    // },
-  );
 
   late final TextEditingController _controller = TextEditingController(
       text: widget.initialValue != null
-          ? _formatter.formatString(widget.initialValue!)
+          ? kNumberFormater.formatString(widget.initialValue!)
           : null);
   bool get _hasValue => _controller.text != '';
   bool _hasFocus = false;
@@ -82,7 +76,7 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
     return TextField(
       focusNode: _focusNode,
       controller: _controller,
-      inputFormatters: [_formatter],
+      inputFormatters: [kNumberFormater],
       keyboardType: TextInputType.numberWithOptions(),
       cursorWidth: 0.54,
       maxLength: widget.maxLength,

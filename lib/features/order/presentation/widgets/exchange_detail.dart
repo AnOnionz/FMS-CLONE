@@ -22,18 +22,27 @@ class ExchangeDetail extends StatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: ReviewCustomer(
-            featureCustomers: generalFeature.feature.featureCustomers!,
+            featureCustomers: generalFeature.feature.featureCustomers ?? [],
             customerInfos: order.customerInfos,
           ),
         ),
         SliverToBoxAdapter(
-          child: ReviewProduct(),
+          child: ReviewProduct(
+            products: generalFeature.feature.featureOrder!.products ?? [],
+            purchases: order.purchases,
+          ),
         ),
         SliverToBoxAdapter(
-          child: ReviewGift(),
+          child: ReviewGift(
+            schemes: generalFeature.feature.featureSchemes ?? [],
+            exchanges: order.exchanges ?? [],
+          ),
         ),
         SliverToBoxAdapter(
-          child: ReviewSampling(),
+          child: ReviewSampling(
+            featureSamplings: generalFeature.feature.featureSamplings ?? [],
+            samplings: order.samplings,
+          ),
         )
       ],
     );
