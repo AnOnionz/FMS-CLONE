@@ -69,4 +69,5 @@ class AppIcons {
   static String requestSkip = 'request_skip'.icon.svg;
   static String requestClose = 'request_close'.icon.svg;
   static String backStepArrow = 'back_step_arrow'.icon.svg;
+  static String orderSuccess = 'order_success'.icon.svg;
 }

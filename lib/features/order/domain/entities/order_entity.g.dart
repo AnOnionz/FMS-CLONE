@@ -49,25 +49,30 @@ const OrderEntitySchema = CollectionSchema(
       name: r'featureId',
       type: IsarType.long,
     ),
-    r'id': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 6,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 7,
       name: r'id',
       type: IsarType.long,
     ),
     r'purchases': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'purchases',
       type: IsarType.objectList,
       target: r'PurchaseEntity',
     ),
     r'samplings': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'samplings',
       type: IsarType.objectList,
       target: r'SamplingEntity',
     ),
     r'status': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'status',
       type: IsarType.string,
       enumMap: _OrderEntitystatusEnumValueMap,
@@ -189,20 +194,21 @@ void _orderEntitySerialize(
     object.exchanges,
   );
   writer.writeLong(offsets[5], object.featureId);
-  writer.writeLong(offsets[6], object.id);
+  writer.writeLong(offsets[6], object.hashCode);
+  writer.writeLong(offsets[7], object.id);
   writer.writeObjectList<PurchaseEntity>(
-    offsets[7],
+    offsets[8],
     allOffsets,
     PurchaseEntitySchema.serialize,
     object.purchases,
   );
   writer.writeObjectList<SamplingEntity>(
-    offsets[8],
+    offsets[9],
     allOffsets,
     SamplingEntitySchema.serialize,
     object.samplings,
   );
-  writer.writeString(offsets[9], object.status.name);
+  writer.writeString(offsets[10], object.status.name);
 }
 
 OrderEntity _orderEntityDeserialize(
@@ -228,21 +234,21 @@ OrderEntity _orderEntityDeserialize(
       ExchangeEntity(),
     ),
     featureId: reader.readLongOrNull(offsets[5]),
-    id: reader.readLongOrNull(offsets[6]),
+    id: reader.readLongOrNull(offsets[7]),
     purchases: reader.readObjectList<PurchaseEntity>(
-      offsets[7],
+      offsets[8],
       PurchaseEntitySchema.deserialize,
       allOffsets,
       PurchaseEntity(),
     ),
     samplings: reader.readObjectList<SamplingEntity>(
-      offsets[8],
+      offsets[9],
       SamplingEntitySchema.deserialize,
       allOffsets,
       SamplingEntity(),
     ),
     status:
-        _OrderEntitystatusValueEnumMap[reader.readStringOrNull(offsets[9])] ??
+        _OrderEntitystatusValueEnumMap[reader.readStringOrNull(offsets[10])] ??
             SyncStatus.isNoSynced,
   );
   return object;
@@ -278,22 +284,24 @@ P _orderEntityDeserializeProp<P>(
     case 5:
       return (reader.readLongOrNull(offset)) as P;
     case 6:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 7:
+      return (reader.readLongOrNull(offset)) as P;
+    case 8:
       return (reader.readObjectList<PurchaseEntity>(
         offset,
         PurchaseEntitySchema.deserialize,
         allOffsets,
         PurchaseEntity(),
       )) as P;
-    case 8:
+    case 9:
       return (reader.readObjectList<SamplingEntity>(
         offset,
         SamplingEntitySchema.deserialize,
         allOffsets,
         SamplingEntity(),
       )) as P;
-    case 9:
+    case 10:
       return (_OrderEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
           SyncStatus.isNoSynced) as P;
     default:
@@ -962,6 +970,61 @@ extension OrderEntityQueryFilter
     });
   }
 
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1581,6 +1644,18 @@ extension OrderEntityQuerySortBy
     });
   }
 
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1658,6 +1733,18 @@ extension OrderEntityQuerySortThenBy
     });
   }
 
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<OrderEntity, OrderEntity, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1722,6 +1809,12 @@ extension OrderEntityQueryWhereDistinct
     });
   }
 
+  QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<OrderEntity, OrderEntity, QDistinct> distinctById() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id');
@@ -1780,6 +1873,12 @@ extension OrderEntityQueryProperty
   QueryBuilder<OrderEntity, int?, QQueryOperations> featureIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'featureId');
+    });
+  }
+
+  QueryBuilder<OrderEntity, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 

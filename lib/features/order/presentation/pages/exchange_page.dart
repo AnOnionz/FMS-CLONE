@@ -48,7 +48,8 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
         (e) => e.featureSchemeExchangeId == entity.featureSchemeExchangeId);
     if (exchangeEntity != null) {
       _exchangeEntites.remove(exchangeEntity);
-      _exchangeEntites.add(entity.copyWith(quantity: entity.quantity));
+      if (entity.quantity! > 0)
+        _exchangeEntites.add(entity.copyWith(quantity: entity.quantity));
     } else {
       _exchangeEntites.add(entity);
     }

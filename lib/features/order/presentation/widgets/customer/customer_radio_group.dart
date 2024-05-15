@@ -35,8 +35,9 @@ class _CustomerRadioGroupState extends State<CustomerRadioGroup> {
           Text(widget.featureCustomer.name!),
         //
         for (final Option option in _groupValue)
-          RadioListTile<CustomerOption>(
+          RadioListTile<int?>(
             contentPadding: EdgeInsets.zero,
+            selected: _selectedOption?.featureCustomerOptionId == option.id!,
             title: Text(
               option.name ?? '',
               style: context.textTheme.body1
@@ -46,11 +47,12 @@ class _CustomerRadioGroupState extends State<CustomerRadioGroup> {
                 _selectedOption?.featureCustomerOptionId == option.id
                     ? AppColors.orange
                     : 'D9D9D9'.toColor()),
-            value: CustomerOption(featureCustomerOptionId: option.id),
-            groupValue: _selectedOption,
+            value: option.id!,
+            groupValue: _selectedOption?.featureCustomerOptionId,
             onChanged: (value) {
               setState(() {
-                _selectedOption = value;
+                _selectedOption =
+                    CustomerOption(featureCustomerOptionId: value);
               });
 
               widget.onChanged([_selectedOption!]);

@@ -65,12 +65,19 @@ class ReviewCustomer extends StatelessWidget {
                         final options = featureCustomer.options!;
                         final opt = options.firstWhereOrNull((element) =>
                             element.id == option.featureCustomerOptionId);
+                        if (customerInfo.options!.length == 1)
+                          return Text(
+                            '${opt?.name!}',
+                            style: context.textTheme.body1
+                                ?.copyWith(color: AppColors.black),
+                          );
                         if (opt != null)
                           return Text(
                             ' - ${opt.name!}',
                             style: context.textTheme.body1
                                 ?.copyWith(color: AppColors.black),
                           );
+
                         return SizedBox.shrink();
                       }).toList(),
                     )

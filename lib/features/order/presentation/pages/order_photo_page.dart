@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -89,6 +87,9 @@ class _OrderPhotoPageState extends State<OrderPhotoPage>
                             dataUuid: Uuid().v1(),
                             dataTimestamp: file.dataTimestamp,
                             path: file.path,
+                            featureId: dataFeature.data.feature.id,
+                            attendanceId:
+                                dataFeature.data.general.attendance!.id,
                             featurePhotoId: item.key.id!,
                           ));
                           setState(() {});
@@ -98,6 +99,9 @@ class _OrderPhotoPageState extends State<OrderPhotoPage>
                             final photo = item.value.firstWhere(
                                 (element) => element.dataUuid == image.uuid);
                             photo.status = SyncStatus.isDeleted;
+                            photo.attendanceId =
+                                dataFeature.data.general.attendance!.id;
+                            photo.featureId = dataFeature.data.feature.id;
                           } else {
                             item.value.removeWhere(
                                 (photo) => photo.dataUuid == image.uuid);

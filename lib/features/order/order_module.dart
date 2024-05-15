@@ -1,8 +1,10 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/images/image_module.dart';
 import 'package:fms/features/order/data/datasources/order_local_datasource.dart';
 import 'package:fms/features/order/data/repositories/order_repository_impl.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/domain/usecases/create_order_usecase.dart';
 import 'package:fms/features/order/domain/usecases/get_orders_no_synced_usecase.dart';
 import 'package:fms/features/order/domain/usecases/get_orders_not_completed_usecase.dart';
@@ -68,11 +70,15 @@ class OrderModule extends Module {
     );
     r.child(
       Routes.root + history,
-      child: (_) => const HistoryExchangePage(),
+      child: (_) => HistoryExchangePage(
+        feature: r.args.data as FeatureEntity,
+      ),
     );
     r.child(
       Routes.root + historyDetail,
-      child: (_) => const HistoryExchangeDetailPage(),
+      child: (_) => HistoryExchangeDetailPage(
+          feature: r.args.data[0] as FeatureEntity,
+          order: r.args.data[1] as OrderEntity),
     );
   }
 }

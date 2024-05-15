@@ -3,11 +3,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
 
 import '../widgets/exchange_detail.dart';
 
 class HistoryExchangeDetailPage extends StatelessWidget {
-  const HistoryExchangeDetailPage({super.key});
+  final OrderEntity order;
+  final FeatureEntity feature;
+  const HistoryExchangeDetailPage(
+      {super.key, required this.order, required this.feature});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,10 @@ class HistoryExchangeDetailPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 30.h),
-        // child: ExchangeDetail(),
+        child: ExchangeDetail(
+          order: order,
+          feature: feature,
+        ),
       ),
     );
   }

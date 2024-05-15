@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../general/domain/entities/config_entity.dart';
@@ -23,6 +24,7 @@ class _InfomationFormState extends State<InfomationForm> {
 
   @override
   Widget build(BuildContext context) {
+    Fx.log(_fields);
     return Form(
         key: widget.formKey,
         child: Column(

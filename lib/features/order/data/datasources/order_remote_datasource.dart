@@ -2,6 +2,8 @@ import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../general/domain/entities/config_entity.dart';
+import '../../../general/domain/entities/general_entity.dart';
 import '../../../images/data/datasource/images_remote_datasource.dart';
 import '../../domain/entities/order_entity.dart';
 
@@ -13,7 +15,10 @@ abstract class IOrderRemoteDataSource {
   Future<OrderEntity?> createOrder(OrderEntity order);
   Future<OrderEntity?> updateOrder(OrderEntity order);
   Future<PhotoEntity?> createPhoto(
-      {required PhotoEntity photo, required int orderId});
+      {required PhotoEntity photo,
+      required int featureId,
+      required int attendanceId,
+      required int orderId});
   Future<List<OrderEntity>> fetchOrders(
       {required int attendanceId, required int featureId});
   Future<List<PhotoEntity>> fetchOrderPhotos(
@@ -97,7 +102,10 @@ class OrderRemoteDataSource extends ImagesRemoteDataSource
 
   @override
   Future<PhotoEntity?> createPhoto(
-      {required PhotoEntity photo, required int orderId}) async {
+      {required PhotoEntity photo,
+      required int featureId,
+      required int attendanceId,
+      required int orderId}) async {
     Map<String, dynamic> formData;
     if (photo.image != null) {
       formData = {
@@ -122,7 +130,7 @@ class OrderRemoteDataSource extends ImagesRemoteDataSource
 
     final _resp = await dio.post(
         path:
-            '/app/attendances/${photo.attendanceId}/features/${photo.featureId}/orders/${orderId}/photos',
+            '/app/attendances/${attendanceId}/features/${featureId}/orders/${orderId}/photos',
         data: formData);
 
     return parseJson<PhotoEntity>((json: _resp, fromJson: PhotoEntity.fromMap));

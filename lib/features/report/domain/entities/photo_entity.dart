@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:isar/isar.dart';
 
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
-import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
 import '../../../general/domain/entities/data_entity.dart';
@@ -34,16 +36,17 @@ class PhotoEntity extends DataEntity {
       this.attendanceId,
       this.featureId});
 
-  factory PhotoEntity.fromMap(Map<String, dynamic> map) {
+  factory PhotoEntity.fromMap(Map<String, dynamic> map,
+      {bool isSynced = false}) {
     return PhotoEntity(
-      id: map['id'] as int,
-      dataUuid: map['dataUuid'] as String,
-      dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
-      featurePhotoId: map['featurePhotoId'] != null
-          ? map['featurePhotoId'] as int
-          : map['featureMultimediaId'] as int,
-      image: ImageCloud.fromMap(map['image'] as Map<String, dynamic>),
-    );
+        id: map['id'] as int,
+        dataUuid: map['dataUuid'] as String,
+        dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
+        featurePhotoId: map['featurePhotoId'] != null
+            ? map['featurePhotoId'] as int
+            : map['featureMultimediaId'] as int,
+        image: ImageCloud.fromMap(map['image'] as Map<String, dynamic>),
+        status: isSynced ? SyncStatus.synced : SyncStatus.isNoSynced);
   }
 
   factory PhotoEntity.fromJson(String source) =>
@@ -75,6 +78,6 @@ class PhotoEntity extends DataEntity {
 
   @override
   String toString() {
-    return 'PhotoEntity(id: $id, dataUuid: $dataUuid, status: $status)';
+    return 'PhotoEntity(id: $id,attendanceId: $attendanceId, featureId: $featureId, dataUuid: $dataUuid, path: $path, dataTimestamp: $dataTimestamp, featurePhotoId: $featurePhotoId, image: $image, status: $status)';
   }
 }

@@ -7,6 +7,7 @@ import 'package:fms/features/crawl/data/repositories/crawl_repository_impl.dart'
 import 'package:fms/features/general/domain/entities/data_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/note/data/repositories/note_repository_impl.dart';
+import 'package:fms/features/order/data/repositories/order_repository_impl.dart';
 import 'package:fms/features/report/data/repositories/report_repository_impl.dart';
 import 'package:fms/features/sync/domain/repositories/sync_repository.dart';
 
@@ -19,9 +20,10 @@ class SyncRepositoryImpl extends Repository
   final ReportRepositoryImpl _reportRepository;
   final NoteRepositoryImpl _noteRepository;
   final CrawlRepositoryImpl _crawlRepository;
+  final OrderRepositoryImpl _orderRepository;
 
-  SyncRepositoryImpl(
-      this._reportRepository, this._noteRepository, this._crawlRepository);
+  SyncRepositoryImpl(this._reportRepository, this._noteRepository,
+      this._crawlRepository, this._orderRepository);
 
   @override
   Future<Result<void>> synchronized(
@@ -41,6 +43,8 @@ class SyncRepositoryImpl extends Repository
                 await _noteRepository.synchronized(feature);
               case FeatureType.multipleEntitiesQuantityCapturing:
                 await _crawlRepository.synchronized(feature);
+              case FeatureType.customerInformationCapturing:
+                await _orderRepository.synchronized(feature);
               default:
             }
           });

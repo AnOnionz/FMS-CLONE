@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -49,14 +50,17 @@ class _OrderPageState extends State<OrderPage> {
   late List<Widget> _body = [];
   late List<StepData> _steps = [];
 
+  late StreamSubscription<OrderState>? _orderSubscription;
+
   late int _curr = 0;
 
   bool isSummary = false;
 
   @override
   void initState() {
+    super.initState();
     _init();
-    orderBloc.stream.listen((state) {
+    _orderSubscription = orderBloc.stream.listen((state) {
       if (state is OrderCreateLoading) {
         OverlayManager.showLoading();
       }
@@ -81,7 +85,12 @@ class _OrderPageState extends State<OrderPage> {
             });
       }
     });
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _orderSubscription?.cancel();
+    super.dispose();
   }
 
   void onNext() {
@@ -203,7 +212,8 @@ class _OrderPageState extends State<OrderPage> {
                   children: [
                     Expanded(
                         child: ExchangeDetail(
-                            order: orderEntity, generalFeature: widget.entity)),
+                            order: orderEntity,
+                            feature: widget.entity.feature)),
                     Container(
                       padding: EdgeInsets.all(16.w),
                       decoration: BoxDecoration(

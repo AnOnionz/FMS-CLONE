@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:isar/isar.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/utilities/parser.dart';
 import '../../../general/domain/entities/config_entity.dart';
@@ -108,7 +109,8 @@ class OrderEntity extends DataEntity {
       photos: map['photos'] != null
           ? List<PhotoEntity>.from(
               (map['photos'] as List<dynamic>).map<PhotoEntity?>(
-                (x) => PhotoEntity.fromMap(x as Map<String, dynamic>),
+                (x) => PhotoEntity.fromMap(x as Map<String, dynamic>,
+                    isSynced: true),
               ),
             )
           : null,
@@ -150,6 +152,16 @@ class OrderEntity extends DataEntity {
 
   factory OrderEntity.fromJson(String source) =>
       OrderEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OrderEntity &&
+          runtimeType == other.runtimeType &&
+          dataUuid == other.dataUuid;
+
+  @override
+  int get hashCode => dataUuid.hashCode;
 }
 
 @embedded

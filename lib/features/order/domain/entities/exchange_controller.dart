@@ -27,10 +27,3 @@ final class ExchangeController {
   }).toList()
         ..removeWhere((data) => data == null);
 }
-
-class ExchangeItem {
-  final FeatureScheme featureScheme;
-  final bool isEnable;
-
-  ExchangeItem({required this.featureScheme, required this.isEnable});
-}

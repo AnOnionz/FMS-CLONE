@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fms/features/home/domain/entities/general_item_data.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
-import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
 import '../../../../core/styles/theme.dart';
 import 'review/review_customer.dart';
@@ -10,10 +9,9 @@ import 'review/review_product.dart';
 import 'review/review_sampling.dart';
 
 class ExchangeDetail extends StatelessWidget {
-  final GeneralFeatureData generalFeature;
+  final FeatureEntity feature;
   final OrderEntity order;
-  const ExchangeDetail(
-      {super.key, required this.order, required this.generalFeature});
+  const ExchangeDetail({super.key, required this.order, required this.feature});
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +20,25 @@ class ExchangeDetail extends StatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: ReviewCustomer(
-            featureCustomers: generalFeature.feature.featureCustomers ?? [],
+            featureCustomers: feature.featureCustomers ?? [],
             customerInfos: order.customerInfos,
           ),
         ),
         SliverToBoxAdapter(
           child: ReviewProduct(
-            products: generalFeature.feature.featureOrder!.products ?? [],
+            products: feature.featureOrder!.products ?? [],
             purchases: order.purchases,
           ),
         ),
         SliverToBoxAdapter(
           child: ReviewGift(
-            schemes: generalFeature.feature.featureSchemes ?? [],
+            schemes: feature.featureSchemes ?? [],
             exchanges: order.exchanges ?? [],
           ),
         ),
         SliverToBoxAdapter(
           child: ReviewSampling(
-            featureSamplings: generalFeature.feature.featureSamplings ?? [],
+            featureSamplings: feature.featureSamplings ?? [],
             samplings: order.samplings,
           ),
         )

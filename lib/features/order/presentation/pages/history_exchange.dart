@@ -4,14 +4,18 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/date_picker.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
 
-import '../widgets/history/history_exchange_reduce_item.dart';
+import '../../../general/domain/entities/config_entity.dart';
+import '../widgets/history/history_exchange_simplify_item.dart';
 
 class HistoryExchangePage extends StatelessWidget {
-  const HistoryExchangePage({super.key});
+  final FeatureEntity feature;
+  const HistoryExchangePage({super.key, required this.feature});
 
   @override
   Widget build(BuildContext context) {
+    final List<OrderEntity> orders = [];
     return Scaffold(
       appBar: DefaultAppBar(title: 'Lịch sử đơn hàng'),
       body: Column(
@@ -24,9 +28,10 @@ class HistoryExchangePage extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 8,
+              itemCount: orders.length,
               physics: kPhysics,
-              itemBuilder: (context, index) => HistoryExchangeReduceItem(),
+              itemBuilder: (context, index) => HistoryExchangeSimplifyItem(
+                  order: orders[index], feature: feature),
             ),
           )
         ],

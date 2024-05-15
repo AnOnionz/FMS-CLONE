@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
+import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/data/datasources/order_local_datasource.dart';
@@ -14,7 +16,7 @@ import '../../../images/data/datasource/delete_image_local_remote_datasource.dar
 import '../../../images/data/datasource/delete_image_remote_datasource.dart';
 
 class OrderRepositoryImpl extends Repository
-    with GeneralDataMixin
+    with GeneralDataMixin, LocalDatasource
     implements OrderRepository {
   final OrderLocalDataSource _local;
   final OrderRemoteDataSource _remote;
@@ -41,21 +43,31 @@ class OrderRepositoryImpl extends Repository
   @override
   Future<Result<List<OrderEntity>>> allOrders({required int featureId}) async {
     return todo(() async {
+      final offlineOrder = await _local.getOrdersByFeature(featureId);
       final onlineOrders = await _remote.fetchOrders(
           featureId: featureId, attendanceId: general.attendance!.id!);
-
-      return Right(onlineOrders);
+      final Set<OrderEntity> orders =
+          [...offlineOrder, ...onlineOrders].toSet();
+      return Right(orders.toList());
     });
   }
 
   @override
   Future<Result<void>> createOrder({required OrderEntity order}) {
     return todo(() async {
+      order.photos!.forEach((photo) {
+        _local.cachePhotoToLocal(photo);
+      });
       _local.cacheOrderToLocal(order);
+      order.localPhotos.addAll(order.photos!);
+      db.writeTxnSync(() => order.localPhotos.saveSync());
+
       final newOrder = await _remote.createOrder(order);
+
       if (newOrder != null) {
+        _local.cacheOrderToLocal(order.copyWith(id: newOrder.id));
         await updatePhotos(order, newOrder.id!);
-        order = order.copyWith(status: SyncStatus.synced, id: newOrder.id);
+        order = order.copyWith(status: SyncStatus.synced);
         _local.cacheOrderToLocal(order);
       }
       return Right(Never);
@@ -103,17 +115,24 @@ class OrderRepositoryImpl extends Repository
     final ordersNoSynced = await _local.getOrdersNoSyncedByFeature(feature.id!);
 
     await Future.forEach(ordersNoSynced, (order) async {
-      final newOrder = await _remote.createOrder(order);
-      if (newOrder != null) {
-        await updatePhotos(order, newOrder.id!);
-        order = order.copyWith(status: SyncStatus.synced, id: newOrder.id);
-        _local.cacheOrderToLocal(order);
+      OrderEntity? newOrder;
+      if (order.id == null) {
+        newOrder = await _remote.createOrder(order);
+        if (newOrder != null) {
+          await updatePhotos(order, newOrder.id!);
+          order = order.copyWith(status: SyncStatus.synced, id: newOrder.id!);
+        }
+      } else {
+        await updatePhotos(order, order.id!);
+        order = order.copyWith(status: SyncStatus.synced, id: order.id);
       }
+
+      _local.cacheOrderToLocal(order);
     });
   }
 
   Future<void> updatePhotos(OrderEntity order, int orderId) async {
-    await Future.forEach(order.photos!, (photo) async {
+    await Future.forEach(order.photos ?? order.localPhotos, (photo) async {
       if (photo.status == SyncStatus.isDeleted) {
         if (photo.id != null) {
           await _remotePhoto.deleteOrderPhoto(
@@ -125,7 +144,11 @@ class OrderRepositoryImpl extends Repository
         _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
       }
       if (photo.status == SyncStatus.isNoSynced) {
-        final resp = await _remote.createPhoto(photo: photo, orderId: orderId);
+        final resp = await _remote.createPhoto(
+            photo: photo,
+            featureId: order.featureId!,
+            attendanceId: order.attendanceId!,
+            orderId: orderId);
         if (resp != null) {
           photo = photo.copyWith(
               id: resp.id, image: resp.image, status: SyncStatus.synced);
