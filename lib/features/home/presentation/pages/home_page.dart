@@ -10,7 +10,6 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
-import 'package:fms/features/home/presentation/widgets/common_info.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
 import 'package:fms/features/home/presentation/widgets/tasks.dart';
 

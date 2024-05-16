@@ -2,8 +2,6 @@ import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../general/domain/entities/config_entity.dart';
-import '../../../general/domain/entities/general_entity.dart';
 import '../../../images/data/datasource/images_remote_datasource.dart';
 import '../../domain/entities/order_entity.dart';
 

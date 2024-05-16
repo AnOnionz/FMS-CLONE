@@ -12,15 +12,13 @@ import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
-import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
 import 'package:fms/features/setting/setting_module.dart';
-import 'package:fms/features/work_place/presentation/bloc/work_place_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 
 import '../../../../core/widgets/image_profile.dart';
 
-class DrawerSide extends StatelessWidget with GeneralDataMixin {
+class DrawerSide extends StatelessWidget {
   const DrawerSide({super.key});
 
   Credentials? get credentials =>

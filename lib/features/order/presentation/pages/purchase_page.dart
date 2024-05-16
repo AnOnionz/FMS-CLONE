@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/format.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
@@ -14,7 +13,6 @@ import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/presentation/widgets/product/concur_product.dart';
-import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
 import 'package:fms/features/order/presentation/widgets/product/select_product.dart';
 import 'package:fuzzy/fuzzy.dart';
 

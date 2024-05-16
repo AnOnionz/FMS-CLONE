@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';

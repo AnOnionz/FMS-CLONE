@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../general/domain/entities/config_entity.dart';

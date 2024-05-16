@@ -3,15 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/exchange_controller.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 
-import '../../../../../core/utilities/overlay.dart';
-import '../../../../../core/widgets/button/flat.dart';
 import '../input_quantity.dart';
 
 class GiftQuantityWidget extends StatefulWidget {
@@ -95,43 +92,43 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
     return result;
   }
 
-  void _showSheetLimitGift() {
-    OverlayManager.showSheet(
-        body: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 32.h, bottom: 13.h),
-          child: Text('SỐ LƯỢNG QUÀ',
-              style:
-                  context.textTheme.h2?.copyWith(color: AppColors.nightRider)),
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 40.h),
-          child: RichText(
-              text: TextSpan(
-                  text: 'Khách hàng có thể đổi tối đa ',
-                  style: context.textTheme.body1
-                      ?.copyWith(color: AppColors.midnightExpress),
-                  children: [
-                TextSpan(
-                    text: widget.exchange.maxReceiveQuantity!.toString(),
-                    style: context.textTheme.body1?.copyWith(
-                        color: AppColors.fireBrick,
-                        fontWeight: FontWeight.w600)),
-                TextSpan(
-                    text: ' quà',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.midnightExpress))
-              ])),
-        ),
-        FlatButton(
-            onPressed: () => context.pop(),
-            name: 'Xác nhận',
-            color: AppColors.orange)
-      ],
-    ));
-  }
+  // void _showSheetLimitGift() {
+  //   OverlayManager.showSheet(
+  //       body: Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       Padding(
+  //         padding: EdgeInsets.only(top: 32.h, bottom: 13.h),
+  //         child: Text('SỐ LƯỢNG QUÀ',
+  //             style:
+  //                 context.textTheme.h2?.copyWith(color: AppColors.nightRider)),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(bottom: 40.h),
+  //         child: RichText(
+  //             text: TextSpan(
+  //                 text: 'Khách hàng có thể đổi tối đa ',
+  //                 style: context.textTheme.body1
+  //                     ?.copyWith(color: AppColors.midnightExpress),
+  //                 children: [
+  //               TextSpan(
+  //                   text: widget.exchange.maxReceiveQuantity!.toString(),
+  //                   style: context.textTheme.body1?.copyWith(
+  //                       color: AppColors.fireBrick,
+  //                       fontWeight: FontWeight.w600)),
+  //               TextSpan(
+  //                   text: ' quà',
+  //                   style: context.textTheme.body1
+  //                       ?.copyWith(color: AppColors.midnightExpress))
+  //             ])),
+  //       ),
+  //       FlatButton(
+  //           onPressed: () => context.pop(),
+  //           name: 'Xác nhận',
+  //           color: AppColors.orange)
+  //     ],
+  //   ));
+  // }
 
   @override
   Widget build(BuildContext context) {
