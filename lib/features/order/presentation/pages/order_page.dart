@@ -33,7 +33,8 @@ import 'sampling_page.dart';
 
 class OrderPage extends StatefulWidget {
   final GeneralFeatureData entity;
-  const OrderPage({super.key, required this.entity});
+  final OrderEntity? order;
+  const OrderPage({super.key, required this.entity, this.order});
 
   @override
   State<OrderPage> createState() => _OrderPageState();
@@ -50,7 +51,7 @@ class _OrderPageState extends State<OrderPage> {
   late List<StepData> _steps = [];
 
   late StreamSubscription<OrderState>? _orderSubscription;
-
+  bool get isEditing => widget.order != null;
   late int _curr = 0;
 
   bool isSummary = false;
@@ -141,13 +142,15 @@ class _OrderPageState extends State<OrderPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: DefaultAppBar(
-          onBack: () => showWarning(
-              title: 'Hủy đơn hàng hiện tại ?',
-              message:
-                  'Đơn hàng hiện tại sẽ không được ghi nhận. Bạn có chắc muốn hủy đơn này ?',
-              icon: SvgPicture.asset(AppIcons.requestClose),
-              btnText: 'Huỷ đơn',
-              onPressed: () => context.popUntil(HomeModule.route)),
+          onBack: isEditing
+              ? () => context.pop()
+              : () => showWarning(
+                  title: 'Hủy đơn hàng hiện tại ?',
+                  message:
+                      'Đơn hàng hiện tại sẽ không được ghi nhận. Bạn có chắc muốn hủy đơn này ?',
+                  icon: SvgPicture.asset(AppIcons.requestClose),
+                  btnText: 'Huỷ đơn',
+                  onPressed: () => context.popUntil(HomeModule.route)),
           iconBack: SvgPicture.asset(AppIcons.closeRegular),
           title: widget.entity.feature.name!,
           action: isSummary ||
@@ -275,28 +278,14 @@ class _OrderPageState extends State<OrderPage> {
   Future<void> _init() async {
     int index = 0;
     final time = await _networkTimeService.ntpDateTime();
-    orderEntity = OrderEntity(
-      dataUuid: Uuid().v1(),
-      dataTimestamp: time,
-      attendanceId: widget.entity.general.attendance!.id,
-      featureId: widget.entity.feature.id,
-      // customerInfos: [
-      //   CustomerInfo(featureCustomerId: 10, value: '1'),
-      //   CustomerInfo(featureCustomerId: 11, value: '2'),
-      //   CustomerInfo(featureCustomerId: 12),
-      //   CustomerInfo(featureCustomerId: 13),
-      //   CustomerInfo(featureCustomerId: 14, options: [
-      //     CustomerOption(featureCustomerOptionId: 4),
-      //     CustomerOption(featureCustomerOptionId: 5)
-      //   ])
-      // ]
-      // purchases: [
-      //   PurchaseEntity(featureOrderProductId: 11, quantity: 5)
-      // ],
-      // exchanges: [
-      //   ExchangeEntity(featureSchemeExchangeId: 15, quantity: 3)
-      // ]
-    );
+    orderEntity = isEditing
+        ? widget.order!.copyWith(dataTimestamp: time)
+        : OrderEntity(
+            dataUuid: Uuid().v1(),
+            dataTimestamp: time,
+            attendanceId: widget.entity.general.attendance!.id,
+            featureId: widget.entity.feature.id,
+          );
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(
@@ -304,7 +293,6 @@ class _OrderPageState extends State<OrderPage> {
       );
       _body.add(OrderCustomerPage(
         key: PageStorageKey('customer'),
-        onBack: onBack,
         onNext: onNext,
         onSaveData: (customers) {
           setState(() {

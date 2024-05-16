@@ -1,13 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fms/core/constant/format.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/constant/colors.dart';
-
-final productPriceFormat = NumberFormat.currency(
-  symbol: '',
-);
 
 class OrderProductInfoWidget extends StatelessWidget {
   final int price;
@@ -25,16 +23,18 @@ class OrderProductInfoWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          product.name!,
-          style: context.textTheme.caption1,
+        Flexible(
+          child: Text(
+            product.name!,
+            style: context.textTheme.caption1,
+          ),
         ),
         Text(
           productPackaging.barcode!,
           style: context.textTheme.caption2?.copyWith(color: AppColors.nobel),
         ),
         Text(
-          '${productPriceFormat.format(price)} vnd / ${productPackaging.unitName}',
+          '${kNumberFormater.formatString(price.toString())} vnd / ${productPackaging.unitName}',
           style: context.textTheme.caption2,
         )
       ],

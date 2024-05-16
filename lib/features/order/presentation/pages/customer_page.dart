@@ -20,14 +20,12 @@ import '../../domain/entities/order_entity.dart';
 
 class OrderCustomerPage extends StatefulWidget {
   final VoidCallback onNext;
-  final VoidCallback onBack;
 
   final void Function(List<CustomerInfo> customers) onSaveData;
 
   const OrderCustomerPage({
     super.key,
     required this.onNext,
-    required this.onBack,
     required this.onSaveData,
   });
 
@@ -216,7 +214,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: BottomButtons(
-                  onBack: () {},
+                  onBack: null,
                   onNext: _identifyCubit.state is IdentifySuccess && validate
                       ? () {
                           if (_formKey.currentState!.validate()) {

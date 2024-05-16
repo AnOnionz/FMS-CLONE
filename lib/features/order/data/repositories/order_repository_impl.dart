@@ -42,11 +42,12 @@ class OrderRepositoryImpl extends Repository
   @override
   Future<Result<List<OrderEntity>>> allOrders({required int featureId}) async {
     return todo(() async {
-      final offlineOrder = await _local.getOrdersByFeature(featureId);
+      final offlineOrders = await _local.getOrdersByFeature(featureId);
       final onlineOrders = await _remote.fetchOrders(
           featureId: featureId, attendanceId: general.attendance!.id!);
+
       final Set<OrderEntity> orders =
-          [...offlineOrder, ...onlineOrders].toSet();
+          [...onlineOrders, ...offlineOrders].toSet();
       return Right(orders.toList());
     });
   }

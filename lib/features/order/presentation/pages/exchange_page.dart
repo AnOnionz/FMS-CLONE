@@ -30,7 +30,7 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
   int priceUsed = 0;
   late final dataFeature = DataFeature.of(context);
   late List<ExchangeEntity> _exchangeEntites =
-      dataFeature.order.exchanges ?? <ExchangeEntity>[];
+      List.from(dataFeature.order.exchanges ?? <ExchangeEntity>[]);
 
   late final ExchangeController _exchangeController = ExchangeController(
       order: dataFeature.order, feature: dataFeature.data.feature);

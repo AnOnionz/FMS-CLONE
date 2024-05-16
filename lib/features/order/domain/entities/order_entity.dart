@@ -86,7 +86,7 @@ class OrderEntity extends DataEntity {
     return OrderEntity(
         id: map['id'] as int?,
         dataUuid: map['dataUuid'] as String,
-        dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
+        dataTimestamp: DateTime.parse(map['dataTimestamp'] as String).toLocal(),
         customerInfos: map['customerInfos'] != null
             ? List<CustomerInfo>.from(
                 (map['customerInfos'] as List<dynamic>).map<CustomerInfo?>(

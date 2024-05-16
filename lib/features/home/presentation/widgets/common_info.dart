@@ -56,41 +56,41 @@ class CommonInfo extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(child: KpiChart())
+                // Expanded(child: KpiChart())
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 16.h, bottom: 12.h),
-              child: Divider(
-                color: AppColors.gainsboro,
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child:
-                        StatChart(title: 'Số bán hôm nay', value: 8, max: 15)),
-                SizedBox(
-                  width: 20.w,
-                ),
-                Expanded(
-                    child: StatChart(
-                  title: 'Số lượng quà tồn',
-                  value: 90,
-                  max: 100,
-                  isPercent: true,
-                )),
-                SizedBox(
-                  width: 20.w,
-                ),
-                Expanded(
-                    child: StatChart(
-                  title: 'Thời gian dự án',
-                  value: 8,
-                  max: 15,
-                ))
-              ],
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: 16.h, bottom: 12.h),
+            //   child: Divider(
+            //     color: AppColors.gainsboro,
+            //   ),
+            // ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //         child:
+            //             StatChart(title: 'Số bán hôm nay', value: 8, max: 15)),
+            //     SizedBox(
+            //       width: 20.w,
+            //     ),
+            //     Expanded(
+            //         child: StatChart(
+            //       title: 'Số lượng quà tồn',
+            //       value: 90,
+            //       max: 100,
+            //       isPercent: true,
+            //     )),
+            //     SizedBox(
+            //       width: 20.w,
+            //     ),
+            //     Expanded(
+            //         child: StatChart(
+            //       title: 'Thời gian dự án',
+            //       value: 8,
+            //       max: 15,
+            //     ))
+            //   ],
+            // ),
           ],
         ),
       ),

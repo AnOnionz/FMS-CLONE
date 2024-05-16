@@ -41,7 +41,10 @@ class PurchaseContainer extends StatelessWidget {
               child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (titleFlexible) Flexible(child: title) else title,
+              if (titleFlexible)
+                Flexible(child: title)
+              else
+                Expanded(child: title),
               Flexible(child: trailing)
             ],
           ))

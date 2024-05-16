@@ -7,7 +7,7 @@ import '../../../../core/constant/icons.dart';
 import '../../../../core/widgets/button/flat.dart';
 
 class BottomButtons extends StatelessWidget {
-  final VoidCallback onBack;
+  final VoidCallback? onBack;
   final VoidCallback? onNext;
   const BottomButtons({super.key, required this.onBack, required this.onNext});
 
@@ -16,23 +16,24 @@ class BottomButtons extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              onBack();
-            },
-            child: Container(
-                height: 56.h,
-                width: 56.h,
-                margin: EdgeInsets.only(right: 8.w),
-                padding: EdgeInsets.all(14.h),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.gainsboro)),
-                child: SvgPicture.asset(
-                  AppIcons.backStepArrow,
-                )),
-          ),
+          if (onBack != null)
+            GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                onBack!.call();
+              },
+              child: Container(
+                  height: 56.h,
+                  width: 56.h,
+                  margin: EdgeInsets.only(right: 8.w),
+                  padding: EdgeInsets.all(14.h),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.gainsboro)),
+                  child: SvgPicture.asset(
+                    AppIcons.backStepArrow,
+                  )),
+            ),
           Expanded(
             child: FlatButton(
               onPressed: onNext != null

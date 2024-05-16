@@ -32,8 +32,8 @@ class _OrderPhotoPageState extends State<OrderPhotoPage>
   late final dataFeature = DataFeature.of(context);
   late final featurePhotos = dataFeature.data.feature.featurePhotos!;
 
-  late final List<PhotoEntity> _photos =
-      dataFeature.order.photos ?? dataFeature.order.localPhotos.toList();
+  late final List<PhotoEntity> _photos = List.from(
+      dataFeature.order.photos ?? dataFeature.order.localPhotos.toList());
 
   late final Map<FeaturePhoto, List<PhotoEntity>> _items = {};
 
