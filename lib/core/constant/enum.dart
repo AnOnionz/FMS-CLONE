@@ -14,6 +14,7 @@ enum FeatureType {
   customerInformationCapturing(),
   multiSubjectMultimediaInformationCapturing(),
   multipleEntitiesQuantityCapturing(),
+  historyExchange(),
   synchronization(true),
   onlineIndividualSummaryReport(true),
   onlineTeamSummaryReport(true),

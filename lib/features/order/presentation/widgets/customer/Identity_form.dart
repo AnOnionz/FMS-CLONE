@@ -32,11 +32,6 @@ class _IdentityFormState extends State<IdentityForm> {
 
   late final generalFeature = DataFeature.of(context).data;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   bool validate() {
     return !_fields.any((field) {
       if (field.key.isRequired!) {

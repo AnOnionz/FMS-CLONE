@@ -24,7 +24,6 @@ class _InfomationFormState extends State<InfomationForm> {
 
   @override
   Widget build(BuildContext context) {
-    Fx.log(_fields);
     return Form(
         key: widget.formKey,
         child: Column(

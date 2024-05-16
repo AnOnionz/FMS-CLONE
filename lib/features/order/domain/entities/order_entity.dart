@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../core/utilities/parser.dart';
 import '../../../general/domain/entities/config_entity.dart';
@@ -54,72 +53,82 @@ class OrderEntity extends DataEntity {
       this.status = SyncStatus.isNoSynced});
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    final data = <String, dynamic>{
       'dataUuid': dataUuid,
       'dataTimestamp': dataTimestamp.toUtc().toIso8601String(),
-      'customers': customerInfos?.map((x) => x.toMap()).toList(),
+      // 'customers':  customerInfos?.map((x) => x.toMap()).toList(),
       'purchases': purchases?.map((x) => x.toMap()).toList(),
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),
     };
+    if (customerInfos!.isNotEmpty) {
+      data['customers'] = customerInfos!.map((x) => x.toMap()).toList();
+    }
+
+    return data;
   }
 
   Map<String, dynamic> toUpdateMap() {
-    return <String, dynamic>{
+    final data = <String, dynamic>{
       'customers': customerInfos?.map((x) => x.toMap()).toList(),
       'purchases': purchases?.map((x) => x.toMap()).toList(),
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),
     };
+    if (customerInfos!.isNotEmpty) {
+      data['customers'] = customerInfos!.map((x) => x.toMap()).toList();
+    }
+
+    return data;
   }
 
   factory OrderEntity.fromMap(Map<String, dynamic> map) {
     return OrderEntity(
-      id: map['id'] as int?,
-      dataUuid: map['dataUuid'] as String,
-      dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
-      customerInfos: map['customerInfos'] != null
-          ? List<CustomerInfo>.from(
-              (map['customerInfos'] as List<dynamic>).map<CustomerInfo?>(
-                (x) => CustomerInfo.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      purchases: map['purchases'] != null
-          ? List<PurchaseEntity>.from(
-              (map['purchases'] as List<dynamic>).map<PurchaseEntity?>(
-                (x) => PurchaseEntity.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      exchanges: map['exchanges'] != null
-          ? List<ExchangeEntity>.from(
-              (map['exchanges'] as List<dynamic>).map<ExchangeEntity?>(
-                (x) => ExchangeEntity.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      samplings: map['samplings'] != null
-          ? List<SamplingEntity>.from(
-              (map['samplings'] as List<dynamic>).map<SamplingEntity?>(
-                (x) => SamplingEntity.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      photos: map['photos'] != null
-          ? List<PhotoEntity>.from(
-              (map['photos'] as List<dynamic>).map<PhotoEntity?>(
-                (x) => PhotoEntity.fromMap(x as Map<String, dynamic>,
-                    isSynced: true),
-              ),
-            )
-          : null,
-    );
+        id: map['id'] as int?,
+        dataUuid: map['dataUuid'] as String,
+        dataTimestamp: DateTime.parse(map['dataTimestamp'] as String),
+        customerInfos: map['customerInfos'] != null
+            ? List<CustomerInfo>.from(
+                (map['customerInfos'] as List<dynamic>).map<CustomerInfo?>(
+                  (x) => CustomerInfo.fromMap(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
+        purchases: map['purchases'] != null
+            ? List<PurchaseEntity>.from(
+                (map['purchases'] as List<dynamic>).map<PurchaseEntity?>(
+                  (x) => PurchaseEntity.fromMap(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
+        exchanges: map['exchanges'] != null
+            ? List<ExchangeEntity>.from(
+                (map['exchanges'] as List<dynamic>).map<ExchangeEntity?>(
+                  (x) => ExchangeEntity.fromMap(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
+        samplings: map['samplings'] != null
+            ? List<SamplingEntity>.from(
+                (map['samplings'] as List<dynamic>).map<SamplingEntity?>(
+                  (x) => SamplingEntity.fromMap(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
+        photos: map['photos'] != null
+            ? List<PhotoEntity>.from(
+                (map['photos'] as List<dynamic>).map<PhotoEntity?>(
+                  (x) => PhotoEntity.fromMap(x as Map<String, dynamic>,
+                      isSynced: true),
+                ),
+              )
+            : null,
+        status: SyncStatus.synced);
   }
 
   @override
   String toString() {
-    return 'OrderEntity(dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, attendanceId: $attendanceId, featureId: $featureId, customerInfos: $customerInfos, purchases: $purchases, exchanges: $exchanges, samplings: $samplings, photos: $photos)';
+    return 'OrderEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, attendanceId: $attendanceId, featureId: $featureId, customerInfos: $customerInfos, purchases: $purchases, exchanges: $exchanges, samplings: $samplings, photos: $photos)';
   }
 
   OrderEntity copyWith({
@@ -136,6 +145,7 @@ class OrderEntity extends DataEntity {
     SyncStatus? status,
   }) {
     return OrderEntity(
+        id: id ?? this.id,
         dataUuid: dataUuid ?? this.dataUuid,
         dataTimestamp: dataTimestamp ?? this.dataTimestamp,
         attendanceId: attendanceId ?? this.attendanceId,

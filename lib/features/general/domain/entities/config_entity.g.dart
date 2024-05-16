@@ -894,6 +894,7 @@ const _FeatureEntitytypeEnumValueMap = {
   r'multiSubjectMultimediaInformationCapturing':
       r'multiSubjectMultimediaInformationCapturing',
   r'multipleEntitiesQuantityCapturing': r'multipleEntitiesQuantityCapturing',
+  r'historyExchange': r'historyExchange',
   r'synchronization': r'synchronization',
   r'onlineIndividualSummaryReport': r'onlineIndividualSummaryReport',
   r'onlineTeamSummaryReport': r'onlineTeamSummaryReport',
@@ -908,6 +909,7 @@ const _FeatureEntitytypeValueEnumMap = {
       FeatureType.multiSubjectMultimediaInformationCapturing,
   r'multipleEntitiesQuantityCapturing':
       FeatureType.multipleEntitiesQuantityCapturing,
+  r'historyExchange': FeatureType.historyExchange,
   r'synchronization': FeatureType.synchronization,
   r'onlineIndividualSummaryReport': FeatureType.onlineIndividualSummaryReport,
   r'onlineTeamSummaryReport': FeatureType.onlineTeamSummaryReport,

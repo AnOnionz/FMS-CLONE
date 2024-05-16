@@ -11,8 +11,12 @@ import '../widgets/exchange_detail.dart';
 class HistoryExchangeDetailPage extends StatelessWidget {
   final OrderEntity order;
   final FeatureEntity feature;
-  const HistoryExchangeDetailPage(
-      {super.key, required this.order, required this.feature});
+
+  const HistoryExchangeDetailPage({
+    super.key,
+    required this.order,
+    required this.feature,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,7 @@ class HistoryExchangeDetailPage extends StatelessWidget {
         child: ExchangeDetail(
           order: order,
           feature: feature,
+          isHistory: true,
         ),
       ),
     );

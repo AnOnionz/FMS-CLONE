@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -31,7 +32,7 @@ class CustomerTextFormField extends StatefulWidget {
 }
 
 class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
-  bool isValid = true;
+  ValueNotifier<bool> isError = ValueNotifier(false);
   late final TextEditingController _controller =
       TextEditingController(text: widget.customerInfo.value);
   final FocusNode _focusNode = FocusNode();
@@ -52,6 +53,10 @@ class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
     setState(() {});
   }
 
+  void setIsError(bool value) {
+    isError.value = value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -62,13 +67,17 @@ class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
       onChanged: widget.onChanged,
       focusNode: _focusNode,
       validator: (value) {
-        if (widget.isRequired && widget.validate != null) {
-          final error = widget.validate?.call(value);
-          if (error != null) {
-            isValid = false;
+        if (widget.isRequired) {
+          if (value.isEmptyOrNull) {
+            setIsError(true);
+            return 'Bắt buộc nhập';
           } else {
-            isValid = true;
+            setIsError(false);
           }
+        }
+        if (widget.validate != null) {
+          final error = widget.validate?.call(value);
+          setIsError(error != null);
           return error;
         }
         return null;
@@ -91,12 +100,15 @@ class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
                       style: context.textTheme.body1
                           ?.copyWith(color: AppColors.brickRed))
               ])),
-          suffixIcon: isValid
-              ? SizedBox()
-              : Padding(
-                  padding: EdgeInsets.only(right: 12.w),
-                  child: SvgPicture.asset(AppIcons.error),
-                ),
+          suffixIcon: ValueListenableBuilder(
+            valueListenable: isError,
+            builder: (context, value, child) => !isError.value
+                ? SizedBox()
+                : Padding(
+                    padding: EdgeInsets.only(right: 12.w),
+                    child: SvgPicture.asset(AppIcons.error),
+                  ),
+          ),
           suffixIconConstraints: BoxConstraints(),
           hintStyle: context.textTheme.body1?.copyWith(color: AppColors.nobel),
           enabledBorder: OutlineInputBorder(

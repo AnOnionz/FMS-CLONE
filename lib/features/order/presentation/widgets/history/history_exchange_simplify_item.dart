@@ -1,9 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/order/order_module.dart';
+import 'package:fms/features/order/history_exchange_module.dart';
 
 import '../../../../../core/constant/colors.dart';
 import '../../../../general/domain/entities/config_entity.dart';
@@ -11,7 +12,7 @@ import '../../../domain/entities/order_entity.dart';
 
 class HistoryExchangeSimplifyItem extends StatefulWidget {
   final OrderEntity order;
-  final FeatureEntity feature;
+  final EmbeddedFeatureEntity feature;
   const HistoryExchangeSimplifyItem(
       {super.key, required this.order, required this.feature});
 
@@ -24,9 +25,11 @@ class _HistoryExchangeSimplifyItemState
     extends State<HistoryExchangeSimplifyItem> {
   late final Map<FeatureCustomer, CustomerInfo> _identityField = {};
 
+  late final featureExchange = widget.feature.feature;
+
   @override
   void initState() {
-    final identities = widget.feature.featureCustomers
+    final identities = featureExchange.featureCustomers
         ?.where((element) => element.isIdentity!);
     identities?.forEach((featureCustomer) {
       final customerInfo = widget.order.customerInfos!.firstWhereOrNull(
@@ -41,7 +44,8 @@ class _HistoryExchangeSimplifyItemState
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.nextRoute(OrderModule.historyDetail),
+      onTap: () => context.nextRoute(HistoryExchangeModule.historyDetail,
+          arguments: [widget.feature.feature, widget.order]),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
         padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
@@ -54,7 +58,6 @@ class _HistoryExchangeSimplifyItemState
           children: [
             for (final item in _identityField.entries)
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '${item.key.name}: ',
@@ -69,7 +72,6 @@ class _HistoryExchangeSimplifyItemState
                 ],
               ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Thời gian: ',
@@ -84,7 +86,6 @@ class _HistoryExchangeSimplifyItemState
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Trạng thái: ',

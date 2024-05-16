@@ -39,7 +39,8 @@ class GiftQuantityWidget extends StatefulWidget {
 class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
   late final _exchange = widget.exchange;
   late final _purchases = widget.controller.products;
-  late final bool enable = isValid();
+  late final bool isCanExchange = isValid();
+  late bool isMax = false;
 
   bool isValid() {
     if (_exchange.reachAmount != null &&
@@ -134,7 +135,6 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Fx.log(widget.exchange);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.h),
       child: IntrinsicHeight(
@@ -142,8 +142,10 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DefaultTextStyle(
-              style:
-                  TextStyle(color: enable ? AppColors.black : AppColors.nobel),
+              style: TextStyle(
+                  color: isCanExchange && !isMax
+                      ? AppColors.black
+                      : AppColors.nobel),
               child: Expanded(
                 flex: 6,
                 child: Column(
@@ -204,12 +206,16 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
             Flexible(
                 flex: 4,
                 child: AbsorbPointer(
-                  absorbing: !enable,
+                  absorbing: !isCanExchange,
                   child: InputQuantity(
                     key: ValueKey(_exchange.id!.toString()),
                     max: widget.exchange.maxReceiveQuantity!,
+                    onMax: () {
+                      setState(() {
+                        isMax = true;
+                      });
+                    },
                     value: widget.value,
-                    onMax: _showSheetLimitGift,
                     onValueChanged: (value) {
                       final ExchangeEntity entity = ExchangeEntity(
                           featureSchemeExchangeId: _exchange.id,

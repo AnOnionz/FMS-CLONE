@@ -11,8 +11,12 @@ import '../../../domain/entities/order_entity.dart';
 class ReviewCustomer extends StatelessWidget {
   final List<FeatureCustomer> featureCustomers;
   final List<CustomerInfo>? customerInfos;
+  final DateTime? createdDate;
   const ReviewCustomer(
-      {super.key, required this.featureCustomers, required this.customerInfos});
+      {super.key,
+      required this.featureCustomers,
+      required this.customerInfos,
+      this.createdDate});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,25 @@ class ReviewCustomer extends StatelessWidget {
               height: 10.h,
             ),
             for (final featureCustomer in featureCustomers)
-              _rowData(context, featureCustomer)
+              _rowData(context, featureCustomer),
+            if (createdDate != null)
+              Padding(
+                  padding: EdgeInsets.only(top: 12.h),
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Thời gian : ',
+                            style: context.textTheme.body1
+                                ?.copyWith(color: AppColors.nobel)),
+                        Text(
+                          createdDate!.formatBy(khmdMy),
+                          style: context.textTheme.body1
+                              ?.copyWith(color: AppColors.black),
+                        )
+                      ],
+                    ),
+                  ))
           ],
         ));
   }

@@ -65,7 +65,8 @@ class OrderRepositoryImpl extends Repository
       final newOrder = await _remote.createOrder(order);
 
       if (newOrder != null) {
-        _local.cacheOrderToLocal(order.copyWith(id: newOrder.id));
+        order = order.copyWith(id: newOrder.id);
+        _local.cacheOrderToLocal(order);
         await updatePhotos(order, newOrder.id!);
         order = order.copyWith(status: SyncStatus.synced);
         _local.cacheOrderToLocal(order);

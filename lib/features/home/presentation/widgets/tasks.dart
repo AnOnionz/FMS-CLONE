@@ -1,6 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/task_box.dart';
 
@@ -14,12 +17,28 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> with GeneralDataMixin {
-  late final tasks = general.config.features
-      ?.where((feature) => feature.type != null && !feature.type!.isAssistance)
+  late final tasks = general.config.features!
+      .where((feature) => feature.type != null && !feature.type!.isAssistance)
       .toList();
   final double columns = 3;
-  late final rows = (tasks!.length / columns).ceil();
+  late final rows = (tasks.length / columns).ceil();
   final double extendHeight = 172;
+
+  @override
+  void initState() {
+    super.initState();
+    final featureExchange = tasks.firstWhereOrNull(
+        (feature) => feature.type == FeatureType.customerInformationCapturing);
+    if (featureExchange != null) {
+      tasks.add(EmbeddedFeatureEntity(
+          name: 'Lịch sử đơn hàng',
+          type: FeatureType.historyExchange,
+          ordinal: featureExchange.ordinal,
+          dependentOnFeatureIds: featureExchange.dependentOnFeatureIds,
+          feature: featureExchange));
+    }
+    tasks.sort((a, b) => a.ordinal! - b.ordinal!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +54,9 @@ class _TasksState extends State<Tasks> with GeneralDataMixin {
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
                 mainAxisExtent: extendHeight),
-            itemCount: tasks!.length,
+            itemCount: tasks.length,
             itemBuilder: (context, index) {
-              final feature = tasks![index];
+              final feature = tasks[index];
               return TaskBox(
                 height: extendHeight,
                 name: feature.name!,

@@ -11,7 +11,12 @@ import 'review/review_sampling.dart';
 class ExchangeDetail extends StatelessWidget {
   final FeatureEntity feature;
   final OrderEntity order;
-  const ExchangeDetail({super.key, required this.order, required this.feature});
+  final bool isHistory;
+  const ExchangeDetail(
+      {super.key,
+      required this.order,
+      required this.feature,
+      this.isHistory = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +25,9 @@ class ExchangeDetail extends StatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: ReviewCustomer(
-            featureCustomers: feature.featureCustomers ?? [],
-            customerInfos: order.customerInfos,
-          ),
+              featureCustomers: feature.featureCustomers ?? [],
+              customerInfos: order.customerInfos,
+              createdDate: isHistory ? order.dataTimestamp : null),
         ),
         SliverToBoxAdapter(
           child: ReviewProduct(

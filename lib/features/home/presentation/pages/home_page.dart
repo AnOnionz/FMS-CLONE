@@ -76,11 +76,11 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _title(context, 'Thông tin chung'),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 29.h, horizontal: 16.w),
-                        child: CommonInfo(general: general)),
+                    // _title(context, 'Thông tin chung'),
+                    // Padding(
+                    //     padding: EdgeInsets.symmetric(
+                    //         vertical: 29.h, horizontal: 16.w),
+                    //     child: CommonInfo(general: general)),
                     _title(context, 'Chức năng hỗ trợ'),
                     Padding(
                         padding: EdgeInsets.symmetric(

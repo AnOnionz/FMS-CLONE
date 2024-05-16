@@ -58,6 +58,9 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
         return false;
       });
 
+  bool get isHasIdentity =>
+      _fields.keys.any((element) => element.isIdentity == true);
+
   @override
   void didChangeDependencies() {
     if (customerInfos.length > 0) _identifyCubit.setIdentify();
@@ -69,26 +72,35 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
             featureCustomerId: featureCustomer.id,
           );
     });
+    if (!isHasIdentity) {
+      _identifyCubit.setIdentify();
+    }
     setState(() {});
     super.didChangeDependencies();
   }
 
   void _handleCallback(List<CustomerInfo> customerInfos) {
-    if (customerInfos.isNotEmpty) {
-      _fields.entries.forEach((field) {
-        final customerInfo = customerInfos.firstWhereOrNull((element) =>
-            element.featureCustomerId == field.value.featureCustomerId);
+    _fields.entries.forEach((field) {
+      final customerInfo = customerInfos.firstWhereOrNull((element) =>
+          element.featureCustomerId == field.value.featureCustomerId);
+      if (!field.key.isIdentity!) {
         if (customerInfo != null) {
           _fields[field.key] = customerInfo;
+        } else {
+          _fields[field.key] = CustomerInfo(
+            featureCustomerId: _fields[field.key]!.featureCustomerId,
+          );
         }
-      });
-    }
+      }
+    });
+
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Column(
@@ -97,44 +109,44 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
               child: CustomScrollView(
             physics: kPhysics,
             slivers: [
-              SliverToBoxAdapter(
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.w),
-                  margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10.sqr)),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Thông tin định danh khách hàng',
-                              style: context.textTheme.subtitle1,
-                            ),
-                            SvgPicture.asset(AppIcons.barcode)
-                          ],
+              if (isHasIdentity)
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.w),
+                    margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(10.sqr)),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Thông tin định danh khách hàng',
+                                style: context.textTheme.subtitle1,
+                              ),
+                              SvgPicture.asset(AppIcons.barcode)
+                            ],
+                          ),
                         ),
-                      ),
-                      IdentityForm(
-                        fields: _fields,
-                        identifyCubit: _identifyCubit,
-                      ),
-                    ],
+                        IdentityForm(
+                          fields: _fields,
+                          identifyCubit: _identifyCubit,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
               SliverToBoxAdapter(
                 child: BlocConsumer<IdentifyCubit, IdentifyState>(
                   bloc: _identifyCubit,
                   listener: (context, state) {
                     if (state is IdentifySuccess) {
                       _handleCallback(state.customerInfos);
-                      Fx.log(state.customerInfos);
                     }
                   },
                   builder: (context, state) {

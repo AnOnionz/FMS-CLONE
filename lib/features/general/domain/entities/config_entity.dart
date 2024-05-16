@@ -3,11 +3,9 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
-import 'package:string_validator_plus/string_validator_plus.dart';
-
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:isar/isar.dart';
 
 import '../../../../core/constant/type_def.dart';
 
@@ -202,6 +200,21 @@ class FeatureEntity {
   String toString() {
     return 'FeatureEntity(id: $id, name: $name, type: $type, ordinal: $ordinal, dependentOnFeatureIds: $dependentOnFeatureIds, featureAttendance: $featureAttendance, featureQuantities: $featureQuantities, featurePhotos: $featurePhotos, featureMultimedias: $featureMultimedias, featureOrder: $featureOrder, featureSchemes: $featureSchemes, featureCustomers: $featureCustomers, featureSamplings: $featureSamplings)';
   }
+}
+
+class EmbeddedFeatureEntity extends FeatureEntity {
+  final String? name;
+  final FeatureType? type;
+  final int? ordinal;
+  final List<int>? dependentOnFeatureIds;
+  final FeatureEntity feature;
+
+  EmbeddedFeatureEntity(
+      {required this.feature,
+      this.name,
+      this.type,
+      this.ordinal,
+      this.dependentOnFeatureIds});
 }
 
 @embedded
@@ -593,15 +606,8 @@ class FeatureCustomer {
           final RegExp regex = RegExp(
               r'^[_A-Za-z0-9-+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})\$*(\s?)');
 
-          // If the input value is null, assign an empty string to the variable
-          final emailNonNullValue = value ?? '';
-
-          // Check if the email is empty
-          if (emailNonNullValue.isEmpty) {
-            return "Email can't be empty";
-          }
           // Check if the email format matches the regular expression
-          else if (!regex.hasMatch(emailNonNullValue)) {
+          if (value.isNotEmptyAndNotNull && !regex.hasMatch(value!)) {
             return 'Email chưa chính xác';
           }
 
@@ -613,15 +619,8 @@ class FeatureCustomer {
           final RegExp regex =
               RegExp('/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/');
 
-          // If the input value is null, assign an empty string to the variable
-          final phoneNonNullValue = value ?? '';
-
-          // Check if the phone is empty
-          if (phoneNonNullValue.isEmpty) {
-            return "Phone number can't be empty";
-          }
           // Check if the phone format matches the regular expression
-          else if (!regex.hasMatch(phoneNonNullValue)) {
+          if (value.isNotEmptyAndNotNull && !regex.hasMatch(value!)) {
             return 'Số điện thoại chưa chính xác';
           }
           // If the phone is valid, return null (no error message)

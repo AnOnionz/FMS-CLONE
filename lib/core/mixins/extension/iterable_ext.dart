@@ -290,8 +290,11 @@ extension IterableBasics2<T> on Iterable<T> {
   /// ['a', 'b'].firstOrNull(); // 'a'
   /// [].firstOrNull();         // null
   /// ```
-  T firstOrNull() {
-    return firstOrElse(() => null as T);
+
+  T? get firstOrNull {
+    final iterator = this.iterator;
+    if (iterator.moveNext()) return iterator.current;
+    return null;
   }
 
   /// Returns the last element. If there is no last element the [orElse]

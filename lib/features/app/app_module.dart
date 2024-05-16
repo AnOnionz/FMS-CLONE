@@ -9,6 +9,7 @@ import 'package:fms/features/crawl/crawl.module.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/lock/lock_module.dart';
 import 'package:fms/features/note/note_module.dart';
+import 'package:fms/features/order/history_exchange_module.dart';
 import 'package:fms/features/order/order_module.dart';
 import 'package:fms/features/report/report_module.dart';
 import 'package:fms/features/setting/setting_module.dart';
@@ -65,6 +66,8 @@ class AppModule extends Module {
         module: NoteModule(), transition: TransitionType.fadeIn);
     r.module(OrderModule.route,
         module: OrderModule(), transition: TransitionType.fadeIn);
+    r.module(HistoryExchangeModule.route,
+        module: HistoryExchangeModule(), transition: TransitionType.fadeIn);
     r.module(ReportModule.route,
         module: ReportModule(), transition: TransitionType.fadeIn);
     r.module(SettingModule.route,
