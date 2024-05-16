@@ -265,6 +265,9 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                       ? () {
                           widget.onSaveData(selectedItems.entries
                               .map((e) => e.value)
+                              .where((element) =>
+                                  element.quantity != null &&
+                                  element.quantity! > 0)
                               .toList());
                           widget.onNext();
                         }

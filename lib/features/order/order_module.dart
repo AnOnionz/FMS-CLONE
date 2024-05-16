@@ -13,6 +13,7 @@ import 'package:fms/features/order/presentation/pages/barcode_scanner_page.dart'
 
 import '../../routes/routes.dart';
 import 'data/datasources/order_remote_datasource.dart';
+import 'domain/usecases/update_order_usecase.dart';
 import 'presentation/bloc/order_bloc.dart';
 import 'presentation/pages/order_page.dart';
 import 'presentation/pages/success_page.dart';
@@ -21,7 +22,6 @@ class OrderModule extends Module {
   static const String route = '/customerInformationCapturing/';
   static const String productBarcodeScanner = 'product_barcode_scanner';
   static const String success = 'success';
-  static const String updateSuccess = 'update_success';
 
   @override
   List<Module> get imports => [ImageModule()];
@@ -35,6 +35,7 @@ class OrderModule extends Module {
     i.addLazySingleton(GetOrdersNotCompletedUsecase.new);
     i.addLazySingleton(GetOrdersUsecase.new);
     i.addLazySingleton(CreateOrderUsecase.new);
+    i.addLazySingleton(UpdateOrderUsecase.new);
     i.add(IdentifyCubit.new);
     i.add(OrderBloc.new);
   }
@@ -55,12 +56,6 @@ class OrderModule extends Module {
       Routes.root + success,
       child: (_) => SuccessPage(
         generalFeature: r.args.data as GeneralFeatureData,
-      ),
-    );
-    r.child(
-      Routes.root + updateSuccess,
-      child: (_) => SuccessPage(
-        isUpdate: true,
       ),
     );
   }

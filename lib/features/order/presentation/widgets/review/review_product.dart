@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/presentation/widgets/review/review_container.dart';
@@ -22,9 +23,22 @@ class ReviewProduct extends StatefulWidget {
 
 class _ReviewProductState extends State<ReviewProduct> {
   final Map<OrderProduct, PurchaseEntity> _items = {};
-  late final int totalPrice;
+  late int totalPrice;
+
   @override
-  void initState() {
+  void didChangeDependencies() {
+    _handleProducts();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant ReviewProduct oldWidget) {
+    _items.clear();
+    _handleProducts();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _handleProducts() {
     widget.purchases?.forEach((purchase) {
       final product = widget.products.firstWhereOrNull(
           (element) => element.id == purchase.featureOrderProductId);
@@ -37,7 +51,7 @@ class _ReviewProductState extends State<ReviewProduct> {
         (previousValue, element) =>
             previousValue +
             (element.value.quantity ?? 0) * (element.key.price ?? 0));
-    super.initState();
+    setState(() {});
   }
 
   @override

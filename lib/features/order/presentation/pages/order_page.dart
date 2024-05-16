@@ -15,6 +15,7 @@ import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
+import 'package:fms/features/order/history_exchange_module.dart';
 import 'package:fms/features/order/order_module.dart';
 import 'package:fms/features/order/presentation/bloc/order_bloc.dart';
 import 'package:fms/features/order/presentation/pages/purchase_page.dart';
@@ -48,11 +49,11 @@ class _OrderPageState extends State<OrderPage> {
   Completer<OrderEntity> _completer = Completer();
   late OrderEntity orderEntity;
   late List<Widget> _body = [];
-  late List<StepData> _steps = [];
+  List<StepData> _steps = [];
 
   late StreamSubscription<OrderState>? _orderSubscription;
   bool get isEditing => widget.order != null;
-  late int _curr = 0;
+  int _curr = 0;
 
   bool isSummary = false;
 
@@ -70,7 +71,12 @@ class _OrderPageState extends State<OrderPage> {
       }
       if (state is OrderUpdateSuccess) {
         OverlayManager.hide();
-        context.nextRoute(OrderModule.updateSuccess);
+        context
+            .nextRoute(HistoryExchangeModule.updateSuccess,
+                arguments: state.order)
+            .then((value) {
+          context.pop(value);
+        });
       }
       if (state is OrderUpdateFailure) {
         OverlayManager.hide();
@@ -133,6 +139,23 @@ class _OrderPageState extends State<OrderPage> {
     onNext();
   }
 
+  bool canSkip(StepData? step) {
+    switch (step.runtimeType) {
+      case CustomerStep:
+        return (orderEntity.customerInfos ?? []).isNotEmpty;
+      case PurchaseStep:
+        return (orderEntity.purchases ?? []).isNotEmpty;
+      case ExchangeStep:
+        return (orderEntity.exchanges ?? []).isNotEmpty;
+      case SamplingStep:
+        return (orderEntity.samplings ?? []).isNotEmpty;
+      case PhotoStep:
+        return (orderEntity.photos ?? []).isNotEmpty;
+      default:
+        return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -157,14 +180,16 @@ class _OrderPageState extends State<OrderPage> {
                   widget.entity.feature.featureOrder!.isCustomerRequired!
               ? null
               : TextButton(
-                  onPressed: () => showWarning(
-                      title: 'Xác nhận bỏ qua bước này',
-                      message: 'Thông tin sẽ không được ghi nhận',
-                      icon: SvgPicture.asset(AppIcons.requestSkip),
-                      btnText: 'Bỏ qua',
-                      onPressed: () {
-                        onSkip(_steps[_curr]);
-                      }),
+                  onPressed: canSkip(_steps.elementAtOrNull(_curr))
+                      ? () => onSkip(_steps[_curr])
+                      : () => showWarning(
+                          title: 'Xác nhận bỏ qua bước này',
+                          message: 'Thông tin sẽ không được ghi nhận',
+                          icon: SvgPicture.asset(AppIcons.requestSkip),
+                          btnText: 'Bỏ qua',
+                          onPressed: () {
+                            onSkip(_steps[_curr]);
+                          }),
                   child: Text(
                     'Skip',
                     style: context.textTheme.body1,
@@ -279,7 +304,11 @@ class _OrderPageState extends State<OrderPage> {
     int index = 0;
     final time = await _networkTimeService.ntpDateTime();
     orderEntity = isEditing
-        ? widget.order!.copyWith(dataTimestamp: time)
+        ? widget.order!.copyWith(
+            dataTimestamp: time,
+            attendanceId: widget.entity.general.attendance!.id,
+            featureId: widget.entity.feature.id,
+          )
         : OrderEntity(
             dataUuid: Uuid().v1(),
             dataTimestamp: time,

@@ -13,7 +13,11 @@ class OrderCreateLoading extends OrderState {}
 
 class OrderCreateSuccess extends OrderState {}
 
-class OrderUpdateSuccess extends OrderState {}
+class OrderUpdateSuccess extends OrderState {
+  final OrderEntity order;
+
+  OrderUpdateSuccess(this.order);
+}
 
 class OrderUpdateFailure extends OrderState {
   final Failure failure;

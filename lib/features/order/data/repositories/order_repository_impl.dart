@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/data/datasources/order_local_datasource.dart';
@@ -55,12 +56,16 @@ class OrderRepositoryImpl extends Repository
   @override
   Future<Result<void>> createOrder({required OrderEntity order}) {
     return todo(() async {
-      order.photos!.forEach((photo) {
-        _local.cachePhotoToLocal(photo);
-      });
-      _local.cacheOrderToLocal(order);
-      order.localPhotos.addAll(order.photos!);
-      db.writeTxnSync(() => order.localPhotos.saveSync());
+      if (order.photos != null) {
+        order.photos!.forEach((photo) {
+          _local.cachePhotoToLocal(photo);
+        });
+        _local.cacheOrderToLocal(order);
+        order.localPhotos.addAll(order.photos!);
+        db.writeTxnSync(() => order.localPhotos.saveSync());
+      } else {
+        _local.cacheOrderToLocal(order);
+      }
 
       final newOrder = await _remote.createOrder(order);
 
@@ -76,13 +81,19 @@ class OrderRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<void>> updateOrder({required OrderEntity order}) async {
+  Future<Result<OrderEntity>> fetchOrder({required OrderEntity order}) async {
+    return todo(() async {
+      final thatOrder = await _remote.fetchOrder(order);
+      return Right(thatOrder!);
+    });
+  }
+
+  @override
+  Future<Result<OrderEntity>> updateOrder({required OrderEntity order}) async {
     return todo(() async {
       final newOrder = await _remote.updateOrder(order);
-      if (newOrder != null) {
-        await updatePhotos(order, newOrder.id!);
-      }
-      return Right(Never);
+      await updatePhotos(order, newOrder!.id!);
+      return Right(newOrder);
     });
   }
 

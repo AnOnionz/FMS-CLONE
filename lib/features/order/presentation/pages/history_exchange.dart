@@ -14,6 +14,7 @@ import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
 import '../../../../core/widgets/popup.dart';
 import '../../../home/domain/entities/general_item_data.dart';
+import '../../history_exchange_module.dart';
 import '../widgets/history/history_exchange_simplify_item.dart';
 
 class HistoryExchangePage extends StatefulWidget {
@@ -82,11 +83,24 @@ class _HistoryExchangePageState extends State<HistoryExchangePage> {
                     return ListView.builder(
                       itemCount: state.orders.length,
                       physics: kPhysics,
-                      itemBuilder: (context, index) =>
-                          HistoryExchangeSimplifyItem(
-                              order: state.orders[index],
-                              feature: widget.entity.feature
-                                  as EmbeddedFeatureEntity),
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () async {
+                          final success = await context.nextRoute(
+                              HistoryExchangeModule.historyDetail,
+                              arguments: [
+                                (widget.entity.feature as EmbeddedFeatureEntity)
+                                    .feature,
+                                state.orders[index]
+                              ]);
+                          if (success == true) {
+                            fetchOrders();
+                          }
+                        },
+                        child: HistoryExchangeSimplifyItem(
+                            order: state.orders[index],
+                            feature:
+                                widget.entity.feature as EmbeddedFeatureEntity),
+                      ),
                     );
                   }
                   if (state is HistoryExchangeFailure) {

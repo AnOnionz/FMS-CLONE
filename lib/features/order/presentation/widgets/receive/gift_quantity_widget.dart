@@ -166,38 +166,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
                                 ],
                               ),
                             ))
-                        .toList()
-                    //  [
-                    //   Expanded(
-                    //     child: Row(
-                    //       children: [
-                    //         Expanded(
-                    //             flex: 3,
-                    //             child: Text('x1',
-                    //                 style: context.textTheme.subtitle1)),
-                    //         Expanded(
-                    //             flex: 15,
-                    //             child: Text('Tên quà A',
-                    //                 style: context.textTheme.body1)),
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   Expanded(
-                    //     child: Row(
-                    //       children: [
-                    //         Expanded(
-                    //             flex: 3,
-                    //             child: Text('x1',
-                    //                 style: context.textTheme.subtitle1)),
-                    //         Expanded(
-                    //             flex: 15,
-                    //             child: Text('Tên quà B',
-                    //                 style: context.textTheme.body1)),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ],
-                    ),
+                        .toList()),
               ),
             ),
             Flexible(

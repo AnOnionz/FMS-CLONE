@@ -13,7 +13,7 @@ import 'package:fms/features/order/history_exchange_module.dart';
 import '../../../general/presentation/page/mixin_general.dart';
 import '../widgets/exchange_detail.dart';
 
-class HistoryExchangeDetailPage extends StatelessWidget with GeneralDataMixin {
+class HistoryExchangeDetailPage extends StatefulWidget {
   final OrderEntity order;
   final FeatureEntity feature;
 
@@ -24,17 +24,37 @@ class HistoryExchangeDetailPage extends StatelessWidget with GeneralDataMixin {
   });
 
   @override
+  State<HistoryExchangeDetailPage> createState() =>
+      _HistoryExchangeDetailPageState();
+}
+
+class _HistoryExchangeDetailPageState extends State<HistoryExchangeDetailPage>
+    with GeneralDataMixin {
+  late OrderEntity _order = widget.order;
+  bool isUpdateSuccess = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(
+        onBack: () => context.pop(isUpdateSuccess),
         title: 'Lịch sử đơn hàng',
-        action: order.status == SyncStatus.synced
+        action: _order.status == SyncStatus.synced
             ? GestureDetector(
-                onTap: () => context
-                        .nextRoute(HistoryExchangeModule.edit, arguments: [
-                      GeneralFeatureData(general: general, feature: feature),
-                      order
-                    ]),
+                onTap: () async {
+                  final a = await context.nextRoute(HistoryExchangeModule.edit,
+                      arguments: [
+                        GeneralFeatureData(
+                            general: general, feature: widget.feature),
+                        _order
+                      ]);
+                  if (a != null) {
+                    setState(() {
+                      _order = a as OrderEntity;
+                      isUpdateSuccess = true;
+                    });
+                  }
+                },
                 child: Padding(
                   padding: EdgeInsets.only(right: 16.w),
                   child: SvgPicture.asset(AppIcons.edit),
@@ -44,8 +64,8 @@ class HistoryExchangeDetailPage extends StatelessWidget with GeneralDataMixin {
       body: Padding(
         padding: EdgeInsets.only(top: 30.h),
         child: ExchangeDetail(
-          order: order,
-          feature: feature,
+          order: _order,
+          feature: widget.feature,
           isHistory: true,
         ),
       ),

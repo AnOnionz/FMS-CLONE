@@ -34,7 +34,20 @@ class _ReviewGiftState extends State<ReviewGift> {
       .toList();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    _handleGifts();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant ReviewGift oldWidget) {
+    _exchangeProceeds.clear();
+    _gifts.clear();
+    _handleGifts();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _handleGifts() {
     widget.exchanges.forEach((exchange) {
       final schemeExchange = schemeExchanges.firstWhereOrNull(
           (element) => element.id == exchange.featureSchemeExchangeId);
@@ -57,7 +70,7 @@ class _ReviewGiftState extends State<ReviewGift> {
     });
     total = _gifts.entries
         .fold(0, (previousValue, element) => previousValue + element.value);
-    super.initState();
+    setState(() {});
   }
 
   @override

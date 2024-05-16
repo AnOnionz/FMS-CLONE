@@ -128,7 +128,7 @@ class OrderEntity extends DataEntity {
 
   @override
   String toString() {
-    return 'OrderEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, attendanceId: $attendanceId, featureId: $featureId, customerInfos: $customerInfos, purchases: $purchases, exchanges: $exchanges, samplings: $samplings, photos: $photos)';
+    return 'OrderEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, attendanceId: $attendanceId, featureId: $featureId, customerInfos: $customerInfos, purchases: $purchases, exchanges: $exchanges, samplings: $samplings)';
   }
 
   OrderEntity copyWith({
@@ -168,7 +168,8 @@ class OrderEntity extends DataEntity {
       identical(this, other) ||
       other is OrderEntity &&
           runtimeType == other.runtimeType &&
-          dataUuid == other.dataUuid;
+          dataUuid == other.dataUuid &&
+          dataTimestamp.isAtSameMomentAs(other.dataTimestamp);
 
   @override
   int get hashCode => dataUuid.hashCode;

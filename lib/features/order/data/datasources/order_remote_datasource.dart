@@ -11,6 +11,7 @@ abstract class IOrderRemoteDataSource {
       required int attendanceId,
       required int featureId});
   Future<OrderEntity?> createOrder(OrderEntity order);
+  Future<OrderEntity?> fetchOrder(OrderEntity order);
   Future<OrderEntity?> updateOrder(OrderEntity order);
   Future<PhotoEntity?> createPhoto(
       {required PhotoEntity photo,
@@ -62,6 +63,16 @@ class OrderRemoteDataSource extends ImagesRemoteDataSource
         path:
             '/app/attendances/${order.attendanceId}/features/${order.featureId}/orders',
         data: data);
+
+    return parseJson<OrderEntity>((json: _resp, fromJson: OrderEntity.fromMap));
+  }
+
+  @override
+  Future<OrderEntity?> fetchOrder(OrderEntity order) async {
+    final _resp = await dio.get(
+      path:
+          '/app/attendances/${order.attendanceId}/features/${order.featureId}/order/${order.id}',
+    );
 
     return parseJson<OrderEntity>((json: _resp, fromJson: OrderEntity.fromMap));
   }

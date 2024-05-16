@@ -246,7 +246,7 @@ extension IterableBasics2<T> on Iterable<T> {
   /// ```dart
   /// ['a', 'b'].elementAtOrElse(2, () => ''); // ''
   /// ```
-  T elementAtOrElse(int index, T Function() orElse) {
+  T? elementAtOrElse(int index, T? Function() orElse) {
     RangeError.checkNotNegative(index, 'index');
     ArgumentError.checkNotNull(index);
     ArgumentError.checkNotNull(orElse, 'orElse');
@@ -265,8 +265,8 @@ extension IterableBasics2<T> on Iterable<T> {
   /// ```dart
   /// ['a', 'b'].elementAtOrNull(2); // null
   /// ```
-  T elementAtOrNull(int index) {
-    return elementAtOrElse(index, () => null as T);
+  T? elementAtOrNull(int index) {
+    return elementAtOrElse(index, () => null);
   }
 
   /// Returns the first element. If there is no first element the [orElse]

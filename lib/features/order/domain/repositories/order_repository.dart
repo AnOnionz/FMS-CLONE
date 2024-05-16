@@ -11,6 +11,9 @@ abstract class OrderRepository {
   Future<Result<void>> createOrder({
     required OrderEntity order,
   });
+  Future<Result<OrderEntity>> fetchOrder({
+    required OrderEntity order,
+  });
   Future<Result<void>> updateOrder({
     required OrderEntity order,
   });

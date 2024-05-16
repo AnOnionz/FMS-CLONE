@@ -20,9 +20,20 @@ class ReviewSampling extends StatefulWidget {
 
 class _ReviewSamplingState extends State<ReviewSampling> {
   final Map<FeatureSampling, SamplingEntity> _items = {};
-  late final int total;
+
   @override
-  void initState() {
+  void didChangeDependencies() {
+    _handleSamplings();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant ReviewSampling oldWidget) {
+    _handleSamplings();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _handleSamplings() {
     widget.samplings?.forEach((sampling) {
       final item = widget.featureSamplings.firstWhereOrNull(
           (element) => element.id == sampling.featureSamplingId);
@@ -30,15 +41,17 @@ class _ReviewSamplingState extends State<ReviewSampling> {
         _items[item] = sampling;
       }
     });
-    total = _items.entries.fold(
-        0,
-        (previousValue, element) =>
-            previousValue + (element.value.quantity ?? 0));
-    super.initState();
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final total = _items.entries.fold(
+        0,
+        (previousValue, element) =>
+            previousValue + (element.value.quantity ?? 0));
+    ;
     return ReviewContainer(
         margin: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 16.h),
         child: Column(

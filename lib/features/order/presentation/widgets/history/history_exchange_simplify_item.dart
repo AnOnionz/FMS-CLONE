@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/history_exchange_module.dart';
@@ -36,6 +35,9 @@ class _HistoryExchangeSimplifyItemState
           (element) => element.featureCustomerId == featureCustomer.id);
       if (customerInfo != null) {
         _identityField[featureCustomer] = customerInfo;
+      } else {
+        _identityField[featureCustomer] =
+            CustomerInfo(featureCustomerId: featureCustomer.id, value: '');
       }
     });
     super.initState();
@@ -43,65 +45,59 @@ class _HistoryExchangeSimplifyItemState
 
   @override
   Widget build(BuildContext context) {
-    Fx.log(widget.order);
-    return GestureDetector(
-      onTap: () => context.nextRoute(HistoryExchangeModule.historyDetail,
-          arguments: [widget.feature.feature, widget.order]),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
-        padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
-        decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(16.sqr)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (final item in _identityField.entries)
-              Row(
-                children: [
-                  Text(
-                    '${item.key.name}: ',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.nobel),
-                  ),
-                  Text(
-                    '${item.value.value}',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.black),
-                  )
-                ],
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 16.w),
+      padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+      decoration: BoxDecoration(
+          color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final item in _identityField.entries)
+            Row(
+              children: [
+                Text(
+                  '${item.key.name}: ',
+                  style:
+                      context.textTheme.body1?.copyWith(color: AppColors.nobel),
+                ),
+                Text(
+                  '${item.value.value}',
+                  style:
+                      context.textTheme.body1?.copyWith(color: AppColors.black),
+                )
+              ],
+            ),
+          Row(
+            children: [
+              Text(
+                'Thời gian: ',
+                style:
+                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
               ),
-            Row(
-              children: [
-                Text(
-                  'Thời gian: ',
-                  style:
-                      context.textTheme.body1?.copyWith(color: AppColors.nobel),
-                ),
-                Text(
-                  widget.order.dataTimestamp.formatBy(khmdMy),
-                  style:
-                      context.textTheme.body1?.copyWith(color: AppColors.black),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  'Trạng thái: ',
-                  style:
-                      context.textTheme.body1?.copyWith(color: AppColors.nobel),
-                ),
-                Text(
-                  widget.order.status.name,
-                  style:
-                      context.textTheme.body1?.copyWith(color: AppColors.black),
-                )
-              ],
-            ),
-          ],
-        ),
+              Text(
+                widget.order.dataTimestamp.formatBy(khmdMy),
+                style:
+                    context.textTheme.body1?.copyWith(color: AppColors.black),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'Trạng thái: ',
+                style:
+                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
+              ),
+              Text(
+                widget.order.status.name,
+                style:
+                    context.textTheme.body1?.copyWith(color: AppColors.black),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
