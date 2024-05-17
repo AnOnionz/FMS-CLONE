@@ -235,6 +235,18 @@ class CustomerInfo {
       options: options ?? this.options,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CustomerInfo &&
+          runtimeType == other.runtimeType &&
+          featureCustomerId == other.featureCustomerId &&
+          value == other.value &&
+          options == other.options;
+
+  @override
+  int get hashCode => featureCustomerId.hashCode;
 }
 
 @embedded

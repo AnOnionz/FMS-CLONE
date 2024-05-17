@@ -14,10 +14,14 @@ import '../../../domain/entities/order_entity.dart';
 class IdentityForm extends StatefulWidget {
   final Map<FeatureCustomer, CustomerInfo> fields;
   final IdentifyCubit identifyCubit;
+  final Function(Map<FeatureCustomer, CustomerInfo> fields) onFieldChanged;
+  final Function(Map<FeatureCustomer, CustomerInfo> fields) onIdentify;
   const IdentityForm({
     Key? key,
     required this.identifyCubit,
     required this.fields,
+    required this.onFieldChanged,
+    required this.onIdentify,
   }) : super(key: key);
 
   @override
@@ -27,18 +31,27 @@ class IdentityForm extends StatefulWidget {
 class _IdentityFormState extends State<IdentityForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late final _fields =
-      widget.fields.entries.where((field) => field.key.isIdentity!).toList();
+  late final Map<FeatureCustomer, CustomerInfo> _fields = {};
 
   late final generalFeature = DataFeature.of(context).data;
 
   bool validate() {
-    return !_fields.any((field) {
+    return !_fields.entries.any((field) {
       if (field.key.isRequired!) {
         return field.value.value.isEmptyOrNull && field.value.options == null;
       }
       return false;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    _fields.clear();
+    widget.fields.forEach((key, value) {
+      _fields[key] = value.copyWith();
+    });
+    setState(() {});
+    super.didChangeDependencies();
   }
 
   @override
@@ -48,13 +61,14 @@ class _IdentityFormState extends State<IdentityForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ..._fields.mapIndexed((index, entry) {
+            ..._fields.entries.toList().mapIndexed((index, entry) {
               final isLast = index == _fields.length - 1;
               return Padding(
                 padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
                 child: CustomerField(
                   onChanged: () {
                     setState(() {});
+                    widget.onFieldChanged(_fields);
                   },
                   featureCustomer: entry.key,
                   isLast: isLast,
@@ -99,10 +113,10 @@ class _IdentityFormState extends State<IdentityForm> {
                   onPressed: isValidate
                       ? () {
                           FocusManager.instance.primaryFocus?.unfocus();
-
+                          widget.onIdentify(_fields);
                           widget.identifyCubit.identify(
                               identifyFields:
-                                  _fields.map((e) => e.value).toList(),
+                                  _fields.entries.map((e) => e.value).toList(),
                               attendanceId:
                                   generalFeature.general.attendance!.id!,
                               featureId: generalFeature.feature.id!);

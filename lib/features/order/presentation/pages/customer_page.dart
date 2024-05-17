@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
@@ -46,17 +47,23 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
   late final List<CustomerInfo> customerInfos =
       DataFeature.of(context).order.customerInfos ?? [];
 
-  Map<FeatureCustomer, CustomerInfo> _fields = {};
+  Map<FeatureCustomer, CustomerInfo> _identityFields = {};
+  Map<FeatureCustomer, CustomerInfo> _infomationFields = {};
 
-  bool get validate => !_fields.entries.any((field) {
-        if (field.key.isRequired!) {
-          return field.value.value.isEmptyOrNull && field.value.options == null;
-        }
-        return false;
-      });
+  bool get validate =>
+      validateFields(_identityFields) && validateFields(_identityFields);
 
-  bool get isHasIdentity =>
-      _fields.keys.any((element) => element.isIdentity == true);
+  bool validateFields(Map<FeatureCustomer, CustomerInfo> fields) {
+    return !fields.entries.any((field) {
+      if (field.key.isRequired!) {
+        return field.value.value.isEmptyOrNull && field.value.options == null;
+      }
+      return false;
+    });
+  }
+
+  bool get isHasIdentity => _identityFields.isNotEmpty;
+  bool isChangedIdentity = false;
 
   @override
   void didChangeDependencies() {
@@ -64,10 +71,17 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
     featureCustomers.forEach((featureCustomer) {
       final customerInfo = customerInfos.firstWhereOrNull(
           (element) => element.featureCustomerId == featureCustomer.id);
-      _fields[featureCustomer] = customerInfo ??
-          CustomerInfo(
-            featureCustomerId: featureCustomer.id,
-          );
+      if (featureCustomer.isIdentity == true) {
+        _identityFields[featureCustomer] = customerInfo ??
+            CustomerInfo(
+              featureCustomerId: featureCustomer.id,
+            );
+      } else {
+        _infomationFields[featureCustomer] = customerInfo ??
+            CustomerInfo(
+              featureCustomerId: featureCustomer.id,
+            );
+      }
     });
     if (!isHasIdentity) {
       _identifyCubit.setIdentify();
@@ -76,21 +90,23 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
     super.didChangeDependencies();
   }
 
+  bool isSameAsIdentity(Map<FeatureCustomer, CustomerInfo> fields) {
+    return _identityFields.valuesList().containsAll(fields.valuesList());
+  }
+
   void _handleCallback(List<CustomerInfo> customerInfos) {
-    _fields.entries.forEach((field) {
+    _infomationFields.entries.forEach((field) {
       final customerInfo = customerInfos.firstWhereOrNull((element) =>
           element.featureCustomerId == field.value.featureCustomerId);
-      if (!field.key.isIdentity!) {
-        if (customerInfo != null) {
-          _fields[field.key] = customerInfo;
-        } else {
-          _fields[field.key] = CustomerInfo(
-            featureCustomerId: _fields[field.key]!.featureCustomerId,
-          );
-        }
+      if (customerInfo != null) {
+        _infomationFields[field.key] = customerInfo;
+      } else {
+        _infomationFields[field.key] = CustomerInfo(
+          featureCustomerId: _infomationFields[field.key]!.featureCustomerId,
+        );
       }
     });
-
+    isChangedIdentity = false;
     setState(() {});
   }
 
@@ -131,8 +147,19 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                           ),
                         ),
                         IdentityForm(
-                          fields: _fields,
+                          fields: _identityFields,
                           identifyCubit: _identifyCubit,
+                          onIdentify: (fields) {
+                            fields.forEach((key, value) {
+                              _identityFields[key] = value.copyWith();
+                            });
+                          },
+                          onFieldChanged: (fields) {
+                            setState(() {
+                              isChangedIdentity = !isSameAsIdentity(fields);
+                            });
+                            Fx.log(isChangedIdentity);
+                          },
                         ),
                       ],
                     ),
@@ -192,7 +219,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                             ),
                             InfomationForm(
                               formKey: _formKey,
-                              fields: _fields,
+                              fields: _infomationFields,
                             ),
                           ],
                         ),
@@ -215,11 +242,16 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: BottomButtons(
                   onBack: null,
-                  onNext: _identifyCubit.state is IdentifySuccess && validate
+                  onNext: _identifyCubit.state is IdentifySuccess &&
+                          validate &&
+                          !isChangedIdentity
                       ? () {
                           if (_formKey.currentState!.validate()) {
-                            widget.onSaveData(
-                                _fields.entries.map((e) => e.value).toList());
+                            widget.onSaveData(_identityFields
+                                .addAllT(_infomationFields)
+                                .entries
+                                .map((e) => e.value)
+                                .toList());
                             widget.onNext();
                           }
                         }

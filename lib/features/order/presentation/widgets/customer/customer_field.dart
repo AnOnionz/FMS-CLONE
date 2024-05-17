@@ -30,20 +30,20 @@ class _CustomerFieldState extends State<CustomerField> {
       return CustomerCheckBoxGroup(
           customerInfo: widget.customerInfo,
           onChanged: (value) {
-            widget.onChanged();
             setState(() {
               widget.customerInfo.options = value;
             });
+            widget.onChanged();
           },
           featureCustomer: widget.featureCustomer);
     if (widget.featureCustomer.dataType == 'radio')
       return CustomerRadioGroup(
           customerInfo: widget.customerInfo,
           onChanged: (value) {
-            widget.onChanged();
             setState(() {
               widget.customerInfo.options = value;
             });
+            widget.onChanged();
           },
           featureCustomer: widget.featureCustomer);
 
@@ -52,10 +52,10 @@ class _CustomerFieldState extends State<CustomerField> {
       label: widget.featureCustomer.name!,
       isRequired: widget.featureCustomer.isRequired!,
       onChanged: (value) {
-        widget.onChanged();
         setState(() {
           widget.customerInfo.value = value;
         });
+        widget.onChanged();
       },
       textInputType: widget.featureCustomer.inputType(),
       validate: widget.featureCustomer.validate(),
