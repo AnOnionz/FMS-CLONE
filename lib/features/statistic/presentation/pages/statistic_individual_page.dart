@@ -11,8 +11,8 @@ import '../widgets/statistic_genaral.dart';
 import '../widgets/statistic_gift.dart';
 import '../widgets/statistic_sampling.dart';
 
-class StatisticSpPage extends StatisticDefaultPage {
-  const StatisticSpPage() : super(type: StatisticType.sp);
+class StatisticIndividualPage extends StatisticDefaultPage {
+  const StatisticIndividualPage() : super(type: StatisticType.sp);
 }
 
 class StatisticOutletPage extends StatisticDefaultPage {

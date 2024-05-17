@@ -1,9 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/features/statistic/data/datasources/statistic_remote_datasource.dart';
+import 'package:fms/features/statistic/data/repositories/statistic_repository_impl.dart';
 import 'package:fms/features/statistic/presentation/bloc/statistic_bloc.dart';
 
 import '../../routes/routes.dart';
+import 'presentation/pages/statistic_individual_page.dart';
 import 'presentation/pages/statistic_page.dart';
-import 'presentation/pages/statistic_sp_page.dart';
 
 class StatisticModule extends Module {
   static const String route = '/onlineTeamSummaryReport/';
@@ -15,14 +17,16 @@ class StatisticModule extends Module {
   List<Module> get imports => [];
   @override
   void binds(Injector i) {
-    i.add<StatisticBloc>(StatisticBloc.new);
+    i.addLazySingleton(StatisticRemoteDataSource.new);
+    i.addLazySingleton(StatisticRepositoryImpl.new);
+    i.add(StatisticBloc.new);
   }
 
   @override
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => StatisticPage(isSup: true),
+      child: (_) => StatisticPage(isTeam: true),
     );
 
     r.child(

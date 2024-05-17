@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/features/statistic/presentation/bloc/statistic_bloc.dart';
+import 'package:fms/features/statistic/statistic_module.dart';
 
 import '../../routes/routes.dart';
 import 'presentation/pages/statistic_page.dart';
@@ -8,11 +8,9 @@ class IndividualStatisticModule extends Module {
   static const String route = '/onlineIndividualSummaryReport/';
 
   @override
-  List<Module> get imports => [];
+  List<Module> get imports => [StatisticModule()];
   @override
-  void binds(Injector i) {
-    i.add<StatisticBloc>(StatisticBloc.new);
-  }
+  void binds(Injector i) {}
 
   @override
   void routes(RouteManager r) {

@@ -7,14 +7,14 @@ import 'package:fms/features/statistic/statistic_module.dart';
 
 import '../widgets/statistic_type_item.dart';
 
-class StatisticSupPage extends StatefulWidget {
-  const StatisticSupPage({super.key});
+class StatisticTeamPage extends StatefulWidget {
+  const StatisticTeamPage({super.key});
 
   @override
-  State<StatisticSupPage> createState() => _StatisticSupPageState();
+  State<StatisticTeamPage> createState() => _StatisticTeamPageState();
 }
 
-class _StatisticSupPageState extends State<StatisticSupPage> {
+class _StatisticTeamPageState extends State<StatisticTeamPage> {
   @override
   void dispose() {
     super.dispose();
