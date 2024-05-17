@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
@@ -42,6 +43,7 @@ class _HistoryExchangeDetailPageState extends State<HistoryExchangeDetailPage>
         action: _order.status == SyncStatus.synced
             ? GestureDetector(
                 onTap: () async {
+                  Fx.log(_order.photos);
                   final a = await context.nextRoute(HistoryExchangeModule.edit,
                       arguments: [
                         GeneralFeatureData(

@@ -168,8 +168,7 @@ class OrderEntity extends DataEntity {
       identical(this, other) ||
       other is OrderEntity &&
           runtimeType == other.runtimeType &&
-          dataUuid == other.dataUuid &&
-          dataTimestamp.isAtSameMomentAs(other.dataTimestamp);
+          dataUuid == other.dataUuid;
 
   @override
   int get hashCode => dataUuid.hashCode;

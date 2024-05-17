@@ -73,7 +73,7 @@ class _OrderPageState extends State<OrderPage> {
         OverlayManager.hide();
         context
             .nextRoute(HistoryExchangeModule.updateSuccess,
-                arguments: state.order)
+                arguments: orderEntity)
             .then((value) {
           context.pop(value);
         });
