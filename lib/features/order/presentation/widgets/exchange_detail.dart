@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 
