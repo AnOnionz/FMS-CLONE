@@ -43,7 +43,6 @@ class _HistoryExchangeDetailPageState extends State<HistoryExchangeDetailPage>
         action: _order.status == SyncStatus.synced
             ? GestureDetector(
                 onTap: () async {
-                  Fx.log(_order.photos);
                   final a = await context.nextRoute(HistoryExchangeModule.edit,
                       arguments: [
                         GeneralFeatureData(

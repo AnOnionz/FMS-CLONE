@@ -158,7 +158,6 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
                             setState(() {
                               isChangedIdentity = !isSameAsIdentity(fields);
                             });
-                            Fx.log(isChangedIdentity);
                           },
                         ),
                       ],
