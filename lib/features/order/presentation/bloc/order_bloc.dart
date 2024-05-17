@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/errors/failure.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
@@ -17,14 +18,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderCreateLoading());
       await createOrder(event.order);
       emit(OrderCreateSuccess());
-    });
-    on<UpdateOrder>(
-      (event, emit) async {
-        emit(OrderCreateLoading());
-        final execute = await updateOrder(event.order);
-        execute.fold((failure) => emit(OrderUpdateFailure(failure)),
-            (data) => emit(OrderUpdateSuccess(data)));
-      },
-    );
+    }, transformer: droppable());
+    on<UpdateOrder>((event, emit) async {
+      emit(OrderCreateLoading());
+      final execute = await updateOrder(event.order);
+      execute.fold((failure) => emit(OrderUpdateFailure(failure)),
+          (data) => emit(OrderUpdateSuccess(data)));
+    }, transformer: droppable());
   }
 }

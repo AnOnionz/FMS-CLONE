@@ -49,7 +49,11 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
 
   Future<void> _scanProductBarcode() async {
     FocusManager.instance.primaryFocus?.unfocus();
-    final _barcode = await context.nextRoute(OrderModule.productBarcodeScanner);
+    String? _barcode = null;
+    await context.nextRoute(OrderModule.productBarcodeScanner,
+        arguments: (String value) {
+      _barcode = value;
+    });
 
     if (_barcode == null) return;
 
@@ -60,12 +64,19 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
         onSelectedProduct(_product as OrderProduct);
       }
     } else {
-      showFailure(
-          title: 'Mã barcode không tồn tại',
-          message: 'Không tìm thấy mã barcode trong hệ thống',
-          btnText: 'Quét lại',
-          onPressed: () =>
-              Future.delayed(300.milliseconds, () => _scanProductBarcode()));
+      final _product = products.firstWhereOrNull(
+          (element) => element.productPackaging!.barcode == _barcode);
+
+      if (_product != null) {
+        onSelectedProduct(_product);
+      } else {
+        showFailure(
+            title: 'Mã barcode không tồn tại',
+            message: 'Không tìm thấy mã barcode trong hệ thống',
+            btnText: 'Quét lại',
+            onPressed: () =>
+                Future.delayed(300.milliseconds, () => _scanProductBarcode()));
+      }
     }
   }
 
