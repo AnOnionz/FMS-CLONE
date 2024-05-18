@@ -164,16 +164,21 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
                       final fuse = Fuzzy(
                           products
                               .map((e) => e.productPackaging!.barcode)
+                              .toSet()
                               .toList(),
                           options: FuzzyOptions(
                             tokenize: true,
                             threshold: 0.1,
                           ));
 
-                      final result = fuse.search(search).map((suggest) {
-                        return products.firstWhere((element) =>
-                            element.productPackaging!.barcode == suggest.item);
-                      }).toList();
+                      final result = <OrderProduct>[];
+                      fuse.search(search).forEach((suggest) {
+                        final sameAsBarcodeProducts = products.where(
+                            (element) =>
+                                element.productPackaging!.barcode ==
+                                suggest.item);
+                        result.addAll(sameAsBarcodeProducts);
+                      });
 
                       return result;
                     },

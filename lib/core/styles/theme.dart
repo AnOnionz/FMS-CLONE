@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fms/core/constant/fonts.dart';
 
 import '../constant/colors.dart';
 import '../constant/text_styles.dart';
@@ -34,6 +35,7 @@ const ScrollPhysics kPhysics =
 
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
+    fontFamily: AppFonts.lato,
     colorScheme: ColorScheme.light(
       background: AppColors.aliceBlue,
       primary: AppColors.blackRussian,

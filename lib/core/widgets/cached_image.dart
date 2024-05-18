@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 
 class CachedImage extends StatelessWidget {

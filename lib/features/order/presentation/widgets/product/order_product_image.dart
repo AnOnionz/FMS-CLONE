@@ -16,13 +16,6 @@ class OrderProductImage extends StatelessWidget {
         AppImages.product,
         width: 40.w,
       ));
-    return CachedImage(
-      imageUrl: product.imageUrl!,
-      errorWidget: (p0, p1, p2) => Center(
-          child: Image.asset(
-        AppImages.product,
-        width: 40.w,
-      )),
-    );
+    return CachedImage(imageUrl: product.imageUrl!);
   }
 }
