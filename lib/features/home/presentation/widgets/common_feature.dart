@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -38,13 +39,16 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
             itemCount: tasks!.length,
             itemBuilder: (context, index) {
               final feature = tasks![index];
+              final bool isOnline =
+                  feature.type == FeatureType.onlineTeamSummaryReport ||
+                      feature.type == FeatureType.onlineIndividualSummaryReport;
 
               return FeatureBox(
                 icon: AppIcons.sync,
                 name: feature.name!,
                 onPressed: () => context
                     .read<NecessaryBloc>()
-                    .add(NecessaryIn(feature: feature)),
+                    .add(NecessaryIn(feature: feature, isOnline: isOnline)),
               );
             },
           )

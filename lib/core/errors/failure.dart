@@ -77,7 +77,7 @@ class ServerDownFailure extends Failure {
 class DataNullFailure extends Failure {
   const DataNullFailure(
       {String? message, Object? error, StackTrace? stackTrace})
-      : super(message, error, stackTrace);
+      : super('Không có dữ liệu', error, stackTrace);
 }
 
 class DownloadFailure extends Failure {

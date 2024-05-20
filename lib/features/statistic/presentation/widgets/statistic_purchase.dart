@@ -5,13 +5,14 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/matter_container.dart';
 
 import '../../../../core/styles/theme.dart';
+
 import '../../domain/entities/statistic_entity.dart';
 
-class StatisticGift extends StatelessWidget {
+class StatisticPurchase extends StatelessWidget {
   final int total;
-  final List<ExchangeStatistic> exchanges;
-  const StatisticGift(
-      {super.key, required this.exchanges, required this.total});
+  final List<PurchaseStatistic> purchases;
+  const StatisticPurchase(
+      {super.key, required this.purchases, required this.total});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class StatisticGift extends StatelessWidget {
             padding: EdgeInsets.only(right: 24.w, bottom: 16.h),
             child: RichText(
                 text: TextSpan(
-                    text: 'Tổng số lượng quà phát ra:  ',
+                    text: 'Tổng sản lượng: ',
                     style: context.textTheme.body2
                         ?.copyWith(color: AppColors.black),
                     children: [
@@ -35,9 +36,9 @@ class StatisticGift extends StatelessWidget {
           Expanded(
               child: ListView.builder(
             physics: kPhysics,
-            itemCount: exchanges.length,
+            itemCount: purchases.length,
             itemBuilder: (context, index) {
-              final exchange = exchanges[index];
+              final purchase = purchases[index];
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
                 margin: EdgeInsets.symmetric(vertical: 4.h),
@@ -46,27 +47,20 @@ class StatisticGift extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.sqr),
                 ),
                 child: MatterContainer(
-                    leading: MatterImage(
-                        url: exchange.item != null
-                            ? exchange.item!.imageUrl
-                            : exchange.product!.imageUrl),
+                    leading: MatterImage(url: purchase.product!.imageUrl),
                     title: MatterInfoWidget(
-                      product: exchange.product,
-                      productPackaging: exchange.productPackaging,
-                      item: exchange.item,
-                      asset: exchange.item != null
-                          ? exchange.item!.itemTypeName!
-                          : exchange.product!.brandName!,
+                      product: purchase.product!,
+                      productPackaging: purchase.productPackaging!,
+                      asset: purchase.product!.brandName!,
                     ),
                     trailing: RichText(
                         text: TextSpan(
-                            text: (exchange.quantity ?? 0).toString(),
+                            text: (purchase.quantity ?? 0).toString(),
                             style: context.textTheme.body1
                                 ?.copyWith(color: AppColors.black),
                             children: [
                           TextSpan(
-                              text:
-                                  ' ${exchange.item != null ? exchange.item!.unitName : exchange.productPackaging!.unitName!}',
+                              text: ' ${purchase.productPackaging!.unitName!}',
                               style: context.textTheme.body1
                                   ?.copyWith(color: AppColors.nobel))
                         ]))),

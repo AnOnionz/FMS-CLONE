@@ -121,21 +121,29 @@ class _AttendancePageState extends State<AttendancePage> {
         OverlayManager.showLoading();
       }
       if (state is AttendanceFailure) {
-        String? icon;
+        OverlayManager.hide();
 
         if (state.failure is SocketFailure) {
-          icon = AppIcons.requiredInternet;
+          showFailure(
+              title: 'Không có kết nối mạng',
+              icon: SvgPicture.asset(AppIcons.requiredInternet),
+              message:
+                  'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
+              btnText: 'Thử lại',
+              onPressed: () {
+                _attendance.call();
+              });
+        } else {
+          showFailure(
+              title: 'Chấm công thất bại',
+              icon: SvgPicture.asset(AppIcons.failure),
+              message: state.failure.message ??
+                  'Phát sinh lỗi trong quá trình chấm công',
+              btnText: 'Thử lại',
+              onPressed: () {
+                _attendance.call();
+              });
         }
-        OverlayManager.hide();
-        showFailure(
-            title: 'Chấm công thất bại',
-            icon: SvgPicture.asset(icon ?? AppIcons.failure),
-            message: state.failure.message ??
-                'Phát sinh lỗi trong quá trình chấm công',
-            btnText: 'Thử lại',
-            onPressed: () {
-              _attendance.call();
-            });
       }
       if (state is AttendanceSuccess) {
         OverlayManager.hide();

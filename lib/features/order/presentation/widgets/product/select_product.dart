@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/order/presentation/widgets/product/order_product_image.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
 import 'package:fuzzy/fuzzy.dart';
 
@@ -12,7 +11,7 @@ import '../../../../../core/constant/colors.dart';
 import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/button/flat.dart';
 import '../../../../../core/widgets/custom_checkbox.dart';
-import '../../../../../core/widgets/item_container.dart';
+import '../../../../../core/widgets/matter_container.dart';
 import '../../../../../core/widgets/search_text_field.dart';
 
 class SelectProduct extends StatefulWidget {
@@ -94,7 +93,7 @@ class _SelectProductState extends State<SelectProduct> {
                     return Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
-                      child: PurchaseContainer(
+                      child: MatterContainer(
                         titleFlexible: false,
                         trailing: CustomCheckbox(
                           value: selectedId == orderProduct.id,
@@ -108,11 +107,9 @@ class _SelectProductState extends State<SelectProduct> {
                           },
                         ),
                         leading:
-                            OrderProductImage(product: orderProduct.product!),
-                        title: OrderProductInfoWidget(
-                            product: orderProduct.product!,
-                            productPackaging: orderProduct.productPackaging!,
-                            price: orderProduct.price!),
+                            MatterImage(url: orderProduct.product!.imageUrl),
+                        title:
+                            OrderProductInfoWidget(orderProduct: orderProduct),
                       ),
                     );
                   },

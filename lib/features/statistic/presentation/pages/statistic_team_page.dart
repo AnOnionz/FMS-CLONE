@@ -3,12 +3,14 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/statistic/statistic_module.dart';
 
 import '../widgets/statistic_type_item.dart';
 
 class StatisticTeamPage extends StatefulWidget {
-  const StatisticTeamPage({super.key});
+  final GeneralFeatureData entity;
+  const StatisticTeamPage({super.key, required this.entity});
 
   @override
   State<StatisticTeamPage> createState() => _StatisticTeamPageState();
@@ -46,7 +48,7 @@ class _StatisticTeamPageState extends State<StatisticTeamPage> {
                     itemCount: 5,
                     itemBuilder: (context, index) => StatisticTypeItem(
                       onPressed: () =>
-                          context.nextRoute(StatisticModule.outlet),
+                          context.nextRoute(StatisticModule.employee),
                       title: 'Outlet Emart Trường Chinh',
                       subTitle: 'ma0001',
                     ),

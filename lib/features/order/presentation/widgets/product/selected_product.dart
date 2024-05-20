@@ -6,9 +6,8 @@ import 'package:fms/features/order/presentation/widgets/product/order_product_in
 
 import '../../../../../core/styles/theme.dart';
 import '../../../../../core/widgets/empty_widget.dart';
-import '../../../../../core/widgets/item_container.dart';
+import '../../../../../core/widgets/matter_container.dart';
 import '../input_quantity.dart';
-import 'order_product_image.dart';
 
 class SelectedProduct extends StatefulWidget {
   final VoidCallback onChanged;
@@ -50,14 +49,11 @@ class _SelectedProductState extends State<SelectedProduct> {
                     widget.onChanged();
                   });
                 },
-                child: PurchaseContainer(
+                child: MatterContainer(
                     key: ValueKey(orderProduct.id!.toString()),
                     titleFlexible: false,
-                    leading: OrderProductImage(product: orderProduct.product!),
-                    title: OrderProductInfoWidget(
-                        product: orderProduct.product!,
-                        productPackaging: orderProduct.productPackaging!,
-                        price: orderProduct.price!),
+                    leading: MatterImage(url: orderProduct.product!.imageUrl),
+                    title: OrderProductInfoWidget(orderProduct: orderProduct),
                     trailing: InputQuantity(
                       value: purchase.quantity!,
                       max: 10000,

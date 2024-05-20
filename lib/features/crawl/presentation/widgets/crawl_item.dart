@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/item_container.dart';
+import 'package:fms/core/widgets/matter_container.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 
 import '../../../../core/constant/colors.dart';
@@ -40,7 +40,7 @@ class _CrawlItemState extends State<CrawlItem> {
       padding: EdgeInsets.all(15.h),
       decoration: BoxDecoration(
           color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
-      child: PurchaseContainer(
+      child: MatterContainer(
           leading: Image.asset(AppImages.loginBanner),
           title: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

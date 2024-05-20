@@ -1925,19 +1925,24 @@ const CustomerInfoSchema = Schema(
       name: r'featureCustomerId',
       type: IsarType.long,
     ),
-    r'id': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 1,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 2,
       name: r'id',
       type: IsarType.long,
     ),
     r'options': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'options',
       type: IsarType.objectList,
       target: r'CustomerOption',
     ),
     r'value': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'value',
       type: IsarType.string,
     )
@@ -1984,14 +1989,15 @@ void _customerInfoSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.featureCustomerId);
-  writer.writeLong(offsets[1], object.id);
+  writer.writeLong(offsets[1], object.hashCode);
+  writer.writeLong(offsets[2], object.id);
   writer.writeObjectList<CustomerOption>(
-    offsets[2],
+    offsets[3],
     allOffsets,
     CustomerOptionSchema.serialize,
     object.options,
   );
-  writer.writeString(offsets[3], object.value);
+  writer.writeString(offsets[4], object.value);
 }
 
 CustomerInfo _customerInfoDeserialize(
@@ -2002,14 +2008,14 @@ CustomerInfo _customerInfoDeserialize(
 ) {
   final object = CustomerInfo(
     featureCustomerId: reader.readLongOrNull(offsets[0]),
-    id: reader.readLongOrNull(offsets[1]),
+    id: reader.readLongOrNull(offsets[2]),
     options: reader.readObjectList<CustomerOption>(
-      offsets[2],
+      offsets[3],
       CustomerOptionSchema.deserialize,
       allOffsets,
       CustomerOption(),
     ),
-    value: reader.readStringOrNull(offsets[3]),
+    value: reader.readStringOrNull(offsets[4]),
   );
   return object;
 }
@@ -2024,15 +2030,17 @@ P _customerInfoDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
+      return (reader.readLongOrNull(offset)) as P;
+    case 3:
       return (reader.readObjectList<CustomerOption>(
         offset,
         CustomerOptionSchema.deserialize,
         allOffsets,
         CustomerOption(),
       )) as P;
-    case 3:
+    case 4:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2107,6 +2115,62 @@ extension CustomerInfoQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'featureCustomerId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<CustomerInfo, CustomerInfo, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CustomerInfo, CustomerInfo, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CustomerInfo, CustomerInfo, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CustomerInfo, CustomerInfo, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
         lower: lower,
         includeLower: includeLower,
         upper: upper,

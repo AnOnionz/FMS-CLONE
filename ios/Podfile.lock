@@ -27,9 +27,6 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
   - geocoding_ios (1.0.5):
     - Flutter
   - geolocator_apple (1.2.0):
@@ -121,7 +118,7 @@ PODS:
   - SimpleKeychain (1.1.0)
   - sqflite (0.0.3):
     - Flutter
-    - FMDB (>= 2.7.5)
+    - FlutterMacOS
   - string_validator_plus (0.0.1):
     - Flutter
   - Toast (4.0.0)
@@ -147,13 +144,12 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - string_validator_plus (from `.symlinks/plugins/string_validator_plus/ios`)
 
 SPEC REPOS:
   trunk:
     - Auth0
-    - FMDB
     - GoogleDataTransport
     - GoogleMaps
     - GoogleMLKit
@@ -216,7 +212,7 @@ EXTERNAL SOURCES:
   rive_common:
     :path: ".symlinks/plugins/rive_common/ios"
   sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
+    :path: ".symlinks/plugins/sqflite/darwin"
   string_validator_plus:
     :path: ".symlinks/plugins/string_validator_plus/ios"
 
@@ -231,7 +227,6 @@ SPEC CHECKSUMS:
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geocoding_ios: d7460f56e80e118d57678efe5c2cdc888739ff18
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   google_maps_flutter_ios: abdac20d6ce8931f6ebc5f46616df241bfaa2cfd
@@ -261,10 +256,10 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 5ae15e16814b5f9ef568963fb2c87aeb49158c66
   rive_common: c537b4eed761e903a9403d93c347b69bd7a4762f
   SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
-  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   string_validator_plus: ac0497bbfa06f0960e71937e76c844cb19ab77e8
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
+PODFILE CHECKSUM: 2080e99405a265421fbbee1c5766eb5058f461d7
 
 COCOAPODS: 1.12.0

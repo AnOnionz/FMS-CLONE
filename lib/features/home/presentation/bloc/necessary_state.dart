@@ -14,6 +14,10 @@ final class NecessaryLockIn extends NecessaryStateHasData {
   NecessaryLockIn({required super.feature});
 }
 
+final class NecessaryInternet extends NecessaryState {
+  NecessaryInternet();
+}
+
 final class NecessaryUnfastenIn extends NecessaryStateHasData {
   NecessaryUnfastenIn({required super.feature});
 }

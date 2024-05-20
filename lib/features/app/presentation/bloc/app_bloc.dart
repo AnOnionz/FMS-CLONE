@@ -97,8 +97,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<void> _startInternetConnectionService() async {
     return _connectivityService.startup(
-      timeout: const Duration(seconds: 10),
-      interval: const Duration(seconds: 10),
+      timeout: const Duration(seconds: 5),
+      interval: const Duration(seconds: 5),
     );
   }
 

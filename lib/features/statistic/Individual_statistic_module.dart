@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/statistic/statistic_module.dart';
 
 import '../../routes/routes.dart';
+import '../home/domain/entities/general_item_data.dart';
 import 'presentation/pages/statistic_page.dart';
 
 class IndividualStatisticModule extends Module {
@@ -16,7 +17,7 @@ class IndividualStatisticModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) => StatisticPage(),
+      child: (_) => StatisticPage(entity: r.args.data as GeneralFeatureData),
     );
   }
 }

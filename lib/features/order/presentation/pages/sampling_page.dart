@@ -8,11 +8,9 @@ import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/advanced_text_field.dart';
-import '../../../../core/widgets/item_container.dart';
+import '../../../../core/widgets/matter_container.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../widgets/bottom_buttons.dart';
-import '../widgets/product/order_product_image.dart';
-import '../widgets/sampling/sampling_info.dart';
 
 class OrderSamplingPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -97,13 +95,14 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
                                 _items.keys.elementAt(index);
                             final sampling = _items.values.elementAt(index);
 
-                            return PurchaseContainer(
-                                leading: OrderProductImage(
-                                    product: samplingProduct.product!),
-                                title: SamplingInfoWidget(
+                            return MatterContainer(
+                                leading: MatterImage(
+                                    url: samplingProduct.product!.imageUrl),
+                                title: MatterInfoWidget(
                                   product: samplingProduct.product!,
                                   productPackaging:
                                       samplingProduct.productPackaging!,
+                                  asset: samplingProduct.product!.brandName!,
                                 ),
                                 trailing: AdvancedTextField(
                                   initialValue: sampling.quantity != null

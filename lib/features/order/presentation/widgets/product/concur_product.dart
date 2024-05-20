@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/features/order/presentation/widgets/product/order_product_image.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
 
 import '../../../../../core/constant/colors.dart';
+import '../../../../../core/constant/format.dart';
 import '../../../../../core/widgets/button/flat.dart';
 import '../../../../../core/widgets/custom_checkbox.dart';
-import '../../../../../core/widgets/item_container.dart';
+import '../../../../../core/widgets/matter_container.dart';
 import '../../../../general/domain/entities/config_entity.dart';
 
 class ConcurProduct extends StatefulWidget {
@@ -53,7 +53,7 @@ class _ConcurProductState extends State<ConcurProduct> {
                     return Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
-                      child: PurchaseContainer(
+                      child: MatterContainer(
                         titleFlexible: false,
                         trailing: CustomCheckbox(
                           value: selectedIndex == index,
@@ -67,11 +67,9 @@ class _ConcurProductState extends State<ConcurProduct> {
                           },
                         ),
                         leading:
-                            OrderProductImage(product: orderProduct.product!),
-                        title: OrderProductInfoWidget(
-                            product: orderProduct.product!,
-                            productPackaging: orderProduct.productPackaging!,
-                            price: orderProduct.price!),
+                            MatterImage(url: orderProduct.product!.imageUrl),
+                        title:
+                            OrderProductInfoWidget(orderProduct: orderProduct),
                       ),
                     );
                   },

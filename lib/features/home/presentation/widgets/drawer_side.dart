@@ -60,7 +60,13 @@ class DrawerSide extends StatelessWidget {
                                         ? Column(
                                             children: [
                                               ImageProfile(
-                                                  credentials: credentials!),
+                                                  imageUrl: credentials!.user
+                                                              .pictureUrl ==
+                                                          null
+                                                      ? null
+                                                      : credentials!
+                                                          .user.pictureUrl!
+                                                          .toString()),
                                               SizedBox(height: 20.h),
                                               (credentials!.user.name != null)
                                                   ? Padding(

@@ -7,19 +7,24 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/image_profile.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
 import '../../../../core/constant/enum.dart';
 import '../../../../core/styles/theme.dart';
 import '../../../app_information/presentation/widgets/row_info.dart';
+import '../../domain/entities/statistic_entity.dart';
 import '../../statistic_module.dart';
 import 'statistic_type_item.dart';
 
-class StatisticGenaral extends StatelessWidget {
-  const StatisticGenaral({super.key, required this.type});
-
+class StatisticGenaral extends StatelessWidget with GeneralDataMixin {
+  final StatisticEntity entity;
+  final OutletEntity? outlet;
   final StatisticType type;
+  const StatisticGenaral(
+      {super.key, required this.entity, this.outlet, required this.type});
+
   Credentials get credentials =>
       Modular.get<AuthenticationRepository>().credentials!;
 
@@ -38,12 +43,9 @@ class StatisticGenaral extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               switch (type) {
-                StatisticType.outlet => OutletInfo(
-                    outlet: OutletEntity(id: 1, name: 'name', code: 'code')),
-                StatisticType.booth => BoothInfo(
-                    booth: BoothEntity(
-                        id: 1, name: 'name', description: 'description')),
-                _ => EmployeeInfo(credentials: credentials)
+                StatisticType.outlet => OutletInfo(outlet: general.outlet),
+                StatisticType.employee => OutletInfo(outlet: general.outlet),
+                _ => IndividualInfo(credentials: credentials)
               },
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -54,32 +56,31 @@ class StatisticGenaral extends StatelessWidget {
                   indent: 16.w,
                 ),
               ),
-              RowInfo(
-                leading: 'KPI',
-                info: '85,000/100,000',
-              ),
-              SizedBox(height: 12.h),
+              // RowInfo(
+              //   leading: 'KPI',
+              //   info: '85,000/100,000',
+              // ),
+              // SizedBox(height: 12.h),
               RowInfo(
                 leading: 'Tổng sản lượng',
-                info: '23,000',
+                info: entity.totalPurchase.toString(),
               ),
               SizedBox(height: 12.h),
               RowInfo(
                 leading: 'Tổng quà phát ra',
-                info: '240',
+                info: entity.totalExchange.toString(),
               ),
               SizedBox(height: 12.h),
               RowInfo(
                 leading: 'Tổng sampling',
-                info: '800',
+                info: entity.totalSampling.toString(),
               ),
             ],
           ),
         ),
         Expanded(
             child: switch (type) {
-          StatisticType.booth => EmployeesOfBooth(),
-          StatisticType.outlet => BoothsOfOutlet(),
+          StatisticType.outlet => EmployeesOfOutlet(),
           _ => SizedBox.shrink()
         })
       ],
@@ -87,16 +88,18 @@ class StatisticGenaral extends StatelessWidget {
   }
 }
 
-class EmployeeInfo extends StatelessWidget {
+class IndividualInfo extends StatelessWidget {
   final Credentials credentials;
-  const EmployeeInfo({super.key, required this.credentials});
+  const IndividualInfo({super.key, required this.credentials});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ImageProfile(
-          credentials: credentials,
+          imageUrl: credentials.user.pictureUrl == null
+              ? null
+              : credentials.user.pictureUrl!.toString(),
           size: Size(80, 80),
         ),
         (credentials.user.name != null)
@@ -107,11 +110,32 @@ class EmployeeInfo extends StatelessWidget {
                         context.textTheme.h3?.copyWith(color: AppColors.black)),
               )
             : SizedBox.shrink(),
-        (credentials.user.zoneinfo != null)
-            ? Text(credentials.user.zoneinfo!,
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.nobel))
-            : SizedBox.shrink(),
+        Text('MA0001',
+            style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
+      ],
+    );
+  }
+}
+
+class EmployeeInfo extends StatelessWidget {
+  final EmployeeEntity employee;
+  const EmployeeInfo({super.key, required this.employee});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ImageProfile(
+          imageUrl: employee.user.picture,
+          size: Size(80, 80),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
+          child: Text(employee.user.name,
+              style: context.textTheme.h3?.copyWith(color: AppColors.black)),
+        ),
+        Text('MA0001',
+            style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
       ],
     );
   }
@@ -143,70 +167,8 @@ class OutletInfo extends StatelessWidget {
   }
 }
 
-class BoothsOfOutlet extends StatelessWidget {
-  const BoothsOfOutlet({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 2.h, bottom: 4.h),
-          child: Text(
-            'Danh sách booth trong outlet',
-            style: context.textTheme.h3?.copyWith(color: AppColors.nobel),
-          ),
-        ),
-        Flexible(
-          child: CustomScrollView(
-            physics: kPhysics,
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(bottom: context.screenPadding.bottom),
-                sliver: SliverList.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) => StatisticTypeItem(
-                    onPressed: () => context.nextRoute(StatisticModule.booth),
-                    title: 'Booth A',
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class BoothInfo extends StatelessWidget {
-  final BoothEntity booth;
-  const BoothInfo({super.key, required this.booth});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(AppImages.outletBorder, height: 80, width: 80),
-        Padding(
-          padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
-          child: Text(
-            booth.name!,
-            style: context.textTheme.h3?.copyWith(color: AppColors.black),
-          ),
-        ),
-        Text(
-          booth.description ?? 'description',
-          style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
-        ),
-      ],
-    );
-  }
-}
-
-class EmployeesOfBooth extends StatelessWidget {
-  const EmployeesOfBooth({super.key});
+class EmployeesOfOutlet extends StatelessWidget {
+  const EmployeesOfOutlet({super.key});
 
   @override
   Widget build(BuildContext context) {

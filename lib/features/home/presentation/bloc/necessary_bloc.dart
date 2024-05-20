@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/features/crawl/domain/usecases/get_quantities_not_completed_usecase.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -14,6 +15,9 @@ import 'package:fms/features/note/domain/usecases/get_notes_not_completed_usecas
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/sync/sync_module.dart';
+import '../../../../core/constant/icons.dart';
+import '../../../../core/services/connectivity/connectivity_service.dart';
+import '../../../../core/widgets/popup.dart';
 import '../../domain/entities/general_item_data.dart';
 
 part 'necessary_event.dart';
@@ -26,6 +30,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
   final GetQuantitiesNotCompletedUsecase getQuantitiesNotCompleted;
 
   final SyncBloc _syncBloc;
+
   StreamSubscription<NecessaryState>? subscription;
   NecessaryBloc(this._syncBloc, this.getPhotosNotCompleted,
       this.getNotesNotCompleted, this.getQuantitiesNotCompleted)
@@ -77,6 +82,15 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
           },
         );
       }
+      if (state is NecessaryInternet) {
+        showFailure(
+            title: 'Không có kết nối mạng',
+            icon: SvgPicture.asset(AppIcons.requiredInternet),
+            message:
+                'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
+            btnText: 'Ok',
+            onPressed: () {});
+      }
       if (state is NecessarySync) {
         showRequiredSync(
           () {
@@ -95,7 +109,20 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     });
   }
 
-  Future<void> onNecessaryIn(NecessaryIn event, emit) async {
+  Future<void> onNecessaryIn(
+      NecessaryIn event, Emitter<NecessaryState> emit) async {
+    final _connectivityService = Modular.get<ConnectivityService>();
+    if (event.isOnline) {
+      final hasNoSynced = _syncBloc.state.status == SyncStatus.isNoSynced;
+      if (hasNoSynced) {
+        emit(NecessarySync(onClose: () {}));
+        return;
+      }
+      if (!_connectivityService.hasConnected) {
+        emit(NecessaryInternet());
+        return;
+      }
+    }
     bool _isLock = false;
 
     event.feature.dependentOnFeatureIds!.forEach((dependent) {
