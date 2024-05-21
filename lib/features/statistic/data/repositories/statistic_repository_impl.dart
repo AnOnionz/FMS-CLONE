@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/mixins/common.dart';
@@ -98,7 +99,11 @@ class StatisticRepositoryImpl extends Repository
           }
         });
         statistic = StatisticEntity(
-            purchases: purchases, exchanges: [], samplings: samplings);
+            purchases:
+                purchases.sorted((a, b) => b.product!.id! - a.product!.id!),
+            exchanges: [],
+            samplings:
+                samplings.sorted((a, b) => b.product!.id! - a.product!.id!));
       }
       if (statistic == null) {
         return Left(DataNullFailure());
