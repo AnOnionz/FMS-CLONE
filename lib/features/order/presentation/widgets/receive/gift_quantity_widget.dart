@@ -185,6 +185,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
                     onValueChanged: (value) {
                       final ExchangeEntity entity = ExchangeEntity(
                           featureSchemeExchangeId: _exchange.id,
+                          exchangeProceeds: _exchange.exchangeProceeds,
                           quantity: value);
                       widget.onQuantityChanged(entity, _exchange.reachAmount);
                     },

@@ -46,11 +46,11 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
           (element) => element.featureSamplingId == featureSampling.id);
       _items[featureSampling] = sampling ??
           SamplingEntity(
-            featureSamplingId: featureSampling.id,
-          );
+              featureSamplingId: featureSampling.id,
+              product: featureSampling.product,
+              productPackaging: featureSampling.productPackaging);
     });
     setState(() {});
-
     super.didChangeDependencies();
   }
 

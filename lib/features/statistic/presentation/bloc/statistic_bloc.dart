@@ -5,6 +5,8 @@ import 'package:fms/features/statistic/domain/entities/statistic_entity.dart';
 import 'package:fms/features/statistic/domain/usecases/fetch_employee_statistic_usecase.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/usecase/either.dart';
+import '../../domain/usecases/fetch_individual_statistic_offline_usecase.dart';
 import '../../domain/usecases/fetch_individual_statistic_usecase.dart';
 import '../../domain/usecases/fetch_team_statistic_usecase.dart';
 
@@ -15,12 +17,20 @@ class StatisticBloc extends Bloc<StatisticEvent, StatisticState> {
   final FetchTeamStatisticUseCase fetchTeamStatistic;
   final FetchIndividualStatisticUseCase fetchIndividualStatistic;
   final FetchEmployeeStatisticUseCase fetchEmployeeStatistic;
+  final FetchIndividualStatisticOfflineUseCase fetchIndividualStatisticOffline;
   StatisticBloc(this.fetchTeamStatistic, this.fetchIndividualStatistic,
-      this.fetchEmployeeStatistic)
+      this.fetchEmployeeStatistic, this.fetchIndividualStatisticOffline)
       : super(StatisticInitial()) {
     on<FetchIndividualStatistic>((event, emit) async {
       emit(StatisticLoading());
-      final execute = await fetchIndividualStatistic(event.featureId);
+      Either<Failure, StatisticEntity> execute;
+      if (event.isOnline) {
+        print(1);
+        execute = await fetchIndividualStatistic(event.featureId);
+      } else {
+        print(2);
+        execute = await fetchIndividualStatisticOffline(event.featureId);
+      }
 
       execute.fold((failure) => emit(StatisticFailure(failure)),
           (data) => emit(StatisticSuccess(data)));

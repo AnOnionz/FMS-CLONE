@@ -5,8 +5,8 @@ import 'package:fms/features/statistic/statistic_module.dart';
 import '../../routes/routes.dart';
 import '../home/domain/entities/general_item_data.dart';
 
-class IndividualStatisticModule extends Module {
-  static const String route = '/onlineIndividualSummaryReport/';
+class IndividualStatisticOfflineModule extends Module {
+  static const String route = '/summaryReport/';
 
   @override
   List<Module> get imports => [StatisticModule()];
@@ -15,8 +15,9 @@ class IndividualStatisticModule extends Module {
   void routes(RouteManager r) {
     r.child(
       Routes.root,
-      child: (_) =>
-          StatisticIndividualPage(entity: r.args.data as GeneralFeatureData),
+      child: (_) => StatisticIndividualOfflinePage(
+        entity: r.args.data as GeneralFeatureData,
+      ),
     );
   }
 }

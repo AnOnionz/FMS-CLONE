@@ -91,8 +91,11 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
       final purchase = selectedItems[value]!;
       purchase.updateQuantity(purchase.quantity! + 1);
     } else {
-      selectedItems[value] =
-          PurchaseEntity(featureOrderProductId: value.id, quantity: 1);
+      selectedItems[value] = PurchaseEntity(
+          featureOrderProductId: value.id,
+          product: value.product,
+          productPackaging: value.productPackaging,
+          quantity: 1);
     }
     setState(() {});
   }

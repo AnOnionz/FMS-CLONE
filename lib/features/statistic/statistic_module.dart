@@ -9,6 +9,8 @@ import 'package:fms/features/statistic/presentation/bloc/statistic_bloc.dart';
 import 'package:fms/features/statistic/presentation/cubit/team_members_cubit.dart';
 
 import '../../routes/routes.dart';
+import '../order/order_module.dart';
+import 'domain/usecases/fetch_individual_statistic_offline_usecase.dart';
 import 'domain/usecases/fetch_individual_statistic_usecase.dart';
 import 'domain/usecases/fetch_team_statistic_usecase.dart';
 import 'presentation/pages/statistic_page.dart';
@@ -18,7 +20,8 @@ class StatisticModule extends Module {
   static const String employee = 'employee';
 
   @override
-  List<Module> get imports => [];
+  List<Module> get imports => [OrderModule()];
+
   @override
   void binds(Injector i) {
     i.addLazySingleton(StatisticRemoteDataSource.new);
@@ -27,6 +30,7 @@ class StatisticModule extends Module {
     i.addLazySingleton(FetchTeamStatisticUseCase.new);
     i.addLazySingleton(FetchIndividualStatisticUseCase.new);
     i.addLazySingleton(FetchTeamMembersUseCase.new);
+    i.addLazySingleton(FetchIndividualStatisticOfflineUseCase.new);
     i.add(StatisticBloc.new);
     i.add(TeamMembersCubit.new);
   }

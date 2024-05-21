@@ -34,6 +34,21 @@ const StatisticEntitySchema = CollectionSchema(
       name: r'samplings',
       type: IsarType.objectList,
       target: r'SamplingStatistic',
+    ),
+    r'totalExchange': PropertySchema(
+      id: 3,
+      name: r'totalExchange',
+      type: IsarType.long,
+    ),
+    r'totalPurchase': PropertySchema(
+      id: 4,
+      name: r'totalPurchase',
+      type: IsarType.long,
+    ),
+    r'totalSampling': PropertySchema(
+      id: 5,
+      name: r'totalSampling',
+      type: IsarType.long,
     )
   },
   estimateSize: _statisticEntityEstimateSize,
@@ -117,6 +132,9 @@ void _statisticEntitySerialize(
     SamplingStatisticSchema.serialize,
     object.samplings,
   );
+  writer.writeLong(offsets[3], object.totalExchange);
+  writer.writeLong(offsets[4], object.totalPurchase);
+  writer.writeLong(offsets[5], object.totalSampling);
 }
 
 StatisticEntity _statisticEntityDeserialize(
@@ -183,6 +201,12 @@ P _statisticEntityDeserializeProp<P>(
             SamplingStatistic(),
           ) ??
           []) as P;
+    case 3:
+      return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readLong(offset)) as P;
+    case 5:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -623,6 +647,174 @@ extension StatisticEntityQueryFilter
       );
     });
   }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalExchangeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalExchange',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalExchangeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalExchange',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalExchangeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalExchange',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalExchangeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalExchange',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalPurchaseEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalPurchase',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalPurchaseGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalPurchase',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalPurchaseLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalPurchase',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalPurchaseBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalPurchase',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalSamplingEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalSampling',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalSamplingGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalSampling',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalSamplingLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalSampling',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterFilterCondition>
+      totalSamplingBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalSampling',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension StatisticEntityQueryObject
@@ -653,7 +845,49 @@ extension StatisticEntityQueryLinks
     on QueryBuilder<StatisticEntity, StatisticEntity, QFilterCondition> {}
 
 extension StatisticEntityQuerySortBy
-    on QueryBuilder<StatisticEntity, StatisticEntity, QSortBy> {}
+    on QueryBuilder<StatisticEntity, StatisticEntity, QSortBy> {
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      sortByTotalExchange() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalExchange', Sort.asc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      sortByTotalExchangeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalExchange', Sort.desc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      sortByTotalPurchase() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPurchase', Sort.asc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      sortByTotalPurchaseDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPurchase', Sort.desc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      sortByTotalSampling() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalSampling', Sort.asc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      sortByTotalSamplingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalSampling', Sort.desc);
+    });
+  }
+}
 
 extension StatisticEntityQuerySortThenBy
     on QueryBuilder<StatisticEntity, StatisticEntity, QSortThenBy> {
@@ -668,10 +902,73 @@ extension StatisticEntityQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      thenByTotalExchange() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalExchange', Sort.asc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      thenByTotalExchangeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalExchange', Sort.desc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      thenByTotalPurchase() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPurchase', Sort.asc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      thenByTotalPurchaseDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalPurchase', Sort.desc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      thenByTotalSampling() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalSampling', Sort.asc);
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QAfterSortBy>
+      thenByTotalSamplingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalSampling', Sort.desc);
+    });
+  }
 }
 
 extension StatisticEntityQueryWhereDistinct
-    on QueryBuilder<StatisticEntity, StatisticEntity, QDistinct> {}
+    on QueryBuilder<StatisticEntity, StatisticEntity, QDistinct> {
+  QueryBuilder<StatisticEntity, StatisticEntity, QDistinct>
+      distinctByTotalExchange() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalExchange');
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QDistinct>
+      distinctByTotalPurchase() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalPurchase');
+    });
+  }
+
+  QueryBuilder<StatisticEntity, StatisticEntity, QDistinct>
+      distinctByTotalSampling() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalSampling');
+    });
+  }
+}
 
 extension StatisticEntityQueryProperty
     on QueryBuilder<StatisticEntity, StatisticEntity, QQueryProperty> {
@@ -701,6 +998,24 @@ extension StatisticEntityQueryProperty
       return query.addPropertyName(r'samplings');
     });
   }
+
+  QueryBuilder<StatisticEntity, int, QQueryOperations> totalExchangeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalExchange');
+    });
+  }
+
+  QueryBuilder<StatisticEntity, int, QQueryOperations> totalPurchaseProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalPurchase');
+    });
+  }
+
+  QueryBuilder<StatisticEntity, int, QQueryOperations> totalSamplingProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalSampling');
+    });
+  }
 }
 
 // **************************************************************************
@@ -714,26 +1029,31 @@ const ExchangeStatisticSchema = Schema(
   name: r'ExchangeStatistic',
   id: 3163454658869530156,
   properties: {
-    r'item': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 0,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'item': PropertySchema(
+      id: 1,
       name: r'item',
       type: IsarType.object,
       target: r'Item',
     ),
     r'product': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
     ),
     r'quantity': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -781,25 +1101,26 @@ void _exchangeStatisticSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
+  writer.writeLong(offsets[0], object.hashCode);
   writer.writeObject<Item>(
-    offsets[0],
+    offsets[1],
     allOffsets,
     ItemSchema.serialize,
     object.item,
   );
   writer.writeObject<Product>(
-    offsets[1],
+    offsets[2],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[2],
+    offsets[3],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
   );
-  writer.writeLong(offsets[3], object.quantity);
+  writer.writeLong(offsets[4], object.quantity);
 }
 
 ExchangeStatistic _exchangeStatisticDeserialize(
@@ -810,21 +1131,21 @@ ExchangeStatistic _exchangeStatisticDeserialize(
 ) {
   final object = ExchangeStatistic(
     item: reader.readObjectOrNull<Item>(
-      offsets[0],
+      offsets[1],
       ItemSchema.deserialize,
       allOffsets,
     ),
     product: reader.readObjectOrNull<Product>(
-      offsets[1],
+      offsets[2],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[2],
+      offsets[3],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
-    quantity: reader.readLongOrNull(offsets[3]),
+    quantity: reader.readLongOrNull(offsets[4]),
   );
   return object;
 }
@@ -837,24 +1158,26 @@ P _exchangeStatisticDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
       return (reader.readObjectOrNull<Item>(
         offset,
         ItemSchema.deserialize,
         allOffsets,
       )) as P;
-    case 1:
+    case 2:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 2:
+    case 3:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
         allOffsets,
       )) as P;
-    case 3:
+    case 4:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -863,6 +1186,62 @@ P _exchangeStatisticDeserializeProp<P>(
 
 extension ExchangeStatisticQueryFilter
     on QueryBuilder<ExchangeStatistic, ExchangeStatistic, QFilterCondition> {
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
       itemIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -1023,20 +1402,25 @@ const PurchaseStatisticSchema = Schema(
   name: r'PurchaseStatistic',
   id: 7012173234855762857,
   properties: {
-    r'product': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 0,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'product': PropertySchema(
+      id: 1,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
     ),
     r'quantity': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -1077,19 +1461,20 @@ void _purchaseStatisticSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
+  writer.writeLong(offsets[0], object.hashCode);
   writer.writeObject<Product>(
-    offsets[0],
+    offsets[1],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[1],
+    offsets[2],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
   );
-  writer.writeLong(offsets[2], object.quantity);
+  writer.writeLong(offsets[3], object.quantity);
 }
 
 PurchaseStatistic _purchaseStatisticDeserialize(
@@ -1100,16 +1485,16 @@ PurchaseStatistic _purchaseStatisticDeserialize(
 ) {
   final object = PurchaseStatistic(
     product: reader.readObjectOrNull<Product>(
-      offsets[0],
+      offsets[1],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[1],
+      offsets[2],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
-    quantity: reader.readLongOrNull(offsets[2]),
+    quantity: reader.readLongOrNull(offsets[3]),
   );
   return object;
 }
@@ -1122,18 +1507,20 @@ P _purchaseStatisticDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 1:
+    case 2:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
         allOffsets,
       )) as P;
-    case 2:
+    case 3:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1142,6 +1529,62 @@ P _purchaseStatisticDeserializeProp<P>(
 
 extension PurchaseStatisticQueryFilter
     on QueryBuilder<PurchaseStatistic, PurchaseStatistic, QFilterCondition> {
+  QueryBuilder<PurchaseStatistic, PurchaseStatistic, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseStatistic, PurchaseStatistic, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseStatistic, PurchaseStatistic, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseStatistic, PurchaseStatistic, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<PurchaseStatistic, PurchaseStatistic, QAfterFilterCondition>
       productIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -1277,20 +1720,25 @@ const SamplingStatisticSchema = Schema(
   name: r'SamplingStatistic',
   id: 5891958254111070310,
   properties: {
-    r'product': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 0,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'product': PropertySchema(
+      id: 1,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
     ),
     r'quantity': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -1331,19 +1779,20 @@ void _samplingStatisticSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
+  writer.writeLong(offsets[0], object.hashCode);
   writer.writeObject<Product>(
-    offsets[0],
+    offsets[1],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[1],
+    offsets[2],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
   );
-  writer.writeLong(offsets[2], object.quantity);
+  writer.writeLong(offsets[3], object.quantity);
 }
 
 SamplingStatistic _samplingStatisticDeserialize(
@@ -1354,16 +1803,16 @@ SamplingStatistic _samplingStatisticDeserialize(
 ) {
   final object = SamplingStatistic(
     product: reader.readObjectOrNull<Product>(
-      offsets[0],
+      offsets[1],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[1],
+      offsets[2],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
-    quantity: reader.readLongOrNull(offsets[2]),
+    quantity: reader.readLongOrNull(offsets[3]),
   );
   return object;
 }
@@ -1376,18 +1825,20 @@ P _samplingStatisticDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 1:
+    case 2:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
         allOffsets,
       )) as P;
-    case 2:
+    case 3:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1396,6 +1847,62 @@ P _samplingStatisticDeserializeProp<P>(
 
 extension SamplingStatisticQueryFilter
     on QueryBuilder<SamplingStatistic, SamplingStatistic, QFilterCondition> {
+  QueryBuilder<SamplingStatistic, SamplingStatistic, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingStatistic, SamplingStatistic, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingStatistic, SamplingStatistic, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingStatistic, SamplingStatistic, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<SamplingStatistic, SamplingStatistic, QAfterFilterCondition>
       productIsNull() {
     return QueryBuilder.apply(this, (query) {

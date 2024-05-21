@@ -55,7 +55,8 @@ class _StatisticGenaralState extends State<StatisticGenaral>
   }
 
   void fetchTeamMembers() {
-    _cubit.getTeamMembers(widget.entity.feature.id!);
+    if (widget.type == StatisticType.outlet)
+      _cubit.getTeamMembers(widget.entity.feature.id!);
   }
 
   @override
@@ -120,9 +121,11 @@ class _StatisticGenaralState extends State<StatisticGenaral>
                     members: state.list, entity: widget.entity);
               }
               if (state is TeamMembersFailure) {
-                return DataLoadErrorWidget(onPressed: () => fetchTeamMembers);
+                return Center(
+                    child:
+                        DataLoadErrorWidget(onPressed: () => fetchTeamMembers));
               }
-              return AppIndicator();
+              return Center(child: AppIndicator());
             },
           ))
       ],

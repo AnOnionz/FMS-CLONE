@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 
 import '../../../general/domain/entities/config_entity.dart';
@@ -139,6 +140,20 @@ class ExchangeStatistic {
       quantity: map['quantity'] != null ? map['quantity'] as int : null,
     );
   }
+
+  @override
+  bool operator ==(covariant ExchangeStatistic other) {
+    if (identical(this, other)) return true;
+
+    return other.product == product &&
+        other.productPackaging == productPackaging &&
+        other.item == item;
+  }
+
+  @override
+  int get hashCode {
+    return product.hashCode ^ productPackaging.hashCode ^ item.hashCode;
+  }
 }
 
 @embedded
@@ -194,6 +209,18 @@ class PurchaseStatistic {
 
   factory PurchaseStatistic.fromJson(String source) =>
       PurchaseStatistic.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool operator ==(covariant PurchaseStatistic other) {
+    if (identical(this, other)) return true;
+
+    return other.product == product &&
+        other.productPackaging == productPackaging;
+  }
+
+  @override
+  int get hashCode =>
+      product.hashCode ^ productPackaging.hashCode ^ quantity.hashCode;
 }
 
 @embedded
@@ -245,4 +272,15 @@ class SamplingStatistic {
       quantity: map['quantity'] != null ? map['quantity'] as int : null,
     );
   }
+
+  @override
+  bool operator ==(covariant SamplingStatistic other) {
+    if (identical(this, other)) return true;
+
+    return other.product == product &&
+        other.productPackaging == productPackaging;
+  }
+
+  @override
+  int get hashCode => product.hashCode ^ productPackaging.hashCode;
 }

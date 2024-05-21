@@ -298,11 +298,15 @@ class CustomerOption {
 class PurchaseEntity {
   int? id;
   int? featureOrderProductId;
+  Product? product;
+  ProductPackaging? productPackaging;
   int? quantity;
 
   PurchaseEntity({
     this.id,
     this.featureOrderProductId,
+    this.product,
+    this.productPackaging,
     this.quantity = 0,
   });
 
@@ -354,11 +358,13 @@ class PurchaseEntity {
 class ExchangeEntity {
   final int? id;
   final int? featureSchemeExchangeId;
+  final List<ExchangeProceed>? exchangeProceeds;
   final int? quantity;
 
   ExchangeEntity({
     this.id,
     this.featureSchemeExchangeId,
+    this.exchangeProceeds,
     this.quantity,
   });
 
@@ -406,11 +412,15 @@ class ExchangeEntity {
 class SamplingEntity {
   int? id;
   int? featureSamplingId;
+  final Product? product;
+  final ProductPackaging? productPackaging;
   int? quantity;
 
   SamplingEntity({
     this.id,
     this.featureSamplingId,
+    this.product,
+    this.productPackaging,
     this.quantity,
   });
 

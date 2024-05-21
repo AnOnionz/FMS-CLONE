@@ -76,7 +76,8 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
 
   void _loadStatistic() {
     if (widget.type == StatisticType.individual)
-      _bloc.add(FetchIndividualStatistic(featureId: widget.entity.feature.id!));
+      _bloc.add(FetchIndividualStatistic(
+          featureId: widget.entity.feature.id!, isOnline: widget.isOnline));
     if (widget.type == StatisticType.outlet)
       _bloc.add(FetchTeamStatistic(featureId: widget.entity.feature.id!));
     if (widget.type == StatisticType.employee)

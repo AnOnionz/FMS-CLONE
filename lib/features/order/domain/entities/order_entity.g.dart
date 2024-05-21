@@ -96,7 +96,11 @@ const OrderEntitySchema = CollectionSchema(
     r'CustomerInfo': CustomerInfoSchema,
     r'CustomerOption': CustomerOptionSchema,
     r'PurchaseEntity': PurchaseEntitySchema,
+    r'Product': ProductSchema,
+    r'ProductPackaging': ProductPackagingSchema,
     r'ExchangeEntity': ExchangeEntitySchema,
+    r'ExchangeProceed': ExchangeProceedSchema,
+    r'Item': ItemSchema,
     r'SamplingEntity': SamplingEntitySchema
   },
   getId: _orderEntityGetId,
@@ -2825,8 +2829,20 @@ const PurchaseEntitySchema = Schema(
       name: r'id',
       type: IsarType.long,
     ),
-    r'quantity': PropertySchema(
+    r'product': PropertySchema(
       id: 2,
+      name: r'product',
+      type: IsarType.object,
+      target: r'Product',
+    ),
+    r'productPackaging': PropertySchema(
+      id: 3,
+      name: r'productPackaging',
+      type: IsarType.object,
+      target: r'ProductPackaging',
+    ),
+    r'quantity': PropertySchema(
+      id: 4,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -2843,6 +2859,21 @@ int _purchaseEntityEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.product;
+    if (value != null) {
+      bytesCount += 3 +
+          ProductSchema.estimateSize(value, allOffsets[Product]!, allOffsets);
+    }
+  }
+  {
+    final value = object.productPackaging;
+    if (value != null) {
+      bytesCount += 3 +
+          ProductPackagingSchema.estimateSize(
+              value, allOffsets[ProductPackaging]!, allOffsets);
+    }
+  }
   return bytesCount;
 }
 
@@ -2854,7 +2885,19 @@ void _purchaseEntitySerialize(
 ) {
   writer.writeLong(offsets[0], object.featureOrderProductId);
   writer.writeLong(offsets[1], object.id);
-  writer.writeLong(offsets[2], object.quantity);
+  writer.writeObject<Product>(
+    offsets[2],
+    allOffsets,
+    ProductSchema.serialize,
+    object.product,
+  );
+  writer.writeObject<ProductPackaging>(
+    offsets[3],
+    allOffsets,
+    ProductPackagingSchema.serialize,
+    object.productPackaging,
+  );
+  writer.writeLong(offsets[4], object.quantity);
 }
 
 PurchaseEntity _purchaseEntityDeserialize(
@@ -2866,7 +2909,17 @@ PurchaseEntity _purchaseEntityDeserialize(
   final object = PurchaseEntity(
     featureOrderProductId: reader.readLongOrNull(offsets[0]),
     id: reader.readLongOrNull(offsets[1]),
-    quantity: reader.readLongOrNull(offsets[2]),
+    product: reader.readObjectOrNull<Product>(
+      offsets[2],
+      ProductSchema.deserialize,
+      allOffsets,
+    ),
+    productPackaging: reader.readObjectOrNull<ProductPackaging>(
+      offsets[3],
+      ProductPackagingSchema.deserialize,
+      allOffsets,
+    ),
+    quantity: reader.readLongOrNull(offsets[4]),
   );
   return object;
 }
@@ -2883,6 +2936,18 @@ P _purchaseEntityDeserializeProp<P>(
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
+      return (reader.readObjectOrNull<Product>(
+        offset,
+        ProductSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 3:
+      return (reader.readObjectOrNull<ProductPackaging>(
+        offset,
+        ProductPackagingSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 4:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3039,6 +3104,42 @@ extension PurchaseEntityQueryFilter
   }
 
   QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition>
+      productIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'product',
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition>
+      productIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'product',
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition>
+      productPackagingIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'productPackaging',
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition>
+      productPackagingIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'productPackaging',
+      ));
+    });
+  }
+
+  QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition>
       quantityIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3114,7 +3215,21 @@ extension PurchaseEntityQueryFilter
 }
 
 extension PurchaseEntityQueryObject
-    on QueryBuilder<PurchaseEntity, PurchaseEntity, QFilterCondition> {}
+    on QueryBuilder<PurchaseEntity, PurchaseEntity, QFilterCondition> {
+  QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition> product(
+      FilterQuery<Product> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'product');
+    });
+  }
+
+  QueryBuilder<PurchaseEntity, PurchaseEntity, QAfterFilterCondition>
+      productPackaging(FilterQuery<ProductPackaging> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'productPackaging');
+    });
+  }
+}
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
@@ -3123,18 +3238,24 @@ const ExchangeEntitySchema = Schema(
   name: r'ExchangeEntity',
   id: -3159729755724177288,
   properties: {
-    r'featureSchemeExchangeId': PropertySchema(
+    r'exchangeProceeds': PropertySchema(
       id: 0,
+      name: r'exchangeProceeds',
+      type: IsarType.objectList,
+      target: r'ExchangeProceed',
+    ),
+    r'featureSchemeExchangeId': PropertySchema(
+      id: 1,
       name: r'featureSchemeExchangeId',
       type: IsarType.long,
     ),
     r'id': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'id',
       type: IsarType.long,
     ),
     r'quantity': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -3151,6 +3272,20 @@ int _exchangeEntityEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final list = object.exchangeProceeds;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[ExchangeProceed]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              ExchangeProceedSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
+    }
+  }
   return bytesCount;
 }
 
@@ -3160,9 +3295,15 @@ void _exchangeEntitySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.featureSchemeExchangeId);
-  writer.writeLong(offsets[1], object.id);
-  writer.writeLong(offsets[2], object.quantity);
+  writer.writeObjectList<ExchangeProceed>(
+    offsets[0],
+    allOffsets,
+    ExchangeProceedSchema.serialize,
+    object.exchangeProceeds,
+  );
+  writer.writeLong(offsets[1], object.featureSchemeExchangeId);
+  writer.writeLong(offsets[2], object.id);
+  writer.writeLong(offsets[3], object.quantity);
 }
 
 ExchangeEntity _exchangeEntityDeserialize(
@@ -3172,9 +3313,15 @@ ExchangeEntity _exchangeEntityDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = ExchangeEntity(
-    featureSchemeExchangeId: reader.readLongOrNull(offsets[0]),
-    id: reader.readLongOrNull(offsets[1]),
-    quantity: reader.readLongOrNull(offsets[2]),
+    exchangeProceeds: reader.readObjectList<ExchangeProceed>(
+      offsets[0],
+      ExchangeProceedSchema.deserialize,
+      allOffsets,
+      ExchangeProceed(),
+    ),
+    featureSchemeExchangeId: reader.readLongOrNull(offsets[1]),
+    id: reader.readLongOrNull(offsets[2]),
+    quantity: reader.readLongOrNull(offsets[3]),
   );
   return object;
 }
@@ -3187,10 +3334,17 @@ P _exchangeEntityDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readObjectList<ExchangeProceed>(
+        offset,
+        ExchangeProceedSchema.deserialize,
+        allOffsets,
+        ExchangeProceed(),
+      )) as P;
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
+      return (reader.readLongOrNull(offset)) as P;
+    case 3:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3199,6 +3353,113 @@ P _exchangeEntityDeserializeProp<P>(
 
 extension ExchangeEntityQueryFilter
     on QueryBuilder<ExchangeEntity, ExchangeEntity, QFilterCondition> {
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'exchangeProceeds',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'exchangeProceeds',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'exchangeProceeds',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'exchangeProceeds',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'exchangeProceeds',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'exchangeProceeds',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'exchangeProceeds',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'exchangeProceeds',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
       featureSchemeExchangeIdIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -3422,7 +3683,14 @@ extension ExchangeEntityQueryFilter
 }
 
 extension ExchangeEntityQueryObject
-    on QueryBuilder<ExchangeEntity, ExchangeEntity, QFilterCondition> {}
+    on QueryBuilder<ExchangeEntity, ExchangeEntity, QFilterCondition> {
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      exchangeProceedsElement(FilterQuery<ExchangeProceed> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'exchangeProceeds');
+    });
+  }
+}
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
@@ -3441,8 +3709,20 @@ const SamplingEntitySchema = Schema(
       name: r'id',
       type: IsarType.long,
     ),
-    r'quantity': PropertySchema(
+    r'product': PropertySchema(
       id: 2,
+      name: r'product',
+      type: IsarType.object,
+      target: r'Product',
+    ),
+    r'productPackaging': PropertySchema(
+      id: 3,
+      name: r'productPackaging',
+      type: IsarType.object,
+      target: r'ProductPackaging',
+    ),
+    r'quantity': PropertySchema(
+      id: 4,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -3459,6 +3739,21 @@ int _samplingEntityEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.product;
+    if (value != null) {
+      bytesCount += 3 +
+          ProductSchema.estimateSize(value, allOffsets[Product]!, allOffsets);
+    }
+  }
+  {
+    final value = object.productPackaging;
+    if (value != null) {
+      bytesCount += 3 +
+          ProductPackagingSchema.estimateSize(
+              value, allOffsets[ProductPackaging]!, allOffsets);
+    }
+  }
   return bytesCount;
 }
 
@@ -3470,7 +3765,19 @@ void _samplingEntitySerialize(
 ) {
   writer.writeLong(offsets[0], object.featureSamplingId);
   writer.writeLong(offsets[1], object.id);
-  writer.writeLong(offsets[2], object.quantity);
+  writer.writeObject<Product>(
+    offsets[2],
+    allOffsets,
+    ProductSchema.serialize,
+    object.product,
+  );
+  writer.writeObject<ProductPackaging>(
+    offsets[3],
+    allOffsets,
+    ProductPackagingSchema.serialize,
+    object.productPackaging,
+  );
+  writer.writeLong(offsets[4], object.quantity);
 }
 
 SamplingEntity _samplingEntityDeserialize(
@@ -3482,7 +3789,17 @@ SamplingEntity _samplingEntityDeserialize(
   final object = SamplingEntity(
     featureSamplingId: reader.readLongOrNull(offsets[0]),
     id: reader.readLongOrNull(offsets[1]),
-    quantity: reader.readLongOrNull(offsets[2]),
+    product: reader.readObjectOrNull<Product>(
+      offsets[2],
+      ProductSchema.deserialize,
+      allOffsets,
+    ),
+    productPackaging: reader.readObjectOrNull<ProductPackaging>(
+      offsets[3],
+      ProductPackagingSchema.deserialize,
+      allOffsets,
+    ),
+    quantity: reader.readLongOrNull(offsets[4]),
   );
   return object;
 }
@@ -3499,6 +3816,18 @@ P _samplingEntityDeserializeProp<P>(
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
+      return (reader.readObjectOrNull<Product>(
+        offset,
+        ProductSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 3:
+      return (reader.readObjectOrNull<ProductPackaging>(
+        offset,
+        ProductPackagingSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 4:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3655,6 +3984,42 @@ extension SamplingEntityQueryFilter
   }
 
   QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+      productIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'product',
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+      productIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'product',
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+      productPackagingIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'productPackaging',
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+      productPackagingIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'productPackaging',
+      ));
+    });
+  }
+
+  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
       quantityIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3730,4 +4095,18 @@ extension SamplingEntityQueryFilter
 }
 
 extension SamplingEntityQueryObject
-    on QueryBuilder<SamplingEntity, SamplingEntity, QFilterCondition> {}
+    on QueryBuilder<SamplingEntity, SamplingEntity, QFilterCondition> {
+  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition> product(
+      FilterQuery<Product> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'product');
+    });
+  }
+
+  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+      productPackaging(FilterQuery<ProductPackaging> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'productPackaging');
+    });
+  }
+}

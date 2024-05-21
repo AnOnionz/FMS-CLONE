@@ -24,7 +24,8 @@ import '../attendance/attendance_in_module.dart';
 import '../attendance_report/attendance_report_module.dart';
 import '../general/general_module.dart';
 import '../leave/leave_module.dart';
-import '../statistic/Individual_statistic_module.dart';
+import '../statistic/individual_statistic_module.dart';
+import '../statistic/individual_statistic_offline_module.dart';
 import '../sync/sync_module.dart';
 import '../work_place/work_place_module.dart';
 import 'presentation/bloc/app_bloc.dart';
@@ -80,6 +81,9 @@ class AppModule extends Module {
         module: StatisticModule(), transition: TransitionType.fadeIn);
     r.module(IndividualStatisticModule.route,
         module: IndividualStatisticModule(), transition: TransitionType.fadeIn);
+    r.module(IndividualStatisticOfflineModule.route,
+        module: IndividualStatisticOfflineModule(),
+        transition: TransitionType.fadeIn);
     r.module(LockModule.route,
         module: LockModule(), transition: TransitionType.fadeIn);
     r.module(CameraModule.route,

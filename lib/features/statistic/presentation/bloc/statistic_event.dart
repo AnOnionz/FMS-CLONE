@@ -12,8 +12,12 @@ class FetchTeamStatistic extends StatisticEvent {
 
 class FetchIndividualStatistic extends StatisticEvent {
   final int featureId;
+  final bool isOnline;
 
-  FetchIndividualStatistic({required this.featureId});
+  FetchIndividualStatistic({
+    required this.featureId,
+    required this.isOnline,
+  });
 }
 
 class FetchEmployeeStatistic extends StatisticEvent {
