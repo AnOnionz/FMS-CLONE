@@ -11,7 +11,6 @@ import 'package:fms/features/statistic/presentation/cubit/team_members_cubit.dar
 import '../../routes/routes.dart';
 import 'domain/usecases/fetch_individual_statistic_usecase.dart';
 import 'domain/usecases/fetch_team_statistic_usecase.dart';
-import 'presentation/pages/statistic_individual_page.dart';
 import 'presentation/pages/statistic_page.dart';
 
 class StatisticModule extends Module {

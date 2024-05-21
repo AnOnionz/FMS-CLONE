@@ -50,12 +50,9 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
   Future<void> _scanProductBarcode() async {
     FocusManager.instance.primaryFocus?.unfocus();
     String? _barcode = null;
-    await context.nextRoute(OrderModule.productBarcodeScanner,
-        arguments: (String value) {
-      _barcode = value;
-    });
+    _barcode = await context.nextRoute(OrderModule.productBarcodeScanner);
 
-    if (_barcode == null) return;
+    if (_barcode.isEmptyOrNull) return;
 
     if (concurProducts.keys.contains(_barcode)) {
       final _product = await OverlayManager.showSheet(

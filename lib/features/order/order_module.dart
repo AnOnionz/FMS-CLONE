@@ -50,7 +50,7 @@ class OrderModule extends Module {
     );
     r.child(
       Routes.root + productBarcodeScanner,
-      child: (_) => BarcodeScanner(onScan: r.args.data as Function(String)),
+      child: (_) => BarcodeScanner(),
     );
     r.child(
       Routes.root + success,
