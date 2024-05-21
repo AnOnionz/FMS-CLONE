@@ -5,7 +5,6 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/presentation/widgets/product/order_product_info.dart';
 
 import '../../../../../core/constant/colors.dart';
-import '../../../../../core/constant/format.dart';
 import '../../../../../core/widgets/button/flat.dart';
 import '../../../../../core/widgets/custom_checkbox.dart';
 import '../../../../../core/widgets/matter_container.dart';

@@ -22,8 +22,8 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    appBloc.add(AppAuthenticationSubscribed());
     appBloc.add(AppStarted());
+    appBloc.add(AppAuthenticationSubscribed());
   }
 
   @override

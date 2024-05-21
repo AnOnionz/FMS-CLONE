@@ -10,7 +10,7 @@ class StatisticPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isTeam == true) return StatisticTeamPage(entity: entity);
+    if (isTeam == true) return StatisticOutletPage(entity: entity);
     return StatisticIndividualPage(entity: entity);
   }
 }

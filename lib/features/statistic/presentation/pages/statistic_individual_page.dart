@@ -10,6 +10,7 @@ import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/data_load_error_widget.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
+import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/statistic/presentation/bloc/statistic_bloc.dart';
 import 'package:fms/features/statistic/presentation/widgets/statistic_purchase.dart';
 
@@ -29,22 +30,25 @@ class StatisticOutletPage extends StatisticDefaultPage {
 }
 
 class StatisticEmployeePage extends StatisticDefaultPage {
-  const StatisticEmployeePage({required GeneralFeatureData entity})
+  final EmployeeEntity employee;
+  const StatisticEmployeePage(
+      {required GeneralFeatureData entity, required this.employee})
       : super(type: StatisticType.employee, entity: entity);
 }
 
 class StatisticDefaultPage extends StatefulWidget {
   final GeneralFeatureData entity;
+  final EmployeeEntity? employee;
   final StatisticType type;
   const StatisticDefaultPage(
-      {super.key, required this.type, required this.entity});
+      {super.key, required this.type, required this.entity, this.employee});
 
   @override
   State<StatisticDefaultPage> createState() => _StatisticDefaultPageState();
 }
 
 class _StatisticDefaultPageState extends State<StatisticDefaultPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, GeneralDataMixin {
   final _bloc = Modular.get<StatisticBloc>();
   late TabController _tabController = TabController(vsync: this, length: 4);
 
@@ -61,13 +65,20 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
   }
 
   void _loadStatistic() {
-    _bloc.add(FetchIndividualStatistic(featureId: widget.entity.feature.id!));
+    if (widget.type == StatisticType.individual)
+      _bloc.add(FetchIndividualStatistic(featureId: widget.entity.feature.id!));
+    if (widget.type == StatisticType.outlet)
+      _bloc.add(FetchTeamStatistic(featureId: widget.entity.feature.id!));
+    if (widget.type == StatisticType.employee)
+      _bloc.add(FetchEmployeeStatistic(
+          featureId: widget.entity.feature.id!,
+          employeeId: widget.employee!.id));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: title),
+      appBar: DefaultAppBar(title: widget.entity.feature.name!),
       body: Padding(
         padding: EdgeInsets.only(
           top: 30.h,
@@ -108,7 +119,11 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
                       physics: kPhysics,
                       children: <Widget>[
                         StatisticGenaral(
-                            type: widget.type, entity: state.statistic),
+                            entity: widget.entity,
+                            type: widget.type,
+                            statisticEntity: state.statistic,
+                            employee: widget.employee,
+                            outlet: general.outlet),
                         StatisticPurchase(
                             total: state.statistic.totalPurchase,
                             purchases: state.statistic.purchases),
@@ -133,13 +148,5 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
         ),
       ),
     );
-  }
-
-  String get title {
-    return switch (widget.type) {
-      StatisticType.outlet => 'Thống kê theo outlet',
-      StatisticType.employee => 'Thống kê theo nhân sự',
-      _ => 'Thống kê',
-    };
   }
 }

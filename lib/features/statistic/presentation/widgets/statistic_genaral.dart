@@ -1,14 +1,19 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
+import 'package:fms/core/widgets/data_load_error_widget.dart';
 import 'package:fms/core/widgets/image_profile.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
+import 'package:fms/features/statistic/presentation/cubit/team_members_cubit.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
 import '../../../../core/constant/enum.dart';
@@ -18,15 +23,40 @@ import '../../domain/entities/statistic_entity.dart';
 import '../../statistic_module.dart';
 import 'statistic_type_item.dart';
 
-class StatisticGenaral extends StatelessWidget with GeneralDataMixin {
-  final StatisticEntity entity;
+class StatisticGenaral extends StatefulWidget {
+  final GeneralFeatureData entity;
+  final StatisticEntity statisticEntity;
   final OutletEntity? outlet;
+  final EmployeeEntity? employee;
   final StatisticType type;
   const StatisticGenaral(
-      {super.key, required this.entity, this.outlet, required this.type});
+      {super.key,
+      required this.statisticEntity,
+      this.outlet,
+      required this.type,
+      required this.entity,
+      this.employee});
 
+  @override
+  State<StatisticGenaral> createState() => _StatisticGenaralState();
+}
+
+class _StatisticGenaralState extends State<StatisticGenaral>
+    with GeneralDataMixin {
   Credentials get credentials =>
       Modular.get<AuthenticationRepository>().credentials!;
+
+  final _cubit = Modular.get<TeamMembersCubit>();
+
+  @override
+  void initState() {
+    fetchTeamMembers();
+    super.initState();
+  }
+
+  void fetchTeamMembers() {
+    _cubit.getTeamMembers(widget.entity.feature.id!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +72,12 @@ class StatisticGenaral extends StatelessWidget with GeneralDataMixin {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              switch (type) {
+              switch (widget.type) {
                 StatisticType.outlet => OutletInfo(outlet: general.outlet),
-                StatisticType.employee => OutletInfo(outlet: general.outlet),
-                _ => IndividualInfo(credentials: credentials)
+                StatisticType.employee =>
+                  IndividualInfo(employeeEntity: widget.employee),
+                StatisticType.individual =>
+                  IndividualInfo(credentials: credentials)
               },
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -63,53 +95,75 @@ class StatisticGenaral extends StatelessWidget with GeneralDataMixin {
               // SizedBox(height: 12.h),
               RowInfo(
                 leading: 'Tổng sản lượng',
-                info: entity.totalPurchase.toString(),
+                info: widget.statisticEntity.totalPurchase.toString(),
               ),
               SizedBox(height: 12.h),
               RowInfo(
                 leading: 'Tổng quà phát ra',
-                info: entity.totalExchange.toString(),
+                info: widget.statisticEntity.totalExchange.toString(),
               ),
               SizedBox(height: 12.h),
               RowInfo(
                 leading: 'Tổng sampling',
-                info: entity.totalSampling.toString(),
+                info: widget.statisticEntity.totalSampling.toString(),
               ),
             ],
           ),
         ),
-        Expanded(
-            child: switch (type) {
-          StatisticType.outlet => EmployeesOfOutlet(),
-          _ => SizedBox.shrink()
-        })
+        if (widget.type == StatisticType.outlet)
+          Expanded(
+              child: BlocBuilder<TeamMembersCubit, TeamMembersState>(
+            bloc: _cubit,
+            builder: (context, state) {
+              if (state is TeamMembersSuccess) {
+                return EmployeesOfOutlet(
+                    members: state.list, entity: widget.entity);
+              }
+              if (state is TeamMembersFailure) {
+                return DataLoadErrorWidget(onPressed: () => fetchTeamMembers);
+              }
+              return AppIndicator();
+            },
+          ))
       ],
     );
   }
 }
 
 class IndividualInfo extends StatelessWidget {
-  final Credentials credentials;
-  const IndividualInfo({super.key, required this.credentials});
+  final Credentials? credentials;
+  final EmployeeEntity? employeeEntity;
+  const IndividualInfo({super.key, this.credentials, this.employeeEntity})
+      : assert(employeeEntity == null || credentials == null);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ImageProfile(
-          imageUrl: credentials.user.pictureUrl == null
-              ? null
-              : credentials.user.pictureUrl!.toString(),
-          size: Size(80, 80),
-        ),
-        (credentials.user.name != null)
+        employeeEntity == null
+            ? ImageProfile(
+                imageUrl: credentials!.user.pictureUrl == null
+                    ? null
+                    : credentials!.user.pictureUrl!.toString(),
+                size: Size(80, 80),
+              )
+            : ImageProfile(
+                imageUrl: employeeEntity!.user.picture,
+                size: Size(80, 80),
+              ),
+        (credentials != null)
             ? Padding(
                 padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
-                child: Text(credentials.user.name!,
+                child: Text(credentials!.user.name ?? '',
                     style:
                         context.textTheme.h3?.copyWith(color: AppColors.black)),
               )
-            : SizedBox.shrink(),
+            : Padding(
+                padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
+                child: Text(employeeEntity!.user.name,
+                    style:
+                        context.textTheme.h3?.copyWith(color: AppColors.black)),
+              ),
         Text('MA0001',
             style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
       ],
@@ -168,7 +222,10 @@ class OutletInfo extends StatelessWidget {
 }
 
 class EmployeesOfOutlet extends StatelessWidget {
-  const EmployeesOfOutlet({super.key});
+  final GeneralFeatureData entity;
+  final List<EmployeeEntity> members;
+  const EmployeesOfOutlet(
+      {super.key, required this.members, required this.entity});
 
   @override
   Widget build(BuildContext context) {
@@ -189,13 +246,17 @@ class EmployeesOfOutlet extends StatelessWidget {
               SliverPadding(
                 padding: EdgeInsets.only(bottom: context.screenPadding.bottom),
                 sliver: SliverList.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) => StatisticTypeItem(
-                    onPressed: () =>
-                        context.nextRoute(StatisticModule.employee),
-                    title: 'Nguyễn Quốc An',
-                    subTitle: 'ma00001',
-                  ),
+                  itemCount: members.length,
+                  itemBuilder: (context, index) {
+                    final employee = members[index];
+                    return StatisticTypeItem(
+                      onPressed: () => context.nextRoute(
+                          StatisticModule.employee,
+                          arguments: [entity, employee]),
+                      title: employee.user.name,
+                      subTitle: 'Ma00001',
+                    );
+                  },
                 ),
               )
             ],
