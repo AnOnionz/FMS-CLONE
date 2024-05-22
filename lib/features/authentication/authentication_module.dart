@@ -10,6 +10,7 @@ import 'domain/usecases/get_credentials_usecase.dart';
 import 'domain/usecases/has_valid_credentials_usecase.dart';
 import 'domain/usecases/login_usecase.dart';
 import 'domain/usecases/logout_usecase.dart';
+import 'domain/usecases/renew_credentials_usecase.dart';
 import 'presentation/blocs/authentication_bloc.dart';
 
 class AuthenticationModule extends Module {
@@ -29,6 +30,7 @@ class AuthenticationModule extends Module {
     i.addLazySingleton(HasValidCredentialsUsecase.new);
     i.addLazySingleton(GetCredentialsUsecase.new);
     i.addLazySingleton(LogoutSuccessUsecase.new);
+    i.addLazySingleton(RenewCredentialsUsecase.new);
     i.addLazySingleton<AuthenticationBloc>(AuthenticationBloc.new);
   }
 }

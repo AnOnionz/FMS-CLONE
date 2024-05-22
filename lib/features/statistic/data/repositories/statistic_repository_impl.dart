@@ -45,6 +45,7 @@ class StatisticRepositoryImpl extends Repository
             await _remote.fetchIndividualStatistic(featureId: featureId);
       } else {
         final orders = await _local.getOrders();
+
         final ordersPurchases = orders
             .map((order) => (order.purchases ?? []).map((purchase) =>
                 PurchaseStatistic(
@@ -52,17 +53,21 @@ class StatisticRepositoryImpl extends Repository
                     productPackaging: purchase.productPackaging,
                     quantity: purchase.quantity)))
             .expand((element) => element);
-        final orderExchanges = orders
-            .map((order) => (order.exchanges ?? []).map((exchange) {
-                  final gifts = (exchange.exchangeProceeds ?? []).map((e) =>
-                      ExchangeStatistic(
-                          item: e.item,
-                          product: e.product,
-                          productPackaging: e.productPackaging,
-                          quantity: e.quantity));
-                  return gifts;
-                }).expand((element) => element))
-            .expand((element) => element);
+
+        final orderExchanges = orders.map((order) {
+          return (order.exchanges ?? []).map((exchange) {
+            final gifts = (exchange.exchangeProceeds ?? []).map((e) =>
+                ExchangeStatistic(
+                    item: e.item,
+                    product: e.product,
+                    productPackaging: e.productPackaging,
+                    quantity: e.quantity! * exchange.quantity!));
+
+            return gifts;
+          }).expand((element) => element);
+        }).expand((element) => element);
+        ;
+
         final orderSamplings = orders
             .map((order) => (order.samplings ?? []).map((sampling) =>
                 SamplingStatistic(
@@ -85,6 +90,21 @@ class StatisticRepositoryImpl extends Repository
           }
         });
 
+        final exchanges = <ExchangeStatistic>[];
+        orderExchanges.forEach((element) {
+          if (exchanges.contains(element)) {
+            final purchase = exchanges.firstWhere((value) =>
+                value.product == element.product &&
+                value.productPackaging == element.productPackaging &&
+                value.item == element.item);
+            exchanges.remove(purchase);
+            exchanges.add(purchase.copyWith(
+                quantity: purchase.quantity! + element.quantity!));
+          } else {
+            exchanges.add(element);
+          }
+        });
+
         final samplings = <SamplingStatistic>[];
         orderSamplings.forEach((element) {
           if (samplings.contains(element)) {
@@ -98,10 +118,11 @@ class StatisticRepositoryImpl extends Repository
             samplings.add(element);
           }
         });
+
         statistic = StatisticEntity(
             purchases:
                 purchases.sorted((a, b) => b.product!.id! - a.product!.id!),
-            exchanges: [],
+            exchanges: exchanges,
             samplings:
                 samplings.sorted((a, b) => b.product!.id! - a.product!.id!));
       }

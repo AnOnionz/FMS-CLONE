@@ -11,7 +11,7 @@ abstract class AuthenticationRepository {
   bool get isLogged;
   Future<Result<Credentials?>> login();
   Future<Result<void>> changePassword();
-  Future<Result<bool>> renewCredentials();
+  Future<Result<Credentials>> renewCredentials();
   Future<Result<UserProfile>> userProfile(String accessToken);
   Future<Result<Credentials>> getCredentials();
   Future<Result<bool>> hasValidCredentials();

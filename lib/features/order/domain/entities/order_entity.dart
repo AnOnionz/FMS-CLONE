@@ -401,6 +401,7 @@ class ExchangeEntity {
   }) {
     return ExchangeEntity(
       id: id ?? this.id,
+      exchangeProceeds: this.exchangeProceeds,
       featureSchemeExchangeId:
           featureSchemeExchangeId ?? this.featureSchemeExchangeId,
       quantity: quantity ?? this.quantity,

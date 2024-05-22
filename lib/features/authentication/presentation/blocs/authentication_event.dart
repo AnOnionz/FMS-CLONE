@@ -11,3 +11,7 @@ final class AuthenticationLogin extends AuthenticationEvent {
 
   AuthenticationLogin(this.credentials);
 }
+
+final class AuthenticationReFresh extends AuthenticationEvent {
+  AuthenticationReFresh();
+}

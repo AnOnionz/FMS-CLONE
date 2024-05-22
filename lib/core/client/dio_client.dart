@@ -43,7 +43,7 @@ class DioClient extends ApiService {
     _http.interceptors.add(InterceptorsWrapper(
       onResponse: (response, handler) {
         if (response.statusCode == StatusCode.UNAUTHORIZED) {
-          Modular.get<AuthenticationBloc>().add(AuthenticationLogout());
+          Modular.get<AuthenticationBloc>().add(AuthenticationReFresh());
         } else {
           handler.next(response);
         }

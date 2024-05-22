@@ -8,6 +8,7 @@ import 'package:fms/features/authentication/domain/usecases/logout_success_useca
 import 'package:fms/features/authentication/domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/get_credentials_usecase.dart';
 import '../../domain/usecases/has_valid_credentials_usecase.dart';
+import '../../domain/usecases/renew_credentials_usecase.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -20,7 +21,8 @@ class AuthenticationBloc
       required LoginUsecase loginUsecase,
       required HasValidCredentialsUsecase hasValidCredentialsUsecase,
       required GetCredentialsUsecase getCredentialsUsecase,
-      required ChangePassUsecase changePassword})
+      required ChangePassUsecase changePassword,
+      required RenewCredentialsUsecase renewCredentials})
       : super(const AuthenticationState.unknown()) {
     on<AuthenticationStarted>(
       (event, emit) async {
@@ -44,6 +46,23 @@ class AuthenticationBloc
       },
       transformer: droppable(),
     );
+    on<AuthenticationReFresh>((event, emit) async {
+      bool hasValidCredentials = false;
+
+      await hasValidCredentialsUsecase()
+        ..fold(
+            (fail) async => emit(const AuthenticationState.unauthenticated()),
+            (success) async {
+          hasValidCredentials = true;
+        });
+      if (hasValidCredentials) {
+        await renewCredentials()
+          ..fold(
+              (fail) async => emit(const AuthenticationState.unauthenticated()),
+              (success) async =>
+                  emit(AuthenticationState.authenticated(success)));
+      }
+    });
 
     on<AuthenticationLogin>(
       (event, emit) async {
