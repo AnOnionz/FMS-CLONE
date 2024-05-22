@@ -42,7 +42,7 @@ class StatisticGenaral extends StatefulWidget {
 }
 
 class _StatisticGenaralState extends State<StatisticGenaral>
-    with GeneralDataMixin {
+    with AutomaticKeepAliveClientMixin, GeneralDataMixin {
   Credentials get credentials =>
       Modular.get<AuthenticationRepository>().credentials!;
 
@@ -61,6 +61,7 @@ class _StatisticGenaralState extends State<StatisticGenaral>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -131,6 +132,9 @@ class _StatisticGenaralState extends State<StatisticGenaral>
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class IndividualInfo extends StatelessWidget {
