@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -15,6 +16,8 @@ import 'package:fms/features/statistic/presentation/bloc/statistic_bloc.dart';
 import 'package:fms/features/statistic/presentation/widgets/statistic_purchase.dart';
 
 import '../../../../core/constant/enum.dart';
+import '../../../../core/constant/icons.dart';
+import '../../../../core/widgets/popup.dart';
 import '../widgets/statistic_genaral.dart';
 import '../widgets/statistic_gift.dart';
 import '../widgets/statistic_sampling.dart';
@@ -94,8 +97,19 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
         padding: EdgeInsets.only(
           top: 30.h,
         ),
-        child: BlocBuilder<StatisticBloc, StatisticState>(
+        child: BlocConsumer<StatisticBloc, StatisticState>(
           bloc: _bloc,
+          listener: (context, state) {
+            if (state is StatisticFailure) {
+              showFailure(
+                  title: 'Không có kết nối mạng',
+                  icon: SvgPicture.asset(AppIcons.requiredInternet),
+                  message:
+                      'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
+                  btnText: 'Ok',
+                  onPressed: () {});
+            }
+          },
           builder: (context, state) {
             if (state is StatisticSuccess) {
               return Column(
@@ -152,7 +166,8 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
             }
             if (state is StatisticFailure) {
               return Center(
-                  child: DataLoadErrorWidget(onPressed: () => _loadStatistic));
+                  child:
+                      DataLoadErrorWidget(onPressed: () => _loadStatistic()));
             }
             return Center(child: AppIndicator());
           },
