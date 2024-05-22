@@ -37,7 +37,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
   late final _exchange = widget.exchange;
   late final _purchases = widget.controller.products;
   late final bool isCanExchange = isValid();
-  late bool isMax = false;
+  bool get isMax => widget.value == _exchange.maxReceiveQuantity;
 
   bool isValid() {
     if (_exchange.reachAmount != null &&
@@ -80,6 +80,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
           if (isValids.every((value) => value == false)) return false;
       }
     }
+
     return true;
   }
 
@@ -176,11 +177,6 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
                   child: InputQuantity(
                     key: ValueKey(_exchange.id!.toString()),
                     max: widget.exchange.maxReceiveQuantity!,
-                    onMax: () {
-                      setState(() {
-                        isMax = true;
-                      });
-                    },
                     value: widget.value,
                     onValueChanged: (value) {
                       final ExchangeEntity entity = ExchangeEntity(

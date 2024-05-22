@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
 import 'package:fms/features/home/presentation/widgets/feature_box.dart';
@@ -44,7 +45,7 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
                       feature.type == FeatureType.onlineIndividualSummaryReport;
 
               return FeatureBox(
-                icon: AppIcons.sync,
+                icon: _getIcon(feature),
                 name: feature.name!,
                 onPressed: () => context
                     .read<NecessaryBloc>()
@@ -55,5 +56,12 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
         ],
       ),
     );
+  }
+
+  String _getIcon(FeatureEntity feature) {
+    return switch (feature.type) {
+      FeatureType.synchronization => AppIcons.sync,
+      _ => AppIcons.statistic,
+    };
   }
 }

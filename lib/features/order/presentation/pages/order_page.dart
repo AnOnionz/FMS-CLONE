@@ -336,9 +336,10 @@ class _OrderPageState extends State<OrderPage> {
         key: PageStorageKey('product'),
         onBack: onBack,
         onNext: onNext,
-        onSaveData: (purchases) {
+        onSaveData: (purchases, isChanged) {
           setState(() {
-            orderEntity = orderEntity.copyWith(purchases: purchases);
+            orderEntity = orderEntity.copyWith(
+                purchases: purchases, exchanges: isChanged ? [] : null);
           });
         },
       ));

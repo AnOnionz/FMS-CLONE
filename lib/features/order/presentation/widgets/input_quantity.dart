@@ -36,8 +36,9 @@ class _InputQuantityState extends State<InputQuantity> {
   void _increase() {
     if (_value < widget.max) {
       setState(() {
-        _value += 1;
+        _value++;
       });
+
       widget.onValueChanged?.call(_value);
     } else {
       widget.onMax?.call();

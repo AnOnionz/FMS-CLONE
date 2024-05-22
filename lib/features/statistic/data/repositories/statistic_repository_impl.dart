@@ -122,7 +122,8 @@ class StatisticRepositoryImpl extends Repository
         statistic = StatisticEntity(
             purchases:
                 purchases.sorted((a, b) => b.product!.id! - a.product!.id!),
-            exchanges: exchanges,
+            exchanges: exchanges
+                .sorted((a, b) => b.product?.id ?? 0 - (a.product?.id ?? 0)),
             samplings:
                 samplings.sorted((a, b) => b.product!.id! - a.product!.id!));
       }
