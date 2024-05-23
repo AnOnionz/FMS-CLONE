@@ -34,6 +34,9 @@ dependencies:
   image: ^4.1.3
   fluttertoast: ^8.2.4
   flutter_svg: ^2.0.10+1
+  collection: ^1.18.0
+  uuid: ^4.4.0
+  async: ^2.11.0
   # flutter_dotenv: ^5.1.0
   #service
   permission_handler: ^10.4.3
@@ -42,9 +45,10 @@ dependencies:
   auth0_flutter: ^1.6.0
   internet_connection_checker_plus: ^2.2.0
   flutter_kronos: ^0.1.0+1
-
   local_auth: ^2.2.0
   flutter_screen_lock: ^9.0.2
+  currency_text_input_formatter: ^2.2.1
+  fuzzy: ^0.5.1
 
   #widget
   cached_network_image: ^3.3.1
@@ -53,12 +57,15 @@ dependencies:
   stop_watch_timer: ^3.1.1
   camerawesome: ^2.0.1
   flutter_typeahead: ^5.2.0
+  easy_image_viewer: ^1.4.1
+  ai_barcode_scanner: ^3.4.3
 
   #tool
   flutter_flavor: ^3.1.1
   change_app_package_name: ^1.1.0
   flutter_native_splash: ^2.4.0
   flutter_launcher_icons: ^0.13.1
+
   #flutter pub run change_app_package_name:main com.new.package.name
 
   google_maps_flutter: ^2.5.3
@@ -71,13 +78,7 @@ dependencies:
   simple_progress_indicators: ^0.2.0
   bloc_concurrency: ^0.2.5
   rive: ^0.13.1
-  easy_image_viewer: ^1.4.1
-  collection: ^1.18.0
-  uuid: ^4.4.0
-  async: ^2.11.0
-  currency_text_input_formatter: ^2.2.1
-  fuzzy: ^0.5.1
-  ai_barcode_scanner: ^3.4.3
+
   string_validator_plus: ^0.0.7
 
 dependency_overrides:
