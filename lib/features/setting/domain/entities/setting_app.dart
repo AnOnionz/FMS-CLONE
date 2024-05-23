@@ -1,3 +1,4 @@
+import 'package:crypto/crypto.dart';
 import 'package:isar/isar.dart';
 
 part 'setting_app.g.dart';
@@ -28,11 +29,18 @@ class SettingApp {
 class AppLock {
   bool? isPasswordSet;
   bool? isLocalAuth;
+  String? password;
 
-  AppLock({
-    this.isPasswordSet = false,
-    this.isLocalAuth = false,
-  });
+  AppLock(
+      {this.isPasswordSet = false, this.isLocalAuth = false, this.password});
+
+  AppLock crypto(String data) {
+    final code = md5.convert(data.codeUnits);
+    return AppLock(
+        isLocalAuth: isLocalAuth,
+        isPasswordSet: isPasswordSet,
+        password: code.toString());
+  }
 
   @override
   String toString() =>
