@@ -305,4 +305,10 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
   //   });
   //   return hasNoSynced;
   // }
+
+  @override
+  Future<void> close() {
+    subscription?.cancel();
+    return super.close();
+  }
 }
