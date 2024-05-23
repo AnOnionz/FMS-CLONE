@@ -51,8 +51,8 @@ class AppLock {
     bool? isLocalAuth,
   }) {
     return AppLock(
-      isPasswordSet: isPasswordSet ?? this.isPasswordSet,
-      isLocalAuth: isLocalAuth ?? this.isLocalAuth,
-    );
+        isPasswordSet: isPasswordSet ?? this.isPasswordSet,
+        isLocalAuth: isLocalAuth ?? this.isLocalAuth,
+        password: password);
   }
 }

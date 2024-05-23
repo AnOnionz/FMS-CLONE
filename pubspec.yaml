@@ -81,6 +81,7 @@ dependencies:
 
   string_validator_plus: ^0.0.7
   crypto: ^3.0.3
+  package_info_plus: ^8.0.0
 
 dependency_overrides:
   intl: ^0.19.0

@@ -18,6 +18,6 @@ class AppInfomationModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child('/', child: (_) => const AppInformationPage());
+    r.child('/', child: (_) => AppInformationPage());
   }
 }
