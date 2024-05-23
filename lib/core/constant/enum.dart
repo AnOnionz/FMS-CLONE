@@ -16,12 +16,13 @@ enum FeatureType {
   multipleEntitiesQuantityCapturing(),
   historyExchange(),
   synchronization(true),
-  onlineIndividualSummaryReport(true),
-  onlineTeamSummaryReport(true),
+  onlineIndividualSummaryReport(true, true),
+  onlineTeamSummaryReport(true, true),
   summaryReport(true);
 
-  const FeatureType([this.isAssistance = false]);
+  const FeatureType([this.isAssistance = false, this.isOnline = false]);
   final bool isAssistance;
+  final bool isOnline;
 }
 
 enum SettingType { none, toggle, transfer }

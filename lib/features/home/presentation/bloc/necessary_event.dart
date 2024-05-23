@@ -4,9 +4,8 @@ sealed class NecessaryEvent {}
 
 class NecessaryIn extends NecessaryEvent {
   final FeatureEntity feature;
-  final bool isOnline;
 
-  NecessaryIn({required this.feature, this.isOnline = false});
+  NecessaryIn({required this.feature});
 }
 
 class NecessaryOut extends NecessaryEvent {

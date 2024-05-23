@@ -40,16 +40,13 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
             itemCount: tasks!.length,
             itemBuilder: (context, index) {
               final feature = tasks![index];
-              final bool isOnline =
-                  feature.type == FeatureType.onlineTeamSummaryReport ||
-                      feature.type == FeatureType.onlineIndividualSummaryReport;
 
               return FeatureBox(
                 icon: _getIcon(feature),
                 name: feature.name!,
                 onPressed: () => context
                     .read<NecessaryBloc>()
-                    .add(NecessaryIn(feature: feature, isOnline: isOnline)),
+                    .add(NecessaryIn(feature: feature)),
               );
             },
           )

@@ -112,7 +112,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
   Future<void> onNecessaryIn(
       NecessaryIn event, Emitter<NecessaryState> emit) async {
     final _connectivityService = Modular.get<ConnectivityService>();
-    if (event.isOnline) {
+    if (event.feature.type!.isOnline) {
       final hasNoSynced = _syncBloc.state.status == SyncStatus.isNoSynced;
       if (hasNoSynced) {
         emit(NecessarySync(onClose: () {}));

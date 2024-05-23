@@ -99,7 +99,6 @@ final class LocationService extends ChangeNotifier {
           return false;
         }
       } catch (e) {
-        Fx.log(e);
         subscription?.resume();
         return false;
       }
@@ -192,7 +191,6 @@ final class LocationService extends ChangeNotifier {
     _handlePermission().then((value) {
       _positionStreamSubscription =
           onPositionChanged.handleError((error) async {
-        Fx.log(error.runtimeType);
         _positionStreamSubscription?.pause();
         _handlePermission(_positionStreamSubscription);
       }).listen((Position? position) {
