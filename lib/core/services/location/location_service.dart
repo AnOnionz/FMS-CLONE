@@ -11,7 +11,6 @@ import '../../permission/permisson_manager.dart';
 import './../../../core/constant/keys.dart';
 import './../../../core/database/database.dart';
 import './../../../core/errors/location_error.dart';
-import './../../../core/mixins/common.dart';
 
 int kDistanceFilter = 15;
 
@@ -64,7 +63,7 @@ final class LocationService extends ChangeNotifier {
         distanceFilter: kDistanceFilter,
       );
     }
-  } // Continuously emit location updates
+  }
 
   StreamSubscription<Position>? _positionStreamSubscription;
 
