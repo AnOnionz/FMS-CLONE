@@ -25,9 +25,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
             onTap: onBack ??
                 () {
                   try {
-                    context.pop();
+                    context.popIfCan();
                   } catch (e) {
-                    context.pop();
+                    context.popIfCan();
                   }
                 },
             child: Padding(

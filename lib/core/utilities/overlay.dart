@@ -82,11 +82,11 @@ final class OverlayManager {
           message: msg,
         ),
         gravity: ToastGravity.TOP,
-        toastDuration: Duration(seconds: 2),
+        toastDuration: Duration(seconds: 4),
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: child,
-            top: 30.h,
+            top: 40.h,
             left: 32.w,
           );
         });
@@ -109,7 +109,7 @@ class CustomToast extends StatelessWidget {
       child: Center(
         child: Text(message,
             style:
-                context.textTheme.subtitle1?.copyWith(color: AppColors.orange)),
+                context.textTheme.subtitle1?.copyWith(color: AppColors.white)),
       ),
     );
   }

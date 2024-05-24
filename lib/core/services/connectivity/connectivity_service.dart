@@ -10,7 +10,7 @@ class ConnectivityService {
 
   ConnectivityService();
 
-  void startup({required Duration interval, required Duration timeout}) {
+  void startup({required Duration interval}) {
     connectivity = InternetConnection.createInstance(
       checkInterval: interval,
     );

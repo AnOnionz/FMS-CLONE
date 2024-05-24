@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
@@ -97,8 +99,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<void> _startInternetConnectionService() async {
     return _connectivityService.startup(
-      timeout: const Duration(seconds: 20),
-      interval: const Duration(seconds: 8),
+      interval: const Duration(seconds: 5),
     );
   }
 
@@ -124,9 +125,33 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       if (status == InternetStatus.connected) {
       } else {
         if (OverlayManager.currentContext != null) {
-          OverlayManager.showToast(
-              msg: 'Không có kết nối internet',
-              context: OverlayManager.currentContext!);
+          if (Modular.to.navigateHistory.last.name == HomeModule.route) {
+            OverlayManager.showSnackbar(
+                snackbar: SnackBar(
+              behavior: SnackBarBehavior.floating,
+              elevation: 3.0,
+              margin: EdgeInsets.all(10),
+              shape: ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              backgroundColor: AppColors.black.withOpacity(0.7),
+              content: Row(
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: AppColors.white,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Không có kết nối internet',
+                  ),
+                ],
+              ),
+            ));
+          } else {
+            OverlayManager.showToast(
+                msg: 'Không có kết nối internet',
+                context: OverlayManager.currentContext!);
+          }
         }
       }
     });
