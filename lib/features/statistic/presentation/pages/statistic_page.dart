@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -95,7 +96,7 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
       appBar: DefaultAppBar(title: widget.entity.feature.name!),
       body: Padding(
         padding: EdgeInsets.only(
-          top: 30.h,
+          top: 25.h,
         ),
         child: BlocConsumer<StatisticBloc, StatisticState>(
           bloc: _bloc,
@@ -114,29 +115,32 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
             if (state is StatisticSuccess) {
               return Column(
                 children: [
-                  TabBar(
-                    controller: _tabController,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: AppColors.orange,
-                    indicator: UnderlineTabIndicator(
-                        borderRadius: BorderRadius.circular(8.sqr),
-                        borderSide:
-                            BorderSide(color: AppColors.orange, width: 4.h),
-                        insets: EdgeInsets.fromLTRB(0, 0, 0, -1.5)),
-                    overlayColor:
-                        MaterialStatePropertyAll(AppColors.transparent),
-                    dividerColor: 'FCD8DF'.toColor(),
-                    physics: kPhysics,
-                    splashFactory: NoSplash.splashFactory,
-                    labelColor: AppColors.orange,
-                    unselectedLabelColor: 'CCC6D9'.toColor(),
-                    labelStyle: context.textTheme.caption1,
-                    tabs: <Widget>[
-                      Tab(child: FittedBox(child: Text('Tổng quan'))),
-                      Tab(child: FittedBox(child: Text('Sản phẩm'))),
-                      Tab(child: FittedBox(child: Text('Quà tặng'))),
-                      Tab(child: FittedBox(child: Text('Sampling'))),
-                    ],
+                  ColoredBox(
+                    color: AppColors.white,
+                    child: TabBar(
+                      controller: _tabController,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      indicatorColor: AppColors.orange,
+                      indicator: UnderlineTabIndicator(
+                          borderRadius: BorderRadius.circular(8.sqr),
+                          borderSide:
+                              BorderSide(color: AppColors.orange, width: 4.h),
+                          insets: EdgeInsets.fromLTRB(0, 0, 0, -1.5)),
+                      overlayColor:
+                          MaterialStatePropertyAll(AppColors.transparent),
+                      dividerColor: 'FCD8DF'.toColor(),
+                      physics: kPhysics,
+                      splashFactory: NoSplash.splashFactory,
+                      labelColor: AppColors.orange,
+                      unselectedLabelColor: 'CCC6D9'.toColor(),
+                      labelStyle: context.textTheme.caption1,
+                      tabs: <Widget>[
+                        Tab(child: FittedBox(child: Text('Tổng quan'))),
+                        Tab(child: FittedBox(child: Text('Sản phẩm'))),
+                        Tab(child: FittedBox(child: Text('Quà tặng'))),
+                        Tab(child: FittedBox(child: Text('Sampling'))),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: TabBarView(
