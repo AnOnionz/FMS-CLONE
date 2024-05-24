@@ -242,8 +242,8 @@ class EmployeesOfOutlet extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
           child: Text(
-            'Danh sách nhân sự làm việc tại booth',
-            style: context.textTheme.h3?.copyWith(color: AppColors.black),
+            'Danh sách nhân sự làm việc tại outlet',
+            style: context.textTheme.h3?.copyWith(color: AppColors.nobel),
           ),
         ),
         Flexible(
@@ -256,7 +256,7 @@ class EmployeesOfOutlet extends StatelessWidget {
                   itemCount: members.length,
                   itemBuilder: (context, index) {
                     final employee = members[index];
-                    return StatisticTypeItem(
+                    return StatisticItem(
                       onPressed: () => context.nextRoute(
                           StatisticModule.employee,
                           arguments: [entity, employee]),

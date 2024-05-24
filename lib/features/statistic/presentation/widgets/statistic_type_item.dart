@@ -4,11 +4,11 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../core/constant/colors.dart';
 
-class StatisticTypeItem extends StatelessWidget {
+class StatisticItem extends StatelessWidget {
   final VoidCallback onPressed;
   final String title;
   final String? subTitle;
-  const StatisticTypeItem(
+  const StatisticItem(
       {super.key, required this.onPressed, required this.title, this.subTitle});
 
   @override
