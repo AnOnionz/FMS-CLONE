@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';

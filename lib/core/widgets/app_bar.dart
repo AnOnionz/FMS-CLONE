@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fms/core/constant/colors.dart';
 
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -41,7 +40,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
             title,
             style: context.textTheme.h2,
           ),
-          actions: [action ?? SizedBox()],
+          actions: [action ?? SizedBox.shrink()],
           automaticallyImplyLeading: false,
           centerTitle: true,
         ));
