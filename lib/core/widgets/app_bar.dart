@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/constant/colors.dart';
 
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -19,6 +20,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
         preferredSize: Size(context.screenWidth, 40.h),
         child: AppBar(
+          titleSpacing: 0.0,
           forceMaterialTransparency: true,
           leadingWidth: 42.w,
           leading: GestureDetector(
@@ -32,26 +34,21 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
             child: Padding(
               padding: EdgeInsets.only(left: 16.w),
-              child: iconBack ??
-                  SvgPicture.asset(
-                    AppIcons.back,
-                  ),
+              child: iconBack ?? SvgPicture.asset(AppIcons.back),
             ),
           ),
-          title: Padding(
-            padding: EdgeInsets.only(bottom: 2.h),
-            child: Text(
-              title,
-              style: context.textTheme.h2,
-            ),
+          title: Text(
+            title,
+            style: context.textTheme.h2,
           ),
           actions: [action ?? SizedBox()],
+          automaticallyImplyLeading: false,
           centerTitle: true,
         ));
   }
 
   @override
-  Size get preferredSize => Size(0, 40.h);
+  Size get preferredSize => Size(0, 48.h);
 }
 
 class HistoryButton extends StatelessWidget {
