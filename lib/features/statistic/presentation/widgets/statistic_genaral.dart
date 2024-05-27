@@ -167,7 +167,7 @@ class IndividualInfo extends StatelessWidget {
               )
             : Padding(
                 padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
-                child: Text(employeeEntity!.user.name,
+                child: Text(employeeEntity!.user.name!,
                     style:
                         context.textTheme.h3?.copyWith(color: AppColors.black)),
               ),
@@ -192,7 +192,7 @@ class EmployeeInfo extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
-          child: Text(employee.user.name,
+          child: Text(employee.user.name!,
               style: context.textTheme.h3?.copyWith(color: AppColors.black)),
         ),
         Text('MA0001',
@@ -260,7 +260,7 @@ class EmployeesOfOutlet extends StatelessWidget {
                       onPressed: () => context.nextRoute(
                           StatisticModule.employee,
                           arguments: [entity, employee]),
-                      title: employee.user.name,
+                      title: employee.user.name!,
                       subTitle: 'Ma00001',
                     );
                   },

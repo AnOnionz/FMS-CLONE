@@ -29,6 +29,12 @@ const AttendanceEntitySchema = Schema(
       id: 2,
       name: r'id',
       type: IsarType.long,
+    ),
+    r'user': PropertySchema(
+      id: 3,
+      name: r'user',
+      type: IsarType.object,
+      target: r'EmployeeUserEntity',
     )
   },
   estimateSize: _attendanceEntityEstimateSize,
@@ -59,6 +65,14 @@ int _attendanceEntityEstimateSize(
               value, allOffsets[AttendanceData]!, allOffsets);
     }
   }
+  {
+    final value = object.user;
+    if (value != null) {
+      bytesCount += 3 +
+          EmployeeUserEntitySchema.estimateSize(
+              value, allOffsets[EmployeeUserEntity]!, allOffsets);
+    }
+  }
   return bytesCount;
 }
 
@@ -81,6 +95,12 @@ void _attendanceEntitySerialize(
     object.dataOut,
   );
   writer.writeLong(offsets[2], object.id);
+  writer.writeObject<EmployeeUserEntity>(
+    offsets[3],
+    allOffsets,
+    EmployeeUserEntitySchema.serialize,
+    object.user,
+  );
 }
 
 AttendanceEntity _attendanceEntityDeserialize(
@@ -101,6 +121,11 @@ AttendanceEntity _attendanceEntityDeserialize(
       allOffsets,
     ),
     id: reader.readLongOrNull(offsets[2]),
+    user: reader.readObjectOrNull<EmployeeUserEntity>(
+      offsets[3],
+      EmployeeUserEntitySchema.deserialize,
+      allOffsets,
+    ),
   );
   return object;
 }
@@ -126,6 +151,12 @@ P _attendanceEntityDeserializeProp<P>(
       )) as P;
     case 2:
       return (reader.readLongOrNull(offset)) as P;
+    case 3:
+      return (reader.readObjectOrNull<EmployeeUserEntity>(
+        offset,
+        EmployeeUserEntitySchema.deserialize,
+        allOffsets,
+      )) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -242,6 +273,24 @@ extension AttendanceEntityQueryFilter
       ));
     });
   }
+
+  QueryBuilder<AttendanceEntity, AttendanceEntity, QAfterFilterCondition>
+      userIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'user',
+      ));
+    });
+  }
+
+  QueryBuilder<AttendanceEntity, AttendanceEntity, QAfterFilterCondition>
+      userIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'user',
+      ));
+    });
+  }
 }
 
 extension AttendanceEntityQueryObject
@@ -257,6 +306,13 @@ extension AttendanceEntityQueryObject
       dataOut(FilterQuery<AttendanceData> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'dataOut');
+    });
+  }
+
+  QueryBuilder<AttendanceEntity, AttendanceEntity, QAfterFilterCondition> user(
+      FilterQuery<EmployeeUserEntity> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'user');
     });
   }
 }

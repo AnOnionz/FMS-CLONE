@@ -1,8 +1,7 @@
 part of 'attendance_report_bloc.dart';
 
-abstract class AttendanceReportEvent extends Equatable {
+abstract class AttendanceReportEvent {
   const AttendanceReportEvent();
-
-  @override
-  List<Object> get props => [];
 }
+
+class GetData extends AttendanceReportEvent {}

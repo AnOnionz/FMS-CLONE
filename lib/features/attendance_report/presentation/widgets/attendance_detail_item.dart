@@ -38,16 +38,16 @@ class AttendanceDetailItem extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.only(top: 6.h),
                       child: Text('ma0001', style: context.textTheme.body2)),
-                  Padding(
-                      padding: EdgeInsets.only(top: 6.h),
-                      child: Text('Booth A', style: context.textTheme.body2))
+                  // Padding(
+                  //     padding: EdgeInsets.only(top: 6.h),
+                  //     child: Text('Booth A', style: context.textTheme.body2))
                 ],
               ),
             ),
             VerticalDivider(
               color: AppColors.whisper,
-              endIndent: 24.h,
-              indent: 24.h,
+              endIndent: 20.w,
+              indent: 20.w,
             ),
             Expanded(flex: 3, child: AttendanceDataDetail())
           ],

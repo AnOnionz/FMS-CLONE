@@ -91,6 +91,7 @@ const GeneralEntitySchema = CollectionSchema(
     r'FeatureSampling': FeatureSamplingSchema,
     r'BoothEntity': BoothEntitySchema,
     r'AttendanceEntity': AttendanceEntitySchema,
+    r'EmployeeUserEntity': EmployeeUserEntitySchema,
     r'AttendanceData': AttendanceDataSchema,
     r'ImageCloud': ImageCloudSchema
   },

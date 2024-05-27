@@ -47,7 +47,7 @@ class AuthenticationRepositoryImpl extends Repository
       if (refreshToken == null) {
         return Left(DataNullFailure());
       }
-      final credentials = await _remote.renewCredentials(refreshToken!);
+      final credentials = await _remote.renewCredentials(refreshToken);
       _credentials = credentials;
       _dio.setBearerAuth(
           token: credentials.tokenType + ' ' + credentials.accessToken);

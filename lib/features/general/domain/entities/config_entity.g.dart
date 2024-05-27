@@ -898,6 +898,7 @@ const _FeatureEntitytypeEnumValueMap = {
   r'synchronization': r'synchronization',
   r'onlineIndividualSummaryReport': r'onlineIndividualSummaryReport',
   r'onlineTeamSummaryReport': r'onlineTeamSummaryReport',
+  r'onlineTeamAttendanceReport': r'onlineTeamAttendanceReport',
   r'summaryReport': r'summaryReport',
 };
 const _FeatureEntitytypeValueEnumMap = {
@@ -913,6 +914,7 @@ const _FeatureEntitytypeValueEnumMap = {
   r'synchronization': FeatureType.synchronization,
   r'onlineIndividualSummaryReport': FeatureType.onlineIndividualSummaryReport,
   r'onlineTeamSummaryReport': FeatureType.onlineTeamSummaryReport,
+  r'onlineTeamAttendanceReport': FeatureType.onlineTeamAttendanceReport,
   r'summaryReport': FeatureType.summaryReport,
 };
 

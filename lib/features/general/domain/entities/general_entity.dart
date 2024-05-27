@@ -4,6 +4,7 @@ import 'package:fms/features/work_place/domain/entities/project_entity.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
+import '../../../statistic/domain/entities/employee_entity.dart';
 import '../../../work_place/domain/entities/booth_entity.dart';
 import '../../../work_place/domain/entities/outlet_entity.dart';
 

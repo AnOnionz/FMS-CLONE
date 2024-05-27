@@ -97,7 +97,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
           height: 16.8.sp / 14.sp),
       caption3: TextStyle(
           fontSize: 12.sp,
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.normal,
           fontFamily: AppFonts.lato,
           letterSpacing: 0.4.sp,
           height: 14.4.sp / 12.sp),

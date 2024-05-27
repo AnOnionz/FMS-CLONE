@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/constant/enum.dart';
@@ -9,11 +10,13 @@ part 'attendance_entity.g.dart';
 @embedded
 class AttendanceEntity {
   final int? id;
+  final EmployeeUserEntity? user;
   final AttendanceData? dataIn;
   final AttendanceData? dataOut;
 
   AttendanceEntity({
     this.id,
+    this.user,
     this.dataIn,
     this.dataOut,
   });
@@ -21,6 +24,7 @@ class AttendanceEntity {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'user': user?.toMap(),
       'in': dataIn?.toMap(),
       'out': dataOut?.toMap(),
     };
@@ -29,6 +33,9 @@ class AttendanceEntity {
   factory AttendanceEntity.fromMap(Map<String, dynamic> map) {
     return AttendanceEntity(
       id: map['id'] as int,
+      user: map['user'] != null
+          ? EmployeeUserEntity.fromMap(map['in'] as Map<String, dynamic>)
+          : null,
       dataIn: map['in'] != null
           ? AttendanceData.fromMap(map['in'] as Map<String, dynamic>)
           : null,
@@ -44,15 +51,18 @@ class AttendanceEntity {
       AttendanceEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'AttendanceEntity(id: $id, in: $dataIn, out: $dataOut)';
+  String toString() =>
+      'AttendanceEntity(id: $id, user: $user, in: $dataIn, out: $dataOut)';
 
   AttendanceEntity copyWith({
     int? id,
+    EmployeeUserEntity? user,
     AttendanceData? dataIn,
     AttendanceData? dataOut,
   }) {
     return AttendanceEntity(
       id: id ?? this.id,
+      user: user,
       dataIn: dataIn ?? this.dataIn,
       dataOut: dataOut ?? this.dataOut,
     );

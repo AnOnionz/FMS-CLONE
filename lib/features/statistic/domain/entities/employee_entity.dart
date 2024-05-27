@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:isar/isar.dart';
+
+part 'employee_entity.g.dart';
+
 class EmployeeEntity {
   final int id;
   final EmployeeUserEntity user;
@@ -42,18 +46,19 @@ class EmployeeEntity {
   String toString() => 'EmployeeEntity(id: $id, user: $user)';
 }
 
+@embedded
 class EmployeeUserEntity {
-  final int id;
-  final String name;
-  final String username;
+  final int? id;
+  final String? name;
+  final String? username;
   final String? picture;
   final String? email;
   final String? phone;
   final String? gender;
   EmployeeUserEntity({
-    required this.id,
-    required this.name,
-    required this.username,
+    this.id,
+    this.name,
+    this.username,
     this.picture,
     this.email,
     this.phone,
