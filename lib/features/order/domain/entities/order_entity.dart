@@ -13,7 +13,7 @@ import '../../../report/domain/entities/photo_entity.dart';
 part 'order_entity.g.dart';
 
 @collection
-class OrderEntity extends DataEntity {
+class OrderEntity extends BaseEntity {
   Id get isarId => fastHash(dataUuid);
   final int? id;
   final String dataUuid;

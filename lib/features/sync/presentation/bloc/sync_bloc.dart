@@ -57,7 +57,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
     });
 
     on<SyncUpdated>((event, emit) async {
-      final Map<FeatureEntity, List<DataEntity>> data = Map.from(state.data);
+      final Map<FeatureEntity, List<BaseEntity>> data = Map.from(state.data);
       data[event.feature] = event.data;
 
       final count = data.values.expand((element) => element).length;
@@ -77,7 +77,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState>
 
   Future<void> _updateOrderSync() async => await fold(_ordersNoSynced());
 
-  Future<void> fold(Future<Result<Map<int, List<DataEntity>>>> future) async {
+  Future<void> fold(Future<Result<Map<int, List<BaseEntity>>>> future) async {
     await future
       ..fold((failure) => null, (data) {
         data.keys.forEach((id) {

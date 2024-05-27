@@ -11,7 +11,7 @@ import '../../../general/domain/entities/data_entity.dart';
 part 'photo_entity.g.dart';
 
 @collection
-class PhotoEntity extends DataEntity {
+class PhotoEntity extends BaseEntity {
   Id get isarId => fastHash(dataUuid);
   int? id;
   String dataUuid;

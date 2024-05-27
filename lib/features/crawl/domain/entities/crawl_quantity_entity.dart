@@ -9,7 +9,7 @@ import 'package:isar/isar.dart';
 part 'crawl_quantity_entity.g.dart';
 
 @collection
-class CrawlQuantityEntity extends DataEntity {
+class CrawlQuantityEntity extends BaseEntity {
   Id get isarId => fastHash(keys.join('-'));
   final int? id;
   final String dataUuid;

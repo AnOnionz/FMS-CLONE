@@ -10,7 +10,7 @@ import '../../../general/domain/entities/data_entity.dart';
 part 'note_entity.g.dart';
 
 @collection
-class NoteEntity extends DataEntity {
+class NoteEntity extends BaseEntity {
   Id get isarId => fastHash(keys.join('-'));
   int? id;
   String dataUuid;

@@ -1,4 +1,4 @@
-class DataEntity {
+class BaseEntity {
   // @Index(unique: true, replace: true)
   // int? attendanceId;
   // @Index(unique: true, replace: true)

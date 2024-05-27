@@ -37,7 +37,7 @@ class _SyncPageState extends State<SyncPage> with GeneralDataMixin {
   }
 
   List<FeatureEntity> _expectationSyncTask(
-      Map<FeatureEntity, List<DataEntity>> map) {
+      Map<FeatureEntity, List<BaseEntity>> map) {
     final List<FeatureEntity> features = [];
     map.entries.forEach((element) {
       if (element.value.isNotEmpty) {
