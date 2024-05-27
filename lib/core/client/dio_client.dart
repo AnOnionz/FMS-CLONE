@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/mixins/common.dart';
+import 'package:fms/features/authentication/domain/usecases/has_valid_credentials_usecase.dart';
+import 'package:fms/features/authentication/domain/usecases/renew_credentials_usecase.dart';
 import 'package:fms/features/authentication/presentation/blocs/authentication_bloc.dart';
 
 import '/core/client/api_service.dart';
@@ -40,10 +44,31 @@ class DioClient extends ApiService {
         ),
       );
     }
+
     _http.interceptors.add(InterceptorsWrapper(
-      onResponse: (response, handler) {
+      onResponse: (response, handler) async {
         if (response.statusCode == StatusCode.UNAUTHORIZED) {
-          Modular.get<AuthenticationBloc>().add(AuthenticationReFresh());
+          final _authenticationBloc = Modular.get<AuthenticationBloc>();
+          final _hasValidCredentials =
+              Modular.get<HasValidCredentialsUsecase>();
+          final _renewCredentials = Modular.get<RenewCredentialsUsecase>();
+          bool hasValidCredentials = false;
+
+          await _hasValidCredentials()
+            ..fold((fail) => _authenticationBloc.add(AuthenticationLogout()),
+                (success) {
+              hasValidCredentials = true;
+            });
+          if (hasValidCredentials) {
+            await _renewCredentials()
+              ..fold((fail) => _authenticationBloc.add(AuthenticationLogout()),
+                  (success) => null);
+          }
+
+          await fetch(response.requestOptions).then(handler.resolve,
+              onError: (error) async {
+            handler.reject(error as DioException);
+          });
         } else {
           handler.next(response);
         }
@@ -138,6 +163,10 @@ class DioClient extends ApiService {
             queryParameters: queryParameters,
             data: data,
             cancelToken: cancelToken));
+  }
+
+  Future<Response<T>> fetch<T>(RequestOptions requestOptions) {
+    return _http.fetch(requestOptions);
   }
 
   Future<T?> _request<T>(Future<Response<T>> method,

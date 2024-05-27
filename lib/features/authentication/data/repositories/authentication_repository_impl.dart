@@ -43,8 +43,11 @@ class AuthenticationRepositoryImpl extends Repository
   @override
   Future<Result<Credentials>> renewCredentials() async {
     return todo(() async {
-      final credentials =
-          await _remote.renewCredentials(_credentials!.refreshToken!);
+      final refreshToken = _local.getRefreshToken();
+      if (refreshToken == null) {
+        return Left(DataNullFailure());
+      }
+      final credentials = await _remote.renewCredentials(refreshToken!);
       _credentials = credentials;
       _dio.setBearerAuth(
           token: credentials.tokenType + ' ' + credentials.accessToken);

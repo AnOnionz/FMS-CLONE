@@ -2,6 +2,7 @@ import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/authentication/domain/usecases/change_pass_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/logout_success_usecase%20copy.dart';
@@ -40,8 +41,10 @@ class AuthenticationBloc
             ..fold(
                 (fail) async =>
                     emit(const AuthenticationState.unauthenticated()),
-                (success) async =>
-                    emit(AuthenticationState.authenticated(success)));
+                (success) async {
+              Fx.log(success);
+              return emit(AuthenticationState.authenticated(success));
+            });
         }
       },
       transformer: droppable(),

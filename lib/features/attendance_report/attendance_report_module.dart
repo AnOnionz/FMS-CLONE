@@ -5,7 +5,7 @@ import '../../routes/routes.dart';
 import 'presentation/pages/attendance_report_detail_page.dart';
 
 class AttendanceReportModule extends Module {
-  static const route = '/attendance_report';
+  static const route = '/onlineTeamAttendanceReport/';
   static const detail = 'attendance_report_detail';
 
   @override

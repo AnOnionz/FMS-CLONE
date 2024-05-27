@@ -18,6 +18,7 @@ enum FeatureType {
   synchronization(true),
   onlineIndividualSummaryReport(true, true),
   onlineTeamSummaryReport(true, true),
+  onlineTeamAttendanceReport(true, true),
   summaryReport(true);
 
   const FeatureType([this.isAssistance = false, this.isOnline = false]);
