@@ -89,7 +89,8 @@ final class LocationService extends ChangeNotifier {
 
     if (permission == LocationPermission.denied) {
       try {
-        permission = await requestPermission();
+        permission = await requestPermission()
+            .onError((error, stackTrace) => LocationPermission.denied);
         if (permission == LocationPermission.denied) {
           OverlayManager.showServiceDialog(
               message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
@@ -133,7 +134,8 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<LocationPermission> requestPermission() async {
-    final permission = await _geolocator.requestPermission();
+    final permission = await _geolocator.requestPermission().timeout(15.seconds,
+        onTimeout: () => Future.error(LocationErrorPermissionDenied()));
 
     if (permission != LocationPermission.always &&
         permission != LocationPermission.whileInUse) {
@@ -145,7 +147,8 @@ final class LocationService extends ChangeNotifier {
 
   Future<Position?> getCurrentPosition() async {
     try {
-      final hasPermission = await _handlePermission().timeout(15.seconds);
+      final hasPermission =
+          await _handlePermission().timeout(15.seconds, onTimeout: () => false);
 
       if (!hasPermission) {
         return null;
@@ -220,7 +223,12 @@ final class LocationService extends ChangeNotifier {
       return '\nVị trí không xác định';
     }
     try {
-      final place = await placemark(_position);
+      final place =
+          await placemark(_position).timeout(15.seconds, onTimeout: () => null);
+      if (place == null) {
+        return database.getValue(Keys.LOCATION_STRING) ??
+            '\nVị trí không xác định';
+      }
       return place;
     } catch (e) {
       return database.getValue(Keys.LOCATION_STRING) ??
@@ -228,12 +236,13 @@ final class LocationService extends ChangeNotifier {
     }
   }
 
-  Future<String> placemark(Position position) async {
+  Future<String?> placemark(Position position) async {
     try {
       final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+          await placemarkFromCoordinates(position.latitude, position.longitude)
+              .timeout(15.seconds, onTimeout: () => []);
       if (placemarks.isEmpty) {
-        return 'Vị trí không xác định';
+        return null;
       }
       final Placemark placemark = placemarks.first;
 
@@ -253,7 +262,7 @@ final class LocationService extends ChangeNotifier {
           '$street$subLocality$subAdministrativeArea$administrativeArea';
       return locationStr;
     } catch (e) {
-      return 'Vị trí không xác định';
+      return null;
     }
   }
 

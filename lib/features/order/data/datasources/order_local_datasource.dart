@@ -14,6 +14,7 @@ abstract class IOrderLocalDataSource {
   Future<List<OrderEntity>> getOrdersNoSyncedByFeature(int featureId);
   Future<List<OrderEntity>> getOrdersByFeature(int featureId);
   Future<List<OrderEntity>> getOrders();
+  Future<OrderEntity?> getOrderByUuid(String uuid);
 }
 
 class OrderLocalDataSource
@@ -60,5 +61,12 @@ class OrderLocalDataSource
         .dataTimestampBetween(time.yesterday, time.today)
         .statusEqualTo(SyncStatus.isNoSynced)
         .build());
+  }
+
+  @override
+  Future<OrderEntity?> getOrderByUuid(String uuid) async {
+    return db
+        .filter<OrderEntity>((filter) => filter.dataUuidEqualTo(uuid).build())
+        .firstOrNull;
   }
 }

@@ -26,8 +26,7 @@ class OrderSamplingPage extends StatefulWidget {
   State<OrderSamplingPage> createState() => _OrderSamplingPageState();
 }
 
-class _OrderSamplingPageState extends State<OrderSamplingPage>
-    with AutomaticKeepAliveClientMixin {
+class _OrderSamplingPageState extends State<OrderSamplingPage> {
   late final dataFeature = DataFeature.of(context);
   late final featureSamplings = dataFeature.data.feature.featureSamplings!
       .sorted((a, b) => a.ordinal! - b.ordinal!);
@@ -56,7 +55,6 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Column(
@@ -153,7 +151,4 @@ class _OrderSamplingPageState extends State<OrderSamplingPage>
           ],
         ));
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

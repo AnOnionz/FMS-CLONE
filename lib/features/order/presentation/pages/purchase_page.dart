@@ -36,8 +36,7 @@ class OrderPurchasePage extends StatefulWidget {
   State<OrderPurchasePage> createState() => _OrderPurchasePageState();
 }
 
-class _OrderPurchasePageState extends State<OrderPurchasePage>
-    with AutomaticKeepAliveClientMixin {
+class _OrderPurchasePageState extends State<OrderPurchasePage> {
   late final products =
       DataFeature.of(context).data.feature.featureOrder!.products ?? [];
 
@@ -125,8 +124,6 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Column(
       children: [
         Expanded(
@@ -307,7 +304,4 @@ class _OrderPurchasePageState extends State<OrderPurchasePage>
       ],
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

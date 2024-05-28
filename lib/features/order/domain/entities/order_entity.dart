@@ -70,7 +70,6 @@ class OrderEntity extends BaseEntity {
 
   Map<String, dynamic> toUpdateMap() {
     final data = <String, dynamic>{
-      'customers': customerInfos?.map((x) => x.toMap()).toList(),
       'purchases': purchases?.map((x) => x.toMap()).toList(),
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),
@@ -346,11 +345,12 @@ class PurchaseEntity {
     int? quantity,
   }) {
     return PurchaseEntity(
-      id: id ?? this.id,
-      featureOrderProductId:
-          featureOrderProductId ?? this.featureOrderProductId,
-      quantity: quantity ?? this.quantity,
-    );
+        id: id ?? this.id,
+        featureOrderProductId:
+            featureOrderProductId ?? this.featureOrderProductId,
+        quantity: quantity ?? this.quantity,
+        product: this.product,
+        productPackaging: this.productPackaging);
   }
 }
 
@@ -460,6 +460,8 @@ class SamplingEntity {
       id: id ?? this.id,
       featureSamplingId: featureSamplingId ?? this.featureSamplingId,
       quantity: quantity ?? this.quantity,
+      product: this.product,
+      productPackaging: this.productPackaging,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -89,15 +90,20 @@ class _HistoryExchangeSimplifyItemState
                 style:
                     context.textTheme.body1?.copyWith(color: AppColors.nobel),
               ),
-              Text(
-                widget.order.status.name,
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.black),
-              )
+              _status(widget.order.status),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Widget _status(SyncStatus status) {
+    return switch (status) {
+      SyncStatus.synced => Text('Đã đồng bộ',
+          style: context.textTheme.body1?.copyWith(color: AppColors.royalBlue)),
+      _ => Text('Chưa đồng bộ',
+          style: context.textTheme.body1?.copyWith(color: 'FF0000'.toColor())),
+    };
   }
 }

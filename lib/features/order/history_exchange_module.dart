@@ -7,6 +7,7 @@ import 'package:fms/features/order/presentation/pages/order_page.dart';
 
 import '../../routes/routes.dart';
 import 'presentation/cubit/history_exchange_cubit.dart';
+import 'presentation/pages/barcode_scanner_page.dart';
 import 'presentation/pages/history_exchange.dart';
 import 'presentation/pages/history_exchange_detail.dart';
 import 'presentation/pages/success_page.dart';
@@ -16,6 +17,7 @@ class HistoryExchangeModule extends Module {
   static const String historyDetail = 'history_detail';
   static const String edit = 'history_edit';
   static const String updateSuccess = 'update_success';
+  static const String productBarcodeScanner = 'product_barcode_scanner';
   @override
   List<Module> get imports => [OrderModule()];
   @override
@@ -44,6 +46,10 @@ class HistoryExchangeModule extends Module {
       child: (_) => OrderPage(
           entity: r.args.data[0] as GeneralFeatureData,
           order: r.args.data[1] as OrderEntity),
+    );
+    r.child(
+      Routes.root + productBarcodeScanner,
+      child: (_) => BarcodeScanner(),
     );
     r.child(
       Routes.root + updateSuccess,

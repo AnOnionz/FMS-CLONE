@@ -14,7 +14,9 @@ import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../../core/styles/theme.dart';
+import '../../../../core/widgets/popup.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/order_entity.dart';
 
@@ -33,8 +35,7 @@ class OrderCustomerPage extends StatefulWidget {
   State<OrderCustomerPage> createState() => _OrderCustomerPageState();
 }
 
-class _OrderCustomerPageState extends State<OrderCustomerPage>
-    with AutomaticKeepAliveClientMixin {
+class _OrderCustomerPageState extends State<OrderCustomerPage> {
   final _identifyCubit = Modular.get<IdentifyCubit>();
   final _formKey = GlobalKey<FormState>();
   late final featureCustomers = DataFeature.of(context)
@@ -111,8 +112,6 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Column(
@@ -260,7 +259,4 @@ class _OrderCustomerPageState extends State<OrderCustomerPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -12,7 +12,7 @@ class InputQuantity extends StatefulWidget {
   final VoidCallback? onMax;
   final VoidCallback? onMin;
   final Function(int value)? onValueChanged;
-
+  final bool? isMax;
   final EdgeInsets? padding;
 
   InputQuantity({
@@ -23,6 +23,7 @@ class InputQuantity extends StatefulWidget {
     this.onMax,
     this.onMin,
     this.onValueChanged,
+    this.isMax,
     this.value = 0,
   });
 
@@ -34,6 +35,9 @@ class _InputQuantityState extends State<InputQuantity> {
   late int _value = widget.value;
 
   void _increase() {
+    if (widget.isMax == true) {
+      return;
+    }
     if (_value < widget.max) {
       setState(() {
         _value++;

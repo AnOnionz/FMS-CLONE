@@ -339,7 +339,10 @@ class _OrderPageState extends State<OrderPage> {
         onSaveData: (purchases, isChanged) {
           setState(() {
             orderEntity = orderEntity.copyWith(
-                purchases: purchases, exchanges: isChanged ? [] : null);
+                purchases: purchases,
+                exchanges: isChanged
+                    ? (orderEntity.exchanges == null ? null : [])
+                    : null);
           });
         },
       ));

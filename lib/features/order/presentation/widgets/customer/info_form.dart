@@ -17,12 +17,14 @@ class InfomationForm extends StatefulWidget {
   State<InfomationForm> createState() => _InfomationFormState();
 }
 
-class _InfomationFormState extends State<InfomationForm> {
+class _InfomationFormState extends State<InfomationForm>
+    with AutomaticKeepAliveClientMixin {
   late final _fields =
       widget.fields.entries.where((field) => !field.key.isIdentity!).toList();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Form(
         key: widget.formKey,
         child: Column(
@@ -45,4 +47,7 @@ class _InfomationFormState extends State<InfomationForm> {
           ],
         ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -36,20 +36,35 @@ class OrderRepositoryImpl extends Repository
           featureId: featureId);
 
       return Right(customerInfos);
-    });
+    }, useInternet: true);
   }
 
   @override
   Future<Result<List<OrderEntity>>> allOrders({required int featureId}) async {
     return todo(() async {
+      final Set<OrderEntity> orders = {};
       final offlineOrders = await _local.getOrdersByFeature(featureId);
+      await allOnlineOrders(featureId: featureId)
+        ..fold((failure) {
+          orders.addAll(offlineOrders);
+        }, (onlineOrders) {
+          orders.addAll([...onlineOrders, ...offlineOrders].toSet());
+        });
+
+      return Right(orders.sorted((a, b) =>
+          b.dataTimestamp.millisecondsSinceEpoch -
+          a.dataTimestamp.millisecondsSinceEpoch));
+    });
+  }
+
+  Future<Result<List<OrderEntity>>> allOnlineOrders(
+      {required int featureId}) async {
+    return todo(() async {
       final onlineOrders = await _remote.fetchOrders(
           featureId: featureId, attendanceId: general.attendance!.id!);
 
-      final Set<OrderEntity> orders =
-          [...onlineOrders, ...offlineOrders].toSet();
-      return Right(orders.toList());
-    });
+      return Right(onlineOrders);
+    }, useInternet: true);
   }
 
   @override
@@ -92,8 +107,30 @@ class OrderRepositoryImpl extends Repository
     return todo(() async {
       final newOrder = await _remote.updateOrder(order);
       await updatePhotos(order, newOrder!.id!);
+      final existOrder = await _local.getOrderByUuid(order.dataUuid);
+      if (existOrder != null) {
+        _local.cacheOrderToLocal(newOrder.copyWith(
+            attendanceId: order.attendanceId,
+            featureId: order.featureId,
+            exchanges: existOrder.exchanges?.map((e) {
+              final copy = order.exchanges!.firstWhere((element) =>
+                  element.featureSchemeExchangeId == e.featureSchemeExchangeId);
+              return e.copyWith(quantity: copy.quantity);
+            }).toList(),
+            purchases: existOrder.purchases?.map((e) {
+              final copy = order.purchases!.firstWhere((element) =>
+                  element.featureOrderProductId == e.featureOrderProductId);
+              return e.copyWith(quantity: copy.quantity);
+            }).toList(),
+            samplings: existOrder.samplings?.map((e) {
+              final copy = order.samplings!.firstWhere((element) =>
+                  element.featureSamplingId == e.featureSamplingId);
+              return e.copyWith(quantity: copy.quantity);
+            }).toList()));
+      }
+
       return Right(newOrder);
-    });
+    }, useInternet: true);
   }
 
   @override

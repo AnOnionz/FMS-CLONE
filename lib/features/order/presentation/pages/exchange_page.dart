@@ -54,15 +54,16 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
       _exchangeEntites.add(entity);
     }
 
-    priceUsed = _exchangeEntites
-        .map((exchange) =>
-            exchanges
-                .firstWhereOrNull((element) =>
-                    element.id! == exchange.featureSchemeExchangeId &&
-                    exchange.quantity! > 0)
-                ?.reachAmount ??
-            0)
-        .fold(0, (previousValue, price) => previousValue + price);
+    priceUsed = _exchangeEntites.map((exchange) {
+      final exchangeUsedPrice = exchanges
+              .firstWhereOrNull((element) =>
+                  element.id! == exchange.featureSchemeExchangeId &&
+                  exchange.quantity! > 0)
+              ?.reachAmount ??
+          0;
+
+      return exchangeUsedPrice * (exchange.quantity ?? 0);
+    }).fold(0, (previousValue, price) => previousValue + price);
 
     setState(() {});
   }

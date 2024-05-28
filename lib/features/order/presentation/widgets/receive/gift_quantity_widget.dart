@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -37,7 +38,19 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
   late final _exchange = widget.exchange;
   late final _purchases = widget.controller.products;
   late final bool isCanExchange = isValid();
-  bool get isMax => widget.value == _exchange.maxReceiveQuantity;
+  bool get isMaxQuantity => widget.value == _exchange.maxReceiveQuantity;
+
+  bool get isMaxPrice =>
+      _exchange.reachAmount != null &&
+      widget.controller.order.totalPrice(widget.products) - (widget.priceUsed) <
+          _exchange.reachAmount!;
+
+  String getGiftUnitName(ExchangeProceed gift) {
+    return switch (gift.item) {
+      null => gift.productPackaging!.unitName ?? '',
+      _ => gift.item!.unitName ?? '',
+    };
+  }
 
   bool isValid() {
     if (_exchange.reachAmount != null &&
@@ -46,6 +59,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
             _exchange.reachAmount!) {
       return false;
     }
+
     if (_exchange.exchangeConditions!.isNotEmpty) {
       final orderProductQuantity = <int, int>{};
       final isValids = <bool>[];
@@ -141,7 +155,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
           children: [
             DefaultTextStyle(
               style: TextStyle(
-                  color: isCanExchange && !isMax
+                  color: isCanExchange && !isMaxQuantity
                       ? AppColors.black
                       : AppColors.nobel),
               child: Expanded(
@@ -154,8 +168,9 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                      flex: 3,
-                                      child: Text('x${gift.quantity}',
+                                      flex: 10,
+                                      child: Text(
+                                          'x${gift.quantity} ${getGiftUnitName(gift)}',
                                           style: context.textTheme.subtitle1)),
                                   Expanded(
                                       flex: 15,
@@ -176,6 +191,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
                   absorbing: !isCanExchange,
                   child: InputQuantity(
                     key: ValueKey(_exchange.id!.toString()),
+                    isMax: isMaxPrice,
                     max: widget.exchange.maxReceiveQuantity!,
                     value: widget.value,
                     onValueChanged: (value) {

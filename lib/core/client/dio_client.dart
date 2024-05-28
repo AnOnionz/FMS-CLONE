@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/authentication/domain/usecases/has_valid_credentials_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/renew_credentials_usecase.dart';
 import 'package:fms/features/authentication/presentation/blocs/authentication_bloc.dart';

@@ -8,6 +8,8 @@ import 'package:fms/features/order/presentation/cubit/identify_cubit.dart';
 import 'package:fms/features/order/presentation/widgets/customer/customer_field.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
+import '../../../../../core/errors/failure.dart';
+import '../../../../../core/widgets/popup.dart';
 import '../../../../general/domain/entities/config_entity.dart';
 import '../../../domain/entities/order_entity.dart';
 
@@ -45,6 +47,36 @@ class _IdentityFormState extends State<IdentityForm> {
   }
 
   @override
+  void initState() {
+    widget.identifyCubit.stream.listen((state) {
+      if (state is IdentifyFailure) {
+        if (state.failure is SocketFailure) {
+          showFailure(
+              title: 'Không có kết nối mạng',
+              icon: SvgPicture.asset(AppIcons.requiredInternet),
+              message:
+                  'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
+              btnText: 'Thử lại',
+              onPressed: () {
+                _identify();
+              });
+        } else {
+          showFailure(
+              title: 'Kiểm tra thất bại',
+              icon: SvgPicture.asset(AppIcons.failure),
+              message: state.failure.message ??
+                  'Phát sinh lỗi trong quá trình định danh',
+              btnText: 'Thử lại',
+              onPressed: () {
+                _identify();
+              });
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     _fields.clear();
     widget.fields.forEach((key, value) {
@@ -52,6 +84,13 @@ class _IdentityFormState extends State<IdentityForm> {
     });
     setState(() {});
     super.didChangeDependencies();
+  }
+
+  void _identify() {
+    widget.identifyCubit.identify(
+        identifyFields: _fields.entries.map((e) => e.value).toList(),
+        attendanceId: generalFeature.general.attendance!.id!,
+        featureId: generalFeature.feature.id!);
   }
 
   @override
@@ -114,12 +153,7 @@ class _IdentityFormState extends State<IdentityForm> {
                       ? () {
                           FocusManager.instance.primaryFocus?.unfocus();
                           widget.onIdentify(_fields);
-                          widget.identifyCubit.identify(
-                              identifyFields:
-                                  _fields.entries.map((e) => e.value).toList(),
-                              attendanceId:
-                                  generalFeature.general.attendance!.id!,
-                              featureId: generalFeature.feature.id!);
+                          _identify();
                         }
                       : null,
                 ),

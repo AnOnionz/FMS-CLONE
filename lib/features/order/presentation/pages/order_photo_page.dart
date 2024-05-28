@@ -27,8 +27,7 @@ class OrderPhotoPage extends StatefulWidget {
   State<OrderPhotoPage> createState() => _OrderPhotoPageState();
 }
 
-class _OrderPhotoPageState extends State<OrderPhotoPage>
-    with AutomaticKeepAliveClientMixin {
+class _OrderPhotoPageState extends State<OrderPhotoPage> {
   late final dataFeature = DataFeature.of(context);
   late final featurePhotos = dataFeature.data.feature.featurePhotos!;
 
@@ -63,7 +62,6 @@ class _OrderPhotoPageState extends State<OrderPhotoPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Padding(
       padding: EdgeInsets.only(top: 16.h),
       child: Column(
@@ -145,7 +143,4 @@ class _OrderPhotoPageState extends State<OrderPhotoPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -47,7 +47,7 @@ class SuccessPage extends StatelessWidget {
                                 context.pop(order);
                               },
                               name: 'OK',
-                              color: AppColors.orange),
+                              color: AppColors.royalBlue),
                         ),
                       ],
                     ),
@@ -73,7 +73,7 @@ class SuccessPage extends StatelessWidget {
                               onPressed: () =>
                                   context.popUntil(HomeModule.route),
                               name: 'Trang chủ',
-                              color: AppColors.orange),
+                              color: AppColors.royalBlue),
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
@@ -83,8 +83,8 @@ class SuccessPage extends StatelessWidget {
                                 context.nextRoute(OrderModule.route,
                                     arguments: generalFeature);
                               },
-                              name: 'Tiếp tục ghi bill',
-                              color: AppColors.orange),
+                              name: 'Tiếp tục ghi đơn',
+                              color: AppColors.royalBlue),
                         ),
                       ],
                     ),
