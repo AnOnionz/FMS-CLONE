@@ -56,7 +56,6 @@ class OrderEntity extends BaseEntity {
     final data = <String, dynamic>{
       'dataUuid': dataUuid,
       'dataTimestamp': dataTimestamp.toUtc().toIso8601String(),
-      // 'customers':  customerInfos?.map((x) => x.toMap()).toList(),
       'purchases': purchases?.map((x) => x.toMap()).toList(),
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),

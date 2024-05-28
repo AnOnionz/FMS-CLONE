@@ -39,12 +39,12 @@ void showRequiredFeature(String feature, VoidCallback onPressed) {
       onPressed: onPressed);
 }
 
-void showRequiredSync(VoidCallback onPressed) {
+void showRequiredSync(VoidCallback onPressed, String feature) {
   showFailure(
     title: 'Yêu cầu đồng bộ dữ liệu',
     icon: SvgPicture.asset(AppIcons.requiredTask),
     message:
-        'Vẫn còn dữ liệu chưa được đồng bộ, yêu cầu đồng bộ tất cả dữ liệu trước khi chấm công ra.',
+        'Vẫn còn dữ liệu chưa được đồng bộ, yêu cầu đồng bộ tất cả dữ liệu trước khi $feature.',
     btnText: 'Đến trang đồng bộ',
     onPressed: onPressed,
   );

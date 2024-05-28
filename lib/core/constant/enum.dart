@@ -28,6 +28,8 @@ enum FeatureType {
 
 enum SettingType { none, toggle, transfer }
 
+enum ValueType { increase, decrease }
+
 enum StatisticType { individual, outlet, employee }
 
 enum SyncStatus { synced, isNoSynced, isDeleted }

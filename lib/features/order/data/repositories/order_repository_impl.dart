@@ -80,18 +80,31 @@ class OrderRepositoryImpl extends Repository
       } else {
         _local.cacheOrderToLocal(order);
       }
+      // final newOrder = await _remote.createOrder(order);
 
+      return await requestCreateOrder(order: order)
+        ..fold((failure) => Right(Never), (newOrder) async {
+          if (newOrder != null) {
+            order = order.copyWith(id: newOrder.id);
+            _local.cacheOrderToLocal(order);
+            await updatePhotos(order, newOrder.id!);
+            order = order.copyWith(status: SyncStatus.synced);
+            _local.cacheOrderToLocal(order);
+          }
+        });
+    });
+  }
+
+  Future<Result<OrderEntity?>> requestCreateOrder(
+      {required OrderEntity order}) {
+    return todo(() async {
       final newOrder = await _remote.createOrder(order);
 
       if (newOrder != null) {
-        order = order.copyWith(id: newOrder.id);
-        _local.cacheOrderToLocal(order);
-        await updatePhotos(order, newOrder.id!);
-        order = order.copyWith(status: SyncStatus.synced);
-        _local.cacheOrderToLocal(order);
+        return Right(newOrder);
       }
-      return Right(Never);
-    });
+      return Right(null);
+    }, useInternet: true);
   }
 
   @override

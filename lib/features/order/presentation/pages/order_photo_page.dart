@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
@@ -104,7 +105,6 @@ class _OrderPhotoPageState extends State<OrderPhotoPage> {
                             item.value.removeWhere(
                                 (photo) => photo.dataUuid == image.uuid);
                           }
-
                           setState(() {});
                         },
                         isWatermark: item.key.isWatermarkRequired!,
@@ -130,6 +130,10 @@ class _OrderPhotoPageState extends State<OrderPhotoPage> {
                 onNext: !isWatermarking.value && validate
                     ? () {
                         widget.onSaveData(_items.entries
+                            .map((e) => e.value)
+                            .expand((photos) => photos)
+                            .toList());
+                        Fx.log(_items.entries
                             .map((e) => e.value)
                             .expand((photos) => photos)
                             .toList());

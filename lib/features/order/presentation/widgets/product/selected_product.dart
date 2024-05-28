@@ -57,7 +57,13 @@ class _SelectedProductState extends State<SelectedProduct> {
                     trailing: InputQuantity(
                       value: purchase.quantity!,
                       max: 10000,
-                      onValueChanged: (value) {
+                      onIncreased: (value) {
+                        setState(() {
+                          purchase.updateQuantity(value);
+                          widget.onChanged();
+                        });
+                      },
+                      onDecreased: (value) {
                         setState(() {
                           purchase.updateQuantity(value);
                           widget.onChanged();

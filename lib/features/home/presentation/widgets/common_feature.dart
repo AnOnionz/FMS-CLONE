@@ -27,10 +27,10 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
   void initState() {
     super.initState();
 
-    tasks!.add(FeatureEntity(
-        name: 'Báo cáo chấm công',
-        type: FeatureType.onlineTeamAttendanceReport,
-        dependentOnFeatureIds: []));
+    // tasks!.add(FeatureEntity(
+    //     name: 'Báo cáo chấm công',
+    //     type: FeatureType.onlineTeamAttendanceReport,
+    //     dependentOnFeatureIds: []));
   }
 
   @override
@@ -43,6 +43,7 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
         slivers: [
           SliverGrid.builder(
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              mainAxisExtent: 110,
               maxCrossAxisExtent: context.screenWidth / column,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
@@ -50,7 +51,6 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
             itemCount: tasks!.length,
             itemBuilder: (context, index) {
               final feature = tasks![index];
-
               return FeatureBox(
                 icon: _getIcon(feature),
                 name: feature.name!,

@@ -96,7 +96,7 @@ class _StatisticGenaralState extends State<StatisticGenaral>
               // ),
               // SizedBox(height: 12.h),
               RowInfo(
-                leading: 'Tổng sản lượng',
+                leading: 'Tổng sản phẩm',
                 info: widget.statisticEntity.totalPurchase.toString(),
               ),
               SizedBox(height: 12.h),

@@ -23,8 +23,7 @@ import '../widgets/product/selected_product.dart';
 class OrderPurchasePage extends StatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
-  final void Function(List<PurchaseEntity> purchases, bool isChanged)
-      onSaveData;
+  final void Function(List<PurchaseEntity> purchases) onSaveData;
 
   const OrderPurchasePage(
       {super.key,
@@ -43,8 +42,6 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
   late final purchases =
       DataFeature.of(context).order.purchases ?? <PurchaseEntity>[];
   final selectedItems = <OrderProduct, PurchaseEntity>{};
-
-  bool isPurchasesChanged = false;
 
   late final concurProducts = groupBy<OrderProduct, String>(
       products, (product) => product.productPackaging!.barcode!)
@@ -100,9 +97,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
           productPackaging: value.productPackaging,
           quantity: 1);
     }
-    setState(() {
-      isPurchasesChanged = true;
-    });
+    setState(() {});
   }
 
   @override
@@ -232,9 +227,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
                         key: UniqueKey(),
                         items: selectedItems,
                         onChanged: () {
-                          setState(() {
-                            isPurchasesChanged = true;
-                          });
+                          setState(() {});
                         },
                       ),
                     )
@@ -284,16 +277,13 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
                   onBack: widget.onBack,
                   onNext: validate
                       ? () {
-                          widget.onSaveData(
-                              selectedItems.entries
-                                  .map((e) => e.value)
-                                  .where((element) =>
-                                      element.quantity != null &&
-                                      element.quantity! > 0)
-                                  .toList(),
-                              isPurchasesChanged);
+                          widget.onSaveData(selectedItems.entries
+                              .map((e) => e.value)
+                              .where((element) =>
+                                  element.quantity != null &&
+                                  element.quantity! > 0)
+                              .toList());
                           widget.onNext();
-                          isPurchasesChanged = false;
                         }
                       : null,
                 ),

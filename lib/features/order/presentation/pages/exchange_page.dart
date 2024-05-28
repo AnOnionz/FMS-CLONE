@@ -1,12 +1,15 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
 import '../../../../core/constant/colors.dart';
+import '../../../../core/constant/enum.dart';
 import '../../../../core/constant/icons.dart';
 import '../../domain/entities/exchange_controller.dart';
 import '../widgets/bottom_buttons.dart';
@@ -27,8 +30,8 @@ class OrderExchangePage extends StatefulWidget {
 }
 
 class _OrderExchangePageState extends State<OrderExchangePage> {
-  int priceUsed = 0;
   late final dataFeature = DataFeature.of(context);
+
   late List<ExchangeEntity> _exchangeEntites =
       List.from(dataFeature.order.exchanges ?? <ExchangeEntity>[]);
 
@@ -43,7 +46,8 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
       .expand((element) => element)
       .toList();
 
-  void _onExchangeUpdate(ExchangeEntity entity, int? price) {
+  void _onExchangeUpdate(
+      ValueType type, ExchangeEntity entity, Exchange exchange) {
     final exchangeEntity = _exchangeEntites.firstWhereOrNull(
         (e) => e.featureSchemeExchangeId == entity.featureSchemeExchangeId);
     if (exchangeEntity != null) {
@@ -53,19 +57,51 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
     } else {
       _exchangeEntites.add(entity);
     }
-
-    priceUsed = _exchangeEntites.map((exchange) {
-      final exchangeUsedPrice = exchanges
-              .firstWhereOrNull((element) =>
-                  element.id! == exchange.featureSchemeExchangeId &&
-                  exchange.quantity! > 0)
-              ?.reachAmount ??
-          0;
-
-      return exchangeUsedPrice * (exchange.quantity ?? 0);
-    }).fold(0, (previousValue, price) => previousValue + price);
+    if (type == ValueType.increase) {
+      _exchangeController.addExchange(exchange);
+    } else {
+      _exchangeController.removeExchange(exchange);
+    }
 
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      late final ExchangeController exchangeController = ExchangeController(
+          order: dataFeature.order, feature: dataFeature.data.feature);
+      List<ExchangeEntity>.from(_exchangeEntites).forEach((exchangeEntity) {
+        final exchange = exchanges.firstWhere(
+            (element) => element.id == exchangeEntity.featureSchemeExchangeId);
+        final quantity = exchangeEntity.quantity!;
+
+        if (quantity > 0) {
+          int value = 0;
+          for (int i = 1; i <= quantity; i++) {
+            if (exchangeController.isValid(exchange, value)) {
+              value += 1;
+              exchangeController.addExchange(exchange);
+            } else {
+              exchangeController.removeExchange(exchange);
+            }
+          }
+          if (value == quantity) {
+            for (int i = 1; i <= quantity; i++) {
+              final ExchangeEntity entity = ExchangeEntity(
+                  featureSchemeExchangeId: exchange.id,
+                  exchangeProceeds: exchange.exchangeProceeds,
+                  quantity: quantity);
+              _onExchangeUpdate(ValueType.increase, entity, exchange);
+            }
+          } else {
+            _exchangeEntites.remove(exchangeEntity);
+            setState(() {});
+          }
+        }
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -133,18 +169,20 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
                     sliver: SliverList.separated(
                       itemCount: exchanges.length,
                       itemBuilder: (context, index) => GiftQuantityWidget(
-                        value: _exchangeEntites
-                                .firstWhereOrNull((element) =>
-                                    element.featureSchemeExchangeId! ==
-                                    exchanges[index].id!)
-                                ?.quantity ??
-                            0,
+                        entity: _exchangeEntites.firstWhereOrNull((element) =>
+                            element.featureSchemeExchangeId! ==
+                            exchanges[index].id!),
                         controller: _exchangeController,
                         products:
                             dataFeature.data.feature.featureOrder!.products!,
                         exchange: exchanges[index],
-                        onQuantityChanged: _onExchangeUpdate,
-                        priceUsed: priceUsed,
+                        onIncreased: (exchangeEntity, exchange) =>
+                            _onExchangeUpdate(
+                                ValueType.increase, exchangeEntity, exchange),
+                        onDecreased: (exchangeEntity, exchange) =>
+                            _onExchangeUpdate(
+                                ValueType.decrease, exchangeEntity, exchange),
+                        priceUsed: _exchangeController.priceExchanged,
                       ),
                       separatorBuilder: (context, index) => Divider(
                         color: AppColors.whisper,

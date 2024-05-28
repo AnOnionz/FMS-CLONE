@@ -92,12 +92,10 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
             onPressed: () {});
       }
       if (state is NecessarySync) {
-        showRequiredSync(
-          () {
-            state.onClose();
-            Modular.to.pushNamed(SyncModule.route);
-          },
-        );
+        showRequiredSync(() {
+          state.onClose();
+          Modular.to.pushNamed(SyncModule.route);
+        }, state.feature);
       }
       if (state is NecessaryAttendanceOut) {
         showRequiredAttendanceOut(() {
@@ -115,7 +113,9 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     if (event.feature.type!.isOnline) {
       final hasNoSynced = _syncBloc.state.status == SyncStatus.isNoSynced;
       if (hasNoSynced) {
-        emit(NecessarySync(onClose: () {}));
+        emit(NecessarySync(
+            onClose: () {},
+            feature: 'xem ' + event.feature.name!.toLowerCase()));
         return;
       }
       if (!_connectivityService.hasConnected) {
@@ -168,7 +168,8 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
         (element) => element.type == FeatureType.synchronization);
 
     if (featureSync != null) {
-      emit(NecessarySync(onClose: () {}));
+      emit(NecessarySync(
+          onClose: () {}, feature: event.feature.name!.toLowerCase()));
       return;
     }
 
@@ -207,7 +208,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
 
     if (featureSync != null &&
         _syncBloc.state.status == SyncStatus.isNoSynced) {
-      emit(NecessarySync(onClose: event.onClose));
+      emit(NecessarySync(onClose: event.onClose, feature: 'đăng xuất'));
       return;
     }
 

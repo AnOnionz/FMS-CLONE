@@ -33,7 +33,8 @@ final class NecessaryLockOut extends NecessaryState {
 
 final class NecessarySync extends NecessaryState {
   final Function onClose;
-  NecessarySync({required this.onClose});
+  final String feature;
+  NecessarySync({required this.onClose, required this.feature});
 }
 
 final class NecessaryAttendanceOut extends NecessaryStateHasData {
