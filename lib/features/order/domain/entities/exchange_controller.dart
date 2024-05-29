@@ -85,7 +85,7 @@ final class ExchangeController {
 
   bool _isUnderAmount(Exchange exchange, int value) {
     return exchange.reachAmount != null &&
-        _price - (value > 0 ? 0 : _priceExchanged) < exchange.reachAmount!;
+        _price - _priceExchanged < exchange.reachAmount!;
   }
 
   bool _and(Exchange exchange) {
