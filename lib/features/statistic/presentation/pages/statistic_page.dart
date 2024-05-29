@@ -101,13 +101,7 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
           bloc: _bloc,
           listener: (context, state) {
             if (state is StatisticFailure) {
-              showFailure(
-                  title: 'Không có kết nối mạng',
-                  icon: SvgPicture.asset(AppIcons.requiredInternet),
-                  message:
-                      'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
-                  btnText: 'Ok',
-                  onPressed: () {});
+              showInternetFailure();
             }
           },
           builder: (context, state) {

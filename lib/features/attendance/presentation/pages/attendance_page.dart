@@ -124,15 +124,7 @@ class _AttendancePageState extends State<AttendancePage> {
         OverlayManager.hide();
 
         if (state.failure is SocketFailure) {
-          showFailure(
-              title: 'Không có kết nối mạng',
-              icon: SvgPicture.asset(AppIcons.requiredInternet),
-              message:
-                  'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
-              btnText: 'Thử lại',
-              onPressed: () {
-                _attendance.call();
-              });
+          showInternetFailure();
         } else {
           showFailure(
               title: 'Chấm công thất bại',

@@ -4,4 +4,8 @@ abstract class AttendanceReportEvent {
   const AttendanceReportEvent();
 }
 
-class GetData extends AttendanceReportEvent {}
+class FetchAttendanceReports extends AttendanceReportEvent {
+  final FeatureEntity feature;
+
+  FetchAttendanceReports({required this.feature});
+}

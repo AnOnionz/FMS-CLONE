@@ -17,6 +17,8 @@ abstract class IAttendanceRemoteDataSource {
       required GeneralEntity general});
   Future<AttendanceEntity?> getAttendanceInfo(
       {required FeatureEntity feature, required GeneralEntity general});
+  Future<List<AttendanceEntity>> getAttendanceReports(
+      {required FeatureEntity feature, required GeneralEntity general});
 }
 
 class AttendanceRemoteDataSource extends ImagesRemoteDataSource
@@ -60,5 +62,16 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
 
     return parseJson<AttendanceEntity>(
         (json: _resp, fromJson: AttendanceEntity.fromMap));
+  }
+
+  @override
+  Future<List<AttendanceEntity>> getAttendanceReports(
+      {required FeatureEntity feature, required GeneralEntity general}) async {
+    final _resp = await dio.get(
+        path:
+            '/app/attendances/${general.attendance!.id}/features/${feature.id}/team-reports/attendances');
+
+    return parseListJson<AttendanceEntity>(
+        (listJson: _resp, fromJson: AttendanceEntity.fromMap));
   }
 }

@@ -47,13 +47,7 @@ class _HistoryExchangeDetailPageState extends State<HistoryExchangeDetailPage>
             ? GestureDetector(
                 onTap: () async {
                   if (!_network.hasConnected) {
-                    showFailure(
-                        title: 'Không có kết nối mạng',
-                        icon: SvgPicture.asset(AppIcons.requiredInternet),
-                        message:
-                            'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
-                        btnText: 'Ok',
-                        onPressed: () {});
+                    showInternetFailure();
                     return;
                   }
                   final a = await context.nextRoute(HistoryExchangeModule.edit,

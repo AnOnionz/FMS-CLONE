@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/errors/failure.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
@@ -30,7 +31,7 @@ void showFailure({
   Widget? icon,
   String? message,
   required String btnText,
-  required VoidCallback onPressed,
+  VoidCallback? onPressed,
 }) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
@@ -52,7 +53,7 @@ void showFailure({
           action: OutlineButton(
               onPressed: () {
                 OverlayManager.hide();
-                onPressed();
+                onPressed?.call();
               },
               name: btnText,
               color: AppColors.orange)));
@@ -89,4 +90,13 @@ void showWarning({
               },
               name: btnText,
               color: AppColors.orange)));
+}
+
+void showInternetFailure([VoidCallback? onPressed]) {
+  showFailure(
+      title: 'Không có kết nối mạng',
+      icon: SvgPicture.asset(AppIcons.requiredInternet),
+      message: 'Kết nối mạng không ổn định, vui lòng kiểm tra lại kết nối mạng',
+      btnText: 'Ok',
+      onPressed: onPressed);
 }

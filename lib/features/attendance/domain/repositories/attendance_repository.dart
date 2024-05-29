@@ -14,4 +14,7 @@ abstract class AttendanceRepository {
 
   Future<Result<AttendanceEntity?>> getAttendanceInfo(
       {required FeatureEntity feature});
+
+  Future<Result<List<AttendanceEntity>>> getAttendanceReports(
+      {required FeatureEntity feature});
 }

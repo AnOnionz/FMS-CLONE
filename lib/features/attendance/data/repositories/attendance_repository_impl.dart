@@ -48,4 +48,15 @@ class AttendanceRepositoryImpl extends Repository
       return Right(attendanceEntity);
     });
   }
+
+  @override
+  Future<Result<List<AttendanceEntity>>> getAttendanceReports(
+      {required FeatureEntity feature}) async {
+    return todo(() async {
+      final attendanceEntity = await _remote.getAttendanceReports(
+          feature: feature, general: general);
+
+      return Right(attendanceEntity);
+    }, useInternet: true);
+  }
 }
