@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/features/crawl/domain/usecases/get_quantities_not_completed_usecase.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -15,7 +14,6 @@ import 'package:fms/features/note/domain/usecases/get_notes_not_completed_usecas
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/sync/sync_module.dart';
-import '../../../../core/constant/icons.dart';
 import '../../../../core/services/connectivity/connectivity_service.dart';
 import '../../../../core/widgets/popup.dart';
 import '../../domain/entities/general_item_data.dart';

@@ -3,10 +3,9 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
-
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:isar/isar.dart';
 
 import '../../../../core/constant/type_def.dart';
 

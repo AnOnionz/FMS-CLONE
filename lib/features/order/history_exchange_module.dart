@@ -8,8 +8,8 @@ import 'package:fms/features/order/presentation/pages/order_page.dart';
 import '../../routes/routes.dart';
 import 'presentation/cubit/history_exchange_cubit.dart';
 import 'presentation/pages/barcode_scanner_page.dart';
-import 'presentation/pages/history_exchange_page.dart';
 import 'presentation/pages/history_exchange_detail.dart';
+import 'presentation/pages/history_exchange_page.dart';
 import 'presentation/pages/success_page.dart';
 
 class HistoryExchangeModule extends Module {
