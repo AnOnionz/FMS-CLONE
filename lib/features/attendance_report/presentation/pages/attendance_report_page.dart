@@ -10,6 +10,7 @@ import 'package:fms/features/home/domain/entities/general_item_data.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../../core/styles/theme.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
@@ -78,14 +79,25 @@ class _AttendanceReportPageState extends State<AttendanceReportPage> {
                 bloc: _bloc,
                 listener: (context, state) {
                   if (state is AttendanceReportFailure) {
-                    showInternetFailure();
+                    if (state.failure is SocketFailure) {
+                      showInternetFailure();
+                    } else {
+                      showFailure(
+                          title: 'Tải dữ liệu thất bại',
+                          icon: SvgPicture.asset(AppIcons.failure),
+                          message: state.failure.message ?? 'Phát sinh lỗi',
+                          btnText: 'Thử lại',
+                          onPressed: () {
+                            fetchReports();
+                          });
+                    }
                   }
                 },
                 builder: (context, state) {
                   if (state is AttendanceReportSuccess) {
                     if (state.entities.isEmpty) {
                       return Center(
-                          child: Text('Không có dữ liệu',
+                          child: Text('Không có dữ liệu chấm công',
                               style: context.textTheme.body1));
                     }
                     return CustomScrollView(
@@ -96,9 +108,10 @@ class _AttendanceReportPageState extends State<AttendanceReportPage> {
                             bottom: 14.h,
                           ),
                           sliver: SliverList.builder(
-                            itemCount: 7,
+                            itemCount: state.entities.length,
                             itemBuilder: (context, index) =>
-                                AttendanceDetailItem(),
+                                AttendanceDetailItem(
+                                    attendanceEntity: state.entities[index]),
                           ),
                         )
                       ],

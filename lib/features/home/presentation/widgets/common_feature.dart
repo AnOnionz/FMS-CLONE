@@ -24,16 +24,6 @@ class _CommonFeatureState extends State<CommonFeature> with GeneralDataMixin {
   final double extendHeight = 84;
 
   @override
-  void initState() {
-    super.initState();
-
-    // tasks!.add(FeatureEntity(
-    //     name: 'Báo cáo chấm công',
-    //     type: FeatureType.onlineTeamAttendanceReport,
-    //     dependentOnFeatureIds: []));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
       // height: (tasks.length / column).ceil() * extendHeight,

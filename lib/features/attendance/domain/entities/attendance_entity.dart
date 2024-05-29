@@ -34,7 +34,7 @@ class AttendanceEntity {
     return AttendanceEntity(
       id: map['id'] as int,
       user: map['user'] != null
-          ? EmployeeUserEntity.fromMap(map['in'] as Map<String, dynamic>)
+          ? EmployeeUserEntity.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       dataIn: map['in'] != null
           ? AttendanceData.fromMap(map['in'] as Map<String, dynamic>)

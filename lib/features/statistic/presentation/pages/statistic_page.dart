@@ -17,6 +17,7 @@ import 'package:fms/features/statistic/presentation/widgets/statistic_purchase.d
 
 import '../../../../core/constant/enum.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../../core/widgets/popup.dart';
 import '../widgets/statistic_genaral.dart';
 import '../widgets/statistic_gift.dart';
@@ -101,7 +102,18 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
           bloc: _bloc,
           listener: (context, state) {
             if (state is StatisticFailure) {
-              showInternetFailure();
+              if (state.failure is SocketFailure) {
+                showInternetFailure();
+              } else {
+                showFailure(
+                    title: 'Tải dữ liệu thất bại',
+                    icon: SvgPicture.asset(AppIcons.failure),
+                    message: state.failure.message ?? 'Phát sinh lỗi',
+                    btnText: 'Thử lại',
+                    onPressed: () {
+                      _loadStatistic();
+                    });
+              }
             }
           },
           builder: (context, state) {
