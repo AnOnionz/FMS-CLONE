@@ -67,6 +67,9 @@ class DioClient extends ApiService {
               onError: (error) async {
             handler.reject(error as DioException);
           });
+        } else if (response.statusCode == StatusCode.FORBIDDEN) {
+          final _authenticationBloc = Modular.get<AuthenticationBloc>();
+          _authenticationBloc.add(AuthenticationLogout());
         } else {
           handler.next(response);
         }

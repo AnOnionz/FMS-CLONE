@@ -120,8 +120,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     _connectivityService.onConnectionChange.listen((status) async {
       Fx.log('Internet status: $status');
-      if (status == InternetStatus.connected) {
-      } else {
+      Fx.log('Internet status: ${_connectivityService.hasConnected}');
+      if (status == InternetStatus.disconnected) {
         if (OverlayManager.currentContext != null) {
           if (Modular.to.navigateHistory.last.name == HomeModule.route) {
             OverlayManager.showSnackbar(

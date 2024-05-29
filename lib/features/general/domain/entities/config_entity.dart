@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
+
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:isar/isar.dart';
 
 import '../../../../core/constant/type_def.dart';
 
@@ -789,6 +790,24 @@ class Exchange {
   String toString() {
     return 'Exchange(id: $id, maxReceiveQuantity: $maxReceiveQuantity, reachAmount: $reachAmount, logical: $logical, exchangeConditions: $exchangeConditions, exchangeProceeds: $exchangeProceeds)';
   }
+
+  Exchange copyWith({
+    int? id,
+    int? maxReceiveQuantity,
+    int? reachAmount,
+    String? logical,
+    List<ExchangeCondition>? exchangeConditions,
+    List<ExchangeProceed>? exchangeProceeds,
+  }) {
+    return Exchange(
+      id: id ?? this.id,
+      maxReceiveQuantity: maxReceiveQuantity ?? this.maxReceiveQuantity,
+      reachAmount: reachAmount ?? this.reachAmount,
+      logical: logical ?? this.logical,
+      exchangeConditions: exchangeConditions ?? this.exchangeConditions,
+      exchangeProceeds: exchangeProceeds ?? this.exchangeProceeds,
+    );
+  }
 }
 
 @embedded
@@ -836,6 +855,20 @@ class ExchangeCondition {
   @override
   String toString() {
     return 'ExchangeCondition(id: $id, product: $product, productPackaging: $productPackaging, quantity: $quantity)';
+  }
+
+  ExchangeCondition copyWith({
+    int? id,
+    Product? product,
+    ProductPackaging? productPackaging,
+    int? quantity,
+  }) {
+    return ExchangeCondition(
+      id: id ?? this.id,
+      product: product ?? this.product,
+      productPackaging: productPackaging ?? this.productPackaging,
+      quantity: quantity ?? this.quantity,
+    );
   }
 }
 

@@ -1,10 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -18,7 +15,6 @@ class GiftQuantityWidget extends StatefulWidget {
   final Exchange exchange;
   final List<OrderProduct> products;
   final ExchangeController controller;
-  final int priceUsed;
   final ExchangeEntity? entity;
   final void Function(ExchangeEntity exchangeEntity, Exchange exchange)
       onIncreased;
@@ -30,7 +26,6 @@ class GiftQuantityWidget extends StatefulWidget {
       required this.controller,
       required this.exchange,
       required this.products,
-      required this.priceUsed,
       required this.entity,
       required this.onIncreased,
       required this.onDecreased});
@@ -42,7 +37,6 @@ class GiftQuantityWidget extends StatefulWidget {
 class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
   late final _exchange = widget.exchange;
   late final bool isCanExchange = widget.controller.isValid(_exchange, _value);
-  bool get isMaxQuantity => _value == _exchange.maxReceiveQuantity;
   late int _value = widget.entity?.quantity ?? 0;
 
   String getGiftUnitName(ExchangeProceed gift) {
@@ -74,9 +68,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
           children: [
             DefaultTextStyle(
               style: TextStyle(
-                  color: isCanExchange && !isMaxQuantity
-                      ? AppColors.black
-                      : AppColors.nobel),
+                  color: isCanExchange ? AppColors.black : AppColors.nobel),
               child: Expanded(
                 flex: 6,
                 child: Column(
