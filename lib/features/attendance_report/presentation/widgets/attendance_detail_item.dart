@@ -174,7 +174,7 @@ class AttendanceDataDetail extends StatelessWidget {
               ),
         (data != null)
             ? Text(
-                '08:35',
+                khm.format(data.deviceTime!),
                 style: context.textTheme.caption3
                     ?.copyWith(color: AppColors.midnightExpress),
               )

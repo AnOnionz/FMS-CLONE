@@ -32,8 +32,7 @@ final class ExchangeController {
   int get _price => order.totalPrice(feature.featureOrder!.products!);
 
   /// price exchanged
-  int get _priceExchanged => _exchanges.fold(0,
-      (previousValue, element) => previousValue + (element.reachAmount ?? 0));
+  int get _priceExchanged => _exchanges.fold(0, priceExchanged);
 
   /// products Exchanged
   Map<(int productId, int packageId), int> get _productsExchanged => _exchanges
@@ -48,6 +47,8 @@ final class ExchangeController {
 
   void addExchange(Exchange exchange) {
     _exchanges.add(_exchanged(exchange));
+    Fx.log(_exchanges);
+    Fx.log(_productsExchanged);
   }
 
   void removeExchange(Exchange exchange) {
@@ -198,5 +199,20 @@ final class ExchangeController {
     }
 
     return exchange;
+  }
+
+  int priceExchanged(int previousValue, Exchange exchange) {
+    final exchangeConditionPrice = (exchange.exchangeConditions ?? []).fold(0,
+        (previousValue, exchangeCondition) {
+      final productPrice = feature.featureOrder!.products!
+              .firstWhere((product) =>
+                  product.product!.id == exchangeCondition.product!.id &&
+                  product.productPackaging!.id ==
+                      exchangeCondition.productPackaging!.id)
+              .price ??
+          0;
+      return previousValue + productPrice;
+    });
+    return previousValue + (exchange.reachAmount ?? 0) + exchangeConditionPrice;
   }
 }

@@ -4,6 +4,7 @@ import '/core/mixins/dart/language.dart';
 
 final kdMy = DateFormat('dd/MM/yyyy');
 final khmdMy = DateFormat('HH:mm dd/MM/yyyy');
+final khm = DateFormat('HH:mm');
 
 /// Date Time Extension Methods
 extension DateTimeExtension on DateTime {

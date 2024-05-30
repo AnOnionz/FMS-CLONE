@@ -60,12 +60,6 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
   }
 
   @override
-  void initState() {
-    Fx.log(_exchange);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.h),

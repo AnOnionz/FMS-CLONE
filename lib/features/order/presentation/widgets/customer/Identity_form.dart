@@ -62,10 +62,9 @@ class _IdentityFormState extends State<IdentityForm> {
               });
         } else {
           showFailure(
-              title: 'Kiểm tra thất bại',
+              title: 'Kiểm tra thông tin thất bại',
               icon: SvgPicture.asset(AppIcons.failure),
-              message: state.failure.message ??
-                  'Phát sinh lỗi trong quá trình định danh',
+              message: 'Phát sinh lỗi trong quá trình kiểm tra',
               btnText: 'Thử lại',
               onPressed: () {
                 _identify();
