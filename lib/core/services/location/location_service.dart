@@ -4,11 +4,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/utilities/overlay.dart';
-import 'package:fms/core/widgets/popup.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../mixins/common.dart';
 import '../../permission/permisson_manager.dart';
 import './../../../core/constant/keys.dart';
 import './../../../core/database/database.dart';

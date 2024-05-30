@@ -75,6 +75,8 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
             (element) => element.id == exchangeEntity.featureSchemeExchangeId);
         final quantity = exchangeEntity.quantity!;
 
+        print(exchangeEntity);
+
         if (quantity > 0) {
           int value = 0;
           for (int i = 1; i <= quantity; i++) {

@@ -5,8 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 
-import '../../../../core/mixins/common.dart';
-
 final class ExchangeController {
   final FeatureEntity feature;
   final OrderEntity order;
@@ -47,14 +45,12 @@ final class ExchangeController {
 
   void addExchange(Exchange exchange) {
     _exchanges.add(_exchanged(exchange));
-    Fx.log(_exchanges);
-    Fx.log(_productsExchanged);
   }
 
   void removeExchange(Exchange exchange) {
-    final e = _exchanges.lastWhere((element) => exchange.id == element.id);
-    _exchanges.remove(e);
-    Fx.log(_exchanges);
+    final e =
+        _exchanges.lastWhereOrNull((element) => exchange.id == element.id);
+    if (e != null) _exchanges.remove(e);
   }
 
   bool isValid(Exchange exchange, int value) {
