@@ -1051,7 +1051,7 @@ class Product {
       other is Product && runtimeType == other.runtimeType && id == other.id;
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode => id.hashCode;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -1182,6 +1182,16 @@ class OrderProduct {
 
   factory OrderProduct.fromJson(String source) =>
       OrderProduct.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OrderProduct &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 
   @override
   String toString() {

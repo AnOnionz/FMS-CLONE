@@ -186,7 +186,7 @@ class DioClient extends ApiService {
         throw InternetException(e.message, e, s);
       } else if (e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
-        throw TimeoutException(e.message, e, s);
+        throw InternetException(e.message, e, s);
       }
       throw InternetException(e.message, e, s);
     } on SocketException catch (e, s) {

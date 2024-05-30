@@ -63,8 +63,30 @@ final class ExchangeController {
     if (_isUnderAmount(exchange, value)) return false;
 
     if (exchange.exchangeConditions!.isNotEmpty) {
-      if (exchange.logical == 'or') return _or(exchange);
-      if (exchange.logical == 'and') return _and(exchange);
+      if (exchange.logical == 'or') {
+        final or = _or(exchange);
+        if (!or.success) {
+          return false;
+        } else {
+          final _priceExpected = or.purchases.fold(
+              0, (previousValue, element) => element!.$2 * element.$1.price!);
+
+          return _price - _priceExchanged - _priceExpected >= 0;
+        }
+      }
+
+      if (exchange.logical == 'and') {
+        final and = _and(exchange);
+
+        if (!and.success) {
+          return false;
+        } else {
+          final _priceExpected = and.purchases.fold(
+              0, (previousValue, element) => element!.$2 * element.$1.price!);
+
+          return _price - _priceExchanged - _priceExpected >= 0;
+        }
+      }
     }
 
     return true;
@@ -89,8 +111,9 @@ final class ExchangeController {
         _price - _priceExchanged < exchange.reachAmount!;
   }
 
-  bool _and(Exchange exchange) {
-    final quantities = <int, int>{};
+  ({bool success, List<(OrderProduct, int)?> purchases}) _and(
+      Exchange exchange) {
+    final quantities = <OrderProduct, int>{};
     final isValids = <bool>[];
 
     for (final ExchangeCondition condition in exchange.exchangeConditions!) {
@@ -99,9 +122,8 @@ final class ExchangeController {
               _productMatchCondition(product: product!, condition: condition));
 
       if (productPurchased != null) {
-        final quantityUsed = switch (
-            quantities[productPurchased.$1.id!] != null) {
-          true => quantities[productPurchased.$1.id!]!,
+        final quantityUsed = switch (quantities[productPurchased.$1] != null) {
+          true => quantities[productPurchased.$1]!,
           false => 0
         };
 
@@ -110,26 +132,62 @@ final class ExchangeController {
         } else {
           isValids.add(false);
         }
-        quantities[productPurchased.$1.id!] =
-            quantityUsed + condition.quantity!;
+        quantities[productPurchased.$1] = quantityUsed + condition.quantity!;
       } else {
         isValids.add(false);
       }
     }
-    if (isValids.any((value) => value == false)) return false;
-    return true;
+    if (isValids.any((value) => value == false))
+      return (success: false, purchases: []);
+    return (
+      success: true,
+      purchases: quantities.entries.map((e) => (e.key, e.value)).toList()
+    );
   }
 
-  bool _or(Exchange exchange) {
-    int totalPurchased = 0;
-    for (final ExchangeCondition condition in exchange.exchangeConditions!) {
-      final productPurchased =
-          _purchaseUnExchangedWithQuantity.firstWhereOrNull((product) =>
-              _productMatchCondition(product: product!, condition: condition));
-      if (productPurchased != null) totalPurchased += productPurchased.$2;
-    }
+  ({bool success, List<(OrderProduct, int)?> purchases}) _or(
+      Exchange exchange) {
+    // int totalPurchased = 0;
+    // for (final ExchangeCondition condition in exchange.exchangeConditions!) {
+    //   final productPurchased =
+    //       _purchaseUnExchangedWithQuantity.firstWhereOrNull((product) =>
+    //           _productMatchCondition(product: product!, condition: condition));
+    //   if (productPurchased != null) totalPurchased += productPurchased.$2;
+    // }
 
-    return totalPurchased >= exchange.exchangeConditions!.first.quantity!;
+    // final success =
+    //     totalPurchased >= exchange.exchangeConditions!.first.quantity!;
+
+    // if (!success) {
+    //   return (success: success, purchases: []);
+    // }
+
+    final _exchangeConditions = <ExchangeCondition>[];
+    int quantity = exchange.exchangeConditions!.first.quantity!;
+
+    exchange.exchangeConditions!.forEach((exchangeCondition) {
+      final purchaseUnExchanged =
+          _purchaseUnExchangedWithQuantity.firstWhereOrNull((element) =>
+              element!.$1.product!.id == exchangeCondition.product!.id &&
+              element.$1.productPackaging!.id ==
+                  exchangeCondition.productPackaging!.id);
+
+      if (purchaseUnExchanged != null && quantity > 0) {
+        final purchaseQuantity =
+            min(exchangeCondition.quantity!, purchaseUnExchanged.$2);
+
+        quantity -= purchaseQuantity;
+        _exchangeConditions
+            .add(exchangeCondition.copyWith(quantity: purchaseQuantity));
+      }
+    });
+
+    if (_exchangeConditions.length !=
+        exchange.exchangeConditions!.first.quantity!) {
+      return (success: false, purchases: []);
+    } else {
+      return _and(exchange.copyWith(exchangeConditions: _exchangeConditions));
+    }
   }
 
   List<(OrderProduct product, int quantity)?> _orderProductsByQuantity(
