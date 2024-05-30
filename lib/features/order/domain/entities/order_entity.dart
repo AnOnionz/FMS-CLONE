@@ -17,14 +17,14 @@ class OrderEntity extends BaseEntity {
   Id get isarId => fastHash(dataUuid);
   final int? id;
   final String dataUuid;
-  final DateTime dataTimestamp;
-  final int? attendanceId;
-  final int? featureId;
+  DateTime dataTimestamp;
+  int? attendanceId;
+  int? featureId;
   final List<CustomerInfo>? customerInfos;
   final List<PurchaseEntity>? purchases;
   final List<ExchangeEntity>? exchanges;
   final List<SamplingEntity>? samplings;
-  final localPhotos = IsarLinks<PhotoEntity>();
+  var localPhotos = IsarLinks<PhotoEntity>();
   @Enumerated(EnumType.name)
   final SyncStatus status;
 
@@ -126,7 +126,7 @@ class OrderEntity extends BaseEntity {
 
   @override
   String toString() {
-    return 'OrderEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, attendanceId: $attendanceId, featureId: $featureId, customerInfos: $customerInfos, purchases: $purchases, exchanges: $exchanges, samplings: $samplings)';
+    return 'OrderEntity(id: $id, dataUuid: $dataUuid, dataTimestamp: $dataTimestamp, attendanceId: $attendanceId, featureId: $featureId, customerInfos: $customerInfos, purchases: $purchases, exchanges: $exchanges, samplings: $samplings, photos: $photos, localPhotos: ${localPhotos.toList()})';
   }
 
   OrderEntity copyWith({
@@ -142,18 +142,21 @@ class OrderEntity extends BaseEntity {
     List<PhotoEntity>? photos,
     SyncStatus? status,
   }) {
-    return OrderEntity(
-        id: id ?? this.id,
-        dataUuid: dataUuid ?? this.dataUuid,
-        dataTimestamp: dataTimestamp ?? this.dataTimestamp,
-        attendanceId: attendanceId ?? this.attendanceId,
-        featureId: featureId ?? this.featureId,
-        customerInfos: customerInfos ?? this.customerInfos,
-        purchases: purchases ?? this.purchases,
-        exchanges: exchanges ?? this.exchanges,
-        samplings: samplings ?? this.samplings,
-        photos: photos ?? this.photos,
-        status: status ?? this.status);
+    var newOrder = OrderEntity(
+      id: id ?? this.id,
+      dataUuid: dataUuid ?? this.dataUuid,
+      dataTimestamp: dataTimestamp ?? this.dataTimestamp,
+      attendanceId: attendanceId ?? this.attendanceId,
+      featureId: featureId ?? this.featureId,
+      customerInfos: customerInfos ?? this.customerInfos,
+      purchases: purchases ?? this.purchases,
+      exchanges: exchanges ?? this.exchanges,
+      samplings: samplings ?? this.samplings,
+      photos: photos ?? this.photos,
+      status: status ?? this.status,
+    );
+    newOrder.localPhotos = localPhotos;
+    return newOrder;
   }
 
   String toJson() => json.encode(toMap());

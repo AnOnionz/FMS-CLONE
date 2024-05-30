@@ -63,6 +63,7 @@ class _OrderPhotoPageState extends State<OrderPhotoPage> {
 
   @override
   Widget build(BuildContext context) {
+    Fx.log(dataFeature.order);
     return Padding(
       padding: EdgeInsets.only(top: 16.h),
       child: Column(

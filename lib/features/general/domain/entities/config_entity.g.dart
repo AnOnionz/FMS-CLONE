@@ -11378,24 +11378,29 @@ const OrderProductSchema = Schema(
   name: r'OrderProduct',
   id: 9014927253170020184,
   properties: {
-    r'id': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 0,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 1,
       name: r'id',
       type: IsarType.long,
     ),
     r'price': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'price',
       type: IsarType.long,
     ),
     r'product': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
@@ -11437,16 +11442,17 @@ void _orderProductSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.id);
-  writer.writeLong(offsets[1], object.price);
+  writer.writeLong(offsets[0], object.hashCode);
+  writer.writeLong(offsets[1], object.id);
+  writer.writeLong(offsets[2], object.price);
   writer.writeObject<Product>(
-    offsets[2],
+    offsets[3],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[3],
+    offsets[4],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
@@ -11460,15 +11466,15 @@ OrderProduct _orderProductDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = OrderProduct(
-    id: reader.readLongOrNull(offsets[0]),
-    price: reader.readLongOrNull(offsets[1]),
+    id: reader.readLongOrNull(offsets[1]),
+    price: reader.readLongOrNull(offsets[2]),
     product: reader.readObjectOrNull<Product>(
-      offsets[2],
+      offsets[3],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[3],
+      offsets[4],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
@@ -11484,16 +11490,18 @@ P _orderProductDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
+      return (reader.readLongOrNull(offset)) as P;
+    case 3:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 3:
+    case 4:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
@@ -11506,6 +11514,62 @@ P _orderProductDeserializeProp<P>(
 
 extension OrderProductQueryFilter
     on QueryBuilder<OrderProduct, OrderProduct, QFilterCondition> {
+  QueryBuilder<OrderProduct, OrderProduct, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderProduct, OrderProduct, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderProduct, OrderProduct, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OrderProduct, OrderProduct, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<OrderProduct, OrderProduct, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(

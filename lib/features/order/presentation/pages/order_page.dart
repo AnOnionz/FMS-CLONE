@@ -19,11 +19,13 @@ import 'package:fms/features/order/history_exchange_module.dart';
 import 'package:fms/features/order/order_module.dart';
 import 'package:fms/features/order/presentation/bloc/order_bloc.dart';
 import 'package:fms/features/order/presentation/pages/purchase_page.dart';
+import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/button/outline.dart';
 import '../../../home/domain/entities/general_item_data.dart';
+import '../../../report/domain/entities/photo_entity.dart';
 import '../widgets/custom_stepper.dart';
 import '../widgets/data_feature_widget.dart';
 import '../widgets/exchange_detail.dart';
@@ -303,18 +305,21 @@ class _OrderPageState extends State<OrderPage> {
   Future<void> _init() async {
     int index = 0;
     final time = await _networkTimeService.ntpDateTime();
-    orderEntity = isEditing
-        ? widget.order!.copyWith(
-            dataTimestamp: time,
-            attendanceId: widget.entity.general.attendance!.id,
-            featureId: widget.entity.feature.id,
-          )
-        : OrderEntity(
-            dataUuid: Uuid().v1(),
-            dataTimestamp: time,
-            attendanceId: widget.entity.general.attendance!.id,
-            featureId: widget.entity.feature.id,
-          );
+
+    if (isEditing) {
+      orderEntity = widget.order!;
+      orderEntity.dataTimestamp = time;
+      orderEntity.attendanceId = widget.entity.general.attendance!.id;
+      orderEntity.featureId = widget.entity.feature.id;
+      Fx.log(orderEntity);
+    } else {
+      orderEntity = OrderEntity(
+        dataUuid: Uuid().v1(),
+        dataTimestamp: time,
+        attendanceId: widget.entity.general.attendance!.id,
+        featureId: widget.entity.feature.id,
+      );
+    }
 
     if (widget.entity.feature.featureOrder?.hasCustomer == true) {
       _steps.add(

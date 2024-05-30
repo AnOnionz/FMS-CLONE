@@ -255,10 +255,10 @@ class PhotoStep extends StepData {
     if (currentIndex == index) {
       return StepperState.editing;
     }
-    if (order.photos == null) {
+    if (order.photos == null && order.localPhotos.isEmpty) {
       return StepperState.disabled;
     }
-    if (order.photos!.isNotEmpty) {
+    if ((order.photos ?? order.localPhotos.toList()).isNotEmpty) {
       return StepperState.completed;
     }
 
