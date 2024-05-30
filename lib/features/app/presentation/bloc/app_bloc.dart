@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
@@ -29,6 +30,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
   final GeneralRepository _generalRepository;
+  final LocationService _locationService;
   final SyncBloc _syncBloc;
   final SyncProgressBloc _syncProgressBloc;
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
@@ -44,6 +46,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     this._networkTimeService,
     this._syncBloc,
     this._syncProgressBloc,
+    this._locationService,
   ) : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -66,6 +69,26 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final nextState = change.nextState;
     if (nextState is AppSuccess) {
       // _checkLockStatus(nextState);
+    }
+  }
+
+  void _startLocationService() {
+    if (_generalRepository.general != null) {
+      final isUseLocation =
+          _generalRepository.general!.config.features!.any((feature) {
+        final isUseLocation =
+            feature.featureAttendance?.isLocationRequired ?? false;
+        final isUseWatermark = (feature.featureMultimedias
+                    ?.any((element) => element.isWatermarkRequired ?? false) ??
+                false) ||
+            (feature.featurePhotos
+                    ?.any((element) => element.isWatermarkRequired ?? false) ??
+                false);
+        return isUseLocation || isUseWatermark;
+      });
+      if (isUseLocation == true) {
+        _locationService.enablePositionSubscription();
+      }
     }
   }
 
@@ -119,8 +142,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     _connectivityService.onConnectionChange.listen((status) async {
-      Fx.log('Internet status: $status');
-      Fx.log('Internet status: ${_connectivityService.hasConnected}');
       if (status == InternetStatus.disconnected) {
         if (OverlayManager.currentContext != null) {
           if (Modular.to.navigateHistory.last.name == HomeModule.route) {

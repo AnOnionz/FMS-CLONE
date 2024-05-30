@@ -50,15 +50,17 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
           try {
             final fileWithWatermark = await _service.addWatermark(file);
-            final image = ImageDynamic(
-              uuid: Uuid().v1(),
-              path: fileWithWatermark.path,
-              dataTimestamp: time,
-            );
+            if (fileWithWatermark != null) {
+              final image = ImageDynamic(
+                uuid: Uuid().v1(),
+                path: fileWithWatermark.path,
+                dataTimestamp: time,
+              );
+
+              widget.onChanged(image);
+            }
             isWatermarking.value = false;
             widget.isWatermarking?.value = false;
-
-            widget.onChanged(image);
           } catch (e) {
             isWatermarking.value = false;
             widget.isWatermarking?.value = false;

@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/utilities/overlay.dart';
+import 'package:fms/core/widgets/popup.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../mixins/common.dart';
 import '../../permission/permisson_manager.dart';
 import './../../../core/constant/keys.dart';
 import './../../../core/database/database.dart';
@@ -32,6 +34,9 @@ final class LocationService extends ChangeNotifier {
       _currentLocation = position;
       notifyListeners();
       database.setValue(Keys.LOCATION, jsonEncode(position.toJson()));
+      placemark(position).then((value) {
+        database.setValue(Keys.LOCATION_STRING, value);
+      });
     }
   }
 
@@ -79,7 +84,7 @@ final class LocationService extends ChangeNotifier {
 
     if (!serviceEnabled) {
       OverlayManager.showServiceDialog(
-          message: 'vị trí của thiết bị chưa được bật',
+          message: 'Vị trí của thiết bị chưa được bật',
           solution: () => openLocationSettings());
       subscription?.resume();
       return false;
@@ -94,7 +99,7 @@ final class LocationService extends ChangeNotifier {
         if (permission == LocationPermission.denied) {
           OverlayManager.showServiceDialog(
               message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
-              solution: () => openLocationSettings());
+              solution: () => openAppSettings());
           subscription?.resume();
           return false;
         }
@@ -106,7 +111,7 @@ final class LocationService extends ChangeNotifier {
     if (permission == LocationPermission.deniedForever) {
       OverlayManager.showServiceDialog(
         message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
-        solution: () => openLocationSettings(),
+        solution: () => openAppSettings(),
       );
       subscription?.resume();
       return false;
@@ -148,7 +153,7 @@ final class LocationService extends ChangeNotifier {
   Future<Position?> getCurrentPosition() async {
     try {
       final hasPermission =
-          await _handlePermission().timeout(15.seconds, onTimeout: () => false);
+          await _handlePermission().timeout(10.seconds, onTimeout: () => false);
 
       if (!hasPermission) {
         return null;
@@ -159,9 +164,6 @@ final class LocationService extends ChangeNotifier {
           .timeout(15.seconds);
 
       positionUpdate(userLocation);
-      placemark(userLocation).then((value) {
-        database.setValue(Keys.LOCATION_STRING, value);
-      });
 
       return _currentLocation;
     } catch (e) {
@@ -190,6 +192,7 @@ final class LocationService extends ChangeNotifier {
   }
 
   void enablePositionSubscription() {
+    cancelPositionSubscription();
     _handlePermission().then((value) {
       _positionStreamSubscription =
           onPositionChanged.handleError((error) async {
@@ -216,23 +219,28 @@ final class LocationService extends ChangeNotifier {
     return null;
   }
 
-  Future<String> placeString() async {
+  Future<String?> placeString({VoidCallback? onFailure}) async {
     final _position = await getCurrentPosition();
 
     if (_position == null) {
-      return '\nVị trí không xác định';
+      return null;
     }
     try {
       final place =
           await placemark(_position).timeout(15.seconds, onTimeout: () => null);
+
       if (place == null) {
-        return database.getValue(Keys.LOCATION_STRING) ??
-            '\nVị trí không xác định';
+        final local_string = database.getValue(Keys.LOCATION_STRING);
+        if (local_string == null) {
+          onFailure?.call();
+          return local_string;
+        }
+        return local_string;
       }
+
       return place;
     } catch (e) {
-      return database.getValue(Keys.LOCATION_STRING) ??
-          '\nVị trí không xác định';
+      return database.getValue(Keys.LOCATION_STRING);
     }
   }
 

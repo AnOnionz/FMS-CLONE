@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/camera/camera_module.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
@@ -10,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../database/database.dart';
+import '../../widgets/popup.dart';
 import '../location/location_service.dart';
 import '../network_time/network_time_service.dart';
 import '/core/mixins/common.dart';
@@ -107,16 +110,30 @@ final class MediaService {
     }
   }
 
-  Future<XFile> addWatermark(XFile image) async {
+  Future<XFile?> addWatermark(XFile image) async {
     final fWatermark = DateFormat('dd/MM/yyyy HH:mm:ss');
     final _locationService = Modular.get<LocationService>();
     final _networkTime = Modular.get<NetworkTimeService>();
-    final address = await _locationService.placeString();
-    final ntpTime = await _networkTime.ntpDateTime();
+    final address = await _locationService.placeString(
+      onFailure: () {
+        showFailure(
+          title: 'Không định vị được vị trí của bạn',
+          icon: SvgPicture.asset(AppIcons.requiredAttendance),
+          message: 'Vui lòng kiểm tra GPS / kết nối mạng của bạn',
+          btnText: 'Ok',
+        );
+      },
+    );
 
+    if (address == null) {
+      return null;
+    }
+
+    final ntpTime = await _networkTime.ntpDateTime();
     final time = fWatermark.format(ntpTime);
 
     final imgBytes = await image.readAsBytes();
+
     final painterDesc =
         WatermarkPainter('${time}${address}', 16.sp, color: Colors.white);
     final imageDesc = await painterDesc.toImageData();

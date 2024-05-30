@@ -128,7 +128,10 @@ class ServiceDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog.adaptive(
-      content: Text(message),
+      title: Text(message),
+      titleTextStyle: context.textTheme.h2?.copyWith(color: AppColors.black),
+      contentPadding: EdgeInsets.all(8.0),
+      backgroundColor: AppColors.white,
       actions: [
         ...onSolution != null
             ? [
@@ -137,10 +140,22 @@ class ServiceDialog extends StatelessWidget {
                       onClose();
                       onSolution?.call();
                     },
-                    child: Text('Cài đặt'))
+                    child: Text(
+                      'Cài đặt',
+                      style: context.textTheme.caption1
+                          ?.copyWith(color: AppColors.black),
+                    ))
               ]
             : [],
-        ...[TextButton(onPressed: onClose, child: Text('Đóng'))]
+        ...[
+          TextButton(
+              onPressed: onClose,
+              child: Text(
+                'Đóng',
+                style: context.textTheme.caption1
+                    ?.copyWith(color: AppColors.brickRed),
+              ))
+        ]
       ],
     );
   }
