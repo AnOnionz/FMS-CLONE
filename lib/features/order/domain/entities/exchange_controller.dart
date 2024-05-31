@@ -5,6 +5,8 @@ import 'package:collection/collection.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 
+import '../../../../core/mixins/common.dart';
+
 final class ExchangeController {
   final FeatureEntity feature;
   final OrderEntity order;
@@ -61,6 +63,7 @@ final class ExchangeController {
     if (exchange.exchangeConditions!.isNotEmpty) {
       if (exchange.logical == 'or') {
         final or = _or(exchange);
+        Fx.log(or);
         if (!or.success) {
           return false;
         } else {
@@ -178,7 +181,8 @@ final class ExchangeController {
       }
     });
 
-    if (_exchangeConditions.length !=
+    if (_exchangeConditions.fold(
+            0, (previousValue, element) => previousValue + element.quantity!) !=
         exchange.exchangeConditions!.first.quantity!) {
       return (success: false, purchases: []);
     } else {
@@ -265,8 +269,14 @@ final class ExchangeController {
                       exchangeCondition.productPackaging!.id)
               .price ??
           0;
-      return previousValue + productPrice;
+      return previousValue + productPrice * exchangeCondition.quantity!;
     });
-    return previousValue + (exchange.reachAmount ?? 0) + exchangeConditionPrice;
+    if (exchange.reachAmount != null) {
+      return previousValue + exchange.reachAmount!;
+    } else {
+      return previousValue +
+          (exchange.reachAmount ?? 0) +
+          exchangeConditionPrice;
+    }
   }
 }

@@ -194,7 +194,8 @@ class OrderRepositoryImpl extends Repository
 
   Future<void> updatePhotos(OrderEntity order, int orderId) async {
     try {
-      await Future.forEach(order.photos ?? order.localPhotos!, (photo) async {
+      await Future.forEach(order.photos ?? order.localPhotos.toList(),
+          (photo) async {
         if (photo.status == SyncStatus.isDeleted) {
           if (photo.id != null) {
             await _remotePhoto.deleteOrderPhoto(
