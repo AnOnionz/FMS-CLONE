@@ -86,9 +86,11 @@ class OrderRepositoryImpl extends Repository
           if (newOrder != null) {
             order = order.copyWith(id: newOrder.id);
             _local.cacheOrderToLocal(order);
-            await updatePhotos(order, newOrder.id!);
-            order = order.copyWith(status: SyncStatus.synced);
-            _local.cacheOrderToLocal(order);
+            try {
+              await updatePhotos(order, newOrder.id!);
+              order = order.copyWith(status: SyncStatus.synced);
+              _local.cacheOrderToLocal(order);
+            } catch (e) {}
           }
         });
     });
@@ -193,34 +195,30 @@ class OrderRepositoryImpl extends Repository
   }
 
   Future<void> updatePhotos(OrderEntity order, int orderId) async {
-    try {
-      await Future.forEach(order.photos ?? order.localPhotos.toList(),
-          (photo) async {
-        if (photo.status == SyncStatus.isDeleted) {
-          if (photo.id != null) {
-            await _remotePhoto.deleteOrderPhoto(
-                featureId: order.featureId!,
-                attendanceId: order.attendanceId!,
-                id: photo.id!,
-                orderId: order.id!);
-          }
-          _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
-        }
-        if (photo.status == SyncStatus.isNoSynced) {
-          final resp = await _remote.createPhoto(
-              photo: photo,
+    await Future.forEach(order.photos ?? order.localPhotos.toList(),
+        (photo) async {
+      if (photo.status == SyncStatus.isDeleted) {
+        if (photo.id != null) {
+          await _remotePhoto.deleteOrderPhoto(
               featureId: order.featureId!,
               attendanceId: order.attendanceId!,
-              orderId: orderId);
-          if (resp != null) {
-            photo = photo.copyWith(
-                id: resp.id, image: resp.image, status: SyncStatus.synced);
-            _local.cachePhotoToLocal(photo);
-          }
+              id: photo.id!,
+              orderId: order.id!);
         }
-      });
-    } catch (e) {
-      rethrow;
-    }
+        _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
+      }
+      if (photo.status == SyncStatus.isNoSynced) {
+        final resp = await _remote.createPhoto(
+            photo: photo,
+            featureId: order.featureId!,
+            attendanceId: order.attendanceId!,
+            orderId: orderId);
+        if (resp != null) {
+          photo = photo.copyWith(
+              id: resp.id, image: resp.image, status: SyncStatus.synced);
+          _local.cachePhotoToLocal(photo);
+        }
+      }
+    });
   }
 }
