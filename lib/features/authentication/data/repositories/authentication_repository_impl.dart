@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:fms/core/client/dio_client.dart';
-import 'package:fms/core/mixins/common.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../domain/repositories/authentication_repository.dart';
@@ -87,7 +86,6 @@ class AuthenticationRepositoryImpl extends Repository
     return todo(() async {
       try {
         final credentials = await _remote.credentials();
-        Fx.log(credentials.user.address);
         _credentials = credentials;
         _local.cacheRefreshToken(credentials.refreshToken!);
         _local.cacheIdentifier(credentials.user.sub);

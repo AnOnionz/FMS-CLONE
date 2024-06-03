@@ -160,30 +160,30 @@ class _AttendancePageState extends State<AttendancePage> {
     ;
   }
 
-  void _showSheetHistory(BuildContext context) {
-    OverlayManager.showSheet(
-        body: Padding(
-      padding: EdgeInsets.only(top: 20.h),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 10.w,
-              ),
-              child: Text(
-                'Lịch sử chấm công',
-                style: context.textTheme.h2,
-              ),
-            ),
-          ),
-          Expanded(child: AttendanceHistory()),
-        ],
-      ),
-    ));
-  }
+  // void _showSheetHistory(BuildContext context) {
+  //   OverlayManager.showSheet(
+  //       body: Padding(
+  //     padding: EdgeInsets.only(top: 20.h),
+  //     child: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Align(
+  //           alignment: Alignment.centerLeft,
+  //           child: Padding(
+  //             padding: EdgeInsets.only(
+  //               left: 10.w,
+  //             ),
+  //             child: Text(
+  //               'Lịch sử chấm công',
+  //               style: context.textTheme.h2,
+  //             ),
+  //           ),
+  //         ),
+  //         Expanded(child: AttendanceHistory()),
+  //       ],
+  //     ),
+  //   ));
+  // }
 
   @override
   Widget build(BuildContext context) {

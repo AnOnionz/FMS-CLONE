@@ -6,7 +6,6 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
 import '../../../../core/constant/icons.dart';
-import '../../../../core/mixins/common.dart';
 import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/cached_image.dart';
@@ -94,7 +93,6 @@ class AttendanceDataDetail extends StatelessWidget {
       {required String name,
       required BuildContext context,
       AttendanceData? data}) {
-    Fx.log(data);
     return Column(
       children: [
         Text(name,

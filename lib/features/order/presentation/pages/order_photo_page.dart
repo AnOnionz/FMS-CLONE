@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
@@ -63,7 +62,6 @@ class _OrderPhotoPageState extends State<OrderPhotoPage> {
 
   @override
   Widget build(BuildContext context) {
-    Fx.log(dataFeature.order);
     return Padding(
       padding: EdgeInsets.only(top: 16.h),
       child: Column(

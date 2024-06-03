@@ -311,7 +311,6 @@ class _OrderPageState extends State<OrderPage> {
       orderEntity.dataTimestamp = time;
       orderEntity.attendanceId = widget.entity.general.attendance!.id;
       orderEntity.featureId = widget.entity.feature.id;
-      Fx.log(orderEntity);
     } else {
       orderEntity = OrderEntity(
         dataUuid: Uuid().v1(),
