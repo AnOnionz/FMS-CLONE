@@ -56,7 +56,6 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   void initState() {
-    _mapService.loadStyle();
     _getInfo();
     _subscriptionAttendanceInfo = cubit.stream.listen((state) {
       attendanceInfoListen(state);
