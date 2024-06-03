@@ -2,7 +2,6 @@ import 'dart:core';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 
@@ -45,8 +44,7 @@ final class ExchangeController {
   List<Exchange> _exchanges = [];
 
   void addExchange(Exchange exchange) {
-    Fx.log(exchange);
-    _exchanges.add(_exchanged(exchange));
+    _exchanges.add(_copyExchange(exchange));
   }
 
   void removeExchange(Exchange exchange) {
@@ -205,7 +203,7 @@ final class ExchangeController {
     }).toList();
   }
 
-  Exchange _exchanged(Exchange exchange) {
+  Exchange _copyExchange(Exchange exchange) {
     if (exchange.exchangeConditions != null &&
         exchange.exchangeConditions!.isNotEmpty) {
       if (exchange.logical == 'and') {
