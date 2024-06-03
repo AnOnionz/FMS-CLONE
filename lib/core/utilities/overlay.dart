@@ -54,12 +54,14 @@ final class OverlayManager {
   }
 
   static Future<void> showServiceDialog({
-    required String message,
+    String? title,
+    String? message,
     VoidCallback? solution,
   }) async {
     await showAppDialog(
       barrierDismissible: false,
       builder: (context) => ServiceDialog(
+        title: title,
         message: message,
         onSolution: solution,
         onClose: () => hide(),
@@ -116,23 +118,40 @@ class CustomToast extends StatelessWidget {
 }
 
 class ServiceDialog extends StatelessWidget {
-  final String message;
+  final String? title;
+  final String? message;
   final VoidCallback? onSolution;
   final VoidCallback onClose;
   const ServiceDialog(
       {super.key,
-      required this.message,
+      this.title,
+      this.message,
       required this.onSolution,
       required this.onClose});
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog.adaptive(
-      title: Text(message),
+    return AlertDialog(
+      title: title != null ? Text(title!) : null,
+      content: message != null ? Text(message!) : null,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      contentTextStyle:
+          context.textTheme.subtitle1?.copyWith(color: AppColors.black),
       titleTextStyle: context.textTheme.h2?.copyWith(color: AppColors.black),
-      contentPadding: EdgeInsets.all(8.0),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      titlePadding: EdgeInsets.only(top: 24, bottom: 8, left: 16, right: 16),
+      actionsPadding: EdgeInsets.only(bottom: 16),
       backgroundColor: AppColors.white,
       actions: [
+        ...[
+          TextButton(
+              onPressed: onClose,
+              child: Text(
+                'Đóng',
+                style: context.textTheme.caption1
+                    ?.copyWith(color: AppColors.black),
+              ))
+        ],
         ...onSolution != null
             ? [
                 TextButton(
@@ -141,21 +160,12 @@ class ServiceDialog extends StatelessWidget {
                       onSolution?.call();
                     },
                     child: Text(
-                      'Cài đặt',
+                      'Mở cài đặt',
                       style: context.textTheme.caption1
-                          ?.copyWith(color: AppColors.black),
+                          ?.copyWith(color: AppColors.royalBlue),
                     ))
               ]
             : [],
-        ...[
-          TextButton(
-              onPressed: onClose,
-              child: Text(
-                'Đóng',
-                style: context.textTheme.caption1
-                    ?.copyWith(color: AppColors.brickRed),
-              ))
-        ]
       ],
     );
   }

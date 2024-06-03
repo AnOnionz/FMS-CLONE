@@ -111,16 +111,7 @@ final class MediaService {
     final fWatermark = DateFormat('dd/MM/yyyy HH:mm:ss');
     final _locationService = Modular.get<LocationService>();
     final _networkTime = Modular.get<NetworkTimeService>();
-    final address = await _locationService.placeString(
-        // onFailure: () {
-        //   showFailure(
-        //     title: 'Không định vị được vị trí của bạn',
-        //     icon: SvgPicture.asset(AppIcons.requiredAttendance),
-        //     message: 'Vui lòng kiểm tra GPS / kết nối mạng của bạn',
-        //     btnText: 'Ok',
-        //   );
-        // },
-        );
+    final address = await _locationService.placeString();
 
     if (address == null) {
       return null;

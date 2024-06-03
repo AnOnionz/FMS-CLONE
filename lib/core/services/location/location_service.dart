@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:geocoding/geocoding.dart';
@@ -81,35 +82,35 @@ final class LocationService extends ChangeNotifier {
     serviceEnabled = await _geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
-      OverlayManager.showServiceDialog(
-          message: 'Vị trí của thiết bị chưa được bật',
-          solution: () => openLocationSettings());
+      if (subscription == null)
+        OverlayManager.showServiceDialog(
+            title: 'Vị trí của thiết bị đang tắt',
+            message:
+                'Ứng dụng yêu cầu vị trí của bạn trong lúc sử dụng ứng dụng',
+            solution: () => openLocationSettings());
       subscription?.resume();
       return false;
     }
 
-    permission = await _geolocator.checkPermission();
+    permission = await _geolocator
+        .checkPermission()
+        .timeout(5.seconds, onTimeout: () => LocationPermission.denied);
 
     if (permission == LocationPermission.denied) {
       try {
         permission = await requestPermission();
         if (permission == LocationPermission.denied) {
-          OverlayManager.showServiceDialog(
-              message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
-              solution: () => openAppSettings());
-          subscription?.resume();
+          if (subscription == null) subscription?.resume();
           return false;
         }
       } catch (e) {
+        if (subscription == null) showNotify();
         subscription?.resume();
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      OverlayManager.showServiceDialog(
-        message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
-        solution: () => openAppSettings(),
-      );
+      if (subscription == null) showNotify();
       subscription?.resume();
       return false;
     }
@@ -150,15 +151,15 @@ final class LocationService extends ChangeNotifier {
   Future<Position?> getCurrentPosition() async {
     try {
       final hasPermission =
-          await _handlePermission().timeout(10.seconds, onTimeout: () => false);
+          await _handlePermission().timeout(5.seconds, onTimeout: () => false);
 
       if (!hasPermission) {
-        return null;
+        return currentLocation;
       }
 
       final userLocation = await _geolocator
           .getCurrentPosition(locationSettings: _getLocationSettings())
-          .timeout(15.seconds);
+          .timeout(5.seconds);
 
       positionUpdate(userLocation);
 
@@ -189,19 +190,20 @@ final class LocationService extends ChangeNotifier {
   }
 
   void enablePositionSubscription() {
-    cancelPositionSubscription();
-    _handlePermission().then((value) {
-      _positionStreamSubscription =
-          onPositionChanged.handleError((error) async {
-        _positionStreamSubscription?.pause();
-        _handlePermission(_positionStreamSubscription);
-      }).listen((Position? position) {
-        positionUpdate(position);
-        debugPrint(position == null
-            ? 'Stream Location: Unknown'
-            : 'Stream Location: ${position.latitude.toString()}, ${position.longitude.toString()}');
+    if (_positionStreamSubscription == null) {
+      _handlePermission().then((value) {
+        _positionStreamSubscription =
+            onPositionChanged.handleError((error) async {
+          _positionStreamSubscription?.pause();
+          _handlePermission(_positionStreamSubscription);
+        }).listen((Position? position) {
+          positionUpdate(position);
+          Fx.log(position == null
+              ? 'Stream Location: Unknown'
+              : 'Stream Location: ${position.latitude.toString()}, ${position.longitude.toString()}');
+        });
       });
-    });
+    }
   }
 
   void cancelPositionSubscription() {
@@ -216,24 +218,20 @@ final class LocationService extends ChangeNotifier {
     return null;
   }
 
-  Future<String?> placeString({VoidCallback? onFailure}) async {
+  Future<String?> placeString() async {
     final _position =
-        await getCurrentPosition().timeout(30.seconds, onTimeout: () => null);
+        await getCurrentPosition().timeout(2.seconds, onTimeout: () => null) ??
+            currentLocation;
 
     if (_position == null) {
       return null;
     }
     try {
       final place =
-          await placemark(_position).timeout(15.seconds, onTimeout: () => null);
+          await placemark(_position).timeout(10.seconds, onTimeout: () => null);
 
       if (place == null) {
-        final local_string = database.getValue(Keys.LOCATION_STRING);
-        if (local_string == null) {
-          onFailure?.call();
-          return local_string;
-        }
-        return local_string;
+        return database.getValue(Keys.LOCATION_STRING);
       }
 
       return place;
@@ -246,7 +244,7 @@ final class LocationService extends ChangeNotifier {
     try {
       final placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude)
-              .timeout(15.seconds, onTimeout: () => []);
+              .timeout(10.seconds, onTimeout: () => []);
       if (placemarks.isEmpty) {
         return null;
       }
@@ -281,5 +279,12 @@ final class LocationService extends ChangeNotifier {
       return false;
     }
     return true;
+  }
+
+  void showNotify() {
+    OverlayManager.showServiceDialog(
+        title: 'Quyền sử dụng vị trí của thiết bị từ chối',
+        message: 'Ứng dụng yêu cầu vị trí của bạn trong lúc sử dụng ứng dụng',
+        solution: () => openAppSettings());
   }
 }

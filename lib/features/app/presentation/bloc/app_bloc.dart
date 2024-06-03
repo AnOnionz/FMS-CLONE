@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
@@ -29,6 +30,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final NetworkTimeService _networkTimeService;
   final GeneralRepository _generalRepository;
   final SyncBloc _syncBloc;
+  final LocationService _locationService;
   final SyncProgressBloc _syncProgressBloc;
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
 
@@ -43,6 +45,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     this._networkTimeService,
     this._syncBloc,
     this._syncProgressBloc,
+    this._locationService,
   ) : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -75,6 +78,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           if (data != null) {
             _syncBloc.add(SyncStarted());
             _syncBloc.add(SyncAddListener());
+            _startLocationService();
             Modular.to.pushNamedAndRemoveUntil(HomeModule.route, (p0) => false);
           } else {
             Modular.to.navigate(WorkPlaceModule.route);
@@ -98,6 +102,26 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     return _connectivityService.startup(
       interval: const Duration(seconds: 5),
     );
+  }
+
+  void _startLocationService() {
+    if (_generalRepository.general != null) {
+      final isUseLocation =
+          _generalRepository.general!.config.features!.any((feature) {
+        final isUseLocation =
+            feature.featureAttendance?.isLocationRequired ?? false;
+        final isUseWatermark = (feature.featureMultimedias
+                    ?.any((element) => element.isWatermarkRequired ?? false) ??
+                false) ||
+            (feature.featurePhotos
+                    ?.any((element) => element.isWatermarkRequired ?? false) ??
+                false);
+        return isUseLocation || isUseWatermark;
+      });
+      if (isUseLocation == true) {
+        _locationService.enablePositionSubscription();
+      }
+    }
   }
 
   /// Callback function when an [AppStarted] event is emitted.
