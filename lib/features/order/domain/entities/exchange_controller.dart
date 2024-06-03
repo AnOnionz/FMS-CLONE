@@ -2,10 +2,9 @@ import 'dart:core';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
-
-import '../../../../core/mixins/common.dart';
 
 final class ExchangeController {
   final FeatureEntity feature;
@@ -46,6 +45,7 @@ final class ExchangeController {
   List<Exchange> _exchanges = [];
 
   void addExchange(Exchange exchange) {
+    Fx.log(exchange);
     _exchanges.add(_exchanged(exchange));
   }
 
@@ -63,28 +63,12 @@ final class ExchangeController {
     if (exchange.exchangeConditions!.isNotEmpty) {
       if (exchange.logical == 'or') {
         final or = _or(exchange);
-        Fx.log(or);
-        if (!or.success) {
-          return false;
-        } else {
-          final _priceExpected = or.purchases.fold(
-              0, (previousValue, element) => element!.$2 * element.$1.price!);
-
-          return _price - _priceExchanged - _priceExpected >= 0;
-        }
+        return _isExpectedPrice(or);
       }
 
       if (exchange.logical == 'and') {
         final and = _and(exchange);
-
-        if (!and.success) {
-          return false;
-        } else {
-          final _priceExpected = and.purchases.fold(
-              0, (previousValue, element) => element!.$2 * element.$1.price!);
-
-          return _price - _priceExchanged - _priceExpected >= 0;
-        }
+        return _isExpectedPrice(and);
       }
     }
 
@@ -98,6 +82,17 @@ final class ExchangeController {
         product.$1.productPackaging!.id == condition.productPackaging!.id &&
         product.$2 >= condition.quantity!;
     return result;
+  }
+
+  bool _isExpectedPrice(
+      ({List<(OrderProduct, int)?> purchases, bool success}) data) {
+    if (!data.success) {
+      return false;
+    }
+    final _priceExpected = data.purchases
+        .fold(0, (previousValue, element) => element!.$2 * element.$1.price!);
+
+    return _price - _priceExchanged - _priceExpected >= 0;
   }
 
   bool _isMaxQuantity(Exchange exchange, int value) {
@@ -146,21 +141,6 @@ final class ExchangeController {
 
   ({bool success, List<(OrderProduct, int)?> purchases}) _or(
       Exchange exchange) {
-    // int totalPurchased = 0;
-    // for (final ExchangeCondition condition in exchange.exchangeConditions!) {
-    //   final productPurchased =
-    //       _purchaseUnExchangedWithQuantity.firstWhereOrNull((product) =>
-    //           _productMatchCondition(product: product!, condition: condition));
-    //   if (productPurchased != null) totalPurchased += productPurchased.$2;
-    // }
-
-    // final success =
-    //     totalPurchased >= exchange.exchangeConditions!.first.quantity!;
-
-    // if (!success) {
-    //   return (success: success, purchases: []);
-    // }
-
     final _exchangeConditions = <ExchangeCondition>[];
     int quantity = exchange.exchangeConditions!.first.quantity!;
 
