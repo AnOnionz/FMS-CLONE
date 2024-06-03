@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
@@ -13,7 +12,6 @@ import 'package:fms/features/order/presentation/widgets/customer/info_form.dart'
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 
 import '../../../../core/constant/colors.dart';
-import '../../../../core/constant/icons.dart';
 import '../../../../core/styles/theme.dart';
 import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/order_entity.dart';
@@ -138,7 +136,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage> {
                                 'Thông tin định danh khách hàng',
                                 style: context.textTheme.subtitle1,
                               ),
-                              SvgPicture.asset(AppIcons.barcode)
+                              // SvgPicture.asset(AppIcons.barcode)
                             ],
                           ),
                         ),

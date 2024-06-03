@@ -37,19 +37,20 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
 
       final execute = await _getConfig(event.workPlace);
 
-      final config = execute.fold((failure) {
+      final configData = execute.fold((failure) {
         emit(GeneralFailure(failure: failure));
         return null;
       }, (config) => config);
 
-      if (config != null) {
+      if (configData != null) {
         final time = await Modular.get<NetworkTimeService>().ntpDateTime();
         final GeneralEntity general = GeneralEntity(
             identifer: 'temp',
             project: event.workPlace.project!,
             outlet: event.workPlace.outlet!,
             booth: event.workPlace.booth!,
-            config: config,
+            config: configData.$1!,
+            user: configData.$2!,
             createdDate: time.dMy());
 
         await _createGeneral(general);

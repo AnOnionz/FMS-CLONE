@@ -55,7 +55,7 @@ class _OrderPhotoPageState extends State<OrderPhotoPage> {
       final photos = _photos
           .where((element) => element.featurePhotoId == featurePhoto.id)
           .toList();
-      _items[featurePhoto] = photos;
+      _items[featurePhoto] = photos.map((e) => e.copyWith()).toList();
     });
     setState(() {});
     super.didChangeDependencies();
@@ -131,10 +131,6 @@ class _OrderPhotoPageState extends State<OrderPhotoPage> {
                 onNext: !isWatermarking.value && validate
                     ? () {
                         widget.onSaveData(_items.entries
-                            .map((e) => e.value)
-                            .expand((photos) => photos)
-                            .toList());
-                        Fx.log(_items.entries
                             .map((e) => e.value)
                             .expand((photos) => photos)
                             .toList());

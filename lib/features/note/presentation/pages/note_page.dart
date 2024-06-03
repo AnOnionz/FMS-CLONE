@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -46,8 +47,8 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
   Completer<bool> _completer = Completer();
 
   bool get isNoteActive => notes.values.any((note) {
-        return !note.value.isEmptyOrNull &&
-            note.status == SyncStatus.isNoSynced;
+        return note.status == SyncStatus.isNoSynced &&
+            !note.value.isEmptyOrNull;
       });
 
   bool get isPhotoActive => photos.values.any((photos) =>
@@ -56,7 +57,7 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
           photo.status == SyncStatus.isNoSynced ||
           photo.status == SyncStatus.isDeleted));
 
-  bool get isActive => isNoteActive || isPhotoActive;
+  bool get isActive => isPhotoActive || isNoteActive;
 
   @override
   void initState() {
@@ -72,23 +73,6 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
 
   Future<void> onFetchSuccess(
       (List<NoteEntity> notes, List<PhotoEntity> photos) data) async {
-    await Future.forEach(featureMultimedias, (featureMultimedia) async {
-      await Future.delayed(100.milliseconds);
-      final timestamp = await networkTimeService.ntpDateTime();
-      final note = data.$1.firstWhereOrNull(
-          (element) => element.featureMultimediaId == featureMultimedia.id!);
-      setState(() {
-        notes[featureMultimedia.id!] = note ??
-            NoteEntity(
-                dataUuid: Uuid().v1(),
-                dataTimestamp: timestamp,
-                attendanceId: widget.entity.general.attendance!.id,
-                featureId: widget.entity.feature.id,
-                isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
-                featureMultimediaId: featureMultimedia.id!,
-                status: SyncStatus.synced);
-      });
-    });
     final photoGroup = data.$2.groupBy<int, PhotoEntity>((photo) {
       return photo.featurePhotoId;
     });
@@ -101,11 +85,41 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       setState(() {});
     });
 
+    Fx.log(photos);
+
+    await Future.forEach(featureMultimedias, (featureMultimedia) async {
+      await Future.delayed(100.milliseconds);
+      final timestamp = await networkTimeService.ntpDateTime();
+      final note = data.$1.firstWhereOrNull(
+          (element) => element.featureMultimediaId == featureMultimedia.id!);
+      setState(() {
+        if (note != null) {
+          notes[featureMultimedia.id!] = note;
+        } else {
+          final hasPhotoNoSynced = photos[featureMultimedia.id!] != null &&
+              photos[featureMultimedia.id!]!.any((photo) =>
+                  photo.status == SyncStatus.isNoSynced ||
+                  photo.status == SyncStatus.isDeleted);
+
+          notes[featureMultimedia.id!] = NoteEntity(
+              dataUuid: Uuid().v1(),
+              dataTimestamp: timestamp,
+              attendanceId: widget.entity.general.attendance!.id,
+              featureId: widget.entity.feature.id,
+              isTextFieldRequired: featureMultimedia.isTextFieldRequired!,
+              featureMultimediaId: featureMultimedia.id!,
+              status:
+                  hasPhotoNoSynced ? SyncStatus.isNoSynced : SyncStatus.synced);
+        }
+      });
+    });
+
     if (!_completer.isCompleted) _completer.complete(true);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(notes);
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -192,6 +206,9 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
                                                     image.uuid);
 
                                         photo.status = SyncStatus.isDeleted;
+                                        notes[featureMultimedia.id!] =
+                                            noteItem.copyWith(
+                                                status: SyncStatus.isNoSynced);
                                       } else {
                                         photos[featureMultimedia.id!]!
                                             .removeWhere((photo) =>

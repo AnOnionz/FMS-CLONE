@@ -12,6 +12,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
+import '../../../../core/widgets/popup.dart';
 import '../../domain/entities/image_dynamic.dart';
 
 class ImagePickerWidget extends StatefulWidget {
@@ -56,8 +57,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 path: fileWithWatermark.path,
                 dataTimestamp: time,
               );
-
               widget.onChanged(image);
+            } else {
+              showFailure(
+                title: 'Không định vị được vị trí của bạn',
+                icon: SvgPicture.asset(AppIcons.requiredAttendance),
+                message: 'Vui lòng kiểm tra GPS / kết nối mạng của bạn',
+                btnText: 'Ok',
+              );
             }
             isWatermarking.value = false;
             widget.isWatermarking?.value = false;

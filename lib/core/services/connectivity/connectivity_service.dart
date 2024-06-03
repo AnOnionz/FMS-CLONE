@@ -12,8 +12,13 @@ class ConnectivityService {
 
   void startup({required Duration interval}) {
     connectivity = InternetConnection.createInstance(
-      checkInterval: interval,
-    );
+        checkInterval: interval,
+        useDefaultOptions: false,
+        customCheckOptions: [
+          InternetCheckOption(
+            uri: Uri.parse('https://google.com'),
+          ),
+        ]);
 
     connectivity.onStatusChange.listen((status) {
       if (status == InternetStatus.connected) {

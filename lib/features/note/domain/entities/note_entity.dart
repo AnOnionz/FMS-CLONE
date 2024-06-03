@@ -42,7 +42,7 @@ class NoteEntity extends BaseEntity {
       'dataUuid': dataUuid,
       'dataTimestamp': dataTimestamp.toUtc().toIso8601String(),
       'featureMultimediaId': featureMultimediaId,
-      'value': value,
+      'value': value ?? '',
     };
   }
 

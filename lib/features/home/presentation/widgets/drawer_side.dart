@@ -12,13 +12,15 @@ import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
 import 'package:fms/features/setting/setting_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/widgets/image_profile.dart';
 
-class DrawerSide extends StatelessWidget {
+class DrawerSide extends StatelessWidget with GeneralDataMixin {
   const DrawerSide({super.key});
 
   Credentials? get credentials =>
@@ -130,15 +132,15 @@ class DrawerSide extends StatelessWidget {
                                         _generalBloc.add(GeneralReset());
                                       },
                                     ),
-                                    _rowFeature(
-                                      context: context,
-                                      icon: AppIcons.notification,
-                                      name: 'Thông báo',
-                                      route: SettingModule.route,
-                                    ),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
+                                    // _rowFeature(
+                                    //   context: context,
+                                    //   icon: AppIcons.notification,
+                                    //   name: 'Thông báo',
+                                    //   route: SettingModule.route,
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 8.h,
+                                    // ),
                                     _rowFeature(
                                       context: context,
                                       icon: AppIcons.about,
@@ -159,18 +161,32 @@ class DrawerSide extends StatelessWidget {
                                           EdgeInsets.symmetric(vertical: 30.h),
                                       child: Divider(
                                         color: AppColors.black.withOpacity(0.1),
-                                        endIndent: 30.w,
+                                        endIndent: 28.w,
+                                        indent: 28.w,
                                       ),
                                     ),
-                                    _rowInfo(context, 'Ứng dụng', 'FMS 2023'),
+                                    _rowInfo(context, 'Ứng dụng', 'FMS 2024'),
                                     SizedBox(
                                       height: 8.h,
                                     ),
-                                    _rowInfo(context, 'Dự án', 'CellphoneS'),
+                                    _rowInfo(context, 'Dự án',
+                                        general.project.name ?? ''),
                                     SizedBox(
                                       height: 8.h,
                                     ),
-                                    _rowInfo(context, 'Phiên bản', '2.0.1'),
+                                    FutureBuilder<PackageInfo>(
+                                        future: PackageInfo.fromPlatform(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData &&
+                                              snapshot.data != null) {
+                                            final packageInfo = snapshot.data!;
+                                            return _rowInfo(
+                                                context,
+                                                'Phiên bản',
+                                                packageInfo.version);
+                                          }
+                                          return SizedBox.shrink();
+                                        }),
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
@@ -222,14 +238,18 @@ class DrawerSide extends StatelessWidget {
 
   Widget _rowInfo(BuildContext context, String left, String right) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 38.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(left),
-          Text(
-            right,
-            style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
+          Expanded(
+            child: Text(
+              right,
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+              style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
+            ),
           )
         ],
       ),
@@ -252,7 +272,7 @@ class DrawerSide extends StatelessWidget {
       child: ColoredBox(
         color: AppColors.transparent,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 32.w),
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 28.w),
           child: Row(
             children: [
               SvgPicture.asset(icon),

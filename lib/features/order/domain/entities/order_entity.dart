@@ -115,9 +115,13 @@ class OrderEntity extends BaseEntity {
             : null,
         photos: map['photos'] != null
             ? List<PhotoEntity>.from(
-                (map['photos'] as List<dynamic>).map<PhotoEntity?>(
-                  (x) => PhotoEntity.fromMap(x as Map<String, dynamic>,
-                      isSynced: true),
+                (map['photos'] as List<dynamic>)
+                    .where((element) => element != null)
+                    .map<PhotoEntity>(
+                  (x) {
+                    return PhotoEntity.fromMap(x as Map<String, dynamic>,
+                        isSynced: true);
+                  },
                 ),
               )
             : null,
@@ -142,7 +146,7 @@ class OrderEntity extends BaseEntity {
     List<PhotoEntity>? photos,
     SyncStatus? status,
   }) {
-    var newOrder = OrderEntity(
+    final newOrder = OrderEntity(
       id: id ?? this.id,
       dataUuid: dataUuid ?? this.dataUuid,
       dataTimestamp: dataTimestamp ?? this.dataTimestamp,
@@ -337,10 +341,6 @@ class PurchaseEntity {
   factory PurchaseEntity.fromJson(String source) =>
       PurchaseEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  @override
-  String toString() =>
-      'PurchaseEntity(id: $id, featureOrderProductId: $featureOrderProductId, quantity: $quantity)';
-
   PurchaseEntity copyWith({
     int? id,
     int? featureOrderProductId,
@@ -353,6 +353,11 @@ class PurchaseEntity {
         quantity: quantity ?? this.quantity,
         product: this.product,
         productPackaging: this.productPackaging);
+  }
+
+  @override
+  String toString() {
+    return 'PurchaseEntity(id: $id, featureOrderProductId: $featureOrderProductId, product: $product, productPackaging: $productPackaging, quantity: $quantity)';
   }
 }
 
@@ -393,8 +398,9 @@ class ExchangeEntity {
       ExchangeEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'ExchangeEntity(id: $id, featureSchemeExchangeId: $featureSchemeExchangeId, quantity: $quantity)';
+  String toString() {
+    return 'ExchangeEntity(id: $id, featureSchemeExchangeId: $featureSchemeExchangeId, exchangeProceeds: $exchangeProceeds, quantity: $quantity)';
+  }
 
   ExchangeEntity copyWith({
     int? id,
@@ -450,8 +456,9 @@ class SamplingEntity {
       SamplingEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'SamplingEntity(id: $id, featureSamplingId: $featureSamplingId, quantity: $quantity)';
+  String toString() {
+    return 'SamplingEntity(id: $id, featureSamplingId: $featureSamplingId, product: $product, productPackaging: $productPackaging, quantity: $quantity)';
+  }
 
   SamplingEntity copyWith({
     int? id,

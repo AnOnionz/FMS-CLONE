@@ -106,7 +106,12 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
       final product = products.firstWhereOrNull(
           (element) => element.id == purchase.featureOrderProductId);
       if (product != null) {
-        selectedItems[product] = purchase;
+        selectedItems[product] = PurchaseEntity(
+            featureOrderProductId: purchase.featureOrderProductId,
+            product: product.product ?? purchase.product,
+            productPackaging:
+                product.productPackaging ?? purchase.productPackaging,
+            quantity: purchase.quantity);
       }
     });
     setState(() {});
@@ -218,7 +223,7 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
                             'Sản phẩm khách đã mua',
                             style: context.textTheme.subtitle1,
                           ),
-                          SvgPicture.asset(AppIcons.help)
+                          // SvgPicture.asset(AppIcons.help)
                         ],
                       ),
                     ),

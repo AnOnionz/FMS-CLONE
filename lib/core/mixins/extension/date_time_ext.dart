@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '/core/mixins/dart/language.dart';
 
 final kdMy = DateFormat('dd/MM/yyyy');
+final kdM = DateFormat('dd.MM');
 final khmdMy = DateFormat('HH:mm dd/MM/yyyy');
 final khm = DateFormat('HH:mm');
 

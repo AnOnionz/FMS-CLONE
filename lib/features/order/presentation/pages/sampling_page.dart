@@ -43,11 +43,13 @@ class _OrderSamplingPageState extends State<OrderSamplingPage> {
     featureSamplings.forEach((featureSampling) {
       final sampling = _samplings.firstWhereOrNull(
           (element) => element.featureSamplingId == featureSampling.id);
-      _items[featureSampling] = sampling ??
-          SamplingEntity(
-              featureSamplingId: featureSampling.id,
-              product: featureSampling.product,
-              productPackaging: featureSampling.productPackaging);
+
+      _items[featureSampling] = SamplingEntity(
+          id: sampling?.id,
+          quantity: sampling?.quantity,
+          featureSamplingId: featureSampling.id,
+          product: featureSampling.product,
+          productPackaging: featureSampling.productPackaging);
     });
     setState(() {});
     super.didChangeDependencies();

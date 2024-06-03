@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/core/errors/failure.dart';
+import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/domain/usecases/create_order_usecase.dart';
 import 'package:fms/features/order/domain/usecases/update_order_usecase.dart';
@@ -21,7 +22,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }, transformer: droppable());
     on<UpdateOrder>((event, emit) async {
       emit(OrderCreateLoading());
-      final execute = await updateOrder(event.order);
+      final execute = await updateOrder(
+          UpdateOrderParams(order: event.order, feature: event.feature));
       execute.fold((failure) => emit(OrderUpdateFailure(failure)),
           (data) => emit(OrderUpdateSuccess(data)));
     }, transformer: droppable());

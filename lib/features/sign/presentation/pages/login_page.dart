@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           Image.asset(AppImages.logo),
           Padding(
             padding: Fx.pV16,
-            child: Text(context.language.appName,
+            child: Text('FMS 2024',
                 style: context.textTheme.h1, textAlign: TextAlign.center),
           ),
           Padding(

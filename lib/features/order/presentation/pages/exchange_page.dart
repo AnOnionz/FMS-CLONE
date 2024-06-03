@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
@@ -9,7 +8,6 @@ import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
-import '../../../../core/constant/icons.dart';
 import '../../domain/entities/exchange_controller.dart';
 import '../widgets/bottom_buttons.dart';
 import '../widgets/receive/gift_quantity_widget.dart';
@@ -131,7 +129,7 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
                       'Đổi quà',
                       style: context.textTheme.subtitle1,
                     ),
-                    SvgPicture.asset(AppIcons.help)
+                    // SvgPicture.asset(AppIcons.help)
                   ],
                 ),
               ),

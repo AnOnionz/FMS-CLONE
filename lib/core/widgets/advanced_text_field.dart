@@ -35,7 +35,7 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
   bool _hasFocus = false;
 
   void onChanged() {
-    widget.onChanged?.call(_controller.value.text);
+    widget.onChanged?.call(_controller.value.text.replaceAll('.', ''));
   }
 
   void onFocus() {

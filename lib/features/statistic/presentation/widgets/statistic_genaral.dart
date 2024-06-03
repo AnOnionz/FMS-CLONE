@@ -14,6 +14,7 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/statistic/presentation/cubit/team_members_cubit.dart';
+import 'package:fms/features/work_place/domain/entities/booth_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
 import '../../../../core/constant/enum.dart';
@@ -75,7 +76,8 @@ class _StatisticGenaralState extends State<StatisticGenaral>
             mainAxisSize: MainAxisSize.min,
             children: [
               switch (widget.type) {
-                StatisticType.outlet => OutletInfo(outlet: general.outlet),
+                StatisticType.outlet =>
+                  OutletInfo(outlet: general.outlet, booth: general.booth),
                 StatisticType.employee =>
                   IndividualInfo(employeeEntity: widget.employee),
                 StatisticType.individual =>
@@ -171,8 +173,8 @@ class IndividualInfo extends StatelessWidget {
                     style:
                         context.textTheme.h3?.copyWith(color: AppColors.black)),
               ),
-        Text('MA0001',
-            style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
+        // Text('MA0001',
+        //     style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
       ],
     );
   }
@@ -195,8 +197,8 @@ class EmployeeInfo extends StatelessWidget {
           child: Text(employee.user.name!,
               style: context.textTheme.h3?.copyWith(color: AppColors.black)),
         ),
-        Text('MA0001',
-            style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
+        // Text('MA0001',
+        //     style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
       ],
     );
   }
@@ -204,7 +206,8 @@ class EmployeeInfo extends StatelessWidget {
 
 class OutletInfo extends StatelessWidget {
   final OutletEntity outlet;
-  const OutletInfo({super.key, required this.outlet});
+  final BoothEntity booth;
+  const OutletInfo({super.key, required this.outlet, required this.booth});
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +219,13 @@ class OutletInfo extends StatelessWidget {
           padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
           child: Text(
             outlet.name!,
+            style: context.textTheme.h3?.copyWith(color: AppColors.black),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 8.h),
+          child: Text(
+            booth.name!,
             style: context.textTheme.h3?.copyWith(color: AppColors.black),
           ),
         ),
@@ -242,7 +252,7 @@ class EmployeesOfOutlet extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
           child: Text(
-            'Danh sách nhân sự làm việc tại outlet',
+            'Danh sách nhân sự làm việc tại booth',
             style: context.textTheme.h3?.copyWith(color: AppColors.nobel),
           ),
         ),
@@ -261,7 +271,7 @@ class EmployeesOfOutlet extends StatelessWidget {
                           StatisticModule.employee,
                           arguments: [entity, employee]),
                       title: employee.user.name!,
-                      subTitle: 'Ma00001',
+                      // subTitle: 'Ma00001',
                     );
                   },
                 ),

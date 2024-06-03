@@ -18,6 +18,7 @@ import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/domain/repository/general_repository.dart';
 import 'package:fms/features/note/domain/entities/note_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
+import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
 class GeneralRepository extends Repository
@@ -51,10 +52,12 @@ class GeneralRepository extends Repository
   }
 
   @override
-  Future<Result<ConfigEntity?>> getRemoteConfig(WorkPlaceEntity model) {
+  Future<Result<(ConfigEntity?, EmployeeUserEntity?)>> getRemoteConfig(
+      WorkPlaceEntity model) {
     return todo(() async {
       final config = await _remote.getConfigs(model);
-      return Right(config);
+      final user = await _remote.getUserInfo();
+      return Right((config, user));
     });
   }
 

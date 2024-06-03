@@ -34,21 +34,21 @@ class SettingPage extends StatelessWidget {
                     onTap: () {
                       cubit.cameraToggle();
                     }),
-                SettingItem(
-                    icon: SvgPicture.asset(AppIcons.fingerprint),
-                    name: 'Khóa app',
-                    type: SettingType.transfer,
-                    onTap: () => context.nextRoute(SettingModule.appLock)),
+                // SettingItem(
+                //     icon: SvgPicture.asset(AppIcons.fingerprint),
+                //     name: 'Khóa app',
+                //     type: SettingType.transfer,
+                //     onTap: () => context.nextRoute(SettingModule.appLock)),
                 SettingItem(
                     icon: SvgPicture.asset(AppIcons.lock),
                     name: 'Đổi mật khẩu tài khoản',
                     type: SettingType.transfer,
                     onTap: () => context.nextRoute(SettingModule.changePass)),
-                SettingItem(
-                    icon: SvgPicture.asset(AppIcons.trash),
-                    name: 'Xóa data app',
-                    type: SettingType.none,
-                    onTap: () {}),
+                // SettingItem(
+                //     icon: SvgPicture.asset(AppIcons.trash),
+                //     name: 'Xóa data app',
+                //     type: SettingType.none,
+                //     onTap: () {}),
               ],
             );
           },

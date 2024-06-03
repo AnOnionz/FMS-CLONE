@@ -92,8 +92,7 @@ final class LocationService extends ChangeNotifier {
 
     if (permission == LocationPermission.denied) {
       try {
-        permission = await requestPermission()
-            .onError((error, stackTrace) => LocationPermission.denied);
+        permission = await requestPermission();
         if (permission == LocationPermission.denied) {
           OverlayManager.showServiceDialog(
               message: 'Quyền truy cập vị trí ứng dụng đã bị từ chối',
@@ -218,7 +217,8 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<String?> placeString({VoidCallback? onFailure}) async {
-    final _position = await getCurrentPosition();
+    final _position =
+        await getCurrentPosition().timeout(30.seconds, onTimeout: () => null);
 
     if (_position == null) {
       return null;

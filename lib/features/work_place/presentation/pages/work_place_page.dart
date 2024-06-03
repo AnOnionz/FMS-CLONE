@@ -14,7 +14,7 @@ import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 
 import '../../../../core/widgets/button/flat.dart';
-import '../../../../core/widgets/button/outline.dart';
+import '../../../../core/widgets/image_profile.dart';
 
 class WorkPlacePage extends StatefulWidget {
   const WorkPlacePage({super.key});
@@ -63,17 +63,17 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
               Image.asset(AppImages.logo),
               Padding(
                 padding: Fx.pV16,
-                child: Text(context.language.appName,
+                child: Text('FMS 2024',
                     style: context.textTheme.h1, textAlign: TextAlign.center),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 70.w),
-                child: Text(
-                  context.language.loginDescription,
-                  style: context.textTheme.body1,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 70.w),
+              //   child: Text(
+              //     context.language.loginDescription,
+              //     style: context.textTheme.body1,
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
               Flexible(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 16.h),
@@ -86,11 +86,30 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
                             child: SizedBox(
                               width: _logoSize.width,
                               height: _logoSize.height,
-                              child: CircleAvatar(
-                                radius: _logoSize.width,
-                                child: FlutterLogo(),
-                              ),
+                              child: ImageProfile(
+                                  imageUrl: credentials.user.pictureUrl == null
+                                      ? null
+                                      : credentials.user.pictureUrl!
+                                          .toString()),
                             ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: 20.h, bottom: 8.h),
+                                child: Text(
+                                  credentials.user.name!,
+                                  style: context.textTheme.h3,
+                                ),
+                              ),
+                              Text(
+                                credentials.user.email!,
+                                style: context.textTheme.caption1
+                                    ?.copyWith(color: AppColors.nobel),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: Fx.pV32,
@@ -119,102 +138,104 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 16.w,
-                                  ),
-                                  Expanded(
-                                      child: OutlineButton(
-                                          name: 'QR Booth',
-                                          color: AppColors.orange,
-                                          onPressed: () {},
-                                          icon: SvgPicture.asset(
-                                            AppIcons.scan,
-                                          ))),
+                                  // SizedBox(
+                                  //   width: 16.w,
+                                  // ),
+                                  // Expanded(child: SizedBox()),
+                                  // Expanded(
+                                  //     child: OutlineButton(
+                                  //         name: 'QR Booth',
+                                  //         color: AppColors.orange,
+                                  //         onPressed: () {},
+                                  //         icon: SvgPicture.asset(
+                                  //           AppIcons.scan,
+                                  //         ))),
                                 ],
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(25.w, 30.h, 25.w, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    credentials.user.name!,
-                                    style: context.textTheme.h3,
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    'MA00001',
-                                    style: context.textTheme.caption1
-                                        ?.copyWith(color: AppColors.nightRider),
-                                  ),
-                                  SizedBox(
-                                    height: 24.h,
-                                  ),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(AppIcons.location),
-                                      SizedBox(
-                                        width: 12.w,
-                                      ),
-                                      Text(
-                                        '123 Bình Lợi, Bình Thạnh, HCM',
-                                        style: context.textTheme.caption1
-                                            ?.copyWith(color: AppColors.nobel),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 12.h,
-                                  ),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(AppIcons.phone),
-                                      SizedBox(
-                                        width: 12.w,
-                                      ),
-                                      Text(
-                                        '0909090909',
-                                        style: context.textTheme.caption1
-                                            ?.copyWith(color: AppColors.nobel),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // Align(
+                          //   alignment: Alignment.centerLeft,
+                          //   child: Padding(
+                          //     padding: EdgeInsets.fromLTRB(25.w, 30.h, 25.w, 0),
+                          //     child: Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         Text(
+                          //           credentials.user.name!,
+                          //           style: context.textTheme.h3,
+                          //         ),
+                          //         // SizedBox(
+                          //         //   height: 5.h,
+                          //         // ),
+                          //         // Text(
+                          //         //   'MA00001',
+                          //         //   style: context.textTheme.caption1
+                          //         //       ?.copyWith(color: AppColors.nightRider),
+                          //         // ),
+                          //         SizedBox(
+                          //           height: 24.h,
+                          //         ),
+                          //         Row(
+                          //           children: [
+                          //             SvgPicture.asset(AppIcons.location),
+                          //             SizedBox(
+                          //               width: 12.w,
+                          //             ),
+                          //             Text(
+                          //               '',
+                          //               style: context.textTheme.caption1
+                          //                   ?.copyWith(color: AppColors.nobel),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         SizedBox(
+                          //           height: 12.h,
+                          //         ),
+                          //         Row(
+                          //           children: [
+                          //             SvgPicture.asset(AppIcons.phone),
+                          //             SizedBox(
+                          //               width: 12.w,
+                          //             ),
+                          //             Text(
+                          //               credentials.user.nickname ?? '',
+                          //               style: context.textTheme.caption1
+                          //                   ?.copyWith(color: AppColors.nobel),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                           Padding(
                             padding:
-                                EdgeInsets.fromLTRB(25.w, 30.h, 25.w, 30.h),
+                                EdgeInsets.fromLTRB(25.w, 20.h, 25.w, 20.h),
                             child: SizedBox(
-                              width: context.screenWidth,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: Padding(
-                                  padding: Fx.pV16,
-                                  child: Text(
-                                    'Nghỉ phép',
-                                    style: context.textTheme.button2
-                                        ?.copyWith(color: AppColors.black),
-                                  ),
+                                width: context.screenWidth, child: SizedBox()
+                                // TextButton(
+                                //   onPressed: () {},
+                                //   child: Padding(
+                                //     padding: Fx.pV16,
+                                //     child: Text(
+                                //       'Nghỉ phép',
+                                //       style: context.textTheme.button2
+                                //           ?.copyWith(color: AppColors.black),
+                                //     ),
+                                //   ),
+                                //   style: ButtonStyle(
+                                //       shape: MaterialStatePropertyAll<
+                                //               OutlinedBorder>(
+                                //           RoundedRectangleBorder(
+                                //               borderRadius:
+                                //                   BorderRadius.circular(50.sqr))),
+                                //       backgroundColor:
+                                //           MaterialStatePropertyAll<Color>(
+                                //               AppColors.solitude)),
+                                // ),
+
                                 ),
-                                style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll<
-                                            OutlinedBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.sqr))),
-                                    backgroundColor:
-                                        MaterialStatePropertyAll<Color>(
-                                            AppColors.solitude)),
-                              ),
-                            ),
                           ),
                         ]),
                       ),

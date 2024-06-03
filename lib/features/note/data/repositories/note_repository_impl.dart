@@ -155,6 +155,7 @@ class NoteRepositoryImpl extends Repository
   Future<void> _uploadNotes(
       {required List<NoteEntity> notes, required FeatureEntity feature}) async {
     await Future.forEach(notes, (note) async {
+      NoteEntity? report;
       if (note.status == SyncStatus.isNoSynced) {
         if (note.photos.isNotEmpty) {
           await Future.forEach(note.photos, (photo) async {
@@ -162,28 +163,27 @@ class NoteRepositoryImpl extends Repository
               if (photo.id != null) {
                 await _remotePhoto.deleteNotePhoto(
                     general: general, feature: feature, id: photo.id!);
+                _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
               }
-              _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
             }
             if (photo.status == SyncStatus.isNoSynced) {
               final resp = await _remote.createPhoto(
                   photo: photo, general: general, feature: feature);
+
               if (resp != null) {
-                photo = photo.copyWith(
-                    id: resp.id, image: resp.image, status: SyncStatus.synced);
-                _local.cachePhotoToLocal(photo);
+                _local.cachePhotoToLocal(photo.copyWith(
+                    id: resp.id, image: resp.image, status: SyncStatus.synced));
               }
             }
           });
         }
         if (!note.value.isEmptyOrNull) {
-          final report = await _remote.createNote(note: note, general: general);
-          if (report != null) {
-            note = note.copyWith(id: report.id, status: SyncStatus.synced);
-            _local.cacheNoteToLocal(note);
-          }
+          report = await _remote.createNote(note: note, general: general);
         }
       }
+
+      _local.cacheNoteToLocal(
+          note.copyWith(id: report?.id, status: SyncStatus.synced));
     });
   }
 }

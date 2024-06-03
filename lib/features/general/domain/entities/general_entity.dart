@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/work_place/domain/entities/project_entity.dart';
@@ -19,6 +20,7 @@ class GeneralEntity {
   final ConfigEntity config;
   final BoothEntity booth;
   final AttendanceEntity? attendance;
+  final EmployeeUserEntity? user;
   final DateTime createdDate;
 
   GeneralEntity({
@@ -27,6 +29,7 @@ class GeneralEntity {
     required this.outlet,
     required this.booth,
     required this.config,
+    required this.user,
     this.attendance,
     required this.createdDate,
   });
@@ -37,20 +40,21 @@ class GeneralEntity {
       BoothEntity? booth,
       ConfigEntity? config,
       AttendanceEntity? attendance,
-      String? identifer}) {
+      String? identifer,
+      EmployeeUserEntity? user}) {
     return GeneralEntity(
-      identifer: identifer ?? this.identifer,
-      project: project ?? this.project,
-      outlet: outlet ?? this.outlet,
-      booth: booth ?? this.booth,
-      config: config ?? this.config,
-      attendance: attendance ?? this.attendance,
-      createdDate: createdDate,
-    );
+        identifer: identifer ?? this.identifer,
+        project: project ?? this.project,
+        outlet: outlet ?? this.outlet,
+        booth: booth ?? this.booth,
+        config: config ?? this.config,
+        attendance: attendance ?? this.attendance,
+        createdDate: createdDate,
+        user: user ?? this.user);
   }
 
   @override
   String toString() {
-    return 'GeneralEntity(attendance: $attendance, identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth,  createdDate: $createdDate)';
+    return 'GeneralEntity(identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth, attendance: $attendance, user: $user, createdDate: $createdDate)';
   }
 }

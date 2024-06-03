@@ -6,6 +6,7 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/enum.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/mixins/common.dart';
 import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/cached_image.dart';
@@ -34,21 +35,24 @@ class AttendanceDetailItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(attendanceEntity.user!.name ?? '',
-                      style: context.textTheme.caption1
-                          ?.copyWith(color: AppColors.nero)),
-                  Padding(
-                      padding: EdgeInsets.only(top: 6.h),
-                      child: Text('ma0001', style: context.textTheme.body2)),
-                  // Padding(
-                  //     padding: EdgeInsets.only(top: 6.h),
-                  //     child: Text('Booth A', style: context.textTheme.body2))
-                ],
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(attendanceEntity.user!.name ?? '',
+                        style: context.textTheme.caption1
+                            ?.copyWith(color: AppColors.nero)),
+                    // Padding(
+                    //     padding: EdgeInsets.only(top: 6.h),
+                    //     child: Text('ma0001', style: context.textTheme.body2)),
+                    // Padding(
+                    //     padding: EdgeInsets.only(top: 6.h),
+                    //     child: Text('Booth A', style: context.textTheme.body2))
+                  ],
+                ),
               ),
             ),
             VerticalDivider(
@@ -90,11 +94,12 @@ class AttendanceDataDetail extends StatelessWidget {
       {required String name,
       required BuildContext context,
       AttendanceData? data}) {
+    Fx.log(data);
     return Column(
       children: [
         Text(name,
             style: context.textTheme.body1?.copyWith(color: AppColors.nobel)),
-        (data != null)
+        (data != null && data.image != null)
             ? Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.h),
                 child: GestureDetector(

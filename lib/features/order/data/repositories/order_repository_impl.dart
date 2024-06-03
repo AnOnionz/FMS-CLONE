@@ -117,30 +117,22 @@ class OrderRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<OrderEntity>> updateOrder({required OrderEntity order}) async {
+  Future<Result<OrderEntity>> updateOrder(
+      {required OrderEntity order, required FeatureEntity feature}) async {
     return todo(() async {
       final newOrder = await _remote.updateOrder(order);
       await updatePhotos(order, newOrder!.id!);
       final existOrder = await _local.getOrderByUuid(order.dataUuid);
       if (existOrder != null) {
-        _local.cacheOrderToLocal(newOrder.copyWith(
+        _local.cacheOrderToLocal(existOrder.copyWith(
             attendanceId: order.attendanceId,
             featureId: order.featureId,
-            exchanges: existOrder.exchanges?.map((e) {
-              final copy = order.exchanges!.firstWhere((element) =>
-                  element.featureSchemeExchangeId == e.featureSchemeExchangeId);
-              return e.copyWith(quantity: copy.quantity);
-            }).toList(),
-            purchases: existOrder.purchases?.map((e) {
-              final copy = order.purchases!.firstWhere((element) =>
-                  element.featureOrderProductId == e.featureOrderProductId);
-              return e.copyWith(quantity: copy.quantity);
-            }).toList(),
-            samplings: existOrder.samplings?.map((e) {
-              final copy = order.samplings!.firstWhere((element) =>
-                  element.featureSamplingId == e.featureSamplingId);
-              return e.copyWith(quantity: copy.quantity);
-            }).toList()));
+            customerInfos: order.customerInfos,
+            exchanges: order.exchanges,
+            purchases: order.purchases,
+            samplings: order.samplings));
+        existOrder.localPhotos.addAll(order.photos!);
+        db.writeTxnSync(() => existOrder.localPhotos.saveSync());
       }
 
       return Right(newOrder);

@@ -51,15 +51,11 @@ class AppInformationPage extends StatelessWidget with GeneralDataMixin {
                       leading: 'Tên nhân sự',
                       info: credentials!.user.name ?? ''),
                   space,
-                  RowInfo(leading: 'Mã nhân sự', info: 'MA0001'),
+                  // RowInfo(leading: 'Mã nhân sự', info: 'MA0001'),
+                  // space,
+                  RowInfo(leading: 'SĐT', info: general.user!.phone ?? ''),
                   space,
-                  RowInfo(
-                      leading: 'SĐT',
-                      info: credentials!.user.phoneNumber ?? ''),
-                  space,
-                  RowInfo(
-                      leading: 'Địa chỉ',
-                      info: credentials!.user.address.toString())
+                  RowInfo(leading: 'Địa chỉ', info: '')
                 ],
               ),
             FutureBuilder<PackageInfo>(
@@ -79,7 +75,7 @@ class AppInformationPage extends StatelessWidget with GeneralDataMixin {
                             leading: 'Bản phát hành:',
                             info: packageInfo.buildNumber),
                         space,
-                        RowInfo(leading: 'Dự án', info: packageInfo.appName),
+                        RowInfo(leading: 'Dự án', info: 'FMS 2024'),
                       ],
                     );
                   }

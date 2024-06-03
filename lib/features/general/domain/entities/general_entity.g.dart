@@ -56,6 +56,12 @@ const GeneralEntitySchema = CollectionSchema(
       name: r'project',
       type: IsarType.object,
       target: r'ProjectEntity',
+    ),
+    r'user': PropertySchema(
+      id: 7,
+      name: r'user',
+      type: IsarType.object,
+      target: r'EmployeeUserEntity',
     )
   },
   estimateSize: _generalEntityEstimateSize,
@@ -128,6 +134,14 @@ int _generalEntityEstimateSize(
   bytesCount += 3 +
       ProjectEntitySchema.estimateSize(
           object.project, allOffsets[ProjectEntity]!, allOffsets);
+  {
+    final value = object.user;
+    if (value != null) {
+      bytesCount += 3 +
+          EmployeeUserEntitySchema.estimateSize(
+              value, allOffsets[EmployeeUserEntity]!, allOffsets);
+    }
+  }
   return bytesCount;
 }
 
@@ -169,6 +183,12 @@ void _generalEntitySerialize(
     ProjectEntitySchema.serialize,
     object.project,
   );
+  writer.writeObject<EmployeeUserEntity>(
+    offsets[7],
+    allOffsets,
+    EmployeeUserEntitySchema.serialize,
+    object.user,
+  );
 }
 
 GeneralEntity _generalEntityDeserialize(
@@ -209,6 +229,11 @@ GeneralEntity _generalEntityDeserialize(
           allOffsets,
         ) ??
         ProjectEntity(),
+    user: reader.readObjectOrNull<EmployeeUserEntity>(
+      offsets[7],
+      EmployeeUserEntitySchema.deserialize,
+      allOffsets,
+    ),
   );
   return object;
 }
@@ -258,6 +283,12 @@ P _generalEntityDeserializeProp<P>(
             allOffsets,
           ) ??
           ProjectEntity()) as P;
+    case 7:
+      return (reader.readObjectOrNull<EmployeeUserEntity>(
+        offset,
+        EmployeeUserEntitySchema.deserialize,
+        allOffsets,
+      )) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -621,6 +652,24 @@ extension GeneralEntityQueryFilter
       ));
     });
   }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      userIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'user',
+      ));
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition>
+      userIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'user',
+      ));
+    });
+  }
 }
 
 extension GeneralEntityQueryObject
@@ -657,6 +706,13 @@ extension GeneralEntityQueryObject
       FilterQuery<ProjectEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'project');
+    });
+  }
+
+  QueryBuilder<GeneralEntity, GeneralEntity, QAfterFilterCondition> user(
+      FilterQuery<EmployeeUserEntity> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'user');
     });
   }
 }
@@ -801,6 +857,13 @@ extension GeneralEntityQueryProperty
       projectProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'project');
+    });
+  }
+
+  QueryBuilder<GeneralEntity, EmployeeUserEntity?, QQueryOperations>
+      userProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'user');
     });
   }
 }

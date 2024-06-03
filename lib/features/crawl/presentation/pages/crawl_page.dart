@@ -79,8 +79,9 @@ class _CrawlPageState extends State<CrawlPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(
-          title: widget.entity.feature.name!,
-          action: SearchButton(onPressed: () {})),
+        title: widget.entity.feature.name!,
+        // action: SearchButton(onPressed: () {})
+      ),
       body: GestureDetector(
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -133,7 +134,6 @@ class _CrawlPageState extends State<CrawlPage> {
                                     onChanged: (value) {
                                       setState(() {
                                         quantity.value = int.tryParse(value);
-
                                         crawlQuantityEntity =
                                             crawlQuantityEntity!.copyWith(
                                                 status: SyncStatus.isNoSynced);

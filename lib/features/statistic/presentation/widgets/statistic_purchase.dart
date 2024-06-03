@@ -25,7 +25,7 @@ class StatisticPurchase extends StatelessWidget {
             padding: EdgeInsets.only(right: 24.w, bottom: 16.h),
             child: RichText(
                 text: TextSpan(
-                    text: 'Tổng sản lượng: ',
+                    text: 'Tổng sản phẩm: ',
                     style: context.textTheme.body2
                         ?.copyWith(color: AppColors.black),
                     children: [

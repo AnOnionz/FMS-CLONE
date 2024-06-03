@@ -15,6 +15,7 @@ class CreateOrder extends OrderEvent {
 
 class UpdateOrder extends OrderEvent {
   final OrderEntity order;
+  final FeatureEntity feature;
 
-  UpdateOrder({required this.order});
+  UpdateOrder({required this.order, required this.feature});
 }

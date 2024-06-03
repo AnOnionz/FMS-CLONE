@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -12,6 +14,7 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
 import 'package:fms/features/home/presentation/widgets/tasks.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../general/presentation/bloc/general_bloc.dart';
 import '../bloc/necessary_bloc.dart';
@@ -29,11 +32,6 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin {
   final bloc = Modular.get<GeneralBloc>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: DrawerSide(),
@@ -46,10 +44,19 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin {
               backgroundColor: Colors.amber,
               leading: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  'DA01-0909090909-MA001-0.1.1-10.10-ios',
-                  style: context.textTheme.caption3,
-                ),
+                child: FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        final packageInfo = snapshot.data!;
+
+                        return Text(
+                          '${general.project.id}-${general.user!.phone}-${packageInfo.version}-${kdM.format(general.createdDate)}-${Platform.operatingSystem}',
+                          style: context.textTheme.caption3,
+                        );
+                      }
+                      return SizedBox.shrink();
+                    }),
               ),
               forceMaterialTransparency: true,
               leadingWidth: context.screenWidth - 40.w,

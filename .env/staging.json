@@ -1,7 +1,7 @@
 {   
-    "appname": "[STAGING]FMS",
-    "env": "Staging",
-    "baseURL": "https://github.com/an",  
+    "appname": "FMS staging",
+    "env": "staging",
+    "baseURL": "https://api-staging-fms.outcome.asia",
     "AUTH0_DOMAIN":"demo-nest.jp.auth0.com",
     "AUTH0_CLIENT_ID":"GHA3DLZC4iTWWxmNfWWTS6W9nyB09n8I",
     "AUTH0_CUSTOM_SCHEME":"demo"

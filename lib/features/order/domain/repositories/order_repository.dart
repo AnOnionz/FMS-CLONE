@@ -14,9 +14,8 @@ abstract class OrderRepository {
   Future<Result<OrderEntity>> fetchOrder({
     required OrderEntity order,
   });
-  Future<Result<void>> updateOrder({
-    required OrderEntity order,
-  });
+  Future<Result<void>> updateOrder(
+      {required OrderEntity order, required FeatureEntity feature});
   Future<Result<List<OrderEntity>>> allOrders({required int featureId});
 
   Future<Result<FeatureEntity?>> getOrdersNotCompleted(

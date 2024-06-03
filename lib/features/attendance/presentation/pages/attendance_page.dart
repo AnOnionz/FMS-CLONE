@@ -191,9 +191,10 @@ class _AttendancePageState extends State<AttendancePage> {
 
     return Scaffold(
       appBar: DefaultAppBar(
-          title: 'Chấm công',
-          onBack: () => context.popUntil(HomeModule.route),
-          action: HistoryButton(onPressed: () => _showSheetHistory(context))),
+        title: 'Chấm công',
+        onBack: () => context.popUntil(HomeModule.route),
+        // action: HistoryButton(onPressed: () => _showSheetHistory(context))
+      ),
       body: Stack(children: [
         RepaintBoundary(child: _mapService.mapWidget),
         ListenableBuilder(
@@ -295,6 +296,28 @@ class _AttendancePageState extends State<AttendancePage> {
                                                               color: AppColors
                                                                   .black))
                                                 ])),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 12.h),
+                                              child: RichText(
+                                                  text: TextSpan(
+                                                      text: 'Booth: ',
+                                                      style: context
+                                                          .textTheme.subtitle1
+                                                          ?.copyWith(
+                                                              color: AppColors
+                                                                  .nobel),
+                                                      children: [
+                                                    TextSpan(
+                                                        text: widget.entity
+                                                            .general.booth.name,
+                                                        style: context
+                                                            .textTheme.subtitle1
+                                                            ?.copyWith(
+                                                                color: AppColors
+                                                                    .black))
+                                                  ])),
+                                            ),
                                             Padding(
                                               padding: EdgeInsets.symmetric(
                                                   vertical: 12.h),

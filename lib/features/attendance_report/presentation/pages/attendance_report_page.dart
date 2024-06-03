@@ -27,6 +27,7 @@ class AttendanceReportPage extends StatefulWidget {
 
 class _AttendanceReportPageState extends State<AttendanceReportPage> {
   late final outlet = widget.entity.general.outlet;
+  late final booth = widget.entity.general.booth;
 
   final _bloc = Modular.get<AttendanceReportBloc>();
 
@@ -65,6 +66,8 @@ class _AttendanceReportPageState extends State<AttendanceReportPage> {
               child: Column(
                 children: [
                   Text(outlet.name ?? '', style: context.textTheme.h3),
+                  SizedBox(height: 8.h),
+                  Text(booth.name ?? '', style: context.textTheme.h3),
                   SizedBox(height: 8.h),
                   Text(
                     outlet.code ?? '',

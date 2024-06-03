@@ -19,13 +19,11 @@ import 'package:fms/features/order/history_exchange_module.dart';
 import 'package:fms/features/order/order_module.dart';
 import 'package:fms/features/order/presentation/bloc/order_bloc.dart';
 import 'package:fms/features/order/presentation/pages/purchase_page.dart';
-import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/button/outline.dart';
 import '../../../home/domain/entities/general_item_data.dart';
-import '../../../report/domain/entities/photo_entity.dart';
 import '../widgets/custom_stepper.dart';
 import '../widgets/data_feature_widget.dart';
 import '../widgets/exchange_detail.dart';
@@ -89,7 +87,8 @@ class _OrderPageState extends State<OrderPage> {
                 'Phát sinh lỗi trong quá trình chỉnh sửa',
             btnText: 'Thử lại',
             onPressed: () {
-              orderBloc.add(UpdateOrder(order: orderEntity));
+              orderBloc.add(UpdateOrder(
+                  order: orderEntity, feature: widget.entity.feature));
             });
       }
     });
@@ -275,8 +274,9 @@ class _OrderPageState extends State<OrderPage> {
                               child: FlatButton(
                                 onPressed: () {
                                   if (orderEntity.id != null) {
-                                    orderBloc
-                                        .add(UpdateOrder(order: orderEntity));
+                                    orderBloc.add(UpdateOrder(
+                                        order: orderEntity,
+                                        feature: widget.entity.feature));
                                   } else {
                                     orderBloc
                                         .add(CreateOrder(order: orderEntity));
