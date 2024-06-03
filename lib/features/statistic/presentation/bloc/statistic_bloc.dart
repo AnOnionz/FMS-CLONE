@@ -25,10 +25,8 @@ class StatisticBloc extends Bloc<StatisticEvent, StatisticState> {
       emit(StatisticLoading());
       Either<Failure, StatisticEntity> execute;
       if (event.isOnline) {
-        print(1);
         execute = await fetchIndividualStatistic(event.featureId);
       } else {
-        print(2);
         execute = await fetchIndividualStatisticOffline(event.featureId);
       }
 

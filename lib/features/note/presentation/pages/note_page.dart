@@ -119,7 +119,6 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
 
   @override
   Widget build(BuildContext context) {
-    print(notes);
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();

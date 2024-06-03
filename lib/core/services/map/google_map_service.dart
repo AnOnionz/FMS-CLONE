@@ -18,6 +18,13 @@ final class GoogleMapService extends ChangeNotifier implements MapService {
     _padding = e;
   }
 
+  void loadStyle() {
+    // rootBundle.loadString('assets/map_styles.json').then((string) {
+    //   _mapStyleString = string;
+    //   notifyListeners();
+    // });
+  }
+
   CameraPosition _initial = CameraPosition(
     target: myLocation() ?? _initPosition,
     zoom: 16.46,
@@ -45,6 +52,7 @@ final class GoogleMapService extends ChangeNotifier implements MapService {
             notifyListeners();
             _controller!
                 .animateCamera(CameraUpdate.newCameraPosition(_initial));
+            // value.setMapStyle(_mapStyleString);
           });
         },
       );
