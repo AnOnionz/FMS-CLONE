@@ -219,21 +219,16 @@ final class LocationService extends ChangeNotifier {
   }
 
   Future<String?> placeString() async {
-    final _position =
-        await getCurrentPosition().timeout(2.seconds, onTimeout: () => null) ??
-            currentLocation;
+    final _position = getPositionLocal();
 
     if (_position == null) {
       return null;
     }
     try {
-      final place =
-          await placemark(_position).timeout(10.seconds, onTimeout: () => null);
-
+      final place = await placemark(_position);
       if (place == null) {
         return database.getValue(Keys.LOCATION_STRING);
       }
-
       return place;
     } catch (e) {
       return database.getValue(Keys.LOCATION_STRING);
