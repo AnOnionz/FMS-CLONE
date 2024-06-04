@@ -113,21 +113,23 @@ class AttendanceDataDetail extends StatelessWidget {
                       children: <Widget>[
                         Stack(
                           children: [
-                            Align(
-                                child: CachedImage(
-                                    placeholder: (p0, p1) => SizedBox(
-                                          height: 300.h,
-                                          width: context.screenWidth - 32.w,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              AppIndicator(),
-                                            ],
-                                          ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4.sqr),
+                              child: CachedImage(
+                                  placeholder: (p0, p1) => SizedBox(
+                                        height: 300.h,
+                                        width: context.screenWidth - 32.w,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            AppIndicator(),
+                                          ],
                                         ),
-                                    errorWidget: (p0, p1, p2) => SizedBox(),
-                                    imageUrl: data.image!.getImage())),
+                                      ),
+                                  errorWidget: (p0, p1, p2) => SizedBox(),
+                                  imageUrl: data.image!.getImage()),
+                            ),
                             Positioned(
                               right: 10.h,
                               top: 10.h,
