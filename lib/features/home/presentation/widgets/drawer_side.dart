@@ -210,16 +210,16 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
         ),
         Positioned(
             top: context.screenPadding.top,
-            left: -17.5.w,
+            left: -17.w,
             child: GestureDetector(
               onTap: () => Scaffold.of(context).closeEndDrawer(),
               child: Container(
                 height: 35.w,
                 width: 35.w,
+                padding: EdgeInsets.all(6.h),
                 child: Center(
                     child: SvgPicture.asset(
                   AppIcons.closeDrawer,
-                  height: 24.h,
                 )),
                 decoration: BoxDecoration(
                     color: AppColors.white,

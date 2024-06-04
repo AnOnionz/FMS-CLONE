@@ -15,6 +15,7 @@ part 'sync_progress_state.dart';
 class SyncProgressBloc extends Bloc<SyncProgressEvent, SyncProgressState> {
   final SyncUseCase _synchronized;
   final SyncBloc _syncBloc;
+  final syncDelayTime = 180;
 
   SyncProgressBloc(this._syncBloc, this._synchronized)
       : super(SyncProgressInitial()) {
@@ -35,7 +36,7 @@ class SyncProgressBloc extends Bloc<SyncProgressEvent, SyncProgressState> {
           ..fold((failure) async {
             emit(SyncProgressSuccess());
             _timer?.cancel();
-            _timer = Timer(Duration(seconds: 180), () {
+            _timer = Timer(Duration(seconds: syncDelayTime), () {
               add(SyncProgressSilent());
             });
           }, (data) {
