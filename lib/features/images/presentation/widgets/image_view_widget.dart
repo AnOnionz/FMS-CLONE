@@ -88,6 +88,8 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                     }),
                   )
                 : Align(
+                    child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4.sqr),
                     child: CachedImage(
                         placeholder: (p0, p1) => SizedBox(
                               height: 300.h,
@@ -100,7 +102,8 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                               ),
                             ),
                         errorWidget: (p0, p1, p2) => SizedBox(),
-                        imageUrl: widget.image.networkImage!.getImage())),
+                        imageUrl: widget.image.networkImage!.getImage()),
+                  )),
             if (_isImageLoaded)
               Positioned(
                 right: 10.h,
