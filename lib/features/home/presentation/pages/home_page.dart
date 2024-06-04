@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin {
       endDrawer: DrawerSide(),
       drawerScrimColor: AppColors.transparent,
       appBar: PreferredSize(
-          preferredSize: Size(context.screenWidth, 35.h),
+          preferredSize: Size(context.screenWidth, 35.w),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: AppBar(

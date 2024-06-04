@@ -57,11 +57,11 @@ class SignBloc extends Bloc<SignEvent, SignState> {
     OverlayManager.showLoading();
     final execute = await _logout();
     execute.fold((fail) async {
-      OverlayManager.showLoading();
+      OverlayManager.hide();
       emit(SignFailure(fail));
     }, (success) async {
+      OverlayManager.hide();
       if (success) {
-        OverlayManager.showLoading();
         _authenticationBloc.add(AuthenticationLogout());
         return emit(SignSuccess(SignStatus.loggedOut));
       }

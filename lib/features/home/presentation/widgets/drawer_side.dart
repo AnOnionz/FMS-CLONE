@@ -209,13 +209,13 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
           ),
         ),
         Positioned(
-            top: 40.h,
-            left: -20.h,
+            top: context.screenPadding.top,
+            left: -17.5.w,
             child: GestureDetector(
               onTap: () => Scaffold.of(context).closeEndDrawer(),
               child: Container(
-                height: 47.h,
-                width: 47.h,
+                height: 35.w,
+                width: 35.w,
                 child: Center(
                     child: SvgPicture.asset(
                   AppIcons.closeDrawer,
@@ -238,7 +238,7 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
 
   Widget _rowInfo(BuildContext context, String left, String right) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 38.w),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 28.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
