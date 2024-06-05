@@ -144,33 +144,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _connectivityService.onConnectionChange.listen((status) async {
       if (status == InternetStatus.disconnected) {
         if (OverlayManager.currentContext != null) {
-          if (Modular.to.navigateHistory.last.name == HomeModule.route) {
-            OverlayManager.showSnackbar(
-                snackbar: SnackBar(
-              behavior: SnackBarBehavior.floating,
-              elevation: 3.0,
-              margin: EdgeInsets.all(10),
-              shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              backgroundColor: AppColors.black.withOpacity(0.7),
-              content: Row(
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    color: AppColors.white,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Không có kết nối internet',
-                  ),
-                ],
-              ),
-            ));
-          } else {
-            OverlayManager.showToast(
-                msg: 'Không có kết nối internet',
-                context: OverlayManager.currentContext!);
-          }
+          OverlayManager.showToast(
+              title: 'Không có kết nối Internet',
+              msg: 'Yêu cầu kiểm tra laị đường truyền của bạn',
+              context: OverlayManager.currentContext!);
         }
       }
     });

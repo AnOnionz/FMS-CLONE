@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -75,43 +79,85 @@ final class OverlayManager {
   }
 
   static Future<void> showToast(
-      {required String msg, required BuildContext context}) async {
+      {required String msg,
+      required String title,
+      required BuildContext context}) async {
     final fToast = FToast();
     fToast.init(context);
     fToast.removeCustomToast();
     fToast.showToast(
         child: CustomToast(
+          title: title,
           message: msg,
+          onClose: () => fToast.removeCustomToast(),
         ),
-        gravity: ToastGravity.TOP,
-        toastDuration: Duration(seconds: 4),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 100),
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: child,
-            top: 40.h,
-            left: 32.w,
+            bottom: 10.h,
+            left: 16.w,
           );
         });
   }
 }
 
 class CustomToast extends StatelessWidget {
+  final String title;
   final String message;
-  const CustomToast({super.key, required this.message});
+  final VoidCallback onClose;
+  const CustomToast(
+      {super.key,
+      required this.message,
+      required this.title,
+      required this.onClose});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.screenWidth - 64.w,
-      padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 8.h),
+      width: context.screenWidth - 32.w,
+      padding: EdgeInsets.fromLTRB(20.w, 10.w, 10.w, 20.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: AppColors.nobel,
+        borderRadius: BorderRadius.circular(12.sqr),
+        border: Border.all(color: 'F4B0A1'.toColor()),
+        boxShadow: [
+          BoxShadow(
+              offset: Offset(0, 4),
+              blurRadius: 16,
+              color: '100B27'.toColor(0.08))
+        ],
+        color: 'FFF5F3'.toColor(),
       ),
-      child: Center(
-        child: Text(message,
-            style:
-                context.textTheme.subtitle1?.copyWith(color: AppColors.white)),
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.topRight,
+              child: InkWell(
+                  onTap: onClose,
+                  child: SvgPicture.asset(AppIcons.closeToast))),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SvgPicture.asset(AppIcons.noInternet),
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: context.textTheme.h3
+                            ?.copyWith(color: '27303A'.toColor())),
+                    SizedBox(height: 4.h),
+                    Text(message,
+                        style: context.textTheme.body1
+                            ?.copyWith(color: '2F3F53'.toColor())),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
