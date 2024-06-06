@@ -1,7 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/enum.dart';
+import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -50,49 +53,57 @@ class _HistoryExchangeSimplifyItemState
       padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
       decoration: BoxDecoration(
           color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          for (final item in _identityField.entries)
-            Row(
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${item.key.name}: ',
-                  style:
-                      context.textTheme.body1?.copyWith(color: AppColors.nobel),
+                for (final item in _identityField.entries)
+                  Row(
+                    children: [
+                      Text(
+                        '${item.key.name}: ',
+                        style: context.textTheme.body1
+                            ?.copyWith(color: AppColors.nobel),
+                      ),
+                      Text(
+                        '${item.value.value}',
+                        style: context.textTheme.body1
+                            ?.copyWith(color: AppColors.black),
+                      )
+                    ],
+                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Thời gian: ',
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.nobel),
+                    ),
+                    Text(
+                      widget.order.dataTimestamp.formatBy(khmdMy),
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.black),
+                    )
+                  ],
                 ),
-                Text(
-                  '${item.value.value}',
-                  style:
-                      context.textTheme.body1?.copyWith(color: AppColors.black),
-                )
+                // Row(
+                //   children: [
+                //     Text(
+                //       'Trạng thái: ',
+                //       style:
+                //           context.textTheme.body1?.copyWith(color: AppColors.nobel),
+                //     ),
+                //     _status(widget.order.status),
+                //   ],
+                // ),
               ],
             ),
-          Row(
-            children: [
-              Text(
-                'Thời gian: ',
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
-              ),
-              Text(
-                widget.order.dataTimestamp.formatBy(khmdMy),
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.black),
-              )
-            ],
           ),
-          Row(
-            children: [
-              Text(
-                'Trạng thái: ',
-                style:
-                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
-              ),
-              _status(widget.order.status),
-            ],
-          ),
+          _status(widget.order.status)
         ],
       ),
     );
@@ -100,10 +111,8 @@ class _HistoryExchangeSimplifyItemState
 
   Widget _status(SyncStatus status) {
     return switch (status) {
-      SyncStatus.synced => Text('Đã đồng bộ',
-          style: context.textTheme.body1?.copyWith(color: AppColors.royalBlue)),
-      _ => Text('Chưa đồng bộ',
-          style: context.textTheme.body1?.copyWith(color: 'FF0000'.toColor())),
+      SyncStatus.synced => SvgPicture.asset(AppIcons.synced),
+      _ => SvgPicture.asset(AppIcons.noSynced),
     };
   }
 }

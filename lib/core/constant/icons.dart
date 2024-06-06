@@ -73,4 +73,6 @@ class AppIcons {
   static String attendanceReport = 'attendance_report'.icon.svg;
   static String noInternet = 'no_internet'.icon.svg;
   static String closeToast = 'close_toast'.icon.svg;
+  static String noSynced = 'no_synced'.icon.svg;
+  static String synced = 'synced'.icon.svg;
 }
