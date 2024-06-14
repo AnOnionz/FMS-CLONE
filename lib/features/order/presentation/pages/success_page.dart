@@ -9,6 +9,7 @@ import 'package:fms/core/widgets/button/outline.dart';
 import 'package:fms/features/home/domain/entities/general_item_data.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
+import 'package:fms/features/order/history_exchange_module.dart';
 import 'package:fms/features/order/order_module.dart';
 
 class SuccessPage extends StatelessWidget {
@@ -44,7 +45,8 @@ class SuccessPage extends StatelessWidget {
                         Expanded(
                           child: FlatButton(
                               onPressed: () {
-                                context.pop(order);
+                                context.pop();
+                                context.pop();
                               },
                               name: 'OK',
                               color: AppColors.royalBlue),

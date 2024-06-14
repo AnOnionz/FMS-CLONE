@@ -85,16 +85,14 @@ class _HistoryExchangePageState extends State<HistoryExchangePage> {
                       physics: kPhysics,
                       itemBuilder: (context, index) => GestureDetector(
                         onTap: () async {
-                          final success = await context.nextRoute(
+                          await context.nextRoute(
                               HistoryExchangeModule.historyDetail,
                               arguments: [
                                 (widget.entity.feature as EmbeddedFeatureEntity)
                                     .feature,
                                 state.orders[index]
                               ]);
-                          if (success == true) {
-                            fetchOrders();
-                          }
+                          fetchOrders();
                         },
                         child: HistoryExchangeSimplifyItem(
                             order: state.orders[index],
