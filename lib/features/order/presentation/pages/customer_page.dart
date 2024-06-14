@@ -18,7 +18,6 @@ import '../../domain/entities/order_entity.dart';
 
 class OrderCustomerPage extends StatefulWidget {
   final VoidCallback onNext;
-
   final void Function(List<CustomerInfo> customers) onSaveData;
 
   const OrderCustomerPage({
@@ -40,8 +39,8 @@ class _OrderCustomerPageState extends State<OrderCustomerPage> {
       .featureCustomers!
       .sorted((a, b) => a.ordinal! - b.ordinal!);
 
-  late final List<CustomerInfo> customerInfos =
-      DataFeature.of(context).order.customerInfos ?? [];
+  late final List<CustomerInfo> customerInfos = List<CustomerInfo>.from(
+      DataFeature.of(context).order.customerInfos ?? []);
 
   Map<FeatureCustomer, CustomerInfo> _identityFields = {};
   Map<FeatureCustomer, CustomerInfo> _infomationFields = {};
