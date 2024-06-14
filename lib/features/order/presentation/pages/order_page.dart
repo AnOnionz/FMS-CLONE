@@ -178,7 +178,7 @@ class _OrderPageState extends State<OrderPage> {
           iconBack: SvgPicture.asset(AppIcons.closeRegular),
           title: widget.entity.feature.name!,
           action: isSummary ||
-                  (!widget.entity.feature.featureOrder!.isCustomerRequired! &&
+                  (widget.entity.feature.featureOrder!.isCustomerRequired! &&
                       _steps.length > 0 &&
                       _steps[_curr] is CustomerStep)
               ? null
