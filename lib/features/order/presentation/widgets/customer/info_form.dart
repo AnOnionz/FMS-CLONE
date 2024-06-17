@@ -9,9 +9,13 @@ import 'customer_field.dart';
 class InfomationForm extends StatefulWidget {
   final GlobalKey formKey;
   final Map<FeatureCustomer, CustomerInfo> fields;
+  final VoidCallback onFieldChanged;
 
   const InfomationForm(
-      {super.key, required this.formKey, required this.fields});
+      {super.key,
+      required this.formKey,
+      required this.fields,
+      required this.onFieldChanged});
 
   @override
   State<InfomationForm> createState() => _InfomationFormState();
@@ -37,6 +41,7 @@ class _InfomationFormState extends State<InfomationForm>
                 child: CustomerField(
                   onChanged: () {
                     setState(() {});
+                    widget.onFieldChanged();
                   },
                   featureCustomer: entry.key,
                   isLast: isLast,

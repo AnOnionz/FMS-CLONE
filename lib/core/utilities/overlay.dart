@@ -90,7 +90,7 @@ final class OverlayManager {
           onClose: () => fToast.removeCustomToast(),
         ),
         gravity: ToastGravity.BOTTOM,
-        toastDuration: Duration(seconds: 100),
+        toastDuration: Duration(seconds: 2),
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: child,

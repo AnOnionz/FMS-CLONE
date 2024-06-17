@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';
@@ -37,6 +38,14 @@ class OrderEntity extends BaseEntity {
           (element) => element.id == purchase.featureOrderProductId);
       return previousValue + (purchase.quantity! * (product?.price ?? 0));
     });
+  }
+
+  bool isEmpty() {
+    return (customerInfos == null || customerInfos!.isEmpty) &&
+        (purchases == null || purchases!.isEmpty) &&
+        (exchanges == null || exchanges!.isEmpty) &&
+        (samplings == null || samplings!.isEmpty) &&
+        (photos == null || photos!.isEmpty);
   }
 
   OrderEntity(

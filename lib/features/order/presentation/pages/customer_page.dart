@@ -46,7 +46,7 @@ class _OrderCustomerPageState extends State<OrderCustomerPage> {
   Map<FeatureCustomer, CustomerInfo> _infomationFields = {};
 
   bool get validate =>
-      validateFields(_identityFields) && validateFields(_identityFields);
+      validateFields(_identityFields) && validateFields(_infomationFields);
 
   bool validateFields(Map<FeatureCustomer, CustomerInfo> fields) {
     return !fields.entries.any((field) {
@@ -212,6 +212,9 @@ class _OrderCustomerPageState extends State<OrderCustomerPage> {
                             InfomationForm(
                               formKey: _formKey,
                               fields: _infomationFields,
+                              onFieldChanged: () {
+                                setState(() {});
+                              },
                             ),
                           ],
                         ),

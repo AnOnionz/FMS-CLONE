@@ -46,8 +46,18 @@ class _CustomerCheckBoxGroupState extends State<CustomerCheckBoxGroup> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.featureCustomer.name != null)
-          Text(widget.featureCustomer.name!),
-        //
+          RichText(
+              text: TextSpan(
+                  text: widget.featureCustomer.name!,
+                  style:
+                      context.textTheme.body1?.copyWith(color: AppColors.black),
+                  children: [
+                if (widget.featureCustomer.isRequired!)
+                  TextSpan(
+                      text: ' *',
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.brickRed))
+              ])),
         for (final Option option in _groupValue)
           CheckboxListTile(
             value: option.isChecked,

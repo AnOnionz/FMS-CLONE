@@ -275,6 +275,14 @@ class _OrderPageState extends State<OrderPage> {
                             Expanded(
                               child: FlatButton(
                                 onPressed: () {
+                                  if (orderEntity.isEmpty()) {
+                                    showFailure(
+                                        title: 'Không thể hoàn thành đơn hàng',
+                                        message:
+                                            'Yêu cầu cần ít nhất có 1 trường dữ liệu để tạo đơn',
+                                        btnText: 'Ok');
+                                    return;
+                                  }
                                   if (orderEntity.id != null) {
                                     orderBloc.add(UpdateOrder(
                                         order: orderEntity,
