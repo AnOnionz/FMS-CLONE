@@ -33,11 +33,9 @@ class OrderCustomerPage extends StatefulWidget {
 class _OrderCustomerPageState extends State<OrderCustomerPage> {
   final _identifyCubit = Modular.get<IdentifyCubit>();
   final _formKey = GlobalKey<FormState>();
-  late final featureCustomers = DataFeature.of(context)
-      .data
-      .feature
-      .featureCustomers!
-      .sorted((a, b) => a.ordinal! - b.ordinal!);
+  late final featureCustomers =
+      (DataFeature.of(context).data.feature.featureCustomers ?? [])
+          .sorted((a, b) => a.ordinal! - b.ordinal!);
 
   late final List<CustomerInfo> customerInfos = List<CustomerInfo>.from(
       DataFeature.of(context).order.customerInfos ?? []);

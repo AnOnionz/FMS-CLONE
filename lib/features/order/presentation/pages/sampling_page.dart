@@ -28,8 +28,9 @@ class OrderSamplingPage extends StatefulWidget {
 
 class _OrderSamplingPageState extends State<OrderSamplingPage> {
   late final dataFeature = DataFeature.of(context);
-  late final featureSamplings = dataFeature.data.feature.featureSamplings!
-      .sorted((a, b) => a.ordinal! - b.ordinal!);
+  late final featureSamplings =
+      (dataFeature.data.feature.featureSamplings ?? [])
+          .sorted((a, b) => a.ordinal! - b.ordinal!);
   late final List<SamplingEntity> _samplings =
       dataFeature.order.samplings ?? [];
   late final Map<FeatureSampling, SamplingEntity> _items = {};

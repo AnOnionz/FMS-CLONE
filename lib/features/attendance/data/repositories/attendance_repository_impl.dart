@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/usecase/either.dart';
@@ -53,10 +54,10 @@ class AttendanceRepositoryImpl extends Repository
   Future<Result<List<AttendanceEntity>>> getAttendanceReports(
       {required FeatureEntity feature}) async {
     return todo(() async {
-      final attendanceEntity = await _remote.getAttendanceReports(
+      final attendanceEntities = await _remote.getAttendanceReports(
           feature: feature, general: general);
 
-      return Right(attendanceEntity);
+      return Right(attendanceEntities);
     }, useInternet: true);
   }
 }

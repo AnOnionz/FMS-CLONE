@@ -37,7 +37,7 @@ class OrderPurchasePage extends StatefulWidget {
 
 class _OrderPurchasePageState extends State<OrderPurchasePage> {
   late final products =
-      DataFeature.of(context).data.feature.featureOrder!.products ?? [];
+      DataFeature.of(context).data.feature.featureOrder?.products ?? [];
 
   late final purchases =
       DataFeature.of(context).order.purchases ?? <PurchaseEntity>[];
