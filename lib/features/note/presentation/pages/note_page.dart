@@ -57,12 +57,15 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
           photo.status == SyncStatus.isNoSynced ||
           photo.status == SyncStatus.isDeleted));
 
-  bool get isActive => isPhotoActive || isNoteActive;
+  bool get isActive =>
+      !notes.values.any((note) {
+        return note.status == SyncStatus.isNoSynced && note.value.isEmptyOrNull;
+      }) &&
+      (isNoteActive || isPhotoActive);
 
   @override
   void initState() {
     super.initState();
-
     fetchNotes();
   }
 
@@ -84,8 +87,6 @@ class _NotePageState extends State<NotePage> with LocalDatasource {
       });
       setState(() {});
     });
-
-    Fx.log(photos);
 
     await Future.forEach(featureMultimedias, (featureMultimedia) async {
       await Future.delayed(100.milliseconds);
