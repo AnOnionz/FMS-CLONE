@@ -38,13 +38,11 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
   bool get validate =>
       _exchangeEntites.any((exchange) => exchange.quantity! > 0);
 
-  late final exchanges = DataFeature.of(context)
-      .data
-      .feature
-      .featureSchemes!
-      .map((e) => e.exchanges!)
-      .expand((element) => element)
-      .toList();
+  late final exchanges =
+      (DataFeature.of(context).data.feature.featureSchemes ?? [])
+          .map((e) => e.exchanges!)
+          .expand((element) => element)
+          .toList();
 
   void _onExchangeUpdate(
       ValueType type, ExchangeEntity entity, Exchange exchange) {

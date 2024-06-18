@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/enum.dart';
-import 'package:fms/core/mixins/fx.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/utilities/parser.dart';

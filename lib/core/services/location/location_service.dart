@@ -13,7 +13,7 @@ import './../../../core/constant/keys.dart';
 import './../../../core/database/database.dart';
 import './../../../core/errors/location_error.dart';
 
-int kDistanceFilter = 15;
+int kDistanceFilter = 0;
 
 final class LocationService extends ChangeNotifier {
   final permissionManager = PermissionManager();
@@ -56,16 +56,11 @@ final class LocationService extends ChangeNotifier {
     } else if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return AppleSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: kDistanceFilter,
         pauseLocationUpdatesAutomatically: true,
         timeLimit: 15.seconds,
       );
     } else {
-      return LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: kDistanceFilter,
-      );
+      return LocationSettings(timeLimit: 15.seconds);
     }
   }
 
