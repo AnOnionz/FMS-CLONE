@@ -1,5 +1,5 @@
 { 
-    "appname": "FMS",
+    "appname": "FMS 2024",
     "baseURL": "https://github.com/an",
     "AUTH0_DOMAIN":"demo-nest.jp.auth0.com",
     "AUTH0_CLIENT_ID":"GHA3DLZC4iTWWxmNfWWTS6W9nyB09n8I",

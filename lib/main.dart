@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/crawl/domain/entities/crawl_quantity_entity.dart';
 import 'package:fms/features/note/domain/entities/note_entity.dart';
@@ -15,7 +16,9 @@ import 'features/general/domain/entities/general_entity.dart';
 import 'features/setting/domain/entities/setting_app.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

@@ -81,9 +81,9 @@ android {
     flavorDimensions "zzzzz"
 
     productFlavors {
-        dev {  manifestPlaceholders+=[applabel: "[DEV]FMS", auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
-        stag{  manifestPlaceholders+=[applabel: "[STAGING]FMS",auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
-        prod {  manifestPlaceholders+=[applabel: "FMS",auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
+        dev {  manifestPlaceholders+=[applabel: "FMS 2024", auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
+        stag{  manifestPlaceholders+=[applabel: "FMS 2024",auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
+        prod {  manifestPlaceholders+=[applabel: "FMS 2024",auth0Domain: "@string/auth0_domain", auth0Scheme: "@string/auth0_scheme"]}
     }
 
     buildFeatures {

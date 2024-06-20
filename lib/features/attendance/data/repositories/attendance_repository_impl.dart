@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/usecase/either.dart';
@@ -29,12 +28,11 @@ class AttendanceRepositoryImpl extends Repository
   }) {
     return todo(() async {
       final attendanceData = await _remote.postAttendance(
-        file: file,
-        time: time,
-        position: position,
-        feature: feature,
-        general: general,
-      );
+          file: file,
+          time: time,
+          position: position,
+          feature: feature,
+          general: general);
       return Right(attendanceData);
     });
   }

@@ -1,5 +1,5 @@
 {   
-    "appname": "FMS staging",
+    "appname": "FMS 2024",
     "env": "staging",
     "baseURL": "https://api-staging-fms.outcome.asia",
     "AUTH0_DOMAIN":"demo-nest.jp.auth0.com",

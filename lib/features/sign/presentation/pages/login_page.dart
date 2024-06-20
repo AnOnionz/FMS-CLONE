@@ -39,14 +39,14 @@ class _LoginPageState extends State<LoginPage> {
             child: Text('FMS 2024',
                 style: context.textTheme.h1, textAlign: TextAlign.center),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 70.w),
-            child: Text(
-              context.language.loginDescription,
-              style: context.textTheme.body1,
-              textAlign: TextAlign.center,
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 70.w),
+          //   child: Text(
+          //     context.language.loginDescription,
+          //     style: context.textTheme.body1,
+          //     textAlign: TextAlign.center,
+          //   ),
+          // ),
           Padding(
             padding: Fx.pH20,
             child: Image.asset(

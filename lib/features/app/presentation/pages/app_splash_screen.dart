@@ -12,7 +12,7 @@ class AppSplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Image.asset(
-        AppImages.logo,
+        AppImages.splash,
       ),
     );
   }
