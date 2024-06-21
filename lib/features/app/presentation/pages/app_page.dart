@@ -5,7 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
 
 import '../bloc/app_bloc.dart';
-import 'app_splash_screen.dart';
 
 class AppPage extends StatefulWidget {
   const AppPage({super.key});
@@ -39,7 +38,6 @@ class _AppPageState extends State<AppPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: AppSplashScreen(),
     );
   }
 }
