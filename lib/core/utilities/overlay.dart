@@ -81,6 +81,7 @@ final class OverlayManager {
       required String title,
       required BuildContext context}) async {
     final fToast = FToast();
+    final bottom = context.screenPadding.bottom;
     fToast.init(context);
     fToast.removeCustomToast();
     fToast.showToast(
@@ -94,7 +95,7 @@ final class OverlayManager {
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: child,
-            bottom: 10.h,
+            bottom: 10.h + bottom,
             left: 16.w,
           );
         });
