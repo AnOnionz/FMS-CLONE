@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/colors.dart';
-import 'package:fms/core/responsive/responsive.dart';
-import 'package:fms/core/widgets/app_indicator.dart';
 
 import '../bloc/app_bloc.dart';
 
