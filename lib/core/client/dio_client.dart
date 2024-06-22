@@ -5,16 +5,21 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/authentication/domain/usecases/has_valid_credentials_usecase.dart';
 import 'package:fms/features/authentication/domain/usecases/renew_credentials_usecase.dart';
 import 'package:fms/features/authentication/presentation/blocs/authentication_bloc.dart';
 
+import '../constant/icons.dart';
+import '../widgets/popup.dart';
 import '/core/client/api_service.dart';
 import '/core/errors/app_exception.dart';
 import '/core/errors/status_code.dart';
 
 class DioClient extends ApiService {
   final cancelToken = CancelToken();
+  int? _lastStatusCode;
 
   final Dio _http = Dio(
     BaseOptions(
@@ -47,14 +52,21 @@ class DioClient extends ApiService {
       onResponse: (response, handler) async {
         if (response.statusCode == StatusCode.UNAUTHORIZED) {
           final _authenticationBloc = Modular.get<AuthenticationBloc>();
+          if (_lastStatusCode == response.statusCode) {
+            reject(response, _authenticationBloc);
+            return;
+          }
+          _lastStatusCode = response.statusCode;
+
           final _hasValidCredentials =
               Modular.get<HasValidCredentialsUsecase>();
           final _renewCredentials = Modular.get<RenewCredentialsUsecase>();
           bool hasValidCredentials = false;
 
           await _hasValidCredentials()
-            ..fold((fail) => _authenticationBloc.add(AuthenticationLogout()),
-                (success) {
+            ..fold((fail) {
+              reject(response, _authenticationBloc);
+            }, (success) {
               hasValidCredentials = true;
             });
           if (hasValidCredentials) {
@@ -63,13 +75,12 @@ class DioClient extends ApiService {
                   (success) => null);
           }
 
-          await fetch(response.requestOptions).then(handler.resolve,
-              onError: (error) async {
-            handler.reject(error as DioException);
+          await fetch(response.requestOptions).then((value) {
+            handler.resolve(value);
           });
         } else if (response.statusCode == StatusCode.FORBIDDEN) {
           final _authenticationBloc = Modular.get<AuthenticationBloc>();
-          _authenticationBloc.add(AuthenticationLogout());
+          reject(response, _authenticationBloc);
         } else {
           handler.next(response);
         }
@@ -217,6 +228,20 @@ class DioClient extends ApiService {
       _ =>
         throw InternalException(message, e, StackTrace.current),
     };
+  }
+
+  void reject(
+      Response<dynamic> response, AuthenticationBloc _authenticationBloc) {
+    Future.delayed(
+        100.milliseconds,
+        () => showFailure(
+              title: 'Thao tác thất bại',
+              icon: SvgPicture.asset(AppIcons.failure),
+              message: response.statusMessage,
+              btnText: 'Ok',
+            ));
+    _authenticationBloc.add(AuthenticationLogout());
+    ;
   }
 
   @override

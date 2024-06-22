@@ -16,8 +16,12 @@ class NecessaryOut extends NecessaryEvent {
 }
 
 class NecessarySignOut extends NecessaryEvent {
+  final String functionName;
   final Function action;
   final Function onClose;
 
-  NecessarySignOut({required this.action, required this.onClose});
+  NecessarySignOut(
+      {required this.functionName,
+      required this.action,
+      required this.onClose});
 }

@@ -19,6 +19,7 @@ import 'package:fms/features/work_place/work_place_module.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/widgets/image_profile.dart';
+import '../bloc/necessary_bloc.dart';
 
 class DrawerSide extends StatelessWidget with GeneralDataMixin {
   const DrawerSide({super.key});
@@ -27,6 +28,8 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
       Modular.get<AuthenticationRepository>().credentials;
 
   GeneralBloc get _generalBloc => Modular.get<GeneralBloc>();
+
+  NecessaryBloc get necessaryBloc => Modular.get<NecessaryBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -124,12 +127,18 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                       icon: AppIcons.shop,
                                       name: 'Đổi dự án làm việc',
                                       onPressed: () {
-                                        Scaffold.of(context).closeEndDrawer();
-                                        context.navigate(WorkPlaceModule.route);
-                                        context.nextRoute(
-                                            WorkPlaceModule.selectProject);
+                                        necessaryBloc.add(NecessarySignOut(
+                                            functionName: 'đổi dự án',
+                                            action: () {
+                                              context.navigate(
+                                                  WorkPlaceModule.route);
+                                              context.nextRoute(WorkPlaceModule
+                                                  .selectProject);
 
-                                        _generalBloc.add(GeneralReset());
+                                              _generalBloc.add(GeneralReset());
+                                            },
+                                            onClose: () => Scaffold.of(context)
+                                                .closeEndDrawer()));
                                       },
                                     ),
                                     // _rowFeature(

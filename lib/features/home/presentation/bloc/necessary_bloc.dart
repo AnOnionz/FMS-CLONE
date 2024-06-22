@@ -171,28 +171,26 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
   }
 
   Future<void> onNecessarySignOut(NecessarySignOut event, emit) async {
-    final features = await checkTasksNotCompleted(general: general);
+    // final features = await checkTasksNotCompleted(general: general);
 
-    if (features.isEmpty) {
-      emit(NecessaryUnfastenOut(
-        action: event.action,
-      ));
-      return;
-    }
+    // if (features.isEmpty) {
+    //   emit(NecessaryUnfastenOut(action: event.action));
+    //   return;
+    // }
 
-    ///  check tasks
-    final tasks = features.where((feature) =>
-        feature.type != FeatureType.attendanceClockingOut &&
-        feature.type != FeatureType.synchronization);
+    // ///  check tasks
+    // final tasks = features.where((feature) =>
+    //     feature.type != FeatureType.attendanceClockingOut &&
+    //     feature.type != FeatureType.synchronization);
 
-    if (tasks.isNotEmpty) {
-      features.removeWhere((element) =>
-          element.type == FeatureType.attendanceClockingOut ||
-          element.type == FeatureType.synchronization);
+    // if (tasks.isNotEmpty) {
+    //   features.removeWhere((element) =>
+    //       element.type == FeatureType.attendanceClockingOut ||
+    //       element.type == FeatureType.synchronization);
 
-      emit(NecessaryTask(onClose: event.onClose, features: features));
-      return;
-    }
+    //   emit(NecessaryTask(onClose: event.onClose, features: features));
+    //   return;
+    // }
 
     ///check sync
     final featureSync = general.config.features!.firstWhereOrNull(
@@ -200,17 +198,19 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
 
     if (featureSync != null &&
         _syncBloc.state.status == SyncStatus.isNoSynced) {
-      emit(NecessarySync(onClose: event.onClose, feature: 'đăng xuất'));
+      emit(NecessarySync(onClose: event.onClose, feature: event.functionName));
       return;
     }
 
-    /// check attendance out
-    final featureAttendanceOut = features.firstWhereOrNull(
-        (feature) => feature.type == FeatureType.attendanceClockingOut);
-    if (featureAttendanceOut != null) {
-      emit(NecessaryAttendanceOut(feature: featureAttendanceOut));
-      return;
-    }
+    emit(NecessaryUnfastenOut(action: event.action));
+
+    // /// check attendance out
+    // final featureAttendanceOut = features.firstWhereOrNull(
+    //     (feature) => feature.type == FeatureType.attendanceClockingOut);
+    // if (featureAttendanceOut != null) {
+    //   emit(NecessaryAttendanceOut(feature: featureAttendanceOut));
+    //   return;
+    // }
   }
 
   Future<List<FeatureEntity>> checkTasksNotCompleted(

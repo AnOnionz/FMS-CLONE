@@ -34,6 +34,7 @@ class _LogoutButtonState extends State<LogoutButton> {
       onTap: () {
         if (widget.validate()) {
           necessaryBloc.add(NecessarySignOut(
+            functionName: 'đăng xuất',
             onClose: () => Scaffold.of(context).closeEndDrawer(),
             action: () => showWarning(
                 icon: SvgPicture.asset(AppIcons.requestSignout),
