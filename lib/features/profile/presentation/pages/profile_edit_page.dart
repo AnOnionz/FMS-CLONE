@@ -4,7 +4,9 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 
+import '../widgets/current_whereabouts.dart';
 import '../widgets/information.dart';
+import '../widgets/permanent_residence.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({super.key});
@@ -25,7 +27,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         child: SingleChildScrollView(
           physics: kPhysics,
           child: Column(
-            children: [SizedBox(height: 20.h), UserInformation()],
+            children: [
+              SizedBox(height: 20.h),
+              UserInformation(),
+              SizedBox(height: 8.h),
+              CurrentWhereaboutsState(),
+              SizedBox(height: 8.h),
+              PermanentResidence()
+            ],
           ),
         ),
       ),

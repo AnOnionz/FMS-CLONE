@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -13,6 +14,7 @@ import '../../../../core/widgets/date_picker.dart';
 import '../../../../core/widgets/image_profile.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import 'dropdown_field.dart';
+import 'profile_box.dart';
 
 class UserInformation extends StatefulWidget {
   const UserInformation({super.key});
@@ -42,12 +44,7 @@ class _UserInformationState extends State<UserInformation>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 100.wPerc,
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
-      padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-          color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
+    return ProfileBox(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -97,140 +94,111 @@ class _UserInformationState extends State<UserInformation>
                   Text('Thông tin cá nhân', style: context.textTheme.subtitle1),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'Họ tên',
-              isRequired: true,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'Số điện thoại',
-              isRequired: true,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'CMND/CCCD',
-              isRequired: true,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'Email',
-              isRequired: true,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: Row(
-              children: [
-                Text('Giới tính:',
-                    style: context.textTheme.body1
-                        ?.copyWith(color: AppColors.midnightExpress)),
-                SizedBox(width: 16.w),
-                CustomCheckboxGroup<String>(
-                  group: ['Nam', 'Nữ'],
-                  onSelected: (value) {},
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: DatePicker(
-              lastDate: lastBirthDay,
-              decoration: InputDecoration(
-                  hintText: 'Ngày tháng năm sinh',
-                  hintStyle:
-                      context.textTheme.body1?.copyWith(color: AppColors.nobel),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                  suffixIconConstraints: BoxConstraints(),
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.only(right: 16.w),
-                    child: SvgPicture.asset(
-                      AppIcons.calendar,
-                      height: 18.w,
-                      colorFilter:
-                          ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
-                    ),
+          AppTextFormField(
+            label: 'Họ tên',
+            isRequired: true,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
+          AppTextFormField(
+            label: 'Số điện thoại',
+            isRequired: true,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
+          AppTextFormField(
+            label: 'CMND/CCCD',
+            isRequired: true,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
+          AppTextFormField(
+            label: 'Email',
+            isRequired: true,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
+          Row(
+            children: [
+              Text('Giới tính:',
+                  style: context.textTheme.body1
+                      ?.copyWith(color: AppColors.midnightExpress)),
+              SizedBox(width: 16.w),
+              CustomCheckboxGroup<String>(
+                group: ['Nam', 'Nữ'],
+                onSelected: (value) {},
+              ),
+            ],
+          ).bottom12,
+          DatePicker(
+            lastDate: lastBirthDay,
+            decoration: InputDecoration(
+                hintText: 'Ngày tháng năm sinh',
+                hintStyle:
+                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                suffixIconConstraints: BoxConstraints(),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: SvgPicture.asset(
+                    AppIcons.calendar,
+                    height: 18.w,
+                    colorFilter:
+                        ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.sqr),
-                      borderSide: BorderSide(color: AppColors.nobel)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.sqr),
-                      borderSide: BorderSide(color: AppColors.nobel)),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.sqr),
-                      borderSide:
-                          BorderSide(color: AppColors.fireBrick, width: 2.h)),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.sqr),
-                      borderSide:
-                          BorderSide(color: AppColors.summerSky, width: 2.h))),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'Nơi sinh',
-              isRequired: false,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: DropdownField(
-              values: [1, 2, 3],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'Mã số thuế',
-              isRequired: false,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: AppTextFormField(
-              label: 'Số BHXH',
-              isRequired: false,
-              onChanged: (value) {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.next,
-            ),
-          ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.sqr),
+                    borderSide: BorderSide(color: AppColors.nobel)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.sqr),
+                    borderSide: BorderSide(color: AppColors.nobel)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.sqr),
+                    borderSide:
+                        BorderSide(color: AppColors.fireBrick, width: 2.h)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.sqr),
+                    borderSide:
+                        BorderSide(color: AppColors.summerSky, width: 2.h))),
+          ).bottom12,
+          AppTextFormField(
+            label: 'Nơi sinh',
+            isRequired: false,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
+          DropdownField(
+            hint: 'Trình độ học vấn',
+            values: [1, 2, 3],
+          ).bottom12,
+          AppTextFormField(
+            label: 'Mã số thuế',
+            isRequired: false,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
+          AppTextFormField(
+            label: 'Số BHXH',
+            isRequired: false,
+            onChanged: (value) {
+              setState(() {});
+            },
+            textInputAction: TextInputAction.next,
+          ).bottom12,
         ],
       ),
     );

@@ -10,7 +10,8 @@ import '../../../../core/constant/icons.dart';
 
 class DropdownField<T> extends StatefulWidget {
   final List<T> values;
-  const DropdownField({super.key, required this.values});
+  final String hint;
+  const DropdownField({super.key, required this.values, required this.hint});
 
   @override
   State<DropdownField<T>> createState() => _DropdownFieldState<T>();
@@ -31,8 +32,9 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
       child: DropdownMenu<T>(
         controller: _controller,
         width: 100.wPerc - 80.w,
-        hintText: 'Trình độ học vấn',
+        hintText: widget.hint,
         textStyle: context.textTheme.body1,
+        menuHeight: 200,
         trailingIcon: Transform.rotate(
           origin: Offset(4, -4),
           angle: pi * 1.5,
@@ -42,7 +44,7 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
             colorFilter: ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
           ),
         ),
-        requestFocusOnTap: false,
+        requestFocusOnTap: true,
         onSelected: (T? value) {
           setState(() {
             _selected = value;
@@ -61,12 +63,12 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
           padding: MaterialStatePropertyAll(EdgeInsets.zero),
         ),
         inputDecorationTheme: InputDecorationTheme(
-            isCollapsed: true,
             isDense: true,
+            constraints: BoxConstraints.tight(Size.fromHeight(56.w)),
+            isCollapsed: true,
             hintStyle:
                 context.textTheme.body1?.copyWith(color: AppColors.nobel),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.sqr),
                 borderSide: BorderSide(color: AppColors.nobel)),
