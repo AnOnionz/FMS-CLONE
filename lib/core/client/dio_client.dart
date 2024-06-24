@@ -66,13 +66,16 @@ class DioClient extends ApiService {
           await _hasValidCredentials()
             ..fold((fail) {
               reject(response, _authenticationBloc);
+              return;
             }, (success) {
               hasValidCredentials = true;
             });
           if (hasValidCredentials) {
             await _renewCredentials()
-              ..fold((fail) => _authenticationBloc.add(AuthenticationLogout()),
-                  (success) => null);
+              ..fold((fail) {
+                reject(response, _authenticationBloc);
+                return;
+              }, (success) => null);
           }
 
           await fetch(response.requestOptions).then((value) {

@@ -58,6 +58,7 @@ class AppIcons {
   static String requiredInternet = 'required_internet'.icon.svg;
   static String requiredTask = 'required_task'.icon.svg;
   static String requiredDownload = 'required_download'.icon.svg;
+  static String requiredProfile = 'required_profile'.icon.svg;
   static String success = 'success'.icon.svg;
   static String failure = 'failure'.icon.svg;
   static String logout = 'logout'.icon.svg;
@@ -75,4 +76,7 @@ class AppIcons {
   static String closeToast = 'close_toast'.icon.svg;
   static String noSynced = 'no_synced'.icon.svg;
   static String synced = 'synced'.icon.svg;
+  static String profileError = 'profile_error'.icon.svg;
+  static String profileEdit = 'profile_edit'.icon.svg;
+  static String cameraProfile = 'camera_profile'.icon.svg;
 }

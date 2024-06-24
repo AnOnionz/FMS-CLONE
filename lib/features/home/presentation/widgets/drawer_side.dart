@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,10 +9,10 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/features/app_information/app_infomation_module.dart';
-import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
+import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/setting/setting_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -23,9 +22,6 @@ import '../bloc/necessary_bloc.dart';
 
 class DrawerSide extends StatelessWidget with GeneralDataMixin {
   const DrawerSide({super.key});
-
-  Credentials? get credentials =>
-      Modular.get<AuthenticationRepository>().credentials;
 
   GeneralBloc get _generalBloc => Modular.get<GeneralBloc>();
 
@@ -61,24 +57,23 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                     .copyWith(color: AppColors.blackRussian),
                                 child: Column(
                                   children: [
-                                    (credentials != null)
+                                    (general.user != null)
                                         ? Column(
                                             children: [
                                               ImageProfile(
-                                                  imageUrl: credentials!.user
-                                                              .pictureUrl ==
+                                                  imageUrl: general
+                                                              .user!.picture ==
                                                           null
                                                       ? null
-                                                      : credentials!
-                                                          .user.pictureUrl!
+                                                      : general.user!.picture
                                                           .toString()),
                                               SizedBox(height: 20.h),
-                                              (credentials!.user.name != null)
+                                              (general.user!.name != null)
                                                   ? Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 8.h),
                                                       child: Text(
-                                                        credentials!.user.name!,
+                                                        general.user!.name!,
                                                         style: context
                                                             .textTheme.subtitle1
                                                             ?.copyWith(
@@ -87,29 +82,12 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                                       ),
                                                     )
                                                   : SizedBox.shrink(),
-                                              (credentials!.user.email != null)
+                                              (general.user!.email != null)
                                                   ? Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 8.h),
                                                       child: Text(
-                                                        credentials!
-                                                            .user.email!,
-                                                        style: context
-                                                            .textTheme.body1
-                                                            ?.copyWith(
-                                                                color: AppColors
-                                                                    .nobel),
-                                                      ),
-                                                    )
-                                                  : SizedBox.shrink(),
-                                              (credentials!.user.zoneinfo !=
-                                                      null)
-                                                  ? Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom: 8.h),
-                                                      child: Text(
-                                                        credentials!
-                                                            .user.zoneinfo!,
+                                                        general.user!.email!,
                                                         style: context
                                                             .textTheme.body1
                                                             ?.copyWith(
@@ -141,15 +119,18 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                                 .closeEndDrawer()));
                                       },
                                     ),
+                                    //  SizedBox(
+                                    //   height: 8.h,
+                                    // ),
                                     // _rowFeature(
                                     //   context: context,
                                     //   icon: AppIcons.notification,
                                     //   name: 'Thông báo',
                                     //   route: SettingModule.route,
                                     // ),
-                                    // SizedBox(
-                                    //   height: 8.h,
-                                    // ),
+                                    SizedBox(
+                                      height: 8.h,
+                                    ),
                                     _rowFeature(
                                       context: context,
                                       icon: AppIcons.about,
@@ -164,6 +145,15 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                       icon: AppIcons.config,
                                       name: 'Cài đặt',
                                       route: SettingModule.route,
+                                    ),
+                                    SizedBox(
+                                      height: 8.h,
+                                    ),
+                                    _rowFeature(
+                                      context: context,
+                                      icon: AppIcons.profileEdit,
+                                      name: 'Profile nhân viên',
+                                      route: ProfileModule.route,
                                     ),
                                     Padding(
                                       padding:
@@ -219,7 +209,7 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
         ),
         Positioned(
             top: context.screenPadding.top,
-            left: -17.w,
+            left: -15.w,
             child: GestureDetector(
               onTap: () => Scaffold.of(context).closeEndDrawer(),
               child: Container(

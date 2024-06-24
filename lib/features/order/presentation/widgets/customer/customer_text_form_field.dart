@@ -5,18 +5,17 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../../../core/constant/colors.dart';
-import '../../../domain/entities/order_entity.dart';
 
-class CustomerTextFormField extends StatefulWidget {
+class AppTextFormField extends StatefulWidget {
   final TextInputType textInputType;
   final TextInputAction textInputAction;
   final String? Function(String? value)? validate;
   final String label;
   final bool isRequired;
-  final CustomerInfo customerInfo;
+  final String? value;
   final Function(String value) onChanged;
 
-  const CustomerTextFormField(
+  const AppTextFormField(
       {super.key,
       required this.textInputAction,
       this.textInputType = TextInputType.text,
@@ -24,16 +23,16 @@ class CustomerTextFormField extends StatefulWidget {
       required this.label,
       required this.onChanged,
       this.validate,
-      required this.customerInfo});
+      this.value});
 
   @override
-  State<CustomerTextFormField> createState() => _CustomerTextFormFieldState();
+  State<AppTextFormField> createState() => _AppTextFormFieldState();
 }
 
-class _CustomerTextFormFieldState extends State<CustomerTextFormField> {
+class _AppTextFormFieldState extends State<AppTextFormField> {
   ValueNotifier<bool> isError = ValueNotifier(false);
   late final TextEditingController _controller =
-      TextEditingController(text: widget.customerInfo.value);
+      TextEditingController(text: widget.value);
   final FocusNode _focusNode = FocusNode();
 
   @override

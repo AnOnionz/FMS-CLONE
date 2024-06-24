@@ -78,3 +78,36 @@ void showRequiredTask(
               name: 'Về trang chủ',
               color: AppColors.orange)));
 }
+
+void showRequiredProfile({required VoidCallback onPressed}) {
+  showFailure(
+    title: 'Chưa có hình ảnh trong Profile',
+    icon: SvgPicture.asset(AppIcons.requiredProfile),
+    message:
+        'Yêu cầu cập nhật hình ảnh trong Profile nhân viên để xác thực khi chấm công.',
+    btnText: 'Đến Trang Profile Nhân viên',
+    onPressed: onPressed,
+  );
+}
+
+void showProfileInvalid({required VoidCallback onPressed}) {
+  showFailure(
+    title: 'Hình ảnh không hợp lệ',
+    icon: SvgPicture.asset(AppIcons.profileError),
+    message:
+        'Không thể nhận diện gương mặt trong hình. Vui lòng chụp lại hình sao cho gương mặt bạn nằm trọn trong khung hình.',
+    btnText: 'Thử lại',
+    onPressed: onPressed,
+  );
+}
+
+void showProfileNotMatch({required VoidCallback onPressed}) {
+  showFailure(
+    title: 'Gương mặt không khớp',
+    icon: SvgPicture.asset(AppIcons.requiredProfile),
+    message:
+        'Gương mặt trong hình không khớp với thông tin hồ sơ. Vui lòng chụp lại hình với đúng người cần xác nhận.',
+    btnText: 'Thử lại',
+    onPressed: onPressed,
+  );
+}

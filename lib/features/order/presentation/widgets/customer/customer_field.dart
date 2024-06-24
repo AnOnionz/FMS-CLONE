@@ -47,8 +47,8 @@ class _CustomerFieldState extends State<CustomerField> {
           },
           featureCustomer: widget.featureCustomer);
 
-    return CustomerTextFormField(
-      customerInfo: widget.customerInfo,
+    return AppTextFormField(
+      value: widget.customerInfo.value,
       label: widget.featureCustomer.name!,
       isRequired: widget.featureCustomer.isRequired!,
       onChanged: (value) {

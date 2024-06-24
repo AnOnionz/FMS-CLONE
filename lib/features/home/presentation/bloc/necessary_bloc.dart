@@ -26,7 +26,6 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
   final GetNotesNotCompletedUsecase getNotesNotCompleted;
   final GetQuantitiesNotCompletedUsecase getQuantitiesNotCompleted;
-
   final SyncBloc _syncBloc;
 
   StreamSubscription<NecessaryState>? subscription;
