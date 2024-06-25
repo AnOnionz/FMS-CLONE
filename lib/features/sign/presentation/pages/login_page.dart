@@ -10,6 +10,9 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/button/flat.dart';
 import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 
+import '../../../../core/constant/keys.dart';
+import '../../../../core/environment/env.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -36,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
           Image.asset(AppImages.logo),
           Padding(
             padding: Fx.pV16,
-            child: Text('FMS 2024',
+            child: Text(env.variables[Keys.APP_NAME] as String,
                 style: context.textTheme.h1, textAlign: TextAlign.center),
           ),
           // Padding(

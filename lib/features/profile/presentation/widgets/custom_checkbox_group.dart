@@ -71,9 +71,13 @@ class _CustomCheckboxGroupState<T> extends State<CustomCheckboxGroup<T>> {
         children: options,
       );
     }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: options,
+      children: [
+        for (final Widget opt in options)
+          Padding(padding: EdgeInsets.only(bottom: 12.h), child: opt)
+      ],
     );
   }
 }

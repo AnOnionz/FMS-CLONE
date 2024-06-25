@@ -13,6 +13,8 @@ import 'package:fms/features/authentication/domain/repositories/authentication_r
 import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 
+import '../../../../core/constant/keys.dart';
+import '../../../../core/environment/env.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/image_profile.dart';
 
@@ -63,7 +65,7 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
               Image.asset(AppImages.logo),
               Padding(
                 padding: Fx.pV16,
-                child: Text('FMS 2024',
+                child: Text(env.variables[Keys.APP_NAME] as String,
                     style: context.textTheme.h1, textAlign: TextAlign.center),
               ),
               // Padding(

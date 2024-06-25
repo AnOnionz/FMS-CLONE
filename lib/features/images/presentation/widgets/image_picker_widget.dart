@@ -7,11 +7,13 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
+import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/popup.dart';
 import '../../domain/entities/image_dynamic.dart';
 
@@ -19,7 +21,9 @@ class ImagePickerWidget extends StatefulWidget {
   final bool enable;
   final double? height;
   final bool isWatermarkRequired;
+  final bool multiSource;
   final void Function(ImageDynamic image) onChanged;
+  final Color? backgroundColor;
   final ValueNotifier<bool>? isWatermarking;
 
   const ImagePickerWidget({
@@ -29,6 +33,8 @@ class ImagePickerWidget extends StatefulWidget {
     this.isWatermarkRequired = true,
     this.isWatermarking,
     required this.onChanged,
+    this.multiSource = false,
+    this.backgroundColor,
   });
 
   @override
@@ -41,8 +47,56 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   late ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
   Future<void> _takeImage() async {
+    if (widget.multiSource) {
+      OverlayManager.showSheet(
+          body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.w),
+            child: Text('Chụp trực tiếp hoặc upload từ thư viện',
+                style: context.textTheme.h3
+                    ?.copyWith(color: AppColors.nightRider)),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40.w),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () async => await _take(ImageSource.camera),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset(AppIcons.sourceCamera),
+                        Text('Camera',
+                            style: context.textTheme.body1
+                                ?.copyWith(color: AppColors.nightRider))
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async => await _take(ImageSource.gallery),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset(AppIcons.image),
+                        Text('Upload',
+                            style: context.textTheme.body1
+                                ?.copyWith(color: AppColors.nightRider))
+                      ],
+                    ),
+                  )
+                ]),
+          )
+        ],
+      ));
+    } else {
+      await _take(ImageSource.camera);
+    }
+  }
+
+  Future<void> _take(ImageSource source) async {
     if (isWatermarking.value == false) {
-      final file = await _service.pickImage(720, 1280, 90);
+      final file = await _service.pickImage(source: source, 720, 1280, 90);
       if (file != null) {
         final time = await _timeService.ntpDateTime();
         if (widget.isWatermarkRequired) {
@@ -106,7 +160,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               }),
         ),
         decoration: BoxDecoration(
-            color: AppColors.aliceBlue,
+            color: widget.backgroundColor ?? AppColors.aliceBlue,
             borderRadius: BorderRadius.circular(13.33.sqr)),
       ),
     );

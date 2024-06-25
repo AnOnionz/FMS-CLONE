@@ -9,12 +9,12 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/profile/presentation/widgets/custom_checkbox_group.dart';
+import 'package:fms/features/profile/presentation/widgets/profile_date_picker.dart';
 
 import '../../../../core/widgets/date_picker.dart';
 import '../../../../core/widgets/image_profile.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import 'dropdown_field.dart';
-import 'profile_box.dart';
 
 class UserInformation extends StatefulWidget {
   const UserInformation({super.key});
@@ -44,7 +44,12 @@ class _UserInformationState extends State<UserInformation>
 
   @override
   Widget build(BuildContext context) {
-    return ProfileBox(
+    return Container(
+      width: 100.wPerc,
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.all(24.w),
+      decoration: BoxDecoration(
+          color: AppColors.white, borderRadius: BorderRadius.circular(16.sqr)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -101,7 +106,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
           AppTextFormField(
             label: 'Số điện thoại',
             isRequired: true,
@@ -109,7 +114,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
           AppTextFormField(
             label: 'CMND/CCCD',
             isRequired: true,
@@ -117,7 +122,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
           AppTextFormField(
             label: 'Email',
             isRequired: true,
@@ -125,7 +130,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
           Row(
             children: [
               Text('Giới tính:',
@@ -137,40 +142,12 @@ class _UserInformationState extends State<UserInformation>
                 onSelected: (value) {},
               ),
             ],
-          ).bottom12,
-          DatePicker(
-            lastDate: lastBirthDay,
-            decoration: InputDecoration(
-                hintText: 'Ngày tháng năm sinh',
-                hintStyle:
-                    context.textTheme.body1?.copyWith(color: AppColors.nobel),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                suffixIconConstraints: BoxConstraints(),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.only(right: 16.w),
-                  child: SvgPicture.asset(
-                    AppIcons.calendar,
-                    height: 18.w,
-                    colorFilter:
-                        ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.sqr),
-                    borderSide: BorderSide(color: AppColors.nobel)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.sqr),
-                    borderSide: BorderSide(color: AppColors.nobel)),
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.sqr),
-                    borderSide:
-                        BorderSide(color: AppColors.fireBrick, width: 2.h)),
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.sqr),
-                    borderSide:
-                        BorderSide(color: AppColors.summerSky, width: 2.h))),
-          ).bottom12,
+          ).bottom18,
+          ProfileDatePicker(
+                  lastDate: lastBirthDay,
+                  onChanged: (time) {},
+                  title: 'Ngày tháng năm sinh')
+              .bottom18,
           AppTextFormField(
             label: 'Nơi sinh',
             isRequired: false,
@@ -178,11 +155,19 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
           DropdownField(
             hint: 'Trình độ học vấn',
-            values: [1, 2, 3],
-          ).bottom12,
+            values: [
+              'Cao học',
+              'Đại Học',
+              'Cao Đẳng',
+              'Trung Cấp',
+              'Phổ thông trung học',
+              'Khác'
+            ],
+            width: 100.wPerc - 80.w,
+          ).bottom18,
           AppTextFormField(
             label: 'Mã số thuế',
             isRequired: false,
@@ -190,7 +175,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
           AppTextFormField(
             label: 'Số BHXH',
             isRequired: false,
@@ -198,7 +183,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom12,
+          ).bottom18,
         ],
       ),
     );

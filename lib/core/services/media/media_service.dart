@@ -23,7 +23,7 @@ final class MediaService {
       {ImageSource source = ImageSource.camera}) async {
     try {
       final XFile? pickedFile;
-      if (settings?.useCameraZ ?? false) {
+      if (source == ImageSource.camera && (settings?.useCameraZ ?? false)) {
         pickedFile = await Modular.to.pushNamed(CameraModule.route);
       } else {
         pickedFile = await _picker.pickImage(

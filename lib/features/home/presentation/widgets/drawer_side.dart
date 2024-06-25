@@ -17,6 +17,8 @@ import 'package:fms/features/setting/setting_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../../core/constant/keys.dart';
+import '../../../../core/environment/env.dart';
 import '../../../../core/widgets/image_profile.dart';
 import '../bloc/necessary_bloc.dart';
 
@@ -164,7 +166,8 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                         indent: 28.w,
                                       ),
                                     ),
-                                    _rowInfo(context, 'Ứng dụng', 'FMS 2024'),
+                                    _rowInfo(context, 'Ứng dụng',
+                                        env.variables[Keys.APP_NAME] as String),
                                     SizedBox(
                                       height: 8.h,
                                     ),

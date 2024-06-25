@@ -5,7 +5,14 @@ class DatePicker extends StatefulWidget {
   final InputDecoration? decoration;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  DatePicker({super.key, this.decoration, this.firstDate, this.lastDate});
+  final Function(DateTime time) onSelected;
+
+  DatePicker(
+      {super.key,
+      this.decoration,
+      this.firstDate,
+      this.lastDate,
+      required this.onSelected});
 
   @override
   State<DatePicker> createState() => _DatePickerState();
@@ -24,13 +31,14 @@ class _DatePickerState extends State<DatePicker> {
     if (selectedDay != null) {
       setState(() {
         controller.text = kdMy.format(selectedDay);
+        widget.onSelected(selectedDay);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       readOnly: true,
       onTap: () => selectDay(context),

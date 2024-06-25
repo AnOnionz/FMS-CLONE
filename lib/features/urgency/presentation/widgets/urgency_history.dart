@@ -15,7 +15,9 @@ class UrgencyHistory extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.h),
       child: Column(
         children: [
-          DatePicker(),
+          DatePicker(
+            onSelected: (DateTime time) {},
+          ),
           Expanded(
             child: CustomScrollView(
               shrinkWrap: true,

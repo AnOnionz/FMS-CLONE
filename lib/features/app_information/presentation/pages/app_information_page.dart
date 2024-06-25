@@ -8,6 +8,8 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/constant/images.dart';
+import '../../../../core/constant/keys.dart';
+import '../../../../core/environment/env.dart';
 import '../../../../core/styles/theme.dart';
 import '../widgets/information_box.dart';
 
@@ -75,7 +77,9 @@ class AppInformationPage extends StatelessWidget with GeneralDataMixin {
                             leading: 'Bản phát hành:',
                             info: packageInfo.buildNumber),
                         space,
-                        RowInfo(leading: 'Dự án', info: 'FMS 2024'),
+                        RowInfo(
+                            leading: 'Dự án',
+                            info: env.variables[Keys.APP_NAME] as String),
                       ],
                     );
                   }

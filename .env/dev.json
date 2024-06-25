@@ -1,7 +1,7 @@
 {
-    "appname": "FMS 2024",
-    "env": "staging",
-    "baseURL": "https://api-staging-fms.outcome.asia",
+    "appname": "FMS Demo",
+    "baseURL1": "https://api-staging-fms.outcome.asia",
+    "baseURL": "https://api-demo-fms.outcome.asia",
     "AUTH0_DOMAIN":"demo-nest.jp.auth0.com",
     "AUTH0_CLIENT_ID":"GHA3DLZC4iTWWxmNfWWTS6W9nyB09n8I",
     "AUTH0_CUSTOM_SCHEME":"demo"

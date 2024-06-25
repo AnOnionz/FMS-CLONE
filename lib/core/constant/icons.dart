@@ -79,4 +79,7 @@ class AppIcons {
   static String profileError = 'profile_error'.icon.svg;
   static String profileEdit = 'profile_edit'.icon.svg;
   static String cameraProfile = 'camera_profile'.icon.svg;
+  static String expanded = 'expanded'.icon.svg;
+  static String image = 'image'.icon.svg;
+  static String sourceCamera = 'source_camera'.icon.svg;
 }

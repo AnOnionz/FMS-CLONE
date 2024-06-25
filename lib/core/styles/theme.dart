@@ -40,6 +40,7 @@ ThemeData lightTheme = ThemeData(
       background: AppColors.aliceBlue,
       primary: AppColors.blackRussian,
     ),
+    splashFactory: NoSplash.splashFactory,
     visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
     extensions: [AppTextTheme.fallback()]);
 
