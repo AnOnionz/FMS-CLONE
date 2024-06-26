@@ -79,7 +79,7 @@ void showRequiredTask(
               color: AppColors.orange)));
 }
 
-void showRequiredProfile({required VoidCallback onPressed}) {
+void showRequiredFaceVerified({required VoidCallback onPressed}) {
   showFailure(
     title: 'Chưa có hình ảnh trong Profile',
     icon: SvgPicture.asset(AppIcons.requiredProfile),
@@ -90,7 +90,7 @@ void showRequiredProfile({required VoidCallback onPressed}) {
   );
 }
 
-void showProfileInvalid({required VoidCallback onPressed}) {
+void showFaceNotFound({required VoidCallback onPressed}) {
   showFailure(
     title: 'Hình ảnh không hợp lệ',
     icon: SvgPicture.asset(AppIcons.profileError),
@@ -101,7 +101,7 @@ void showProfileInvalid({required VoidCallback onPressed}) {
   );
 }
 
-void showProfileNotMatch({required VoidCallback onPressed}) {
+void showFaceNotMatch({required VoidCallback onPressed}) {
   showFailure(
     title: 'Gương mặt không khớp',
     icon: SvgPicture.asset(AppIcons.requiredProfile),

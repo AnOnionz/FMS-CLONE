@@ -14,6 +14,7 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/common_feature.dart';
 import 'package:fms/features/home/presentation/widgets/drawer_side.dart';
 import 'package:fms/features/home/presentation/widgets/tasks.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../general/presentation/bloc/general_bloc.dart';
@@ -27,7 +28,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with GeneralDataMixin {
+class _HomePageState extends State<HomePage> with GeneralDataMixin, UserMixin {
   final NecessaryBloc _necessaryBloc = Modular.get();
   final bloc = Modular.get<GeneralBloc>();
 
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin {
                         final packageInfo = snapshot.data!;
 
                         return Text(
-                          '${general.project.id}-${general.user!.phone}-${packageInfo.version}-${kdM.format(general.createdDate)}-${Platform.operatingSystem}',
+                          '${general.project.id}-${user!.phone}-${packageInfo.version}-${kdM.format(general.createdDate)}-${Platform.operatingSystem}',
                           style: context.textTheme.caption3,
                         );
                       }

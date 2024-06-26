@@ -12,6 +12,7 @@ import 'package:fms/features/app_information/app_infomation_module.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/presentation/widgets/logout_button.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/setting/setting_module.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
@@ -22,7 +23,7 @@ import '../../../../core/environment/env.dart';
 import '../../../../core/widgets/image_profile.dart';
 import '../bloc/necessary_bloc.dart';
 
-class DrawerSide extends StatelessWidget with GeneralDataMixin {
+class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
   const DrawerSide({super.key});
 
   GeneralBloc get _generalBloc => Modular.get<GeneralBloc>();
@@ -59,23 +60,22 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                     .copyWith(color: AppColors.blackRussian),
                                 child: Column(
                                   children: [
-                                    (general.user != null)
+                                    (user != null)
                                         ? Column(
                                             children: [
                                               ImageProfile(
-                                                  imageUrl: general
-                                                              .user!.picture ==
-                                                          null
-                                                      ? null
-                                                      : general.user!.picture
-                                                          .toString()),
+                                                  imageUrl:
+                                                      user!.picture == null
+                                                          ? null
+                                                          : user!.picture
+                                                              .toString()),
                                               SizedBox(height: 20.h),
-                                              (general.user!.name != null)
+                                              (user!.name != null)
                                                   ? Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 8.h),
                                                       child: Text(
-                                                        general.user!.name!,
+                                                        user!.name!,
                                                         style: context
                                                             .textTheme.subtitle1
                                                             ?.copyWith(
@@ -84,12 +84,12 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin {
                                                       ),
                                                     )
                                                   : SizedBox.shrink(),
-                                              (general.user!.email != null)
+                                              (user!.email != null)
                                                   ? Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 8.h),
                                                       child: Text(
-                                                        general.user!.email!,
+                                                        user!.email!,
                                                         style: context
                                                             .textTheme.body1
                                                             ?.copyWith(

@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -52,12 +53,11 @@ class GeneralRepository extends Repository
   }
 
   @override
-  Future<Result<(ConfigEntity?, EmployeeUserEntity?)>> getRemoteConfig(
-      WorkPlaceEntity model) {
+  Future<Result<ConfigEntity?>> getRemoteConfig(WorkPlaceEntity model) {
     return todo(() async {
       final config = await _remote.getConfigs(model);
-      final user = await _remote.getUserInfo();
-      return Right((config, user));
+
+      return Right(config);
     });
   }
 
@@ -71,7 +71,7 @@ class GeneralRepository extends Repository
 
   @override
   Future<Result<GeneralEntity>> refreshGenaral(
-      AttendanceEntity attendance) async {
+      {AttendanceEntity? attendance}) async {
     return todo(() async {
       general = general!.copyWith(attendance: attendance);
       _local.cacheGeneral(general!);

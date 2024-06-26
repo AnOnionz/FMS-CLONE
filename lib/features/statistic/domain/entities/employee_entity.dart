@@ -1,10 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:fms/core/utilities/parser.dart';
 import 'package:isar/isar.dart';
 
 part 'employee_entity.g.dart';
 
+@collection
 class EmployeeEntity {
+  Id get isarId => fastHash(id.toString());
   final int id;
   final EmployeeUserEntity user;
 
@@ -55,6 +59,9 @@ class EmployeeUserEntity {
   final String? email;
   final String? phone;
   final String? gender;
+  final bool? isFaceVerified;
+  final bool? isProfileVerified;
+  final bool? hasPendingProfile;
   EmployeeUserEntity({
     this.id,
     this.name,
@@ -63,6 +70,9 @@ class EmployeeUserEntity {
     this.email,
     this.phone,
     this.gender,
+    this.isFaceVerified,
+    this.isProfileVerified,
+    this.hasPendingProfile,
   });
 
   EmployeeUserEntity copyWith({
@@ -73,6 +83,9 @@ class EmployeeUserEntity {
     String? email,
     String? phone,
     String? gender,
+    bool? isFaceVerified,
+    bool? isProfileVerified,
+    bool? hasPendingProfile,
   }) {
     return EmployeeUserEntity(
       id: id ?? this.id,
@@ -82,6 +95,9 @@ class EmployeeUserEntity {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       gender: gender ?? this.gender,
+      isFaceVerified: isFaceVerified ?? this.isFaceVerified,
+      isProfileVerified: isProfileVerified ?? this.isProfileVerified,
+      hasPendingProfile: hasPendingProfile ?? this.hasPendingProfile,
     );
   }
 
@@ -94,18 +110,29 @@ class EmployeeUserEntity {
       'email': email,
       'phone': phone,
       'gender': gender,
+      'isFaceVerified': isFaceVerified,
+      'isProfileVerified': isProfileVerified,
+      'hasPendingProfile': hasPendingProfile,
     };
   }
 
   factory EmployeeUserEntity.fromMap(Map<String, dynamic> map) {
     return EmployeeUserEntity(
-      id: map['id'] as int,
-      name: map['name'] as String,
-      username: map['username'] as String,
-      picture: map['picture'] as String?,
-      email: map['email'] as String?,
-      phone: map['phone'] as String?,
-      gender: map['gender'] as String?,
+      id: map['id'] != null ? map['id'] as int : null,
+      name: map['name'] != null ? map['name'] as String : null,
+      username: map['username'] != null ? map['username'] as String : null,
+      picture: map['picture'] != null ? map['picture'] as String : null,
+      email: map['email'] != null ? map['email'] as String : null,
+      phone: map['phone'] != null ? map['phone'] as String : null,
+      gender: map['gender'] != null ? map['gender'] as String : null,
+      isFaceVerified:
+          map['isFaceVerified'] != null ? map['isFaceVerified'] as bool : null,
+      isProfileVerified: map['isProfileVerified'] != null
+          ? map['isProfileVerified'] as bool
+          : null,
+      hasPendingProfile: map['hasPendingProfile'] != null
+          ? map['hasPendingProfile'] as bool
+          : null,
     );
   }
 
@@ -116,6 +143,6 @@ class EmployeeUserEntity {
 
   @override
   String toString() {
-    return 'EmployeeUserEntity(id: $id, name: $name, username: $username, picture: $picture, email: $email, phone: $phone, gender: $gender)';
+    return 'EmployeeUserEntity(id: $id, name: $name, username: $username, picture: $picture, email: $email, phone: $phone, gender: $gender, isFaceVerified: $isFaceVerified, isProfileVerified: $isProfileVerified, hasPendingProfile: $hasPendingProfile)';
   }
 }

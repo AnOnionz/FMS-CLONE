@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/images/data/datasource/images_remote_datasource.dart';
@@ -9,6 +11,7 @@ import '../../../images/data/models/image_upload_model.dart';
 import '../../domain/entities/attendance_entity.dart';
 
 abstract class IAttendanceRemoteDataSource {
+  Future<void> faceVerification({required XFile file});
   Future<AttendanceData?> postAttendance(
       {XFile? file,
       Position? position,
@@ -24,6 +27,20 @@ abstract class IAttendanceRemoteDataSource {
 class AttendanceRemoteDataSource extends ImagesRemoteDataSource
     implements IAttendanceRemoteDataSource {
   AttendanceRemoteDataSource(super.dio);
+
+  @override
+  Future<void> faceVerification({required XFile file}) async {
+    final FormData _formData = FormData.fromMap({
+      'face': MultipartFile.fromBytes(
+        await file.readAsBytes(),
+        filename: file.name,
+      )
+    });
+    final _resp =
+        await dio.post(data: _formData, path: '/app/face-verification');
+
+    Fx.log(_resp);
+  }
 
   Future<AttendanceData?> postAttendance(
       {XFile? file,

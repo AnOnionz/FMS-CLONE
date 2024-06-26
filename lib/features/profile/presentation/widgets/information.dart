@@ -8,6 +8,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/widgets/custom_checkbox_group.dart';
 import 'package:fms/features/profile/presentation/widgets/profile_date_picker.dart';
 
@@ -24,7 +25,7 @@ class UserInformation extends StatefulWidget {
 }
 
 class _UserInformationState extends State<UserInformation>
-    with GeneralDataMixin {
+    with GeneralDataMixin, UserMixin {
   DateTime lastBirthDay = DateTime.now();
   @override
   void initState() {
@@ -57,9 +58,8 @@ class _UserInformationState extends State<UserInformation>
             children: [
               ImageProfile(
                   size: Size(80.w, 80.w),
-                  imageUrl: general.user!.picture == null
-                      ? null
-                      : general.user!.picture.toString()),
+                  imageUrl:
+                      user!.picture == null ? null : user!.picture.toString()),
               Positioned(
                 right: -5.h,
                 bottom: -5.h,
@@ -79,9 +79,9 @@ class _UserInformationState extends State<UserInformation>
             ],
           ),
           SizedBox(height: 16.h),
-          (general.user!.name != null)
+          (user!.name != null)
               ? Text(
-                  general.user!.name!,
+                  user!.name!,
                   style: context.textTheme.h3?.copyWith(color: AppColors.black),
                 )
               : SizedBox.shrink(),
@@ -183,7 +183,7 @@ class _UserInformationState extends State<UserInformation>
               setState(() {});
             },
             textInputAction: TextInputAction.next,
-          ).bottom18,
+          ),
         ],
       ),
     );

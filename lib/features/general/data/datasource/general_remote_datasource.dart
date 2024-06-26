@@ -7,7 +7,6 @@ import '../../domain/entities/config_entity.dart';
 
 abstract class IGeneralRemoteDatasource {
   Future<ConfigEntity?> getConfigs(WorkPlaceEntity model);
-  Future<EmployeeUserEntity?> getUserInfo();
 }
 
 class GeneralRemoteDatasorce extends RemoteDatasource
@@ -20,12 +19,5 @@ class GeneralRemoteDatasorce extends RemoteDatasource
 
     return parseJson<ConfigEntity>(
         (json: _resp, fromJson: ConfigEntity.fromMap));
-  }
-
-  @override
-  Future<EmployeeUserEntity?> getUserInfo() async {
-    final _resp = await dio.get(path: '/users/me');
-    return parseJson<EmployeeUserEntity>(
-        (json: _resp, fromJson: EmployeeUserEntity.fromMap));
   }
 }

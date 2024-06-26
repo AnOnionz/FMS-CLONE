@@ -20,6 +20,14 @@ class AttendanceRepositoryImpl extends Repository
       : _remote = remote;
 
   @override
+  Future<Result<void>> faceVerification({required XFile file}) async {
+    return todo(() async {
+      await _remote.faceVerification(file: file);
+      return Right(Never);
+    });
+  }
+
+  @override
   Future<Result<AttendanceData?>> postAttendance({
     XFile? file,
     Position? position,

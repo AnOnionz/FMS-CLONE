@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/general/general_module.dart';
+import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/sync/sync_module.dart';
 import 'package:fms/features/work_place/data/datasources/work_place_datasource.dart';
@@ -25,7 +26,8 @@ class WorkPlaceModule extends Module {
   static const String selectBooth = 'select_booth';
   static const String config = 'config';
   @override
-  List<Module> get imports => [SignModule(), GeneralModule(), SyncModule()];
+  List<Module> get imports =>
+      [SignModule(), GeneralModule(), SyncModule(), ProfileModule()];
 
   @override
   void binds(Injector i) {

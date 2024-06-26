@@ -82,4 +82,6 @@ class AppIcons {
   static String expanded = 'expanded'.icon.svg;
   static String image = 'image'.icon.svg;
   static String sourceCamera = 'source_camera'.icon.svg;
+  static String experienceAdd = 'experience_plus'.icon.svg;
+  static String experienceRemove = 'experience_remove'.icon.svg;
 }

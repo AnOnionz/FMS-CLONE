@@ -11,18 +11,20 @@ import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/home/home_module.dart';
 import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:fms/features/note/domain/usecases/get_notes_not_completed_usecase.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/report/domain/usecases/get_photos_not_completed_usecase.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/sync/sync_module.dart';
 import '../../../../core/services/connectivity/connectivity_service.dart';
 import '../../../../core/widgets/popup.dart';
+import '../../../profile/profile_module.dart';
 import '../../domain/entities/general_item_data.dart';
 
 part 'necessary_event.dart';
 part 'necessary_state.dart';
 
 class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
-    with GeneralDataMixin {
+    with GeneralDataMixin, UserMixin {
   final GetPhotosNotCompletedUsecase getPhotosNotCompleted;
   final GetNotesNotCompletedUsecase getNotesNotCompleted;
   final GetQuantitiesNotCompletedUsecase getQuantitiesNotCompleted;
@@ -66,10 +68,6 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
                 GeneralFeatureData(general: general, feature: state.feature));
       }
 
-      if (state is NecessaryUnfastenOut) {
-        state.action();
-      }
-
       if (state is NecessaryTask) {
         showRequiredTask(
           features: state.features,
@@ -94,6 +92,16 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
               arguments:
                   GeneralFeatureData(general: general, feature: state.feature));
         });
+      }
+      if (state is NecessaryFaceVerified) {
+        showRequiredFaceVerified(
+          onPressed: () {
+            Modular.to.pushNamed(ProfileModule.route);
+          },
+        );
+      }
+      if (state is NecessaryUnfastenOut) {
+        state.action();
       }
     });
   }
@@ -133,6 +141,14 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
         }
       }
     });
+
+    if (!_isLock &&
+        event.feature.featureAttendance != null &&
+        event.feature.featureAttendance!.isFaceRequired! &&
+        !(user!.isFaceVerified ?? false)) {
+      emit(NecessaryFaceVerified(feature: event.feature));
+      _isLock = true;
+    }
     if (!_isLock) {
       emit(NecessaryUnfastenIn(feature: event.feature));
     }

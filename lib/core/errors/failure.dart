@@ -100,3 +100,12 @@ class RequiredAllTaskDoneFailure extends Failure {
             error,
             stackTrace);
 }
+
+class FaceVerificationFailure extends Failure {
+  const FaceVerificationFailure(
+      {String? message, Object? error, StackTrace? stackTrace})
+      : super(
+            'Gương mặt trong hình không khớp với thông tin hồ sơ. Vui lòng chụp lại hình với đúng người cần xác nhận.',
+            error,
+            stackTrace);
+}

@@ -2284,23 +2284,28 @@ const FeatureAttendanceSchema = Schema(
       name: r'id',
       type: IsarType.long,
     ),
-    r'isLocationRequired': PropertySchema(
+    r'isFaceRequired': PropertySchema(
       id: 1,
+      name: r'isFaceRequired',
+      type: IsarType.bool,
+    ),
+    r'isLocationRequired': PropertySchema(
+      id: 2,
       name: r'isLocationRequired',
       type: IsarType.bool,
     ),
     r'isPhotoRequired': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'isPhotoRequired',
       type: IsarType.bool,
     ),
     r'isWatermarkRequired': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'isWatermarkRequired',
       type: IsarType.bool,
     ),
     r'mustWithinRadius': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'mustWithinRadius',
       type: IsarType.double,
     )
@@ -2327,10 +2332,11 @@ void _featureAttendanceSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.id);
-  writer.writeBool(offsets[1], object.isLocationRequired);
-  writer.writeBool(offsets[2], object.isPhotoRequired);
-  writer.writeBool(offsets[3], object.isWatermarkRequired);
-  writer.writeDouble(offsets[4], object.mustWithinRadius);
+  writer.writeBool(offsets[1], object.isFaceRequired);
+  writer.writeBool(offsets[2], object.isLocationRequired);
+  writer.writeBool(offsets[3], object.isPhotoRequired);
+  writer.writeBool(offsets[4], object.isWatermarkRequired);
+  writer.writeDouble(offsets[5], object.mustWithinRadius);
 }
 
 FeatureAttendance _featureAttendanceDeserialize(
@@ -2341,10 +2347,11 @@ FeatureAttendance _featureAttendanceDeserialize(
 ) {
   final object = FeatureAttendance(
     id: reader.readLongOrNull(offsets[0]),
-    isLocationRequired: reader.readBoolOrNull(offsets[1]),
-    isPhotoRequired: reader.readBoolOrNull(offsets[2]),
-    isWatermarkRequired: reader.readBoolOrNull(offsets[3]),
-    mustWithinRadius: reader.readDoubleOrNull(offsets[4]),
+    isFaceRequired: reader.readBoolOrNull(offsets[1]),
+    isLocationRequired: reader.readBoolOrNull(offsets[2]),
+    isPhotoRequired: reader.readBoolOrNull(offsets[3]),
+    isWatermarkRequired: reader.readBoolOrNull(offsets[4]),
+    mustWithinRadius: reader.readDoubleOrNull(offsets[5]),
   );
   return object;
 }
@@ -2365,6 +2372,8 @@ P _featureAttendanceDeserializeProp<P>(
     case 3:
       return (reader.readBoolOrNull(offset)) as P;
     case 4:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 5:
       return (reader.readDoubleOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2443,6 +2452,34 @@ extension FeatureAttendanceQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureAttendance, FeatureAttendance, QAfterFilterCondition>
+      isFaceRequiredIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isFaceRequired',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureAttendance, FeatureAttendance, QAfterFilterCondition>
+      isFaceRequiredIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isFaceRequired',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureAttendance, FeatureAttendance, QAfterFilterCondition>
+      isFaceRequiredEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isFaceRequired',
+        value: value,
       ));
     });
   }

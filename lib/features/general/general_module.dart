@@ -9,6 +9,7 @@ import 'package:fms/features/general/domain/usecase/create_general_usecase.dart'
 import 'package:fms/features/general/domain/usecase/get_general_usecase.dart';
 import 'package:fms/features/general/domain/usecase/refresh_general_usecase.dart';
 import 'package:fms/features/general/presentation/bloc/general_bloc.dart';
+import 'package:fms/features/profile/profile_module.dart';
 
 import '../../routes/core_module.dart';
 import 'data/datasource/general_local_datasource.dart';
@@ -16,7 +17,8 @@ import 'domain/usecase/get_config_usecase.dart';
 
 class GeneralModule extends Module {
   @override
-  List<Module> get imports => [CoreModule(), AuthenticationModule()];
+  List<Module> get imports =>
+      [CoreModule(), AuthenticationModule(), ProfileModule()];
 
   @override
   void binds(Injector i) {

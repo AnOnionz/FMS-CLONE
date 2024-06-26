@@ -79,7 +79,7 @@ class _AppearanceState extends State<Appearance> {
             child: DropdownField(
                 width: width,
                 hint: 'Size giày',
-                values: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']),
+                values: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44]),
           ),
         ],
       ).bottom18,

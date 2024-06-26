@@ -20,6 +20,7 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
+import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/services/map/google_map_service.dart';
@@ -102,14 +103,20 @@ class _AttendancePageState extends State<AttendancePage> {
       });
     }
     if (state is AttendanceInfoFailure) {
-      showFailure(
-          title: 'Tải dữ liệu thất bại',
-          icon: SvgPicture.asset(AppIcons.requiredDownload),
-          message: 'Kiểm tra lại đường truyền mạng và thử lại',
-          btnText: 'Thử lại',
-          onPressed: () {
-            _getInfo();
-          });
+      if (state.failure is FaceVerificationFailure) {
+        showFaceNotMatch(
+          onPressed: () {},
+        );
+      } else {
+        showFailure(
+            title: 'Tải dữ liệu thất bại',
+            icon: SvgPicture.asset(AppIcons.requiredDownload),
+            message: 'Kiểm tra lại đường truyền mạng và thử lại',
+            btnText: 'Thử lại',
+            onPressed: () {
+              _getInfo();
+            });
+      }
     }
   }
 

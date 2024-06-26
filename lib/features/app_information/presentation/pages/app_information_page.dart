@@ -5,6 +5,7 @@ import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/app_information/presentation/widgets/row_info.dart';
 import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/constant/images.dart';
@@ -13,7 +14,8 @@ import '../../../../core/environment/env.dart';
 import '../../../../core/styles/theme.dart';
 import '../widgets/information_box.dart';
 
-class AppInformationPage extends StatelessWidget with GeneralDataMixin {
+class AppInformationPage extends StatelessWidget
+    with GeneralDataMixin, UserMixin {
   AppInformationPage({super.key});
 
   final credentials = Modular.get<AuthenticationRepository>().credentials;
@@ -55,7 +57,7 @@ class AppInformationPage extends StatelessWidget with GeneralDataMixin {
                   space,
                   // RowInfo(leading: 'Mã nhân sự', info: 'MA0001'),
                   // space,
-                  RowInfo(leading: 'SĐT', info: general.user!.phone ?? ''),
+                  RowInfo(leading: 'SĐT', info: user!.phone ?? ''),
                   space,
                   RowInfo(leading: 'Địa chỉ', info: '')
                 ],

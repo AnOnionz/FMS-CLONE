@@ -14,6 +14,7 @@ import 'features/app/app_module.dart';
 import 'features/app/presentation/pages/app.dart';
 import 'features/general/domain/entities/general_entity.dart';
 import 'features/setting/domain/entities/setting_app.dart';
+import 'features/statistic/domain/entities/employee_entity.dart';
 
 void main() async {
   final WidgetsBinding widgetsBinding =
@@ -30,7 +31,8 @@ void main() async {
     PhotoEntitySchema,
     NoteEntitySchema,
     CrawlQuantityEntitySchema,
-    OrderEntitySchema
+    OrderEntitySchema,
+    EmployeeEntitySchema,
   ]);
   runApp(ModularApp(
       module: AppModule(),

@@ -47,6 +47,10 @@ final class NecessaryTask extends NecessaryState {
   NecessaryTask({required this.features, required this.onClose});
 }
 
+final class NecessaryFaceVerified extends NecessaryStateHasData {
+  NecessaryFaceVerified({required super.feature});
+}
+
 final class NecessaryUnfastenOut extends NecessaryState {
   final Function action;
   NecessaryUnfastenOut({required this.action});

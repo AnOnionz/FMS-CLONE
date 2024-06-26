@@ -20,7 +20,6 @@ class GeneralEntity {
   final ConfigEntity config;
   final BoothEntity booth;
   final AttendanceEntity? attendance;
-  final EmployeeUserEntity? user;
   final DateTime createdDate;
 
   GeneralEntity({
@@ -29,7 +28,6 @@ class GeneralEntity {
     required this.outlet,
     required this.booth,
     required this.config,
-    required this.user,
     this.attendance,
     required this.createdDate,
   });
@@ -49,12 +47,11 @@ class GeneralEntity {
         booth: booth ?? this.booth,
         config: config ?? this.config,
         attendance: attendance ?? this.attendance,
-        createdDate: createdDate,
-        user: user ?? this.user);
+        createdDate: createdDate);
   }
 
   @override
   String toString() {
-    return 'GeneralEntity(identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth, attendance: $attendance, user: $user, createdDate: $createdDate)';
+    return 'GeneralEntity(identifer: $identifer, project: $project, outlet: $outlet, config: $config, booth: $booth, attendance: $attendance, createdDate: $createdDate)';
   }
 }

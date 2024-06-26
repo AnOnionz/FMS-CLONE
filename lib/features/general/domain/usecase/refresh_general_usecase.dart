@@ -10,6 +10,6 @@ class RefreshGeneralUseCase extends UseCase<GeneralEntity, AttendanceEntity> {
   RefreshGeneralUseCase(this.repository);
   @override
   Future<Result<GeneralEntity>> call(AttendanceEntity params) {
-    return repository.refreshGenaral(params);
+    return repository.refreshGenaral(attendance: params);
   }
 }

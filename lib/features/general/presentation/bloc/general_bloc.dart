@@ -12,6 +12,8 @@ import 'package:fms/features/general/domain/usecase/create_general_usecase.dart'
 import 'package:fms/features/general/domain/usecase/get_general_usecase.dart';
 
 import 'package:fms/features/general/domain/usecase/refresh_general_usecase.dart';
+import 'package:fms/features/profile/domain/usecases/get_user_info_usecase.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -21,15 +23,22 @@ import '../../domain/usecase/get_config_usecase.dart';
 part 'general_event.dart';
 part 'general_state.dart';
 
-class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
+class GeneralBloc extends Bloc<GeneralEvent, GeneralState> with UserMixin {
   final GetConfigUsecase _getConfig;
+  final GetUserInfoUsecase _getUserInfo;
   final RefreshGeneralUseCase _refreshGeneral;
   final GetAttendanceInfoUsecase _getAttendance;
   final CreateGeneralUseCase _createGeneral;
   final ClearGeneralUseCase _clearGeneral;
   final GetGeneralUseCase _getGeneral;
-  GeneralBloc(this._getConfig, this._refreshGeneral, this._getAttendance,
-      this._createGeneral, this._clearGeneral, this._getGeneral)
+  GeneralBloc(
+      this._getConfig,
+      this._refreshGeneral,
+      this._getAttendance,
+      this._createGeneral,
+      this._clearGeneral,
+      this._getGeneral,
+      this._getUserInfo)
       : super(GeneralInitial()) {
     on<GeneralFetch>((event, emit) async {
       emit(GeneralLoading());
@@ -48,24 +57,40 @@ class GeneralBloc extends Bloc<GeneralEvent, GeneralState> {
             project: event.workPlace.project!,
             outlet: event.workPlace.outlet!,
             booth: event.workPlace.booth!,
-            config: configData.$1!,
-            user: configData.$2!,
+            config: configData,
             createdDate: time.dMy());
 
         await _createGeneral(general);
 
-        final execute = await _getAttendance();
+        final execute1 = await _getUserInfo();
+        bool hasUserInfo = user != null;
+        Failure? userInfoFailure;
+        if (!hasUserInfo) {
+          hasUserInfo = execute1.fold((failure) {
+            userInfoFailure = failure;
+            return false;
+          }, (data) {
+            if (data == null) return false;
+            return true;
+          });
+        }
 
-        final attendanceInfo = execute.fold((failure) {
-          emit(GeneralFailure(failure: failure));
-          return null;
-        }, (data) => data);
-        if (attendanceInfo != null) {
-          final execute = await _refreshGeneral(attendanceInfo);
-          execute.fold((failure) => emit(GeneralFailure(failure: failure)),
-              (data) => emit(GeneralSuccess(general: general)));
+        if (hasUserInfo) {
+          final execute = await _getAttendance();
+
+          final attendanceInfo = execute.fold((failure) {
+            emit(GeneralFailure(failure: failure));
+            return null;
+          }, (data) => data);
+          if (attendanceInfo != null) {
+            final execute = await _refreshGeneral(attendanceInfo);
+            execute.fold((failure) => emit(GeneralFailure(failure: failure)),
+                (data) => emit(GeneralSuccess(general: general)));
+          } else {
+            emit(GeneralSuccess(general: general));
+          }
         } else {
-          emit(GeneralSuccess(general: general));
+          emit(GeneralFailure(failure: userInfoFailure));
         }
       }
     });

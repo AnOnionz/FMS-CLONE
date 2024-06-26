@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
+
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:isar/isar.dart';
 
 import '../../../../core/constant/type_def.dart';
 
@@ -224,6 +225,7 @@ class FeatureAttendance {
   final bool? isWatermarkRequired;
   final bool? isLocationRequired;
   final double? mustWithinRadius;
+  final bool? isFaceRequired;
 
   FeatureAttendance({
     this.id,
@@ -231,6 +233,7 @@ class FeatureAttendance {
     this.isWatermarkRequired,
     this.isLocationRequired,
     this.mustWithinRadius,
+    this.isFaceRequired,
   });
 
   Map<String, dynamic> toMap() {
@@ -240,16 +243,27 @@ class FeatureAttendance {
       'isWatermarkRequired': isWatermarkRequired,
       'isLocationRequired': isLocationRequired,
       'mustWithinRadius': mustWithinRadius,
+      'isFaceRequired': isFaceRequired,
     };
   }
 
   factory FeatureAttendance.fromMap(Map<String, dynamic> map) {
     return FeatureAttendance(
-      id: map['id'] as int,
-      isPhotoRequired: map['isPhotoRequired'] as bool,
-      isWatermarkRequired: map['isWatermarkRequired'] as bool,
-      isLocationRequired: map['isLocationRequired'] as bool,
-      mustWithinRadius: map['mustWithinRadius'] as double?,
+      id: map['id'] != null ? map['id'] as int : null,
+      isPhotoRequired: map['isPhotoRequired'] != null
+          ? map['isPhotoRequired'] as bool
+          : null,
+      isWatermarkRequired: map['isWatermarkRequired'] != null
+          ? map['isWatermarkRequired'] as bool
+          : null,
+      isLocationRequired: map['isLocationRequired'] != null
+          ? map['isLocationRequired'] as bool
+          : null,
+      mustWithinRadius: map['mustWithinRadius'] != null
+          ? map['mustWithinRadius'] as double
+          : null,
+      isFaceRequired:
+          map['isFaceRequired'] != null ? map['isFaceRequired'] as bool : null,
     );
   }
 
@@ -260,7 +274,7 @@ class FeatureAttendance {
 
   @override
   String toString() {
-    return 'FeatureAttendance(id: $id, isPhotoRequired: $isPhotoRequired, isWatermarkRequired: $isWatermarkRequired, isLocationRequired: $isLocationRequired, mustWithinRadius: $mustWithinRadius)';
+    return 'FeatureAttendance(id: $id, isPhotoRequired: $isPhotoRequired, isWatermarkRequired: $isWatermarkRequired, isLocationRequired: $isLocationRequired, mustWithinRadius: $mustWithinRadius, isFaceRequired: $isFaceRequired)';
   }
 }
 
