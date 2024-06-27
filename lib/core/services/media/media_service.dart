@@ -9,6 +9,7 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../database/database.dart';
 import '../location/location_service.dart';
@@ -109,16 +110,49 @@ final class MediaService {
   }
 
   Future<bool> faceDetector(XFile image) async {
+    InputImage inputImage;
+
+    if (Platform.isIOS) {
+      final File? iosImageProcessed = await bakeImageOrientation(image);
+      Fx.log(iosImageProcessed);
+      if (iosImageProcessed == null) {
+        return false;
+      }
+      inputImage = InputImage.fromFilePath(iosImageProcessed.path);
+    } else {
+      inputImage = InputImage.fromFilePath(image.path);
+    }
     final FaceDetector _faceDetector = FaceDetector(
-      options: FaceDetectorOptions(
-        enableContours: true,
-        enableLandmarks: true,
-      ),
+      options: FaceDetectorOptions(),
     );
-    final inputImage = InputImage.fromFilePath(image.path);
     final faces = await _faceDetector.processImage(inputImage);
+    await _faceDetector.close();
+    Fx.log(faces);
 
     return faces.isNotEmpty;
+  }
+
+  Future<File?> bakeImageOrientation(XFile pickedFile) async {
+    if (Platform.isIOS) {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = directory.path;
+      final filename = DateTime.now().millisecondsSinceEpoch.toString();
+
+      final img.Image? capturedImage =
+          img.decodeImage(await File(pickedFile.path).readAsBytes());
+
+      if (capturedImage == null) {
+        return null;
+      }
+
+      final img.Image orientedImage = img.bakeOrientation(capturedImage);
+
+      final imageToBeProcessed = await File('$path/$filename')
+          .writeAsBytes(img.encodeJpg(orientedImage));
+
+      return imageToBeProcessed;
+    }
+    return null;
   }
 
   Future<XFile?> addWatermark(XFile image) async {

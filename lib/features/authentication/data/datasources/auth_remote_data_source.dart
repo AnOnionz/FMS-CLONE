@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:fms/core/mixins/common.dart';
 
 import '../../../../core/constant/keys.dart';
 import '../../../../core/environment/env.dart';
@@ -61,7 +62,8 @@ class AuthRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
           useEphemeralSession: Platform.isIOS);
 
       return credentials;
-    } on WebAuthenticationException catch (_) {
+    } on WebAuthenticationException catch (e) {
+      Fx.log(e);
       return null;
     }
   }
