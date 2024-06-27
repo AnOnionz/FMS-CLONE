@@ -26,4 +26,13 @@ class ProfileRepositoryImpl extends Repository implements ProfileRepository {
       return Right(userInfo);
     });
   }
+
+  @override
+  Future<void> getLocalUser() async {
+    final _user = _local.getUser();
+
+    if (_user != null) {
+      user = _user;
+    }
+  }
 }

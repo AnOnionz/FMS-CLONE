@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/camera/camera_module.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -105,6 +106,19 @@ final class MediaService {
     } else {
       return null;
     }
+  }
+
+  Future<bool> faceDetector(XFile image) async {
+    final FaceDetector _faceDetector = FaceDetector(
+      options: FaceDetectorOptions(
+        enableContours: true,
+        enableLandmarks: true,
+      ),
+    );
+    final inputImage = InputImage.fromFilePath(image.path);
+    final faces = await _faceDetector.processImage(inputImage);
+
+    return faces.isNotEmpty;
   }
 
   Future<XFile?> addWatermark(XFile image) async {

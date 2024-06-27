@@ -4,4 +4,5 @@ import '../../../../core/constant/type_def.dart';
 
 abstract class ProfileRepository {
   Future<Result<EmployeeEntity?>> getUserInfo();
+  Future<void> getLocalUser();
 }

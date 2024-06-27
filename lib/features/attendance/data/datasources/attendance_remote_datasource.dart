@@ -31,15 +31,13 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
   @override
   Future<void> faceVerification({required XFile file}) async {
     final FormData _formData = FormData.fromMap({
-      'face': MultipartFile.fromBytes(
-        await file.readAsBytes(),
-        filename: file.name,
-      )
+      'face': MultipartFile.fromBytes(await file.readAsBytes(),
+          contentType: Headers.jsonMimeType
+              .change(type: 'image', subtype: file.name.split('.').last),
+          filename: file.name)
     });
-    final _resp =
-        await dio.post(data: _formData, path: '/app/face-verification');
 
-    Fx.log(_resp);
+    await dio.post(data: _formData, path: '/app/face-verification');
   }
 
   Future<AttendanceData?> postAttendance(

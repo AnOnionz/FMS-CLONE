@@ -239,6 +239,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       feature: widget.entity.feature,
                                       imagePickerButton: ImagePickerWidget(
                                         enable: _imageDynamic == null,
+                                        isFaceDetector: true,
                                         height: 60.h,
                                         onChanged: (file) {
                                           setState(() {

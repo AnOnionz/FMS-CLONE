@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
+import 'package:fms/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
@@ -29,6 +31,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
   final GeneralRepository _generalRepository;
+  final ProfileRepositoryImpl _profileRepository;
   final SyncBloc _syncBloc;
   final LocationService _locationService;
   final SyncProgressBloc _syncProgressBloc;
@@ -46,6 +49,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     this._syncBloc,
     this._syncProgressBloc,
     this._locationService,
+    this._profileRepository,
   ) : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -73,6 +77,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<void> _checkAuthenticationStatus(AuthenticationStatus status) async {
     if (status == AuthenticationStatus.authenticated) {
+      await _profileRepository.getLocalUser();
       await _generalRepository.getLocalGeneral()
         ..fold((failure) => Modular.to.navigate(WorkPlaceModule.route), (data) {
           if (data != null) {
@@ -121,6 +126,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       if (isUseLocation == true) {
         _locationService.enablePositionSubscription();
       }
+      Future.delayed(
+          15.seconds, () => _locationService.cancelPositionSubscription());
     }
   }
 

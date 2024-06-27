@@ -66,8 +66,7 @@ final class LocationService extends ChangeNotifier {
 
   StreamSubscription<Position>? _positionStreamSubscription;
 
-  Stream<Position> get onPositionChanged =>
-      Geolocator.getPositionStream(locationSettings: _getLocationSettings());
+  Stream<Position> get onPositionChanged => Geolocator.getPositionStream();
 
   Future<bool> _handlePermission(
       [StreamSubscription<Position>? subscription]) async {
@@ -146,15 +145,14 @@ final class LocationService extends ChangeNotifier {
   Future<Position?> getCurrentPosition() async {
     try {
       final hasPermission =
-          await _handlePermission().timeout(5.seconds, onTimeout: () => false);
+          await _handlePermission().timeout(4.seconds, onTimeout: () => false);
 
       if (!hasPermission) {
         return currentLocation;
       }
 
-      final userLocation = await _geolocator
-          .getCurrentPosition(locationSettings: _getLocationSettings())
-          .timeout(5.seconds);
+      final userLocation =
+          await _geolocator.getCurrentPosition().timeout(6.seconds);
 
       positionUpdate(userLocation);
 

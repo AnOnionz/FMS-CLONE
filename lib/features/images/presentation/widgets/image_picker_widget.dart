@@ -7,6 +7,7 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
+import 'package:fms/features/home/presentation/widgets/notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -25,6 +26,7 @@ class ImagePickerWidget extends StatefulWidget {
   final void Function(ImageDynamic image) onChanged;
   final Color? backgroundColor;
   final ValueNotifier<bool>? isWatermarking;
+  final bool isFaceDetector;
 
   const ImagePickerWidget({
     super.key,
@@ -35,6 +37,7 @@ class ImagePickerWidget extends StatefulWidget {
     required this.onChanged,
     this.multiSource = false,
     this.backgroundColor,
+    this.isFaceDetector = false,
   });
 
   @override
@@ -99,6 +102,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       final file = await _service.pickImage(source: source, 720, 1280, 90);
       if (file != null) {
         final time = await _timeService.ntpDateTime();
+        if (widget.isFaceDetector) {
+          final hasFace = await _service.faceDetector(file);
+          if (!hasFace) {
+            showFaceNotFound(onPressed: _takeImage);
+            return;
+          }
+          ;
+        }
         if (widget.isWatermarkRequired) {
           isWatermarking.value = true;
           widget.isWatermarking?.value = true;
