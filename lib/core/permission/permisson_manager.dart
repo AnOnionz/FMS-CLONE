@@ -19,7 +19,9 @@ class PermissionManager {
       ph.Permission permission) async {
     if (canRequestPermisson(permission)) {
       try {
-        if (!await permission.isGranted) {
+        final isDenied = await permission.isDenied;
+        final isPermanentlyDenied = await permission.isPermanentlyDenied;
+        if (isDenied || isPermanentlyDenied) {
           final status = await permission.request();
           if (status == ph.PermissionStatus.granted) {
             _permissions.add(permission);
@@ -27,7 +29,11 @@ class PermissionManager {
           Fx.log('$permission : ${status.name}');
           return status;
         }
-      } catch (e) {}
+        return ph.PermissionStatus.granted;
+      } catch (e) {
+        Fx.log(e);
+        return ph.PermissionStatus.denied;
+      }
     }
 
     return null;

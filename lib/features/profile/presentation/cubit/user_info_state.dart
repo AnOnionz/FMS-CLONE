@@ -11,7 +11,11 @@ final class UserInfoInitial extends UserInfoState {}
 
 final class UserInfoLoading extends UserInfoState {}
 
-final class UserInfoSuccess extends UserInfoState {}
+final class UserInfoSuccess extends UserInfoState {
+  final EmployeeEntity entity;
+
+  UserInfoSuccess({required this.entity});
+}
 
 final class UserInfoFailure extends UserInfoState {
   final Failure failure;

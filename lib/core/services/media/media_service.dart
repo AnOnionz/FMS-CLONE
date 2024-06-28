@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/permission/permisson_manager.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/camera/camera_module.dart';
 import 'package:fms/features/setting/domain/entities/setting_app.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -10,6 +12,7 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../database/database.dart';
 import '../location/location_service.dart';
@@ -28,6 +31,19 @@ final class MediaService {
       if (source == ImageSource.camera && (settings?.useCameraZ ?? false)) {
         pickedFile = await Modular.to.pushNamed(CameraModule.route);
       } else {
+        if (source == ImageSource.gallery) {
+          final permissionManager = Modular.get<PermissionManager>();
+          final permision =
+              await permissionManager.requestPermission(Permission.photos);
+          if (permision == PermissionStatus.denied ||
+              permision == PermissionStatus.permanentlyDenied) {
+            OverlayManager.showServiceDialog(
+                message: 'Thay đổi quyền truy cập hình ảnh và thử lại',
+                solution: () => permissionManager.openAppSettings(),
+                title: 'Không thể truy cập thư viện ảnh');
+            return null;
+          }
+        }
         pickedFile = await _picker.pickImage(
           source: source,
           maxWidth: maxWidth,

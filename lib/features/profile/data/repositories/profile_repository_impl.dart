@@ -1,6 +1,7 @@
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:fms/features/profile/domain/entities/profile_status_entity.dart';
 import 'package:fms/features/profile/domain/repositories/profile_repository.dart';
 import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 
@@ -12,7 +13,6 @@ class ProfileRepositoryImpl extends Repository implements ProfileRepository {
   final ProfileLocalDataSource _local;
 
   ProfileRepositoryImpl(this._remote, this._local);
-  EmployeeEntity? user;
 
   @override
   Future<Result<EmployeeEntity?>> getUserInfo() async {
@@ -22,17 +22,16 @@ class ProfileRepositoryImpl extends Repository implements ProfileRepository {
         _local.clearUser();
         _local.cacheUser(userInfo);
       }
-      user = userInfo;
+
       return Right(userInfo);
-    });
+    }, useInternet: true);
   }
 
   @override
-  Future<void> getLocalUser() async {
-    final _user = _local.getUser();
-
-    if (_user != null) {
-      user = _user;
-    }
+  Future<Result<ProfileStatusEntity?>> getProfileStatus() async {
+    return todo(() async {
+      final profileStatus = await _remote.getProfileStatus();
+      return Right(profileStatus);
+    }, useInternet: true);
   }
 }

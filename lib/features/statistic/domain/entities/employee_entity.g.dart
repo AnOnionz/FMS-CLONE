@@ -421,43 +421,38 @@ const EmployeeUserEntitySchema = Schema(
       name: r'gender',
       type: IsarType.string,
     ),
-    r'hasPendingProfile': PropertySchema(
-      id: 2,
-      name: r'hasPendingProfile',
-      type: IsarType.bool,
-    ),
     r'id': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'id',
       type: IsarType.long,
     ),
     r'isFaceVerified': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'isFaceVerified',
       type: IsarType.bool,
     ),
     r'isProfileVerified': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'isProfileVerified',
       type: IsarType.bool,
     ),
     r'name': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
     r'phone': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'phone',
       type: IsarType.string,
     ),
     r'picture': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'picture',
       type: IsarType.string,
     ),
     r'username': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'username',
       type: IsarType.string,
     )
@@ -521,14 +516,13 @@ void _employeeUserEntitySerialize(
 ) {
   writer.writeString(offsets[0], object.email);
   writer.writeString(offsets[1], object.gender);
-  writer.writeBool(offsets[2], object.hasPendingProfile);
-  writer.writeLong(offsets[3], object.id);
-  writer.writeBool(offsets[4], object.isFaceVerified);
-  writer.writeBool(offsets[5], object.isProfileVerified);
-  writer.writeString(offsets[6], object.name);
-  writer.writeString(offsets[7], object.phone);
-  writer.writeString(offsets[8], object.picture);
-  writer.writeString(offsets[9], object.username);
+  writer.writeLong(offsets[2], object.id);
+  writer.writeBool(offsets[3], object.isFaceVerified);
+  writer.writeBool(offsets[4], object.isProfileVerified);
+  writer.writeString(offsets[5], object.name);
+  writer.writeString(offsets[6], object.phone);
+  writer.writeString(offsets[7], object.picture);
+  writer.writeString(offsets[8], object.username);
 }
 
 EmployeeUserEntity _employeeUserEntityDeserialize(
@@ -540,14 +534,13 @@ EmployeeUserEntity _employeeUserEntityDeserialize(
   final object = EmployeeUserEntity(
     email: reader.readStringOrNull(offsets[0]),
     gender: reader.readStringOrNull(offsets[1]),
-    hasPendingProfile: reader.readBoolOrNull(offsets[2]),
-    id: reader.readLongOrNull(offsets[3]),
-    isFaceVerified: reader.readBoolOrNull(offsets[4]),
-    isProfileVerified: reader.readBoolOrNull(offsets[5]),
-    name: reader.readStringOrNull(offsets[6]),
-    phone: reader.readStringOrNull(offsets[7]),
-    picture: reader.readStringOrNull(offsets[8]),
-    username: reader.readStringOrNull(offsets[9]),
+    id: reader.readLongOrNull(offsets[2]),
+    isFaceVerified: reader.readBoolOrNull(offsets[3]),
+    isProfileVerified: reader.readBoolOrNull(offsets[4]),
+    name: reader.readStringOrNull(offsets[5]),
+    phone: reader.readStringOrNull(offsets[6]),
+    picture: reader.readStringOrNull(offsets[7]),
+    username: reader.readStringOrNull(offsets[8]),
   );
   return object;
 }
@@ -564,20 +557,18 @@ P _employeeUserEntityDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readBoolOrNull(offset)) as P;
-    case 3:
       return (reader.readLongOrNull(offset)) as P;
+    case 3:
+      return (reader.readBoolOrNull(offset)) as P;
     case 4:
       return (reader.readBoolOrNull(offset)) as P;
     case 5:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     case 8:
-      return (reader.readStringOrNull(offset)) as P;
-    case 9:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -890,34 +881,6 @@ extension EmployeeUserEntityQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'gender',
         value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeUserEntity, EmployeeUserEntity, QAfterFilterCondition>
-      hasPendingProfileIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'hasPendingProfile',
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeUserEntity, EmployeeUserEntity, QAfterFilterCondition>
-      hasPendingProfileIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'hasPendingProfile',
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeUserEntity, EmployeeUserEntity, QAfterFilterCondition>
-      hasPendingProfileEqualTo(bool? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'hasPendingProfile',
-        value: value,
       ));
     });
   }

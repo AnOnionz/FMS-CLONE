@@ -19,21 +19,6 @@ class _ProfileImagesState extends State<ProfileImages> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Ảnh chân dung (1 hình)',
-                  style: context.textTheme.body1
-                      ?.copyWith(color: AppColors.midnightExpress))
-              .bottom18,
-          ImagePickerWidget(
-            backgroundColor: 'E4EAFF'.toColor(),
-            multiSource: true,
-            enable: true,
-            onChanged: (image) {},
-          ),
-        ],
-      ).bottom18,
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
           Text('Ảnh toàn thân (1-3 hình)',
                   style: context.textTheme.body1
                       ?.copyWith(color: AppColors.midnightExpress))

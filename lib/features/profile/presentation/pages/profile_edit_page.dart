@@ -12,6 +12,7 @@ import 'package:fms/features/profile/presentation/widgets/appearance.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../widgets/current_whereabouts.dart';
 import '../widgets/desires_job_position.dart';
+import '../widgets/face_verified.dart';
 import '../widgets/information.dart';
 import '../widgets/marital_status.dart';
 import '../widgets/permanent_residence.dart';
@@ -60,6 +61,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           child: Column(
             children: [
               SizedBox(height: 20.h),
+              FaceVerifiedWidget(),
               UserInformation(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.w),

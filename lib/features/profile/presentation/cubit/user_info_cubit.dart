@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fms/features/profile/domain/usecases/get_user_info_usecase.dart';
+import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 
 import '../../../../core/errors/failure.dart';
 
@@ -14,6 +15,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     emit(UserInfoLoading());
     await _getUserInfo()
       ..fold((failure) => emit(UserInfoFailure(failure)),
-          (data) => emit(UserInfoSuccess()));
+          (data) => emit(UserInfoSuccess(entity: data!)));
   }
 }

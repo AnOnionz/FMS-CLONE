@@ -222,6 +222,7 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
                 child: Center(
                     child: SvgPicture.asset(
                   AppIcons.closeDrawer,
+                  height: 18.w,
                 )),
                 decoration: BoxDecoration(
                     color: AppColors.white,

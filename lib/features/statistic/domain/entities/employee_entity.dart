@@ -61,7 +61,6 @@ class EmployeeUserEntity {
   final String? gender;
   final bool? isFaceVerified;
   final bool? isProfileVerified;
-  final bool? hasPendingProfile;
   EmployeeUserEntity({
     this.id,
     this.name,
@@ -72,7 +71,6 @@ class EmployeeUserEntity {
     this.gender,
     this.isFaceVerified,
     this.isProfileVerified,
-    this.hasPendingProfile,
   });
 
   EmployeeUserEntity copyWith({
@@ -97,7 +95,6 @@ class EmployeeUserEntity {
       gender: gender ?? this.gender,
       isFaceVerified: isFaceVerified ?? this.isFaceVerified,
       isProfileVerified: isProfileVerified ?? this.isProfileVerified,
-      hasPendingProfile: hasPendingProfile ?? this.hasPendingProfile,
     );
   }
 
@@ -112,7 +109,6 @@ class EmployeeUserEntity {
       'gender': gender,
       'isFaceVerified': isFaceVerified,
       'isProfileVerified': isProfileVerified,
-      'hasPendingProfile': hasPendingProfile,
     };
   }
 
@@ -130,9 +126,6 @@ class EmployeeUserEntity {
       isProfileVerified: map['isProfileVerified'] != null
           ? map['isProfileVerified'] as bool
           : null,
-      hasPendingProfile: map['hasPendingProfile'] != null
-          ? map['hasPendingProfile'] as bool
-          : null,
     );
   }
 
@@ -143,6 +136,6 @@ class EmployeeUserEntity {
 
   @override
   String toString() {
-    return 'EmployeeUserEntity(id: $id, name: $name, username: $username, picture: $picture, email: $email, phone: $phone, gender: $gender, isFaceVerified: $isFaceVerified, isProfileVerified: $isProfileVerified, hasPendingProfile: $hasPendingProfile)';
+    return 'EmployeeUserEntity(id: $id, name: $name, username: $username, picture: $picture, email: $email, phone: $phone, gender: $gender, isFaceVerified: $isFaceVerified, isProfileVerified: $isProfileVerified)';
   }
 }

@@ -69,7 +69,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: () async => await _take(ImageSource.camera),
+                    onTap: () async {
+                      OverlayManager.hide();
+                      await _take(ImageSource.camera);
+                    },
                     child: Column(
                       children: [
                         SvgPicture.asset(AppIcons.sourceCamera),
@@ -80,7 +83,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                     ),
                   ),
                   InkWell(
-                    onTap: () async => await _take(ImageSource.gallery),
+                    onTap: () async {
+                      OverlayManager.hide();
+                      await _take(ImageSource.gallery);
+                    },
                     child: Column(
                       children: [
                         SvgPicture.asset(AppIcons.image),

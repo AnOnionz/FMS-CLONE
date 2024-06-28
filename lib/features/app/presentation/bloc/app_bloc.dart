@@ -31,7 +31,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
   final GeneralRepository _generalRepository;
-  final ProfileRepositoryImpl _profileRepository;
   final SyncBloc _syncBloc;
   final LocationService _locationService;
   final SyncProgressBloc _syncProgressBloc;
@@ -49,7 +48,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     this._syncBloc,
     this._syncProgressBloc,
     this._locationService,
-    this._profileRepository,
   ) : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -77,7 +75,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<void> _checkAuthenticationStatus(AuthenticationStatus status) async {
     if (status == AuthenticationStatus.authenticated) {
-      await _profileRepository.getLocalUser();
       await _generalRepository.getLocalGeneral()
         ..fold((failure) => Modular.to.navigate(WorkPlaceModule.route), (data) {
           if (data != null) {

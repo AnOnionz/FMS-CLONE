@@ -40,3 +40,5 @@ enum ImageType {
   public,
   thumbnail,
 }
+
+enum ProfileStatus { PENDING, APPROVED, REJECTED }

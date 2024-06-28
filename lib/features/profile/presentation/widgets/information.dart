@@ -12,7 +12,6 @@ import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/widgets/custom_checkbox_group.dart';
 import 'package:fms/features/profile/presentation/widgets/profile_date_picker.dart';
 
-import '../../../../core/widgets/date_picker.dart';
 import '../../../../core/widgets/image_profile.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import 'dropdown_field.dart';
@@ -79,12 +78,19 @@ class _UserInformationState extends State<UserInformation>
             ],
           ),
           SizedBox(height: 16.h),
-          (user!.name != null)
-              ? Text(
-                  user!.name!,
-                  style: context.textTheme.h3?.copyWith(color: AppColors.black),
-                )
-              : SizedBox.shrink(),
+          RichText(
+            text: TextSpan(
+                text: 'Ảnh chân dung (1 hình) ',
+                style: context.textTheme.body1
+                    ?.copyWith(color: AppColors.midnightExpress),
+                children: [
+                  TextSpan(
+                    text: ' *',
+                    style: context.textTheme.body1?.copyWith(
+                        color: AppColors.orange, fontWeight: FontWeight.normal),
+                  ),
+                ]),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h),
             child: Divider(

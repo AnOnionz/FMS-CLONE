@@ -33,13 +33,8 @@ import 'presentation/bloc/app_bloc.dart';
 
 class AppModule extends Module {
   @override
-  List<Module> get imports => [
-        CoreModule(),
-        AuthenticationModule(),
-        GeneralModule(),
-        SyncModule(),
-        ProfileModule()
-      ];
+  List<Module> get imports =>
+      [CoreModule(), AuthenticationModule(), GeneralModule(), SyncModule()];
   @override
   void binds(i) {
     AppConfig();
