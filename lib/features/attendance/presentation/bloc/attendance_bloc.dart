@@ -34,7 +34,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
 
     bool isfaceVerified = true;
 
-    if (!(event.feature.featureAttendance!.isFaceRequired ?? false) &&
+    if ((event.feature.featureAttendance!.isFaceRequired ?? false) &&
         event.file != null) {
       await _faceVerification(event.file!)
         ..fold((failure) {

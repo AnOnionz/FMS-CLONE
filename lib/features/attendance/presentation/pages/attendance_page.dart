@@ -168,7 +168,8 @@ class _AttendancePageState extends State<AttendancePage> {
 
   late final imageWidget = ImagePickerWidget(
     enable: _imageDynamic == null,
-    isFaceDetector: false,
+    isFaceDetector:
+        widget.entity.feature.featureAttendance!.isFaceRequired ?? false,
     height: 60.h,
     onChanged: (file) {
       setState(() {
