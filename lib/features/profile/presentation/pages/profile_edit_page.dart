@@ -44,7 +44,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   void initState() {
-    // rootBundle.loadString('assets/vietnam-provinces.json').then((string) {});
     super.initState();
   }
 

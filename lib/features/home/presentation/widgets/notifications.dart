@@ -82,7 +82,7 @@ void showRequiredTask(
 void showRequiredFaceVerified({required VoidCallback onPressed}) {
   showFailure(
     title: 'Chưa có hình ảnh trong Profile',
-    icon: SvgPicture.asset(AppIcons.requiredProfile),
+    icon: SvgPicture.asset(AppIcons.requiredProfileData),
     message:
         'Yêu cầu cập nhật hình ảnh trong Profile nhân viên để xác thực khi chấm công.',
     btnText: 'Đến Trang Profile Nhân viên',
@@ -104,7 +104,7 @@ void showFaceNotFound({required VoidCallback onPressed}) {
 void showFaceNotMatch({required VoidCallback onPressed}) {
   showFailure(
     title: 'Gương mặt không khớp',
-    icon: SvgPicture.asset(AppIcons.requiredProfile),
+    icon: SvgPicture.asset(AppIcons.requiredProfileData),
     message:
         'Gương mặt trong hình không khớp với thông tin hồ sơ. Vui lòng chụp lại hình với đúng người cần xác nhận.',
     btnText: 'Thử lại',

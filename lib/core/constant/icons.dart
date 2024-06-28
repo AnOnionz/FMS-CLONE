@@ -58,7 +58,7 @@ class AppIcons {
   static String requiredInternet = 'required_internet'.icon.svg;
   static String requiredTask = 'required_task'.icon.svg;
   static String requiredDownload = 'required_download'.icon.svg;
-  static String requiredProfile = 'required_profile'.icon.svg;
+  static String requiredProfileData = 'required_profile_data'.icon.svg;
   static String success = 'success'.icon.svg;
   static String failure = 'failure'.icon.svg;
   static String logout = 'logout'.icon.svg;
@@ -84,4 +84,5 @@ class AppIcons {
   static String sourceCamera = 'source_camera'.icon.svg;
   static String experienceAdd = 'experience_plus'.icon.svg;
   static String experienceRemove = 'experience_remove'.icon.svg;
+  static String pending = 'pending'.icon.svg;
 }

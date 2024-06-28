@@ -16,7 +16,7 @@ class _FaceVerifiedWidgetState extends State<FaceVerifiedWidget>
     with UserMixin {
   @override
   Widget build(BuildContext context) {
-    if (!(user!.isFaceVerified ?? false)) {
+    if (!(user!.isFaceVerified ?? true)) {
       return Container(
         margin: EdgeInsets.only(bottom: 8.h, left: 16.w, right: 16.w),
         padding: EdgeInsets.symmetric(vertical: 24.w, horizontal: 33.w),

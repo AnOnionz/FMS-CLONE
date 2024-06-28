@@ -105,7 +105,6 @@ flutter:
     - assets/icons/
     - assets/rives/
     - assets/map_styles.json
-    - assets/vietnam-provinces.json
     - shorebird.yaml
 
   fonts:
