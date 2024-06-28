@@ -127,7 +127,6 @@ final class MediaService {
     );
     final faces = await _faceDetector.processImage(inputImage);
     await _faceDetector.close();
-    Fx.log(faces);
 
     return faces.isNotEmpty;
   }

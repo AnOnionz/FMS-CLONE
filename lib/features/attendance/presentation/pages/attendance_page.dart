@@ -103,20 +103,14 @@ class _AttendancePageState extends State<AttendancePage> {
       });
     }
     if (state is AttendanceInfoFailure) {
-      if (state.failure is FaceVerificationFailure) {
-        showFaceNotMatch(
-          onPressed: () {},
-        );
-      } else {
-        showFailure(
-            title: 'Tải dữ liệu thất bại',
-            icon: SvgPicture.asset(AppIcons.requiredDownload),
-            message: 'Kiểm tra lại đường truyền mạng và thử lại',
-            btnText: 'Thử lại',
-            onPressed: () {
-              _getInfo();
-            });
-      }
+      showFailure(
+          title: 'Tải dữ liệu thất bại',
+          icon: SvgPicture.asset(AppIcons.requiredDownload),
+          message: 'Kiểm tra lại đường truyền mạng và thử lại',
+          btnText: 'Thử lại',
+          onPressed: () {
+            _getInfo();
+          });
     }
   }
 
@@ -127,20 +121,27 @@ class _AttendancePageState extends State<AttendancePage> {
       }
       if (state is AttendanceFailure) {
         OverlayManager.hide();
-
+        if (state.failure is FaceVerificationFailure) {
+          showFaceNotMatch(
+            onPressed: () {
+              imageWidget.state.takeImage();
+            },
+          );
+          return;
+        }
         if (state.failure is SocketFailure) {
           showInternetFailure();
-        } else {
-          showFailure(
-              title: 'Chấm công thất bại',
-              icon: SvgPicture.asset(AppIcons.failure),
-              message: state.failure.message ??
-                  'Phát sinh lỗi trong quá trình chấm công',
-              btnText: 'Thử lại',
-              onPressed: () {
-                _attendance.call();
-              });
+          return;
         }
+        showFailure(
+            title: 'Chấm công thất bại',
+            icon: SvgPicture.asset(AppIcons.failure),
+            message: state.failure.message ??
+                'Phát sinh lỗi trong quá trình chấm công',
+            btnText: 'Thử lại',
+            onPressed: () {
+              _attendance.call();
+            });
       }
       if (state is AttendanceSuccess) {
         OverlayManager.hide();
@@ -164,6 +165,19 @@ class _AttendancePageState extends State<AttendancePage> {
         feature: widget.entity.feature));
     ;
   }
+
+  late final imageWidget = ImagePickerWidget(
+    enable: _imageDynamic == null,
+    isFaceDetector: false,
+    height: 60.h,
+    onChanged: (file) {
+      setState(() {
+        _imageDynamic = file;
+      });
+    },
+    isWatermarkRequired: isWatermarkRequired,
+    isWatermarking: isWatermarking,
+  );
 
   // void _showSheetHistory(BuildContext context) {
   //   OverlayManager.showSheet(
@@ -237,19 +251,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                     child: ListViewImages(
                                       height: 60.h,
                                       feature: widget.entity.feature,
-                                      imagePickerButton: ImagePickerWidget(
-                                        enable: _imageDynamic == null,
-                                        isFaceDetector: true,
-                                        height: 60.h,
-                                        onChanged: (file) {
-                                          setState(() {
-                                            _imageDynamic = file;
-                                          });
-                                        },
-                                        isWatermarkRequired:
-                                            isWatermarkRequired,
-                                        isWatermarking: isWatermarking,
-                                      ),
+                                      imagePickerButton: imageWidget,
                                       onDeleted: (image) {
                                         setState(() {
                                           _imageDynamic = null;

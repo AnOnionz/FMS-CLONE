@@ -28,7 +28,7 @@ class ImagePickerWidget extends StatefulWidget {
   final ValueNotifier<bool>? isWatermarking;
   final bool isFaceDetector;
 
-  const ImagePickerWidget({
+  ImagePickerWidget({
     super.key,
     this.height,
     required this.enable,
@@ -40,8 +40,10 @@ class ImagePickerWidget extends StatefulWidget {
     this.isFaceDetector = false,
   });
 
+  final _ImagePickerWidgetState state = _ImagePickerWidgetState();
+
   @override
-  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
+  State<ImagePickerWidget> createState() => state;
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
@@ -49,7 +51,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   final NetworkTimeService _timeService = Modular.get();
   late ValueNotifier<bool> isWatermarking = ValueNotifier(false);
 
-  Future<void> _takeImage() async {
+  Future<void> takeImage() async {
     if (widget.multiSource) {
       OverlayManager.showSheet(
           body: Column(
@@ -105,7 +107,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         if (widget.isFaceDetector) {
           final hasFace = await _service.faceDetector(file);
           if (!hasFace) {
-            showFaceNotFound(onPressed: _takeImage);
+            showFaceNotFound(onPressed: takeImage);
             return;
           }
           ;
@@ -153,7 +155,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   Widget build(BuildContext context) {
     final height = ((context.screenWidth - 80.w) - 4 * 12.h) / 5;
     return GestureDetector(
-      onTap: () => widget.enable ? _takeImage() : null,
+      onTap: () => widget.enable ? takeImage() : null,
       child: Container(
         height: widget.height ?? height,
         width: widget.height ?? height,

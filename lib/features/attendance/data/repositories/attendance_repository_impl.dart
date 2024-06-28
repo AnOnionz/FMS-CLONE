@@ -24,7 +24,7 @@ class AttendanceRepositoryImpl extends Repository
     return todo(() async {
       await _remote.faceVerification(file: file);
       return Right(Never);
-    });
+    }, useInternet: true);
   }
 
   @override
@@ -42,7 +42,7 @@ class AttendanceRepositoryImpl extends Repository
           feature: feature,
           general: general);
       return Right(attendanceData);
-    });
+    }, useInternet: true);
   }
 
   @override
@@ -53,7 +53,7 @@ class AttendanceRepositoryImpl extends Repository
           await _remote.getAttendanceInfo(feature: feature, general: general);
 
       return Right(attendanceEntity);
-    });
+    }, useInternet: true);
   }
 
   @override
