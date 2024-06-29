@@ -48,7 +48,7 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
       required GeneralEntity general}) async {
     ImageUploadModel? imageServerModel;
     if (file != null) {
-      imageServerModel = await uploadImageToServer(file);
+      imageServerModel = await uploadImageToServer(file, withS3: true);
     }
     final form = {
       if (position != null) 'latitude': position.latitude,

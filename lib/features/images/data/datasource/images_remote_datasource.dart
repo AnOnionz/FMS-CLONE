@@ -10,12 +10,14 @@ abstract class ImagesRemoteDataSource {
 
   ImagesRemoteDataSource(this.dio);
 
-  Future<ImageUploadModel?> uploadImageToServer(XFile file) async {
+  Future<ImageUploadModel?> uploadImageToServer(XFile file,
+      {bool withS3 = false}) async {
     final form = FormData.fromMap({
       'file': MultipartFile.fromBytes(
         await file.readAsBytes(),
         filename: file.name,
-      )
+      ),
+      'withS3': withS3
     });
 
     final _resp = await dio.post(path: '/images', data: form);
@@ -33,6 +35,19 @@ abstract class ImagesRemoteDataSource {
 
       await dio.postHttp(
           path: imageUploadModel.uploadUrl, data: formCloudFlare);
+
+      if (withS3 && imageUploadModel.s3Url != null) {
+        final formS3 = FormData.fromMap({
+          'file': MultipartFile.fromBytes(
+            await file.readAsBytes(),
+            filename: file.name,
+            contentType: Headers.jsonMimeType
+                .change(type: 'image', subtype: file.name.split('.').last),
+          )
+        });
+
+        await dio.postHttp(path: imageUploadModel.s3Url!, data: formS3);
+      }
     }
     return imageUploadModel;
   }
