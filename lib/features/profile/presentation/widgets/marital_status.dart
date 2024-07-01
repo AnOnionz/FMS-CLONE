@@ -1,34 +1,38 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/responsive/responsive.dart';
-
+import 'package:fms/features/profile/presentation/widgets/user_profile_inheriterd.dart';
+import '../../../../core/constant/enum.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
+import '../../domain/entities/user_profile_entity.dart';
 import 'custom_checkbox_group.dart';
 
-class MaritalStatus extends StatefulWidget {
-  const MaritalStatus({super.key});
+class MaritalStatus extends StatelessWidget {
+  final Function(UserProfileEntity newValue) onChanged;
+  const MaritalStatus({super.key, required this.onChanged});
 
-  @override
-  State<MaritalStatus> createState() => _MaritalStatusState();
-}
-
-class _MaritalStatusState extends State<MaritalStatus> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: EdgeInsets.only(bottom: 6.h),
-        child: CustomCheckboxGroup<String>(
+        child: CustomCheckboxGroup<Marital>(
           axis: Axis.vertical,
-          group: ['Độc thân', 'Kết hôn', 'Ly dị'],
-          onSelected: (value) {},
+          label: (option) => option.value,
+          group: [Marital.SINGLE, Marital.MARRIED, Marital.DIVORCED],
+          onSelected: (value) {
+            onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(maritalStatus: value));
+          },
         ),
       ),
       AppTextFormField(
         label: 'Số con(nếu có)',
         isRequired: false,
         onChanged: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(numberOfChildren: int.tryParse(value)));
         },
         textInputAction: TextInputAction.next,
       ),

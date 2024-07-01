@@ -1,21 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
+import '../../domain/entities/user_profile_entity.dart';
 import 'dropdown_field.dart';
 
 class Appearance extends StatefulWidget {
-  const Appearance({super.key});
+  final Function(UserProfileEntity newValue) onChanged;
+  const Appearance({super.key, required this.onChanged});
 
   @override
   State<Appearance> createState() => _AppearanceState();
 }
 
 class _AppearanceState extends State<Appearance> {
+  final dresSizes = [
+    DressSize.XXS,
+    DressSize.XS,
+    DressSize.S,
+    DressSize.M,
+    DressSize.L,
+    DressSize.XL,
+    DressSize.XXL,
+    DressSize.XXXL
+  ];
   @override
   Widget build(BuildContext context) {
     final width = (context.screenWidth - 96.w) / 2;
@@ -48,19 +61,21 @@ class _AppearanceState extends State<Appearance> {
       Row(
         children: [
           Flexible(
-            child: DropdownField(
+            child: DropdownField<DressSize>(
                 width: width,
                 hint: 'Size áo',
-                values: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']),
+                label: (option) => option.name,
+                onSelected: (value) {
+                  setState(() {});
+                },
+                values: dresSizes),
           ),
           SizedBox(width: 16.w),
           Flexible(
             child: AppTextFormField(
               label: 'Size quần/váy',
               isRequired: false,
-              onChanged: (value) {
-                setState(() {});
-              },
+              onChanged: (value) {},
               textInputAction: TextInputAction.next,
             ),
           )
@@ -70,15 +85,20 @@ class _AppearanceState extends State<Appearance> {
         children: [
           Flexible(
             child: DropdownField(
-                width: width,
-                hint: 'Size đầm',
-                values: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']),
+              width: width,
+              hint: 'Size đầm',
+              label: (option) => option.name,
+              values: dresSizes,
+              onSelected: (value) {},
+            ),
           ),
           SizedBox(width: 16.w),
           Flexible(
             child: DropdownField(
                 width: width,
+                label: (option) => option.toString(),
                 hint: 'Size giày',
+                onSelected: (value) {},
                 values: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44]),
           ),
         ],

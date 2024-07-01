@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/utilities/parser.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/images/data/datasource/images_remote_datasource.dart';

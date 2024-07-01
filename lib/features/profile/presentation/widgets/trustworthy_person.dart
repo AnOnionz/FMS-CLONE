@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
+import '../../domain/entities/user_profile_entity.dart';
 
 class TrustworthyPerson extends StatefulWidget {
-  const TrustworthyPerson({super.key});
+  final Function(UserProfileEntity newValue) onChanged;
+  const TrustworthyPerson({super.key, required this.onChanged});
 
   @override
   State<TrustworthyPerson> createState() => _TrustworthyPersonState();

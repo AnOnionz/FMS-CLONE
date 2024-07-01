@@ -12,10 +12,12 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/mixins/common.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
+import '../../domain/entities/user_profile_entity.dart';
 import 'profile_date_picker.dart';
 
 class WorkExperience extends StatefulWidget {
-  const WorkExperience({super.key});
+  final Function(UserProfileEntity newValue) onChanged;
+  const WorkExperience({super.key, required this.onChanged});
 
   @override
   State<WorkExperience> createState() => _WorkExperienceState();

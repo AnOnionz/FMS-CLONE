@@ -4,7 +4,7 @@ import '../environment/env.dart';
 import '/core/constant/keys.dart';
 import '/core/mixins/fx.dart';
 
-Duration kTimeOutDuration = 30.seconds;
+Duration kTimeOutDuration = 60.seconds;
 
 abstract class ApiService {
   static String apiBaseUrl = env.variables[Keys.BASE_URL] as String;

@@ -8,13 +8,15 @@ class CustomCheckboxGroup<T> extends StatefulWidget {
   final List<T> group;
   final T? value;
   final Function(T value) onSelected;
+  final String Function(T option) label;
 
   const CustomCheckboxGroup(
       {super.key,
       required this.group,
       required this.onSelected,
       this.value,
-      this.axis = Axis.horizontal});
+      this.axis = Axis.horizontal,
+      required this.label});
 
   @override
   State<CustomCheckboxGroup<T>> createState() => _CustomCheckboxGroupState<T>();
@@ -57,7 +59,7 @@ class _CustomCheckboxGroupState<T> extends State<CustomCheckboxGroup<T>> {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  option.toString(),
+                  widget.label(option),
                   style: context.textTheme.body1
                       ?.copyWith(color: AppColors.black.withOpacity(0.85)),
                 )

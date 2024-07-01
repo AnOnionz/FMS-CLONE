@@ -3,21 +3,23 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:fms/features/profile/presentation/widgets/appearance.dart';
 
 import '../../../../core/widgets/button/flat.dart';
-import '../widgets/current_whereabouts.dart';
 import '../widgets/desires_job_position.dart';
 import '../widgets/face_verified.dart';
 import '../widgets/information.dart';
 import '../widgets/marital_status.dart';
-import '../widgets/permanent_residence.dart';
+import '../widgets/residence.dart';
 import '../widgets/profile_images.dart';
 import '../widgets/trustworthy_person.dart';
+import '../widgets/user_profile_inheriterd.dart';
 import '../widgets/work_experience.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -28,19 +30,59 @@ class ProfileEditPage extends StatefulWidget {
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
-  final List<ProfileItem> _data = [
-    ProfileItem(header: 'Nơi ở hiện tại', child: CurrentWhereaboutsState()),
-    ProfileItem(header: 'Địa chỉ trên hộ khẩu', child: PermanentResidence()),
-    ProfileItem(header: 'Tình trạng hôn nhân', child: MaritalStatus()),
-    ProfileItem(
-        header: 'Người thân liên hệ trong trường hợp khẩn',
-        child: TrustworthyPerson()),
-    ProfileItem(header: 'Ngoại hình', child: Appearance()),
-    ProfileItem(header: 'Kinh nghiệm làm việc', child: WorkExperience()),
-    ProfileItem(
-        header: 'Vị trí làm việc mong muốn', child: DesiredJobPosition()),
-    ProfileItem(header: 'Hình ảnh', child: ProfileImages()),
-  ];
+  List<ProfileItem> _data() {
+    return [
+      ProfileItem(
+          header: 'Nơi ở hiện tại',
+          child: Residence(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Địa chỉ trên hộ khẩu',
+          child: Residence(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Tình trạng hôn nhân',
+          child: MaritalStatus(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Người thân liên hệ trong trường hợp khẩn',
+          child: TrustworthyPerson(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Ngoại hình',
+          child: Appearance(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Kinh nghiệm làm việc',
+          child: WorkExperience(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Vị trí làm việc mong muốn',
+          child: DesiredJobPosition(
+            onChanged: _handleUpdateEntity,
+          )),
+      ProfileItem(
+          header: 'Hình ảnh',
+          child: ProfileImages(
+            onChanged: _handleUpdateEntity,
+          )),
+    ];
+  }
+
+  late UserProfileEntity entity = UserProfileEntity();
+  late List<ProfileItem> data = _data();
+
+  void _handleUpdateEntity(UserProfileEntity newValue) {
+    setState(() {
+      entity = newValue;
+    });
+  }
 
   @override
   void initState() {
@@ -61,12 +103,15 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             children: [
               SizedBox(height: 20.h),
               FaceVerifiedWidget(),
-              UserInformation(),
+              UserInformation(
+                entity: entity,
+                onChanged: _handleUpdateEntity,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.w),
                 child: ExpandedTileList.builder(
-                  itemCount: _data.length,
-                  maxOpened: _data.length,
+                  itemCount: data.length,
+                  maxOpened: data.length,
                   itemBuilder: (context, index, controller) {
                     return ExpandedTile(
                       theme: ExpandedTileThemeData(
@@ -96,9 +141,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       trailingRotation: 180,
                       controller: controller,
                       footer: SizedBox(height: 8.w - 6),
-                      title: Text(_data[index].header,
+                      title: Text(data[index].header,
                           style: context.textTheme.subtitle1),
-                      content: _data[index].child,
+                      content: UserProfileInherited(
+                          entity: entity, child: data[index].child),
                       disableAnimation: true,
                     );
                   },
@@ -113,7 +159,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 ]),
                 padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
                 child: FlatButton(
-                  onPressed: null,
+                  onPressed: () {
+                    Fx.log(entity);
+                  },
                   name: 'Lưu',
                   color: AppColors.orange,
                   disableColor: AppColors.potPourri,

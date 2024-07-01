@@ -26,6 +26,12 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
   final WorkPlaceBloc _workPlaceBloc = Modular.get<WorkPlaceBloc>();
 
   @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DefaultAppBar(title: 'Chọn dự án'),

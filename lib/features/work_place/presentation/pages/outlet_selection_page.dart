@@ -23,6 +23,7 @@ class OutletSelectionPage extends StatelessWidget {
         ..add(FetchOutlets(workPlace: _workPlaceBloc.state.entity));
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DefaultAppBar(title: 'Chọn outlet'),

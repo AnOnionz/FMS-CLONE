@@ -10,7 +10,6 @@ import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
-import 'package:fms/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';

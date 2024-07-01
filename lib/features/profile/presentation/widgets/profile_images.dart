@@ -4,9 +4,11 @@ import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 
 import '../../../images/presentation/widgets/image_view.dart';
+import '../../domain/entities/user_profile_entity.dart';
 
 class ProfileImages extends StatefulWidget {
-  const ProfileImages({super.key});
+  final Function(UserProfileEntity newValue) onChanged;
+  const ProfileImages({super.key, required this.onChanged});
 
   @override
   State<ProfileImages> createState() => _ProfileImagesState();

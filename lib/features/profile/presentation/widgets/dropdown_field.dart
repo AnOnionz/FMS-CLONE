@@ -12,8 +12,19 @@ class DropdownField<T> extends StatefulWidget {
   final List<T> values;
   final String hint;
   final double? width;
+  final T? value;
+  final Function(T value) onSelected;
+  final String Function(T option) label;
+  final Widget? onError;
   const DropdownField(
-      {super.key, required this.values, required this.hint, this.width});
+      {super.key,
+      required this.values,
+      required this.hint,
+      this.width,
+      this.value,
+      required this.onSelected,
+      this.onError,
+      required this.label});
 
   @override
   State<DropdownField<T>> createState() => _DropdownFieldState<T>();
@@ -22,11 +33,24 @@ class DropdownField<T> extends StatefulWidget {
 class _DropdownFieldState<T> extends State<DropdownField<T>> {
   TextEditingController _controller = TextEditingController();
 
-  T? _selected;
+  late T? _selected = widget.value;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  List<DropdownMenuEntry<T>> entries() {
+    return widget.values.map<DropdownMenuEntry<T>>((T obj) {
+      return DropdownMenuEntry<T>(
+        value: obj,
+        label: widget.label(obj),
+        style: MenuItemButton.styleFrom(
+          backgroundColor: AppColors.white,
+          textStyle: context.textTheme.body1,
+        ),
+      );
+    }).toList();
   }
 
   @override
@@ -54,10 +78,12 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
             ),
           ),
           requestFocusOnTap: false,
+          initialSelection: widget.value,
           onSelected: (T? value) {
             setState(() {
               _selected = value;
             });
+            widget.onSelected(_selected!);
           },
           selectedTrailingIcon: Transform.rotate(
             angle: pi * 1.5,
@@ -98,16 +124,7 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
                   borderRadius: BorderRadius.circular(8.sqr),
                   borderSide:
                       BorderSide(color: AppColors.summerSky, width: 2.h))),
-          dropdownMenuEntries: widget.values.map<DropdownMenuEntry<T>>((T obj) {
-            return DropdownMenuEntry<T>(
-              value: obj,
-              label: obj.toString(),
-              style: MenuItemButton.styleFrom(
-                backgroundColor: AppColors.white,
-                textStyle: context.textTheme.body1,
-              ),
-            );
-          }).toList(),
+          dropdownMenuEntries: entries(),
         ),
       ),
     );

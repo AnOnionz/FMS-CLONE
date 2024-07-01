@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fms/core/constant/mapper.dart';
 
 import '../../../../general/domain/entities/config_entity.dart';
 import '../../../domain/entities/order_entity.dart';
@@ -57,8 +58,10 @@ class _CustomerFieldState extends State<CustomerField> {
         });
         widget.onChanged();
       },
-      textInputType: widget.featureCustomer.inputType(),
-      validate: widget.featureCustomer.validate(),
+      textInputType: Mapper.dataTypeToInputType(
+          dataType: widget.featureCustomer.dataType!),
+      validate:
+          Mapper.dataTypeToValidate(dataType: widget.featureCustomer.dataType!),
       textInputAction:
           widget.isLast ? TextInputAction.done : TextInputAction.next,
     );

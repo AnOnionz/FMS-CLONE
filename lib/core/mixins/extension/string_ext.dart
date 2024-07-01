@@ -559,6 +559,28 @@ extension FeatureTypeExtension on String {
     return FeatureType.values
         .firstWhereOrNull((element) => element.name == this);
   }
+
+  GenderStatus? toGender() {
+    return GenderStatus.values
+        .firstWhereOrNull((element) => element.name == this);
+  }
+
+  Marital? toMerital() {
+    return Marital.values.firstWhereOrNull((element) => element.name == this);
+  }
+
+  DressSize? toDressSize() {
+    return DressSize.values.firstWhereOrNull((element) => element.name == this);
+  }
+
+  EducationLevel? toEducationLevel() {
+    return EducationLevel.values
+        .firstWhereOrNull((element) => element.name == this);
+  }
+
+  PhotoType toPhotoType() {
+    return PhotoType.values.firstWhere((element) => element.name == this);
+  }
 }
 
 extension DateTime1Extension on String? {

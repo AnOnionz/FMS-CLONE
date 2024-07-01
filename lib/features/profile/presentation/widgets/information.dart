@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -14,10 +15,14 @@ import 'package:fms/features/profile/presentation/widgets/profile_date_picker.da
 
 import '../../../../core/widgets/image_profile.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
+import '../../domain/entities/user_profile_entity.dart';
 import 'dropdown_field.dart';
 
 class UserInformation extends StatefulWidget {
-  const UserInformation({super.key});
+  final UserProfileEntity entity;
+  final Function(UserProfileEntity newValue) onChanged;
+  const UserInformation(
+      {super.key, required this.entity, required this.onChanged});
 
   @override
   State<UserInformation> createState() => _UserInformationState();
@@ -26,6 +31,7 @@ class UserInformation extends StatefulWidget {
 class _UserInformationState extends State<UserInformation>
     with GeneralDataMixin, UserMixin {
   DateTime lastBirthDay = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -109,7 +115,7 @@ class _UserInformationState extends State<UserInformation>
             label: 'Họ tên',
             isRequired: true,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(widget.entity.copyWith(fullName: value));
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -117,7 +123,7 @@ class _UserInformationState extends State<UserInformation>
             label: 'Số điện thoại',
             isRequired: true,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(widget.entity.copyWith(phoneNumber: value));
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -125,7 +131,10 @@ class _UserInformationState extends State<UserInformation>
             label: 'CMND/CCCD',
             isRequired: true,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(widget.entity.copyWith(phoneNumber: value));
+              setState(() {
+                widget.entity.update(identityCardNumber: value);
+              });
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -133,7 +142,10 @@ class _UserInformationState extends State<UserInformation>
             label: 'Email',
             isRequired: true,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(widget.entity.copyWith(phoneNumber: value));
+              setState(() {
+                widget.entity.update(email: value);
+              });
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -143,42 +155,55 @@ class _UserInformationState extends State<UserInformation>
                   style: context.textTheme.body1
                       ?.copyWith(color: AppColors.midnightExpress)),
               SizedBox(width: 16.w),
-              CustomCheckboxGroup<String>(
-                group: ['Nam', 'Nữ'],
-                onSelected: (value) {},
+              CustomCheckboxGroup<GenderStatus>(
+                group: [GenderStatus.MALE, GenderStatus.FEMALE],
+                label: (option) => option.value,
+                onSelected: (value) {
+                  widget.onChanged(widget.entity.copyWith(gender: value));
+                },
               ),
             ],
           ).bottom18,
           ProfileDatePicker(
                   lastDate: lastBirthDay,
-                  onChanged: (time) {},
+                  onChanged: (time) {
+                    widget.onChanged(widget.entity.copyWith(birthdate: time));
+                  },
                   title: 'Ngày tháng năm sinh')
               .bottom18,
           AppTextFormField(
             label: 'Nơi sinh',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(widget.entity.copyWith(birthplace: value));
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
           DropdownField(
             hint: 'Trình độ học vấn',
+            label: (option) => option.value,
             values: [
-              'Cao học',
-              'Đại Học',
-              'Cao Đẳng',
-              'Trung Cấp',
-              'Phổ thông trung học',
-              'Khác'
+              EducationLevel.PRIMARY_SCHOOL,
+              EducationLevel.MIDDLE_SCHOOL,
+              EducationLevel.HIGH_SCHOOL,
+              EducationLevel.VOCATIONAL_TRAINING,
+              EducationLevel.ASSOCIATE_DEGREE,
+              EducationLevel.BACHELOR_DEGREE,
+              EducationLevel.MASTER_DEGREE,
+              EducationLevel.DOCTORAL_DEGREE,
+              EducationLevel.POSTDOCTORAL,
+              EducationLevel.OTHER
             ],
+            onSelected: (value) {
+              widget.onChanged(widget.entity.copyWith(educationLevel: value));
+            },
             width: 100.wPerc - 80.w,
           ).bottom18,
           AppTextFormField(
             label: 'Mã số thuế',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(widget.entity.copyWith(personalTaxCode: value));
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -186,7 +211,8 @@ class _UserInformationState extends State<UserInformation>
             label: 'Số BHXH',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              widget.onChanged(
+                  widget.entity.copyWith(socialInsuranceNumber: value));
             },
             textInputAction: TextInputAction.next,
           ),

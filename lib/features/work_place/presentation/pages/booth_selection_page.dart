@@ -79,6 +79,7 @@ class _BoothSelectionPageState extends State<BoothSelectionPage> {
 
   @override
   void dispose() {
+    _fetchWorkPlaceBloc.close();
     _workPlaceSubscription.cancel();
     _generalSubscription.cancel();
     super.dispose();

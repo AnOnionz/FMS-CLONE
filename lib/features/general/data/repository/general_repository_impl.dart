@@ -3,7 +3,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/data_source/local_data_source.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/services/network_time/network_time_service.dart';
@@ -19,7 +18,6 @@ import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/domain/repository/general_repository.dart';
 import 'package:fms/features/note/domain/entities/note_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
-import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
 class GeneralRepository extends Repository

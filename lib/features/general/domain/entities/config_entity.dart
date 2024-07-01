@@ -2,13 +2,9 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
-
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-
-import '../../../../core/constant/type_def.dart';
+import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -597,54 +593,6 @@ class FeatureCustomer {
     this.isRequired,
     this.options,
   });
-
-  TextInputType inputType() {
-    switch (dataType) {
-      case 'string':
-        return TextInputType.text;
-      case 'email':
-        return TextInputType.emailAddress;
-      case 'number' || 'phoneNumber':
-        return TextInputType.number;
-
-      default:
-        return TextInputType.text;
-    }
-  }
-
-  ValidateField? validate() {
-    switch (dataType) {
-      case 'email':
-        return (String? value) {
-          // The regular expression pattern to match email addresses
-          final RegExp regex = RegExp(
-              r'^[_A-Za-z0-9-+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})\$*(\s?)');
-
-          // Check if the email format matches the regular expression
-          if (value.isNotEmptyAndNotNull && !regex.hasMatch(value!)) {
-            return 'Email chưa chính xác';
-          }
-
-          // If the email is valid, return null (no error message)
-          return null;
-        };
-      case 'phoneNumber':
-        return (String? value) {
-          final RegExp regex =
-              RegExp('/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/');
-
-          // Check if the phone format matches the regular expression
-          if (value.isNotEmptyAndNotNull && !regex.hasMatch(value!)) {
-            return 'Số điện thoại chưa chính xác';
-          }
-          // If the phone is valid, return null (no error message)
-          return null;
-        };
-
-      default:
-        return null;
-    }
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
