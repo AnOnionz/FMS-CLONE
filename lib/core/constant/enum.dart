@@ -104,4 +104,4 @@ enum RecruitmentSource {
   final String value;
 }
 
-enum PhotoType { Portrait, FullBody, IDFront, IDBack, CV }
+enum PhotoType { PORTRAIT, FULLBODY, IDFRONT, IDBACK, CV }

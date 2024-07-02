@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,8 @@ import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/button/flat.dart';
+import 'package:fms/features/profile/presentation/widgets/user_profile_inheriterd.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../../../core/mixins/common.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import '../../domain/entities/user_profile_entity.dart';
 import 'profile_date_picker.dart';
@@ -26,6 +26,23 @@ class WorkExperience extends StatefulWidget {
 class _WorkExperienceState extends State<WorkExperience> {
   final _data = [_WorkExperienceEntity(canDelete: false)];
 
+  void _onChanged() {
+    widget.onChanged(UserProfileInherited.of(context).entity.copyWith(
+        experiences: _data
+            .whereNot((workExperienceEntity) {
+              final e = workExperienceEntity.experience;
+              return e.endedAt == null &&
+                  e.startedAt == null &&
+                  e.businessLine.isEmptyOrNull &&
+                  e.companyName.isEmptyOrNull &&
+                  e.description.isEmptyOrNull &&
+                  e.leaveReason.isEmptyOrNull &&
+                  e.title.isEmptyOrNull;
+            })
+            .map((e) => e.experience)
+            .toList()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,11 +51,12 @@ class _WorkExperienceState extends State<WorkExperience> {
           for (final e in _data)
             WorkExperienceForm(
                 entity: e,
+                onChanged: _onChanged,
                 onRemoved: () {
-                  Fx.log(e.uuid);
                   setState(() {
                     _data.remove(e);
                   });
+                  _onChanged();
                 })
         ]),
         InkWell(
@@ -69,14 +87,22 @@ class _WorkExperienceState extends State<WorkExperience> {
 class WorkExperienceForm extends StatefulWidget {
   final _WorkExperienceEntity entity;
   final VoidCallback onRemoved;
+  final VoidCallback onChanged;
   const WorkExperienceForm(
-      {super.key, required this.entity, required this.onRemoved});
+      {super.key,
+      required this.entity,
+      required this.onRemoved,
+      required this.onChanged});
 
   @override
   State<WorkExperienceForm> createState() => _WorkExperienceFormState();
 }
 
 class _WorkExperienceFormState extends State<WorkExperienceForm> {
+  bool get _isRequired => UserProfileInherited.of(context)
+      .entity
+      .experiences
+      .contains(widget.entity.experience);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -84,29 +110,46 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.entity.uuid),
           Row(
             children: [
               Flexible(
                 child: ProfileDatePicker(
                     lastDate: DateTime.now(),
-                    onChanged: (time) {},
-                    title: 'Từ ngày'),
+                    isRequired: _isRequired,
+                    onChanged: (time) {
+                      setState(() {
+                        widget.entity.experience =
+                            widget.entity.experience.copyWith(startedAt: time);
+                      });
+                      widget.onChanged();
+                    },
+                    label: 'Từ ngày'),
               ),
               SizedBox(width: 16.w),
               Flexible(
                 child: ProfileDatePicker(
                     lastDate: DateTime.now(),
-                    onChanged: (time) {},
-                    title: 'Đến ngày'),
+                    onChanged: (time) {
+                      setState(() {
+                        widget.entity.experience =
+                            widget.entity.experience.copyWith(endedAt: time);
+                      });
+                      widget.onChanged();
+                    },
+                    label: 'Đến ngày'),
               )
             ],
           ).bottom18,
           AppTextFormField(
             label: 'Tên công ty',
-            isRequired: false,
+            isRequired: _isRequired,
+            validateMode: AutovalidateMode.always,
             onChanged: (value) {
-              setState(() {});
+              setState(() {
+                widget.entity.experience =
+                    widget.entity.experience.copyWith(companyName: value);
+              });
+              widget.onChanged();
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -114,15 +157,24 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
             label: 'Ngành nghề kinh doanh',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              setState(() {
+                widget.entity.experience =
+                    widget.entity.experience.copyWith(businessLine: value);
+              });
+              widget.onChanged();
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
           AppTextFormField(
             label: 'Chức vụ',
-            isRequired: false,
+            isRequired: _isRequired,
+            validateMode: AutovalidateMode.always,
             onChanged: (value) {
-              setState(() {});
+              setState(() {
+                widget.entity.experience =
+                    widget.entity.experience.copyWith(title: value);
+              });
+              widget.onChanged();
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -130,7 +182,11 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
             label: 'Lý do từ chức',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              setState(() {
+                widget.entity.experience =
+                    widget.entity.experience.copyWith(leaveReason: value);
+              });
+              widget.onChanged();
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
@@ -146,8 +202,10 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
   }
 }
 
+// ignore: must_be_immutable
 class _WorkExperienceEntity extends Equatable {
   final bool canDelete;
+  Experience experience = Experience();
 
   _WorkExperienceEntity({
     this.canDelete = true,

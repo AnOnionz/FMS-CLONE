@@ -5,20 +5,17 @@ import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/features/profile/presentation/widgets/user_profile_inheriterd.dart';
 
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import '../../domain/entities/user_profile_entity.dart';
 import 'dropdown_field.dart';
 
-class Appearance extends StatefulWidget {
+class Appearance extends StatelessWidget {
   final Function(UserProfileEntity newValue) onChanged;
-  const Appearance({super.key, required this.onChanged});
 
-  @override
-  State<Appearance> createState() => _AppearanceState();
-}
+  Appearance({super.key, required this.onChanged});
 
-class _AppearanceState extends State<Appearance> {
   final dresSizes = [
     DressSize.XXS,
     DressSize.XS,
@@ -29,6 +26,7 @@ class _AppearanceState extends State<Appearance> {
     DressSize.XXL,
     DressSize.XXXL
   ];
+
   @override
   Widget build(BuildContext context) {
     final width = (context.screenWidth - 96.w) / 2;
@@ -40,7 +38,9 @@ class _AppearanceState extends State<Appearance> {
               label: 'Chiều cao (m)',
               isRequired: false,
               onChanged: (value) {
-                setState(() {});
+                onChanged(UserProfileInherited.of(context)
+                    .entity
+                    .copyWith(bodyHeight: int.tryParse(value)));
               },
               textInputAction: TextInputAction.next,
             ),
@@ -51,7 +51,9 @@ class _AppearanceState extends State<Appearance> {
               label: 'Cân nặng (kg)',
               isRequired: false,
               onChanged: (value) {
-                setState(() {});
+                onChanged(UserProfileInherited.of(context)
+                    .entity
+                    .copyWith(bodyWeight: int.tryParse(value)));
               },
               textInputAction: TextInputAction.next,
             ),
@@ -66,19 +68,25 @@ class _AppearanceState extends State<Appearance> {
                 hint: 'Size áo',
                 label: (option) => option.name,
                 onSelected: (value) {
-                  setState(() {});
+                  onChanged(UserProfileInherited.of(context)
+                      .entity
+                      .copyWith(shirtSize: value));
                 },
                 values: dresSizes),
           ),
           SizedBox(width: 16.w),
           Flexible(
-            child: AppTextFormField(
-              label: 'Size quần/váy',
-              isRequired: false,
-              onChanged: (value) {},
-              textInputAction: TextInputAction.next,
-            ),
-          )
+            child: DropdownField<DressSize>(
+                width: width,
+                hint: 'Size quần/váy',
+                label: (option) => option.name,
+                onSelected: (value) {
+                  onChanged(UserProfileInherited.of(context)
+                      .entity
+                      .copyWith(pantsSize: value));
+                },
+                values: dresSizes),
+          ),
         ],
       ).bottom18,
       Row(
@@ -89,7 +97,11 @@ class _AppearanceState extends State<Appearance> {
               hint: 'Size đầm',
               label: (option) => option.name,
               values: dresSizes,
-              onSelected: (value) {},
+              onSelected: (value) {
+                onChanged(UserProfileInherited.of(context)
+                    .entity
+                    .copyWith(dressSize: value));
+              },
             ),
           ),
           SizedBox(width: 16.w),
@@ -98,7 +110,11 @@ class _AppearanceState extends State<Appearance> {
                 width: width,
                 label: (option) => option.toString(),
                 hint: 'Size giày',
-                onSelected: (value) {},
+                onSelected: (value) {
+                  onChanged(UserProfileInherited.of(context)
+                      .entity
+                      .copyWith(shoeSize: value));
+                },
                 values: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44]),
           ),
         ],
@@ -113,7 +129,9 @@ class _AppearanceState extends State<Appearance> {
             label: 'Vòng 1',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              onChanged(UserProfileInherited.of(context)
+                  .entity
+                  .copyWith(bodyBust: int.tryParse(value)));
             },
             textInputAction: TextInputAction.next,
           ),
@@ -124,7 +142,9 @@ class _AppearanceState extends State<Appearance> {
             label: 'Vòng 2',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              onChanged(UserProfileInherited.of(context)
+                  .entity
+                  .copyWith(bodyWaist: int.tryParse(value)));
             },
             textInputAction: TextInputAction.next,
           ),
@@ -135,7 +155,9 @@ class _AppearanceState extends State<Appearance> {
             label: 'Vòng 3',
             isRequired: false,
             onChanged: (value) {
-              setState(() {});
+              onChanged(UserProfileInherited.of(context)
+                  .entity
+                  .copyWith(bodyHips: int.tryParse(value)));
             },
             textInputAction: TextInputAction.next,
           ),

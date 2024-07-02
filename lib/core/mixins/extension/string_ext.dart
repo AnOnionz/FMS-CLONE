@@ -578,6 +578,16 @@ extension FeatureTypeExtension on String {
         .firstWhereOrNull((element) => element.name == this);
   }
 
+  DesiredPosition? toDesiredPosition() {
+    return DesiredPosition.values
+        .firstWhereOrNull((element) => element.name == this);
+  }
+
+  RecruitmentSource? toRecruitmentSource() {
+    return RecruitmentSource.values
+        .firstWhereOrNull((element) => element.name == this);
+  }
+
   PhotoType toPhotoType() {
     return PhotoType.values.firstWhere((element) => element.name == this);
   }

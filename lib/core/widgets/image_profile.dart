@@ -9,8 +9,12 @@ import '../constant/images.dart';
 class ImageProfile extends StatelessWidget {
   final String? imageUrl;
   final Size size;
+  final Widget? defaultImage;
   const ImageProfile(
-      {super.key, required this.imageUrl, this.size = const Size(111, 111)});
+      {super.key,
+      required this.imageUrl,
+      this.size = const Size(111, 111),
+      this.defaultImage});
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +41,13 @@ class ImageProfile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(size.height / 2),
                   child: CachedImage(
                     fit: BoxFit.fill,
-                    errorWidget: (p0, p1, p2) => noImage,
+                    errorWidget: (p0, p1, p2) => defaultImage ?? noImage,
                     imageUrl: imageUrl!,
                   ))
               : SizedBox(
                   height: size.height,
                   width: size.width,
-                  child: noImage,
+                  child: defaultImage ?? noImage,
                 ),
         ));
   }

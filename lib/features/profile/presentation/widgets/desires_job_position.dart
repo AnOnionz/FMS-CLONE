@@ -6,16 +6,12 @@ import 'package:fms/core/responsive/responsive.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import '../../domain/entities/user_profile_entity.dart';
 import 'dropdown_field.dart';
+import 'user_profile_inheriterd.dart';
 
-class DesiredJobPosition extends StatefulWidget {
+class DesiredJobPosition extends StatelessWidget {
   final Function(UserProfileEntity newValue) onChanged;
   const DesiredJobPosition({super.key, required this.onChanged});
 
-  @override
-  State<DesiredJobPosition> createState() => _DesiredJobPositionState();
-}
-
-class _DesiredJobPositionState extends State<DesiredJobPosition> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -29,7 +25,9 @@ class _DesiredJobPositionState extends State<DesiredJobPosition> {
           DesiredPosition.SUP
         ],
         onSelected: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(desiredPosition: value));
         },
         width: 100.wPerc - 80.w,
       ).bottom18,
@@ -37,7 +35,9 @@ class _DesiredJobPositionState extends State<DesiredJobPosition> {
         label: 'Địa bàn làm việc mong muốn',
         isRequired: false,
         onChanged: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(desiredLocation: value));
         },
         textInputAction: TextInputAction.next,
       ).bottom18,
@@ -54,7 +54,9 @@ class _DesiredJobPositionState extends State<DesiredJobPosition> {
           RecruitmentSource.OTHER
         ],
         onSelected: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(recruitmentSource: value));
         },
         width: 100.wPerc - 80.w,
       ),

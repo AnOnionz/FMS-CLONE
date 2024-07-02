@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fuzzy/fuzzy.dart';
 
 import '../../../../core/constant/icons.dart';
 
@@ -13,9 +14,11 @@ class DropdownField<T> extends StatefulWidget {
   final String hint;
   final double? width;
   final T? value;
+  final bool enableSearch;
   final Function(T value) onSelected;
   final String Function(T option) label;
-  final Widget? onError;
+  final TextEditingController? controller;
+
   const DropdownField(
       {super.key,
       required this.values,
@@ -23,18 +26,15 @@ class DropdownField<T> extends StatefulWidget {
       this.width,
       this.value,
       required this.onSelected,
-      this.onError,
-      required this.label});
+      required this.label,
+      this.controller,
+      this.enableSearch = false});
 
   @override
   State<DropdownField<T>> createState() => _DropdownFieldState<T>();
 }
 
 class _DropdownFieldState<T> extends State<DropdownField<T>> {
-  TextEditingController _controller = TextEditingController();
-
-  late T? _selected = widget.value;
-
   @override
   void initState() {
     super.initState();
@@ -63,7 +63,7 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
             widget.hint,
             style: context.textTheme.body1?.copyWith(color: AppColors.nobel),
           ),
-          controller: _controller,
+          controller: widget.controller,
           width: widget.width ?? context.screenWidth - 80.w,
           hintText: widget.hint,
           textStyle: context.textTheme.body1,
@@ -77,13 +77,30 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
               colorFilter: ColorFilter.mode(AppColors.nobel, BlendMode.srcIn),
             ),
           ),
-          requestFocusOnTap: false,
+          requestFocusOnTap: widget.enableSearch,
           initialSelection: widget.value,
+          searchCallback: (entries, query) {
+            if (query.isEmpty) {
+              return null;
+            }
+            final fuse = Fuzzy(entries.map((e) => e.label).toList(),
+                options: FuzzyOptions(
+                  tokenize: true,
+                  threshold: 0.1,
+                ));
+
+            final result = fuse.search(query).map((suggest) {
+              return entries
+                  .firstWhere((element) => element.label == suggest.item);
+            }).toList();
+
+            final int index = entries.indexWhere((DropdownMenuEntry<T> entry) =>
+                entry.label == result.firstOrNull?.label);
+
+            return index != -1 ? index : null;
+          },
           onSelected: (T? value) {
-            setState(() {
-              _selected = value;
-            });
-            widget.onSelected(_selected!);
+            widget.onSelected(value!);
           },
           selectedTrailingIcon: Transform.rotate(
             angle: pi * 1.5,

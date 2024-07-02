@@ -3,16 +3,12 @@ import 'package:fms/core/mixins/extension/widget.ext.dart';
 
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import '../../domain/entities/user_profile_entity.dart';
+import 'user_profile_inheriterd.dart';
 
-class TrustworthyPerson extends StatefulWidget {
+class TrustworthyPerson extends StatelessWidget {
   final Function(UserProfileEntity newValue) onChanged;
   const TrustworthyPerson({super.key, required this.onChanged});
 
-  @override
-  State<TrustworthyPerson> createState() => _TrustworthyPersonState();
-}
-
-class _TrustworthyPersonState extends State<TrustworthyPerson> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -20,7 +16,9 @@ class _TrustworthyPersonState extends State<TrustworthyPerson> {
         label: 'Họ tên',
         isRequired: false,
         onChanged: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(emergencyContactName: value));
         },
         textInputAction: TextInputAction.next,
       ).bottom18,
@@ -28,7 +26,9 @@ class _TrustworthyPersonState extends State<TrustworthyPerson> {
         label: 'Quan hệ',
         isRequired: false,
         onChanged: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(emergencyContactRelationship: value));
         },
         textInputAction: TextInputAction.next,
       ).bottom18,
@@ -36,10 +36,12 @@ class _TrustworthyPersonState extends State<TrustworthyPerson> {
         label: 'Số điện thoại',
         isRequired: false,
         onChanged: (value) {
-          setState(() {});
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(emergencyContactPhoneNumber: value));
         },
         textInputAction: TextInputAction.next,
-      ).bottom18,
+      ),
     ]);
   }
 }

@@ -6,13 +6,16 @@ class DatePicker extends StatefulWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final Function(DateTime time) onSelected;
+  final String? Function(String?)? validator;
 
-  DatePicker(
-      {super.key,
-      this.decoration,
-      this.firstDate,
-      this.lastDate,
-      required this.onSelected});
+  DatePicker({
+    super.key,
+    this.decoration,
+    this.firstDate,
+    this.lastDate,
+    required this.onSelected,
+    this.validator,
+  });
 
   @override
   State<DatePicker> createState() => _DatePickerState();
@@ -44,6 +47,8 @@ class _DatePickerState extends State<DatePicker> {
       onTap: () => selectDay(context),
       style: context.textTheme.body1,
       decoration: widget.decoration,
+      validator: widget.validator,
+      autovalidateMode: AutovalidateMode.always,
     );
   }
 }

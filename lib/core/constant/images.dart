@@ -18,4 +18,5 @@ sealed class AppImages {
   static String account = 'account'.image.svg;
   static String outletBorder = 'outlet_border'.image.png;
   static String product = 'product'.image.png;
+  static String userPortrait = 'user_portrait'.image.png;
 }

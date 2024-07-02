@@ -75,13 +75,23 @@ final class Mapper {
       case 'phoneNumber':
         return (String? value) {
           final RegExp regex =
-              RegExp('/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/');
+              RegExp(r'(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b');
 
           // Check if the phone format matches the regular expression
           if (value.isNotEmptyAndNotNull && !regex.hasMatch(value!)) {
             return 'Số điện thoại chưa chính xác';
           }
           // If the phone is valid, return null (no error message)
+          return null;
+        };
+
+      case 'cccd':
+        return (String? value) {
+          final RegExp regex = RegExp(r'^(?=[0-9]+$)(?:.{9}|.{12})+$');
+
+          if (value.isNotEmptyAndNotNull && !regex.hasMatch(value!)) {
+            return 'CMND/CCCD chưa chính xác';
+          }
           return null;
         };
 

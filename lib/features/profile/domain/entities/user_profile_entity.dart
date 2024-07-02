@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
 
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -42,11 +45,16 @@ class UserProfileEntity {
   final DressSize? dressSize;
   final int? shoeSize;
   final EducationLevel? educationLevel;
-  final String? desiredPosition;
+  final DesiredPosition? desiredPosition;
   final String? desiredLocation;
-  final String? recruitmentSource;
+  final RecruitmentSource? recruitmentSource;
   final List<Experience> experiences;
   final List<Photo> photos;
+  final String? portraitImage;
+  final String? fullbodyImage;
+  final String? idfontImage;
+  final String? idbackImage;
+  final String? cvImage;
 
   UserProfileEntity({
     this.id,
@@ -90,6 +98,11 @@ class UserProfileEntity {
     this.recruitmentSource,
     this.experiences = const [],
     this.photos = const [],
+    this.portraitImage,
+    this.fullbodyImage,
+    this.idfontImage,
+    this.idbackImage,
+    this.cvImage,
   });
 
   Map<String, dynamic> toMap() {
@@ -215,13 +228,13 @@ class UserProfileEntity {
           ? (map['educationLevel'] as String).toEducationLevel()
           : null,
       desiredPosition: map['desiredPosition'] != null
-          ? map['desiredPosition'] as String
+          ? (map['desiredPosition'] as String).toDesiredPosition()
           : null,
       desiredLocation: map['desiredLocation'] != null
           ? map['desiredLocation'] as String
           : null,
       recruitmentSource: map['recruitmentSource'] != null
-          ? map['recruitmentSource'] as String
+          ? (map['recruitmentSource'] as String).toRecruitmentSource()
           : null,
       experiences: List<Experience>.from(
         (map['experiences'] as List<int>).map<Experience>(
@@ -278,11 +291,16 @@ class UserProfileEntity {
     DressSize? dressSize,
     int? shoeSize,
     EducationLevel? educationLevel,
-    String? desiredPosition,
+    DesiredPosition? desiredPosition,
     String? desiredLocation,
-    String? recruitmentSource,
+    RecruitmentSource? recruitmentSource,
     List<Experience>? experiences,
     List<Photo>? photos,
+    String? portraitImage,
+    String? fullbodyImage,
+    String? idfontImage,
+    String? idbackImage,
+    String? cvImage,
   }) {
     return UserProfileEntity(
       id: id ?? this.id,
@@ -330,105 +348,21 @@ class UserProfileEntity {
       recruitmentSource: recruitmentSource ?? this.recruitmentSource,
       experiences: experiences ?? this.experiences,
       photos: photos ?? this.photos,
+      portraitImage: portraitImage ?? this.portraitImage,
+      fullbodyImage: fullbodyImage ?? this.fullbodyImage,
+      idbackImage: idbackImage ?? this.idbackImage,
+      idfontImage: idfontImage ?? this.idfontImage,
+      cvImage: cvImage ?? this.cvImage,
     );
-  }
-
-  void update({
-    int? id,
-    String? status,
-    String? reason,
-    String? fullName,
-    String? identityCardNumber,
-    String? phoneNumber,
-    String? email,
-    GenderStatus? gender,
-    DateTime? birthdate,
-    String? birthplace,
-    String? socialInsuranceNumber,
-    String? personalTaxCode,
-    Marital? maritalStatus,
-    int? numberOfChildren,
-    String? emergencyContactName,
-    String? emergencyContactRelationship,
-    String? emergencyContactPhoneNumber,
-    String? emergencyContactAddress,
-    int? permanentProvince,
-    int? permanentDistrict,
-    int? permanentWard,
-    String? permanentAddress,
-    int? province,
-    int? district,
-    int? ward,
-    String? address,
-    int? bodyHeight,
-    int? bodyWeight,
-    int? bodyBust,
-    int? bodyWaist,
-    int? bodyHips,
-    DressSize? shirtSize,
-    DressSize? pantsSize,
-    DressSize? dressSize,
-    int? shoeSize,
-    EducationLevel? educationLevel,
-    String? desiredPosition,
-    String? desiredLocation,
-    String? recruitmentSource,
-    List<Experience>? experiences,
-    List<Photo>? photos,
-  }) {
-    id = id ?? this.id;
-    status = status ?? this.status;
-    reason = reason ?? this.reason;
-    fullName = fullName ?? this.fullName;
-    identityCardNumber = identityCardNumber ?? this.identityCardNumber;
-    phoneNumber = phoneNumber ?? this.phoneNumber;
-    email = email ?? this.email;
-    gender = gender ?? this.gender;
-    birthdate = birthdate ?? this.birthdate;
-    birthplace = birthplace ?? this.birthplace;
-    socialInsuranceNumber = socialInsuranceNumber ?? this.socialInsuranceNumber;
-    personalTaxCode = personalTaxCode ?? this.personalTaxCode;
-    maritalStatus = maritalStatus ?? this.maritalStatus;
-    numberOfChildren = numberOfChildren ?? this.numberOfChildren;
-    emergencyContactName = emergencyContactName ?? this.emergencyContactName;
-    emergencyContactRelationship =
-        emergencyContactRelationship ?? this.emergencyContactRelationship;
-    emergencyContactPhoneNumber =
-        emergencyContactPhoneNumber ?? this.emergencyContactPhoneNumber;
-    emergencyContactAddress =
-        emergencyContactAddress ?? this.emergencyContactAddress;
-    permanentProvince = permanentProvince ?? this.permanentProvince;
-    permanentDistrict = permanentDistrict ?? this.permanentDistrict;
-    permanentWard = permanentWard ?? this.permanentWard;
-    permanentAddress = permanentAddress ?? this.permanentAddress;
-    province = province ?? this.province;
-    district = district ?? this.district;
-    ward = ward ?? this.ward;
-    address = address ?? this.address;
-    bodyHeight = bodyHeight ?? this.bodyHeight;
-    bodyWeight = bodyWeight ?? this.bodyWeight;
-    bodyBust = bodyBust ?? this.bodyBust;
-    bodyWaist = bodyWaist ?? this.bodyWaist;
-    bodyHips = bodyHips ?? this.bodyHips;
-    shirtSize = shirtSize ?? this.shirtSize;
-    pantsSize = pantsSize ?? this.pantsSize;
-    dressSize = dressSize ?? this.dressSize;
-    shoeSize = shoeSize ?? this.shoeSize;
-    educationLevel = educationLevel ?? this.educationLevel;
-    desiredPosition = desiredPosition ?? this.desiredPosition;
-    desiredLocation = desiredLocation ?? this.desiredLocation;
-    recruitmentSource = recruitmentSource ?? this.recruitmentSource;
-    experiences = experiences ?? this.experiences;
-    photos = photos ?? this.photos;
   }
 
   @override
   String toString() {
-    return 'UserProfileEntity(id: $id, status: $status, reason: $reason, fullName: $fullName, identityCardNumber: $identityCardNumber, phoneNumber: $phoneNumber, email: $email, gender: $gender, birthdate: $birthdate, birthplace: $birthplace, socialInsuranceNumber: $socialInsuranceNumber, personalTaxCode: $personalTaxCode, maritalStatus: $maritalStatus, numberOfChildren: $numberOfChildren, emergencyContactName: $emergencyContactName, emergencyContactRelationship: $emergencyContactRelationship, emergencyContactPhoneNumber: $emergencyContactPhoneNumber, emergencyContactAddress: $emergencyContactAddress, permanentProvince: $permanentProvince, permanentDistrict: $permanentDistrict, permanentWard: $permanentWard, permanentAddress: $permanentAddress, province: $province, district: $district, ward: $ward, address: $address, bodyHeight: $bodyHeight, bodyWeight: $bodyWeight, bodyBust: $bodyBust, bodyWaist: $bodyWaist, bodyHips: $bodyHips, shirtSize: $shirtSize, pantsSize: $pantsSize, dressSize: $dressSize, shoeSize: $shoeSize, educationLevel: $educationLevel, desiredPosition: $desiredPosition, desiredLocation: $desiredLocation, recruitmentSource: $recruitmentSource, experiences: $experiences, photos: $photos)';
+    return 'UserProfileEntity(id: $id, status: $status, reason: $reason, fullName: $fullName, identityCardNumber: $identityCardNumber, phoneNumber: $phoneNumber, email: $email, gender: $gender, birthdate: $birthdate, birthplace: $birthplace, socialInsuranceNumber: $socialInsuranceNumber, personalTaxCode: $personalTaxCode, maritalStatus: $maritalStatus, numberOfChildren: $numberOfChildren, emergencyContactName: $emergencyContactName, emergencyContactRelationship: $emergencyContactRelationship, emergencyContactPhoneNumber: $emergencyContactPhoneNumber, emergencyContactAddress: $emergencyContactAddress, permanentProvince: $permanentProvince, permanentDistrict: $permanentDistrict, permanentWard: $permanentWard, permanentAddress: $permanentAddress, province: $province, district: $district, ward: $ward, address: $address, bodyHeight: $bodyHeight, bodyWeight: $bodyWeight, bodyBust: $bodyBust, bodyWaist: $bodyWaist, bodyHips: $bodyHips, shirtSize: $shirtSize, pantsSize: $pantsSize, dressSize: $dressSize, shoeSize: $shoeSize, educationLevel: $educationLevel, desiredPosition: $desiredPosition, desiredLocation: $desiredLocation, recruitmentSource: $recruitmentSource, experiences: $experiences, photos: $photos, portraitImage: $portraitImage, fullbodyImage: $fullbodyImage, idfontImage: $idfontImage, idbackImage: $idbackImage, cvImage: $cvImage)';
   }
 }
 
-class Experience {
+class Experience extends Equatable {
   final int? id;
   final String? title;
   final String? companyName;
@@ -514,6 +448,18 @@ class Experience {
   String toString() {
     return 'Experience(id: $id, title: $title, companyName: $companyName, startedAt: $startedAt, endedAt: $endedAt, description: $description, businessLine: $businessLine, leaveReason: $leaveReason)';
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        companyName,
+        startedAt,
+        endedAt,
+        description,
+        businessLine,
+        leaveReason,
+      ];
 }
 
 class Photo {

@@ -1,9 +1,6 @@
 import 'dart:async';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/features/profile/presentation/cubit/fetch_province_cubit.dart';
 import 'package:fms/features/profile/presentation/widgets/user_profile_inheriterd.dart';
@@ -16,95 +13,188 @@ import '../cubit/fetch_ward_cubit.dart';
 import 'dropdown_field.dart';
 
 class Residence extends StatefulWidget {
+  final bool isPermanent;
   final Function(UserProfileEntity newValue) onChanged;
-  const Residence({super.key, required this.onChanged});
+  const Residence(
+      {super.key, required this.onChanged, this.isPermanent = false});
 
   @override
   State<Residence> createState() => _ResidenceState();
 }
 
-class _ResidenceState extends State<Residence>
-    with AutomaticKeepAliveClientMixin {
+class _ResidenceState extends State<Residence> {
   final provinceCubit = Modular.get<FetchProvinceCubit>();
   final districtCubit = Modular.get<FetchDistrictCubit>();
   final wardCubit = Modular.get<FetchWardCubit>();
-
-  late final entity = UserProfileInherited.of(context).entity;
 
   List<Province> _provinces = [];
   List<District> _districts = [];
   List<Ward> _wards = [];
 
+  ValueNotifier<Province?> _provinceSelected = ValueNotifier(null);
+  ValueNotifier<District?> _districtSelected = ValueNotifier(null);
+  ValueNotifier<Ward?> _wardSelected = ValueNotifier(null);
+
   late StreamSubscription<FetchProvinceState>? _provinceSubscription;
   late StreamSubscription<FetchDistrictState>? _districtSubscription;
   late StreamSubscription<FetchWardState>? _wardSubscription;
 
+  final TextEditingController _provinceController = TextEditingController();
+  final TextEditingController _distrcitController = TextEditingController();
+  final TextEditingController _wardController = TextEditingController();
+
   @override
   void initState() {
-    super.initState();
     provinceCubit.fetchProvinces();
     _provinceSubscription = provinceCubit.stream.listen((state) {
       if (state is FetchProvinceSuccess) {
         setState(() {
           _provinces = state.provinces;
         });
-        Fx.log(_provinces);
       }
     });
+    _districtSubscription = districtCubit.stream.listen((state) {
+      if (state is FetchDistrictSuccess) {
+        setState(() {
+          _districts = state.districts;
+        });
+      }
+    });
+    _wardSubscription = wardCubit.stream.listen((state) {
+      if (state is FetchWardSuccess) {
+        setState(() {
+          _wards = state.wards;
+        });
+      }
+    });
+
+    _provinceSelected.addListener(_fetchDistricts);
+    _districtSelected.addListener(_fetchWards);
+    super.initState();
+  }
+
+  void _fetchDistricts() {
+    if (_districtSelected.value == null) {
+      setState(() {
+        _districts = [];
+      });
+    }
+    if (_provinceSelected.value != null)
+      districtCubit.fetchDistricts(provinceId: _provinceSelected.value!.id!);
+  }
+
+  void _fetchWards() {
+    if (_wardSelected.value == null) {
+      setState(() {
+        _wards = [];
+      });
+    }
+    if (_provinceSelected.value != null && _districtSelected.value != null)
+      wardCubit.fetchWards(
+          provinceId: _provinceSelected.value!.id!,
+          districtId: _districtSelected.value!.id!);
+  }
+
+  void onProvinceSelected(Province province) {
+    _provinceSelected.value = province;
+    _districtSelected.value = null;
+    _wardSelected.value = null;
+    _distrcitController.clear();
+    _wardController.clear();
+    setState(() {});
+  }
+
+  void onDistrictSelected(District district) {
+    _districtSelected.value = district;
+    _wardSelected.value = null;
+    _wardController.clear();
+    setState(() {});
+  }
+
+  void onWardSelected(Ward ward) {
+    _wardSelected.value = ward;
   }
 
   @override
   void dispose() {
     _provinceSubscription?.cancel();
-    // _districtSubscription?.cancel();
-    // _wardSubscription?.cancel();
+    _districtSubscription?.cancel();
+    _wardSubscription?.cancel();
+    _provinceSelected.removeListener(_fetchDistricts);
+    _districtSelected.removeListener(_fetchWards);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Column(children: [
       DropdownField<Province>(
+        controller: _provinceController,
         hint: 'Tỉnh/Thành',
+        enableSearch: true,
         label: (value) => value.name!,
-        value: _provinces
-            .firstWhereOrNull((element) => element.id == entity.province),
+        value: _provinceSelected.value,
         values: _provinces,
         onSelected: (value) {
-          widget.onChanged(entity.copyWith(province: value.id));
+          onProvinceSelected(value);
+          if (widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(permanentProvince: value.id));
+          if (!widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(province: value.id));
         },
       ).bottom18,
       DropdownField<District>(
-        hint: 'Quận/huyện',
+        controller: _distrcitController,
+        hint: 'Quận/Huyện',
+        enableSearch: true,
         label: (value) => value.name!,
-        value: _districts
-            .firstWhereOrNull((element) => element.id == entity.district),
+        value: _districtSelected.value,
         values: _districts,
         onSelected: (value) {
-          widget.onChanged(entity.copyWith(district: value.id));
+          onDistrictSelected(value);
+
+          if (widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(permanentDistrict: value.id));
+          if (!widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(district: value.id));
         },
       ).bottom18,
       DropdownField<Ward>(
+        controller: _wardController,
         hint: 'Phường/Xã',
+        enableSearch: true,
         label: (value) => value.name!,
-        value: _wards.firstWhereOrNull((element) => element.id == entity.ward),
+        value: _wardSelected.value,
         values: _wards,
         onSelected: (value) {
-          widget.onChanged(entity.copyWith(ward: value.id));
+          onWardSelected(value);
+          if (widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(permanentWard: value.id));
+          if (!widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(ward: value.id));
         },
       ).bottom18,
       AppTextFormField(
         label: 'Số nhà, tên đường,...',
         isRequired: false,
         onChanged: (value) {
-          widget.onChanged(entity.copyWith(address: value));
+          widget.onChanged(
+              UserProfileInherited.of(context).entity.copyWith(address: value));
         },
         textInputAction: TextInputAction.next,
       ),
     ]);
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
