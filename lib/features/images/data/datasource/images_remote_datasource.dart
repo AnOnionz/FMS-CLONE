@@ -1,15 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:fms/core/client/dio_client.dart';
+import 'package:fms/core/data_source/remote_datasource.dart';
 import 'package:fms/features/images/data/models/image_upload_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/utilities/parser.dart';
 
-abstract class ImagesRemoteDataSource {
-  final DioClient dio;
-
-  ImagesRemoteDataSource(this.dio);
-
+abstract class ImagesRemoteDataSource extends RemoteDatasource {
   Future<ImageUploadModel?> uploadImageToServer(XFile file,
       {bool withS3 = false}) async {
     final form = FormData.fromMap({

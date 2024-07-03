@@ -6,3 +6,9 @@ abstract class ProfileEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class CreateProfile extends ProfileEvent {
+  final UserProfileEntity profile;
+
+  CreateProfile({required this.profile});
+}

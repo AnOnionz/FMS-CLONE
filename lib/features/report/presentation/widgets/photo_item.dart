@@ -58,7 +58,6 @@ class PhotoItem extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(top: 20.h),
               child: ListViewImages(
-                feature: feature,
                 imagePickerButton: ImagePickerWidget(
                   enable: photos
                           .where((element) =>

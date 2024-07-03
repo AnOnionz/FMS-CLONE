@@ -1,10 +1,11 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../attendance/domain/entities/attendance_entity.dart';
 
@@ -27,13 +28,13 @@ class UserProfileEntity {
   final String? emergencyContactRelationship;
   final String? emergencyContactPhoneNumber;
   final String? emergencyContactAddress;
-  final int? permanentProvince;
-  final int? permanentDistrict;
-  final int? permanentWard;
+  final Province? permanentProvince;
+  final District? permanentDistrict;
+  final Ward? permanentWard;
   final String? permanentAddress;
-  final int? province;
-  final int? district;
-  final int? ward;
+  final Province? province;
+  final District? district;
+  final Ward? ward;
   final String? address;
   final int? bodyHeight;
   final int? bodyWeight;
@@ -49,12 +50,7 @@ class UserProfileEntity {
   final String? desiredLocation;
   final RecruitmentSource? recruitmentSource;
   final List<Experience> experiences;
-  final List<Photo> photos;
-  final String? portraitImage;
-  final String? fullbodyImage;
-  final String? idfontImage;
-  final String? idbackImage;
-  final String? cvImage;
+  final List<ProfilePhoto> photos;
 
   UserProfileEntity({
     this.id,
@@ -97,13 +93,8 @@ class UserProfileEntity {
     this.desiredLocation,
     this.recruitmentSource,
     this.experiences = const [],
-    this.photos = const [],
-    this.portraitImage,
-    this.fullbodyImage,
-    this.idfontImage,
-    this.idbackImage,
-    this.cvImage,
-  });
+    List<ProfilePhoto>? photos,
+  }) : this.photos = photos ?? [];
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -114,40 +105,39 @@ class UserProfileEntity {
       'identityCardNumber': identityCardNumber,
       'phoneNumber': phoneNumber,
       'email': email,
-      'gender': gender,
-      'birthdate': birthdate?.millisecondsSinceEpoch,
+      'gender': gender?.name,
+      'birthdate': birthdate?.formatBy(kyMd),
       'birthplace': birthplace,
       'socialInsuranceNumber': socialInsuranceNumber,
       'personalTaxCode': personalTaxCode,
-      'maritalStatus': maritalStatus,
+      'maritalStatus': maritalStatus?.name,
       'numberOfChildren': numberOfChildren,
       'emergencyContactName': emergencyContactName,
       'emergencyContactRelationship': emergencyContactRelationship,
       'emergencyContactPhoneNumber': emergencyContactPhoneNumber,
       'emergencyContactAddress': emergencyContactAddress,
-      'permanentProvince': permanentProvince,
-      'permanentDistrict': permanentDistrict,
-      'permanentWard': permanentWard,
+      'permanentProvinceId': permanentProvince?.id,
+      'permanentDistrictId': permanentDistrict?.id,
+      'permanentWardId': permanentWard?.id,
       'permanentAddress': permanentAddress,
-      'province': province,
-      'district': district,
-      'ward': ward,
+      'provinceId': province?.id,
+      'districtId': district?.id,
+      'wardId': ward?.id,
       'address': address,
       'bodyHeight': bodyHeight,
       'bodyWeight': bodyWeight,
       'bodyBust': bodyBust,
       'bodyWaist': bodyWaist,
       'bodyHips': bodyHips,
-      'shirtSize': shirtSize,
-      'pantsSize': pantsSize,
-      'dressSize': dressSize,
+      'shirtSize': shirtSize?.name,
+      'pantsSize': pantsSize?.name,
+      'dressSize': dressSize?.name,
       'shoeSize': shoeSize,
-      'educationLevel': educationLevel,
+      'educationLevel': educationLevel?.name,
       'desiredPosition': desiredPosition,
       'desiredLocation': desiredLocation,
-      'recruitmentSource': recruitmentSource,
+      'recruitmentSource': recruitmentSource?.name,
       'experiences': experiences.map((x) => x.toMap()).toList(),
-      'photos': photos.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -166,7 +156,7 @@ class UserProfileEntity {
       gender:
           map['gender'] != null ? (map['gender'] as String).toGender() : null,
       birthdate: map['birthdate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['birthdate'] as int)
+          ? DateTime.parse(map['birthdate'] as String).toLocal()
           : null,
       birthplace:
           map['birthplace'] != null ? map['birthplace'] as String : null,
@@ -195,19 +185,26 @@ class UserProfileEntity {
           ? map['emergencyContactAddress'] as String
           : null,
       permanentProvince: map['permanentProvince'] != null
-          ? map['permanentProvince'] as int
+          ? Province.fromMap(map['permanentProvince'] as Map<String, dynamic>)
           : null,
       permanentDistrict: map['permanentDistrict'] != null
-          ? map['permanentDistrict'] as int
+          ? District.fromMap(map['permanentDistrict'] as Map<String, dynamic>)
           : null,
-      permanentWard:
-          map['permanentWard'] != null ? map['permanentWard'] as int : null,
+      permanentWard: map['permanentWard'] != null
+          ? Ward.fromMap(map['permanentWard'] as Map<String, dynamic>)
+          : null,
       permanentAddress: map['permanentAddress'] != null
           ? map['permanentAddress'] as String
           : null,
-      province: map['province'] != null ? map['province'] as int : null,
-      district: map['district'] != null ? map['district'] as int : null,
-      ward: map['ward'] != null ? map['ward'] as int : null,
+      province: map['province'] != null
+          ? Province.fromMap(map['province'] as Map<String, dynamic>)
+          : null,
+      district: map['district'] != null
+          ? District.fromMap(map['district'] as Map<String, dynamic>)
+          : null,
+      ward: map['ward'] != null
+          ? Ward.fromMap(map['ward'] as Map<String, dynamic>)
+          : null,
       address: map['address'] != null ? map['address'] as String : null,
       bodyHeight: map['bodyHeight'] != null ? map['bodyHeight'] as int : null,
       bodyWeight: map['bodyWeight'] != null ? map['bodyWeight'] as int : null,
@@ -237,13 +234,13 @@ class UserProfileEntity {
           ? (map['recruitmentSource'] as String).toRecruitmentSource()
           : null,
       experiences: List<Experience>.from(
-        (map['experiences'] as List<int>).map<Experience>(
+        (map['experiences'] as List<dynamic>).map<Experience>(
           (x) => Experience.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      photos: List<Photo>.from(
-        (map['photos'] as List<int>).map<Photo>(
-          (x) => Photo.fromMap(x as Map<String, dynamic>),
+      photos: List<ProfilePhoto>.from(
+        (map['photos'] as List<dynamic>).map<ProfilePhoto>(
+          (x) => ProfilePhoto.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );
@@ -273,13 +270,13 @@ class UserProfileEntity {
     String? emergencyContactRelationship,
     String? emergencyContactPhoneNumber,
     String? emergencyContactAddress,
-    int? permanentProvince,
-    int? permanentDistrict,
-    int? permanentWard,
+    Province? permanentProvince,
+    District? permanentDistrict,
+    Ward? permanentWard,
     String? permanentAddress,
-    int? province,
-    int? district,
-    int? ward,
+    Province? province,
+    District? district,
+    Ward? ward,
     String? address,
     int? bodyHeight,
     int? bodyWeight,
@@ -295,12 +292,7 @@ class UserProfileEntity {
     String? desiredLocation,
     RecruitmentSource? recruitmentSource,
     List<Experience>? experiences,
-    List<Photo>? photos,
-    String? portraitImage,
-    String? fullbodyImage,
-    String? idfontImage,
-    String? idbackImage,
-    String? cvImage,
+    List<ProfilePhoto>? photos,
   }) {
     return UserProfileEntity(
       id: id ?? this.id,
@@ -348,17 +340,12 @@ class UserProfileEntity {
       recruitmentSource: recruitmentSource ?? this.recruitmentSource,
       experiences: experiences ?? this.experiences,
       photos: photos ?? this.photos,
-      portraitImage: portraitImage ?? this.portraitImage,
-      fullbodyImage: fullbodyImage ?? this.fullbodyImage,
-      idbackImage: idbackImage ?? this.idbackImage,
-      idfontImage: idfontImage ?? this.idfontImage,
-      cvImage: cvImage ?? this.cvImage,
     );
   }
 
   @override
   String toString() {
-    return 'UserProfileEntity(id: $id, status: $status, reason: $reason, fullName: $fullName, identityCardNumber: $identityCardNumber, phoneNumber: $phoneNumber, email: $email, gender: $gender, birthdate: $birthdate, birthplace: $birthplace, socialInsuranceNumber: $socialInsuranceNumber, personalTaxCode: $personalTaxCode, maritalStatus: $maritalStatus, numberOfChildren: $numberOfChildren, emergencyContactName: $emergencyContactName, emergencyContactRelationship: $emergencyContactRelationship, emergencyContactPhoneNumber: $emergencyContactPhoneNumber, emergencyContactAddress: $emergencyContactAddress, permanentProvince: $permanentProvince, permanentDistrict: $permanentDistrict, permanentWard: $permanentWard, permanentAddress: $permanentAddress, province: $province, district: $district, ward: $ward, address: $address, bodyHeight: $bodyHeight, bodyWeight: $bodyWeight, bodyBust: $bodyBust, bodyWaist: $bodyWaist, bodyHips: $bodyHips, shirtSize: $shirtSize, pantsSize: $pantsSize, dressSize: $dressSize, shoeSize: $shoeSize, educationLevel: $educationLevel, desiredPosition: $desiredPosition, desiredLocation: $desiredLocation, recruitmentSource: $recruitmentSource, experiences: $experiences, photos: $photos, portraitImage: $portraitImage, fullbodyImage: $fullbodyImage, idfontImage: $idfontImage, idbackImage: $idbackImage, cvImage: $cvImage)';
+    return 'UserProfileEntity(id: $id, status: $status, reason: $reason, fullName: $fullName, identityCardNumber: $identityCardNumber, phoneNumber: $phoneNumber, email: $email, gender: $gender, birthdate: $birthdate, birthplace: $birthplace, socialInsuranceNumber: $socialInsuranceNumber, personalTaxCode: $personalTaxCode, maritalStatus: $maritalStatus, numberOfChildren: $numberOfChildren, emergencyContactName: $emergencyContactName, emergencyContactRelationship: $emergencyContactRelationship, emergencyContactPhoneNumber: $emergencyContactPhoneNumber, emergencyContactAddress: $emergencyContactAddress, permanentProvince: $permanentProvince, permanentDistrict: $permanentDistrict, permanentWard: $permanentWard, permanentAddress: $permanentAddress, province: $province, district: $district, ward: $ward, address: $address, bodyHeight: $bodyHeight, bodyWeight: $bodyWeight, bodyBust: $bodyBust, bodyWaist: $bodyWaist, bodyHips: $bodyHips, shirtSize: $shirtSize, pantsSize: $pantsSize, dressSize: $dressSize, shoeSize: $shoeSize, educationLevel: $educationLevel, desiredPosition: $desiredPosition, desiredLocation: $desiredLocation, recruitmentSource: $recruitmentSource, experiences: $experiences, photos: $photos)';
   }
 }
 
@@ -388,8 +375,8 @@ class Experience extends Equatable {
       'id': id,
       'title': title,
       'companyName': companyName,
-      'startedAt': startedAt?.millisecondsSinceEpoch,
-      'endedAt': endedAt?.millisecondsSinceEpoch,
+      'startedAt': startedAt?.formatBy(kyMd),
+      'endedAt': endedAt?.formatBy(kyMd),
       'description': description,
       'businessLine': businessLine,
       'leaveReason': leaveReason,
@@ -403,10 +390,10 @@ class Experience extends Equatable {
       companyName:
           map['companyName'] != null ? map['companyName'] as String : null,
       startedAt: map['startedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int)
+          ? DateTime.parse(map['startedAt'] as String).toLocal()
           : null,
       endedAt: map['endedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['endedAt'] as int)
+          ? DateTime.parse(map['endedAt'] as String).toLocal()
           : null,
       description:
           map['description'] != null ? map['description'] as String : null,
@@ -462,50 +449,54 @@ class Experience extends Equatable {
       ];
 }
 
-class Photo {
+class ProfilePhoto {
   final int? id;
   final PhotoType type;
-  final ImageCloud image;
+  final ImageCloud? image;
+  final String? localPath;
+  final String uuid;
 
-  Photo({
-    this.id,
-    required this.type,
-    required this.image,
-  });
+  ProfilePhoto(
+      {this.id,
+      required this.type,
+      this.image,
+      this.localPath,
+      required String uuid})
+      : this.uuid = uuid;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(int ID) {
     return <String, dynamic>{
-      'id': id,
-      'type': type,
-      'image': image.toMap(),
+      'type': type.name,
+      'imageId': ID,
     };
   }
 
-  factory Photo.fromMap(Map<String, dynamic> map) {
-    return Photo(
-      id: map['id'] as int,
-      type: (map['type'] as String).toPhotoType(),
-      image: ImageCloud.fromMap(map['image'] as Map<String, dynamic>),
-    );
+  String toJson(int ID) => json.encode(toMap(ID));
+
+  factory ProfilePhoto.fromMap(Map<String, dynamic> map) {
+    return ProfilePhoto(
+        id: map['id'] != null ? map['id'] as int : null,
+        type: (map['type'] as String).toPhotoType(),
+        image: map['image'] != null
+            ? ImageCloud.fromMap(map['image'] as Map<String, dynamic>)
+            : null,
+        uuid: Uuid().v1());
   }
 
-  String toJson() => json.encode(toMap());
+  factory ProfilePhoto.fromJson(String source) =>
+      ProfilePhoto.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  factory Photo.fromJson(String source) =>
-      Photo.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  Photo copyWith({
-    int? id,
-    PhotoType? type,
-    ImageCloud? image,
-  }) {
-    return Photo(
-      id: id ?? this.id,
-      type: type ?? this.type,
-      image: image ?? this.image,
-    );
+  ProfilePhoto copyWith(
+      {int? id, PhotoType? type, ImageCloud? image, String? path}) {
+    return ProfilePhoto(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        image: image ?? this.image,
+        uuid: this.uuid,
+        localPath: path ?? this.localPath);
   }
 
   @override
-  String toString() => 'Photo(id: $id, type: $type, image: $image)';
+  String toString() =>
+      'Photo(id: $id, type: $type, image: $image, path: $localPath)';
 }

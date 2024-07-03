@@ -17,8 +17,6 @@ abstract class IReportRemoteDataSource {
 
 class ReportRemoteDataSource extends ImagesRemoteDataSource
     implements IReportRemoteDataSource {
-  ReportRemoteDataSource(super.dio);
-
   @override
   Future<List<PhotoEntity>> allPhotos(
       {required GeneralEntity general, required FeatureEntity feature}) async {

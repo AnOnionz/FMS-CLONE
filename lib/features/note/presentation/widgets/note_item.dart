@@ -83,7 +83,6 @@ class _NoteItemState extends State<NoteItem> {
             Padding(
                 padding: EdgeInsets.only(top: 20.h),
                 child: ListViewImages(
-                  feature: widget.feature,
                   imagePickerButton: ImagePickerWidget(
                     enable: widget.photos
                             .where((element) =>

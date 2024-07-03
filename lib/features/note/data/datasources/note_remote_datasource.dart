@@ -22,8 +22,6 @@ abstract class INoteRemoteDataSource {
 
 class NoteRemoteDataSource extends ImagesRemoteDataSource
     implements INoteRemoteDataSource {
-  NoteRemoteDataSource(super.dio);
-
   @override
   Future<List<NoteEntity>> allNotes(
       {required GeneralEntity general, required FeatureEntity feature}) async {

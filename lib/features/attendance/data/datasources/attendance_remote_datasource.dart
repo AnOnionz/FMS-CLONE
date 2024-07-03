@@ -25,8 +25,6 @@ abstract class IAttendanceRemoteDataSource {
 
 class AttendanceRemoteDataSource extends ImagesRemoteDataSource
     implements IAttendanceRemoteDataSource {
-  AttendanceRemoteDataSource(super.dio);
-
   @override
   Future<void> faceVerification({required XFile file}) async {
     final FormData _formData = FormData.fromMap({

@@ -1,7 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:fms/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:fms/features/profile/domain/usecases/create_profile_usecase.dart';
 import 'package:fms/features/profile/domain/usecases/get_user_info_usecase.dart';
+import 'package:fms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fms/features/profile/presentation/cubit/fetch_district_cubit.dart';
 import 'package:fms/features/profile/presentation/cubit/fetch_province_cubit.dart';
 import 'package:fms/features/profile/presentation/cubit/fetch_ward_cubit.dart';
@@ -29,10 +31,12 @@ class ProfileModule extends Module {
     i.addSingleton(GetProvincesUsecase.new);
     i.addSingleton(GetDistrictsUsecase.new);
     i.addSingleton(GetWardsUsecase.new);
+    i.addSingleton(CreateUserProfileUsecase.new);
     i.add(UserInfoCubit.new);
     i.add(FetchProvinceCubit.new);
     i.add(FetchDistrictCubit.new);
     i.add(FetchWardCubit.new);
+    i.add(ProfileBloc.new);
   }
 
   @override

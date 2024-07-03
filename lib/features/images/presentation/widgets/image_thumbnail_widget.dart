@@ -7,13 +7,11 @@ import '../../../../core/constant/enum.dart';
 import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/cached_image.dart';
-import '../../../general/domain/entities/config_entity.dart';
 import '../../domain/entities/image_dynamic.dart';
 import 'image_view_widget.dart';
 
 class ImageThumbnailWidget extends StatelessWidget {
   final ImageDynamic image;
-  final FeatureEntity feature;
   final VoidCallback onDeleted;
   final double? width;
   final double? height;
@@ -22,7 +20,6 @@ class ImageThumbnailWidget extends StatelessWidget {
     required this.image,
     this.width,
     this.height,
-    required this.feature,
     required this.onDeleted,
   });
 
@@ -30,7 +27,6 @@ class ImageThumbnailWidget extends StatelessWidget {
     await OverlayManager.showAppDialog(
         builder: (context) => ImageViewWidget(
               image: image,
-              feature: feature,
               onDeleted: onDeleted,
             ));
   }

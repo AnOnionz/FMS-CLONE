@@ -28,6 +28,8 @@ class _DatePickerState extends State<DatePicker> {
     final selectedDay = await showDatePicker(
         context: context,
         currentDate: widget.lastDate,
+        locale: context.locale,
+        fieldHintText: 'ngày/tháng/năm',
         firstDate: widget.firstDate ?? DateTime.parse('2000-01-01'),
         lastDate: widget.lastDate ?? DateTime.parse('2100-01-31'));
 

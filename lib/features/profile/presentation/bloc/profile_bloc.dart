@@ -1,11 +1,22 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
+import 'package:fms/features/profile/domain/usecases/create_profile_usecase.dart';
+
+import '../../../../core/errors/failure.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc() : super(ProfileInitial()) {
-    on<ProfileEvent>((event, emit) {});
+  final CreateUserProfileUsecase _createUserProfile;
+
+  ProfileBloc(this._createUserProfile) : super(ProfileInitial()) {
+    on<CreateProfile>((event, emit) async {
+      emit(ProfileLoading());
+      await _createUserProfile(event.profile)
+        ..fold((failure) => emit(ProfileFailure(failure)),
+            (data) => emit(ProfileSuccess(data)));
+    });
   }
 }

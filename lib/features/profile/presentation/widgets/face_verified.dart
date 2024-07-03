@@ -37,10 +37,7 @@ class _FaceVerifiedWidgetState extends State<FaceVerifiedWidget>
                         color: AppColors.orange,
                         fontWeight: FontWeight.normal,
                         decoration: TextDecoration.underline),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        print(2313232);
-                      },
+                    recognizer: TapGestureRecognizer()..onTap = () {},
                   )
                 ])),
       );

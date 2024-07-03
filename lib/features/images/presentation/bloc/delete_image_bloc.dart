@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:fms/core/utilities/overlay.dart';
 
 import '../../../../core/errors/failure.dart';
-import '../../../general/domain/entities/config_entity.dart';
 import '../widgets/image_view.dart';
 
 part 'delete_image_event.dart';

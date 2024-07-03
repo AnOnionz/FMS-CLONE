@@ -10,7 +10,6 @@ import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/cached_image.dart';
 import 'package:fms/core/widgets/popup.dart';
-import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/images/presentation/bloc/delete_image_bloc.dart';
 
 import '../../../../core/constant/colors.dart';
@@ -19,13 +18,10 @@ import '../../domain/entities/image_dynamic.dart';
 
 class ImageViewWidget extends StatefulWidget {
   final ImageDynamic image;
-  final FeatureEntity feature;
+
   final VoidCallback onDeleted;
   const ImageViewWidget(
-      {super.key,
-      required this.image,
-      required this.feature,
-      required this.onDeleted});
+      {super.key, required this.image, required this.onDeleted});
 
   @override
   State<ImageViewWidget> createState() => _ImageViewWidgetState();
@@ -132,8 +128,7 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                       icon: SvgPicture.asset(AppIcons.binCircle),
                       btnText: 'Xóa',
                       onPressed: () {
-                        _bloc.add(DeleteImageRequest(
-                            image: widget.image, feature: widget.feature));
+                        _bloc.add(DeleteImageRequest(image: widget.image));
                       }),
                   child: Container(
                     decoration: BoxDecoration(

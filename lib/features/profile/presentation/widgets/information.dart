@@ -18,6 +18,7 @@ import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/widgets/custom_checkbox_group.dart';
 import 'package:fms/features/profile/presentation/widgets/profile_date_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/cached_image.dart';
@@ -38,19 +39,41 @@ class UserInformation extends StatefulWidget with UserMixin {
 
 class _UserInformationState extends State<UserInformation> {
   final _mediaService = MediaService();
+  bool portraitError = false;
+
+  late ProfilePhoto? portraitPhoto = widget.entity.photos
+      .firstWhereOrNull((element) => element.type == PhotoType.PORTRAIT);
+
+  Future<void> _takeImage(ImageSource imageSource) async {
+    OverlayManager.hide();
+    final file =
+        await _mediaService.pickImage(source: imageSource, 720, 1280, 90);
+    if (file != null) {
+      portraitPhoto = ProfilePhoto(
+          type: PhotoType.PORTRAIT, localPath: file.path, uuid: Uuid().v1());
+
+      portraitError = false;
+
+      widget.entity.photos
+          .whereNot((element) => element.type == PhotoType.PORTRAIT);
+
+      widget.onChanged(widget.entity.copyWith(photos: [
+        ...widget.entity.photos,
+        ...[portraitPhoto!]
+      ]));
+    }
+  }
+
   Future<DateTime> getLastBirthDay() async {
     final NetworkTimeService _timeService = Modular.get<NetworkTimeService>();
     final now = await _timeService.ntpDateTime();
     return DateTime(now.year - 15, now.month, now.day);
   }
 
-  Photo? get portraitCloud => widget.entity.photos
-      .firstWhereOrNull((element) => element.type == PhotoType.PORTRAIT);
-
-  String? get portraitPath => widget.entity.portraitImage;
-
   @override
   Widget build(BuildContext context) {
+    final imageSize = 80.w;
+
     return Container(
       width: 100.wPerc,
       margin: EdgeInsets.symmetric(horizontal: 16.w),
@@ -62,10 +85,10 @@ class _UserInformationState extends State<UserInformation> {
         children: [
           Stack(
             children: [
-              (portraitCloud != null || portraitPath != null)
+              (portraitPhoto != null)
                   ? Container(
-                      width: 80.w,
-                      height: 80.w,
+                      width: imageSize,
+                      height: imageSize,
                       decoration: BoxDecoration(
                         color: AppColors.orange,
                         shape: BoxShape.circle,
@@ -77,24 +100,26 @@ class _UserInformationState extends State<UserInformation> {
                             border:
                                 Border.all(color: AppColors.white, width: 2),
                             shape: BoxShape.circle),
-                        child: (portraitCloud != null)
+                        child: (portraitPhoto!.image != null)
                             ? ClipRRect(
-                                borderRadius: BorderRadius.circular(80.w / 2),
+                                borderRadius:
+                                    BorderRadius.circular(imageSize / 2),
                                 child: CachedImage(
                                   fit: BoxFit.fill,
                                   errorWidget: (p0, p1, p2) =>
                                       SvgPicture.asset(AppImages.account),
-                                  imageUrl: portraitCloud!.image.getImage(),
+                                  imageUrl: portraitPhoto!.image!.getImage(),
                                 ))
                             : ClipRRect(
-                                borderRadius: BorderRadius.circular(80.w / 2),
+                                borderRadius:
+                                    BorderRadius.circular(imageSize / 2),
                                 child: Image.file(
-                                  File(portraitPath!),
+                                  File(portraitPhoto!.localPath!),
                                   fit: BoxFit.fill,
                                 )),
                       ),
                     )
-                  : Image.asset(AppImages.userPortrait),
+                  : Image.asset(AppImages.userPortrait, width: imageSize),
               Positioned(
                 right: -5.h,
                 bottom: -5.h,
@@ -116,14 +141,8 @@ class _UserInformationState extends State<UserInformation> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 InkWell(
-                                  onTap: () async {
-                                    OverlayManager.hide();
-                                    final file = await _mediaService.pickImage(
-                                        720, 1280, 90);
-                                    if (file != null)
-                                      widget.onChanged(widget.entity
-                                          .copyWith(portraitImage: file.path));
-                                  },
+                                  onTap: () async =>
+                                      _takeImage(ImageSource.camera),
                                   child: Column(
                                     children: [
                                       SvgPicture.asset(AppIcons.sourceCamera),
@@ -135,17 +154,8 @@ class _UserInformationState extends State<UserInformation> {
                                   ),
                                 ),
                                 InkWell(
-                                  onTap: () async {
-                                    OverlayManager.hide();
-                                    final file = await _mediaService.pickImage(
-                                        source: ImageSource.gallery,
-                                        720,
-                                        1280,
-                                        90);
-                                    if (file != null)
-                                      widget.onChanged(widget.entity
-                                          .copyWith(portraitImage: file.path));
-                                  },
+                                  onTap: () async =>
+                                      _takeImage(ImageSource.gallery),
                                   child: Column(
                                     children: [
                                       SvgPicture.asset(AppIcons.image),
@@ -192,11 +202,31 @@ class _UserInformationState extends State<UserInformation> {
                 ]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.h),
-            child: Divider(
-              color: AppColors.whisper,
+            padding: EdgeInsets.only(top: 16.h),
+            child: TextFormField(
+              enabled: false,
+              validator: (value) {
+                setState(() {
+                  portraitError = portraitPhoto == null;
+                });
+                return null;
+              },
+              decoration: InputDecoration(
+                constraints: BoxConstraints(maxHeight: 1.h),
+                contentPadding: EdgeInsets.all(10),
+              ),
             ),
           ),
+          Center(
+            child: portraitError
+                ? Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: Text('Yêu cầu chụp chân dung!',
+                        style: context.theme.textTheme.bodySmall!
+                            .copyWith(color: context.theme.colorScheme.error)),
+                  )
+                : SizedBox(),
+          ).bottom18,
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(

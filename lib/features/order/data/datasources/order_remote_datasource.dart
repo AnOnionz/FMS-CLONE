@@ -28,8 +28,6 @@ abstract class IOrderRemoteDataSource {
 
 class OrderRemoteDataSource extends ImagesRemoteDataSource
     implements IOrderRemoteDataSource {
-  OrderRemoteDataSource(super.dio);
-
   @override
   Future<List<CustomerInfo>> getCustomerInfo(
       {required List<CustomerInfo> customerIdentitys,

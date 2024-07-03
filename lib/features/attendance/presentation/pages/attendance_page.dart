@@ -251,7 +251,6 @@ class _AttendancePageState extends State<AttendancePage> {
                                     height: 60.h,
                                     child: ListViewImages(
                                       height: 60.h,
-                                      feature: widget.entity.feature,
                                       imagePickerButton: imageWidget,
                                       onDeleted: (image) {
                                         setState(() {
