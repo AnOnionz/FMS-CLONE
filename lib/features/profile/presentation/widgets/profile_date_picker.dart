@@ -11,6 +11,7 @@ class ProfileDatePicker extends StatefulWidget {
   final String label;
   final DateTime? lastDate;
   final Function(DateTime time) onChanged;
+  final DateTime? value;
   final bool isRequired;
 
   const ProfileDatePicker(
@@ -18,7 +19,8 @@ class ProfileDatePicker extends StatefulWidget {
       this.lastDate,
       required this.onChanged,
       required this.label,
-      this.isRequired = false});
+      this.isRequired = false,
+      this.value});
 
   @override
   State<ProfileDatePicker> createState() => _ProfileDatePickerState();
@@ -35,6 +37,7 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
   Widget build(BuildContext context) {
     return DatePicker(
         lastDate: widget.lastDate,
+        value: widget.value,
         onSelected: widget.onChanged,
         validator: (value) {
           if (widget.isRequired) {

@@ -208,3 +208,9 @@ extension IntExtension on int {
   /// Returns [Duration] of [this] in microseconds.
   Duration get microseconds => Duration(microseconds: this);
 }
+
+extension IntSafeExtension on int? {
+  String? toStringOrNull() {
+    return this == null ? null : this.toString();
+  }
+}

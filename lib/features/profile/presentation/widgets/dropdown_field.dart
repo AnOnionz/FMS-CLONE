@@ -35,11 +35,6 @@ class DropdownField<T> extends StatefulWidget {
 }
 
 class _DropdownFieldState<T> extends State<DropdownField<T>> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   List<DropdownMenuEntry<T>> entries() {
     return widget.values.map<DropdownMenuEntry<T>>((T obj) {
       return DropdownMenuEntry<T>(

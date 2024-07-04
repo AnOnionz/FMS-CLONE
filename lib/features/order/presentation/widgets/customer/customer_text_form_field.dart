@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 
@@ -35,7 +36,7 @@ class AppTextFormField extends StatefulWidget {
 
 class _AppTextFormFieldState extends State<AppTextFormField> {
   ValueNotifier<bool> isError = ValueNotifier(false);
-  late final TextEditingController _controller =
+  late TextEditingController _controller =
       TextEditingController(text: widget.value);
   final FocusNode _focusNode = FocusNode();
 
@@ -49,6 +50,14 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant AppTextFormField oldWidget) {
+    setState(() {
+      _controller = TextEditingController(text: widget.value);
+    });
+    super.didUpdateWidget(oldWidget);
   }
 
   void _onTextFieldFocused() {

@@ -12,6 +12,7 @@ abstract class IProfileRemoteDataSource {
   Future<void> createUserProfile(
       {required UserProfileEntity userProfile, required int projectId});
   Future<ProfileStatusEntity?> getProfileStatus();
+  Future<void> markReadProfileStatus();
   Future<UserProfileEntity?> getUserProfile();
   Future<void> uploadFaceVerifyImage(XFile file);
   Future<List<Province>> getProvinces();
@@ -103,5 +104,10 @@ class ProfileRemoteDataSource extends ImagesRemoteDataSource
     final _resp = await dio.get(path: '/app/user-profile');
 
     return parseJson((json: _resp, fromJson: UserProfileEntity.fromMap));
+  }
+
+  @override
+  Future<void> markReadProfileStatus() async {
+    await dio.post(path: '/app/user-profile/processing-status/mark-read');
   }
 }

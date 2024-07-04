@@ -5,6 +5,7 @@ class DatePicker extends StatefulWidget {
   final InputDecoration? decoration;
   final DateTime? firstDate;
   final DateTime? lastDate;
+  final DateTime? value;
   final Function(DateTime time) onSelected;
   final String? Function(String?)? validator;
 
@@ -15,6 +16,7 @@ class DatePicker extends StatefulWidget {
     this.lastDate,
     required this.onSelected,
     this.validator,
+    this.value,
   });
 
   @override
@@ -22,12 +24,14 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<DatePicker> {
-  final TextEditingController controller = TextEditingController();
+  late DateTime? selectedDay = widget.value;
+  late TextEditingController controller = TextEditingController(
+      text: selectedDay != null ? kdMy.format(selectedDay!) : null);
 
   Future<void> selectDay(BuildContext context) async {
-    final selectedDay = await showDatePicker(
+    selectedDay = await showDatePicker(
         context: context,
-        currentDate: widget.lastDate,
+        currentDate: widget.value,
         locale: context.locale,
         fieldHintText: 'ngày/tháng/năm',
         firstDate: widget.firstDate ?? DateTime.parse('2000-01-01'),
@@ -35,10 +39,20 @@ class _DatePickerState extends State<DatePicker> {
 
     if (selectedDay != null) {
       setState(() {
-        controller.text = kdMy.format(selectedDay);
-        widget.onSelected(selectedDay);
+        controller.text = kdMy.format(selectedDay!);
       });
+      widget.onSelected(selectedDay!);
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant DatePicker oldWidget) {
+    setState(() {
+      selectedDay = widget.value;
+      if (selectedDay != null)
+        controller = TextEditingController(text: kdMy.format(selectedDay!));
+    });
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

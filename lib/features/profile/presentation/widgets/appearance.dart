@@ -37,6 +37,10 @@ class Appearance extends StatelessWidget {
             child: AppTextFormField(
               label: 'Chiều cao (m)',
               isRequired: false,
+              value: UserProfileInherited.of(context)
+                  .entity
+                  .bodyHeight
+                  .toStringOrNull(),
               onChanged: (value) {
                 onChanged(UserProfileInherited.of(context)
                     .entity
@@ -50,6 +54,10 @@ class Appearance extends StatelessWidget {
             child: AppTextFormField(
               label: 'Cân nặng (kg)',
               isRequired: false,
+              value: UserProfileInherited.of(context)
+                  .entity
+                  .bodyWeight
+                  .toStringOrNull(),
               onChanged: (value) {
                 onChanged(UserProfileInherited.of(context)
                     .entity
@@ -66,6 +74,7 @@ class Appearance extends StatelessWidget {
             child: DropdownField<DressSize>(
                 width: width,
                 hint: 'Size áo',
+                value: UserProfileInherited.of(context).entity.shirtSize,
                 label: (option) => option.name,
                 onSelected: (value) {
                   onChanged(UserProfileInherited.of(context)
@@ -79,6 +88,7 @@ class Appearance extends StatelessWidget {
             child: DropdownField<DressSize>(
                 width: width,
                 hint: 'Size quần/váy',
+                value: UserProfileInherited.of(context).entity.pantsSize,
                 label: (option) => option.name,
                 onSelected: (value) {
                   onChanged(UserProfileInherited.of(context)
@@ -95,6 +105,7 @@ class Appearance extends StatelessWidget {
             child: DropdownField(
               width: width,
               hint: 'Size đầm',
+              value: UserProfileInherited.of(context).entity.dressSize,
               label: (option) => option.name,
               values: dresSizes,
               onSelected: (value) {
@@ -106,10 +117,11 @@ class Appearance extends StatelessWidget {
           ),
           SizedBox(width: 16.w),
           Flexible(
-            child: DropdownField(
+            child: DropdownField<int>(
                 width: width,
                 label: (option) => option.toString(),
                 hint: 'Size giày',
+                value: UserProfileInherited.of(context).entity.shoeSize,
                 onSelected: (value) {
                   onChanged(UserProfileInherited.of(context)
                       .entity
@@ -128,6 +140,10 @@ class Appearance extends StatelessWidget {
           child: AppTextFormField(
             label: 'Vòng 1',
             isRequired: false,
+            value: UserProfileInherited.of(context)
+                .entity
+                .bodyBust
+                .toStringOrNull(),
             onChanged: (value) {
               onChanged(UserProfileInherited.of(context)
                   .entity
@@ -141,6 +157,10 @@ class Appearance extends StatelessWidget {
           child: AppTextFormField(
             label: 'Vòng 2',
             isRequired: false,
+            value: UserProfileInherited.of(context)
+                .entity
+                .bodyWaist
+                .toStringOrNull(),
             onChanged: (value) {
               onChanged(UserProfileInherited.of(context)
                   .entity
@@ -154,6 +174,10 @@ class Appearance extends StatelessWidget {
           child: AppTextFormField(
             label: 'Vòng 3',
             isRequired: false,
+            value: UserProfileInherited.of(context)
+                .entity
+                .bodyHips
+                .toStringOrNull(),
             onChanged: (value) {
               onChanged(UserProfileInherited.of(context)
                   .entity

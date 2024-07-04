@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/profile/presentation/widgets/user_profile_inheriterd.dart';
 import '../../../../core/constant/enum.dart';
@@ -18,6 +19,7 @@ class MaritalStatus extends StatelessWidget {
         child: CustomCheckboxGroup<Marital>(
           axis: Axis.vertical,
           label: (option) => option.value,
+          value: UserProfileInherited.of(context).entity.maritalStatus,
           group: [Marital.SINGLE, Marital.MARRIED, Marital.DIVORCED],
           onSelected: (value) {
             onChanged(UserProfileInherited.of(context)
@@ -29,6 +31,10 @@ class MaritalStatus extends StatelessWidget {
       AppTextFormField(
         label: 'Số con(nếu có)',
         isRequired: false,
+        value: UserProfileInherited.of(context)
+            .entity
+            .numberOfChildren
+            .toStringOrNull(),
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
               .entity

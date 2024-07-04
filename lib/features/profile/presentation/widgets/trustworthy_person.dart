@@ -15,6 +15,7 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Họ tên',
         isRequired: false,
+        value: UserProfileInherited.of(context).entity.emergencyContactName,
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
               .entity
@@ -25,6 +26,9 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Quan hệ',
         isRequired: false,
+        value: UserProfileInherited.of(context)
+            .entity
+            .emergencyContactRelationship,
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
               .entity
@@ -35,6 +39,8 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Số điện thoại',
         isRequired: false,
+        value:
+            UserProfileInherited.of(context).entity.emergencyContactPhoneNumber,
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
               .entity

@@ -58,7 +58,7 @@ class ProfileRepositoryImpl extends Repository
     return todo(() async {
       final districts = await _remote.getDistricts(provinceId: provinceId);
       return Right(districts);
-    });
+    }, useInternet: true);
   }
 
   @override
@@ -66,7 +66,7 @@ class ProfileRepositoryImpl extends Repository
     return todo(() async {
       final provinces = await _remote.getProvinces();
       return Right(provinces);
-    });
+    }, useInternet: true);
   }
 
   @override
@@ -76,7 +76,7 @@ class ProfileRepositoryImpl extends Repository
       final wards = await _remote.getWards(
           provinceId: provinceId, districtId: districtId);
       return Right(wards);
-    });
+    }, useInternet: true);
   }
 
   @override
@@ -84,7 +84,7 @@ class ProfileRepositoryImpl extends Repository
     return todo(() async {
       await _remote.uploadFaceVerifyImage(file);
       return Right(Never);
-    });
+    }, useInternet: true);
   }
 
   @override
@@ -92,6 +92,14 @@ class ProfileRepositoryImpl extends Repository
     return todo(() async {
       final profile = await _remote.getUserProfile();
       return Right(profile);
-    });
+    }, useInternet: true);
+  }
+
+  @override
+  Future<Result<void>> markReadProfileStatus() async {
+    return todo(() async {
+      await _remote.markReadProfileStatus();
+      return Right(Never);
+    }, useInternet: true);
   }
 }

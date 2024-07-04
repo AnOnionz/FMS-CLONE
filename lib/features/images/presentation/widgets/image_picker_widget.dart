@@ -7,7 +7,7 @@ import 'package:fms/core/responsive/responsive.dart';
 
 import 'package:fms/core/services/media/media_service.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/features/home/presentation/widgets/notifications.dart';
+import 'package:fms/core/widgets/notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 

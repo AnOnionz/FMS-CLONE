@@ -12,6 +12,7 @@ abstract class ProfileRepository {
       {required UserProfileEntity userProfile});
   Future<Result<void>> uploadFaceVerifyImage(XFile file);
   Future<Result<ProfileStatusEntity?>> getProfileStatus();
+  Future<Result<void>> markReadProfileStatus();
   Future<Result<UserProfileEntity?>> getUserProfile();
   Future<Result<List<Province>>> getProvinces();
   Future<Result<List<District>>> getDistricts({required int provinceId});

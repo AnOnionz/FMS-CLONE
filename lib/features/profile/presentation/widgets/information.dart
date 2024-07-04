@@ -9,6 +9,7 @@ import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/constant/mapper.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
@@ -68,6 +69,23 @@ class _UserInformationState extends State<UserInformation> {
     final NetworkTimeService _timeService = Modular.get<NetworkTimeService>();
     final now = await _timeService.ntpDateTime();
     return DateTime(now.year - 15, now.month, now.day);
+  }
+
+  @override
+  void didUpdateWidget(covariant UserInformation oldWidget) {
+    if (portraitPhoto == null) {
+      setState(() {
+        portraitPhoto = widget.entity.photos
+            .firstWhereOrNull((element) => element.type == PhotoType.PORTRAIT);
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {});
+    super.didChangeDependencies();
   }
 
   @override
@@ -239,6 +257,7 @@ class _UserInformationState extends State<UserInformation> {
             label: 'Họ tên',
             isRequired: true,
             maxLength: 255,
+            value: widget.entity.fullName,
             onChanged: (value) {
               widget.onChanged(widget.entity.copyWith(fullName: value));
             },
@@ -247,6 +266,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Số điện thoại',
             isRequired: true,
+            value: widget.entity.phoneNumber,
             validateMode: AutovalidateMode.onUserInteraction,
             textInputType: TextInputType.numberWithOptions(),
             validate: Mapper.dataTypeToValidate(dataType: 'phoneNumber'),
@@ -258,6 +278,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'CMND/CCCD',
             isRequired: true,
+            value: widget.entity.identityCardNumber,
             textInputType: TextInputType.numberWithOptions(),
             validate: Mapper.dataTypeToValidate(dataType: 'cccd'),
             onChanged: (value) {
@@ -269,6 +290,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Email',
             isRequired: true,
+            value: widget.entity.email,
             textInputType: Mapper.dataTypeToInputType(dataType: 'email'),
             validate: Mapper.dataTypeToValidate(dataType: 'email'),
             onChanged: (value) {
@@ -283,6 +305,7 @@ class _UserInformationState extends State<UserInformation> {
                       ?.copyWith(color: AppColors.midnightExpress)),
               SizedBox(width: 16.w),
               CustomCheckboxGroup<GenderStatus>(
+                value: widget.entity.gender,
                 group: [GenderStatus.MALE, GenderStatus.FEMALE],
                 label: (option) => option.value,
                 onSelected: (value) {
@@ -297,6 +320,7 @@ class _UserInformationState extends State<UserInformation> {
               builder: (context, snapshot) {
                 return ProfileDatePicker(
                         lastDate: snapshot.data,
+                        value: widget.entity.birthdate,
                         onChanged: (time) {
                           widget.onChanged(
                               widget.entity.copyWith(birthdate: time));
@@ -307,14 +331,16 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Nơi sinh',
             isRequired: false,
+            value: widget.entity.birthplace,
             onChanged: (value) {
               widget.onChanged(widget.entity.copyWith(birthplace: value));
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
-          DropdownField(
+          DropdownField<EducationLevel>(
             hint: 'Trình độ học vấn',
             label: (option) => option.value,
+            value: widget.entity.educationLevel,
             values: [
               EducationLevel.PRIMARY_SCHOOL,
               EducationLevel.MIDDLE_SCHOOL,
@@ -335,6 +361,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Mã số thuế',
             isRequired: false,
+            value: widget.entity.personalTaxCode,
             onChanged: (value) {
               widget.onChanged(widget.entity.copyWith(personalTaxCode: value));
             },
@@ -343,6 +370,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Số BHXH',
             isRequired: false,
+            value: widget.entity.socialInsuranceNumber,
             onChanged: (value) {
               widget.onChanged(
                   widget.entity.copyWith(socialInsuranceNumber: value));

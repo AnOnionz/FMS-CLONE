@@ -20,7 +20,7 @@ import 'package:fms/features/attendance/domain/entities/attendance_entity.dart';
 import 'package:fms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:fms/features/attendance/presentation/bloc/cubit/attendance_info_cubit.dart';
 import 'package:fms/features/home/presentation/bloc/necessary_bloc.dart';
-import 'package:fms/features/home/presentation/widgets/notifications.dart';
+import 'package:fms/core/widgets/notifications.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/services/map/google_map_service.dart';

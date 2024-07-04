@@ -18,6 +18,7 @@ class DesiredJobPosition extends StatelessWidget {
       DropdownField<DesiredPosition>(
         hint: 'Vị trí',
         label: (option) => option.value,
+        value: UserProfileInherited.of(context).entity.desiredPosition,
         values: [
           DesiredPosition.PB,
           DesiredPosition.PG,
@@ -34,6 +35,7 @@ class DesiredJobPosition extends StatelessWidget {
       AppTextFormField(
         label: 'Địa bàn làm việc mong muốn',
         isRequired: false,
+        value: UserProfileInherited.of(context).entity.desiredLocation,
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
               .entity
@@ -44,6 +46,7 @@ class DesiredJobPosition extends StatelessWidget {
       DropdownField<RecruitmentSource>(
         hint: 'Nguồn tuyển dụng',
         label: (option) => option.value,
+        value: UserProfileInherited.of(context).entity.recruitmentSource,
         values: [
           RecruitmentSource.FACEBOOK,
           RecruitmentSource.LINKEDIN,

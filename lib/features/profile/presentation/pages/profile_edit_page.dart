@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
@@ -12,18 +13,26 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:fms/features/profile/presentation/cubit/mark_read_status_cubit.dart';
 import 'package:fms/features/profile/presentation/widgets/appearance.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/widgets/button/flat.dart';
+import '../../../../core/widgets/notifications.dart';
+import '../../domain/entities/profile_status_entity.dart';
+import '../bloc/get_profile_bloc.dart';
+import '../cubit/profile_status_cubit.dart';
 import '../widgets/desires_job_position.dart';
 import '../widgets/face_verified.dart';
 import '../widgets/information.dart';
 import '../widgets/marital_status.dart';
 import '../widgets/profile_images.dart';
+import '../widgets/profile_status_widget.dart';
 import '../widgets/residence.dart';
 import '../widgets/trustworthy_person.dart';
 import '../widgets/user_profile_inheriterd.dart';
@@ -36,25 +45,29 @@ class ProfileEditPage extends StatefulWidget {
   State<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
-class _ProfileEditPageState extends State<ProfileEditPage> {
+class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
   final _formKey = GlobalKey<FormState>();
 
-  final _bloc = Modular.get<ProfileBloc>();
+  bool isFaceVerified = false;
+
+  final _createProfileBloc = Modular.get<ProfileBloc>();
+  final _getProfileBloc = Modular.get<GetProfileBloc>();
+  final _profileStatusCubit = Modular.get<ProfileStatusCubit>();
+  final _markReadProfileStatusCubit = Modular.get<MarkReadStatusCubit>();
 
   StreamSubscription<ProfileState>? _createProfileSubscription;
-
+  StreamSubscription<GetProfileState>? _getProfileSubscription;
+  StreamSubscription<ProfileStatusState>? _getProfileStatusSubscription;
   late final List<ProfileItem> _data = [
     ProfileItem(
         header: 'Nơi ở hiện tại',
         child: Residence(
-          entity: entity,
           onChanged: _handleUpdateEntity,
         )),
     ProfileItem(
         header: 'Địa chỉ trên hộ khẩu',
         child: Residence(
           isPermanent: true,
-          entity: entity,
           onChanged: _handleUpdateEntity,
         )),
     ProfileItem(
@@ -88,8 +101,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           onChanged: _handleUpdateEntity,
         )),
   ];
-
+  late ProfileStatusEntity? status;
+  bool statusLoaded = false;
+  bool markRead = false;
   late UserProfileEntity entity = UserProfileEntity();
+
+  bool get isFistUpdate => statusLoaded && status == null;
 
   void _handleUpdateEntity(UserProfileEntity newValue) {
     setState(() {
@@ -99,7 +116,26 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   void initState() {
-    _createProfileSubscription = _bloc.stream.listen((state) {
+    _profileStatusCubit.getProfileStatus();
+    _getProfileBloc.add(GetProfile());
+    _getProfileStatusSubscription = _profileStatusCubit.stream.listen((state) {
+      if (state is ProfileStatusSuccess) {
+        setState(() {
+          status = state.entity;
+          statusLoaded = true;
+        });
+        Fx.log(state.entity);
+      }
+    });
+    _getProfileSubscription = _getProfileBloc.stream.listen((state) {
+      if (state is GetProfileSuccess) {
+        setState(() {
+          entity = state.profile;
+        });
+        Fx.log(state.profile);
+      }
+    });
+    _createProfileSubscription = _createProfileBloc.stream.listen((state) {
       if (state is ProfileLoading) {
         OverlayManager.showLoading();
       }
@@ -108,6 +144,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         setState(() {
           entity = state.profile;
         });
+        _profileStatusCubit.getProfileStatus();
       }
       if (state is ProfileFailure) {
         OverlayManager.hide();
@@ -123,7 +160,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 'Phát sinh lỗi trong quá trình cập nhật',
             btnText: 'Thử lại',
             onPressed: () {
-              _bloc.add(CreateProfile(profile: entity));
+              _createProfileBloc.add(CreateProfile(profile: entity));
             });
       }
     });
@@ -133,6 +170,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   void dispose() {
     _createProfileSubscription?.cancel();
+    _getProfileSubscription?.cancel();
+    _getProfileStatusSubscription?.cancel();
+
     super.dispose();
   }
 
@@ -151,7 +191,43 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             child: Column(
               children: [
                 SizedBox(height: 20.h),
-                FaceVerifiedWidget(),
+                if (user!.isFaceVerified == false && isFaceVerified == false)
+                  FaceVerifiedWidget(onSuccess: () {
+                    setState(() {
+                      isFaceVerified = true;
+                    });
+                  }),
+                BlocBuilder<ProfileStatusCubit, ProfileStatusState>(
+                  bloc: _profileStatusCubit,
+                  builder: (context, state) {
+                    if (state is ProfileStatusLoading) {
+                      return Container(
+                          width: context.screenWidth,
+                          margin: EdgeInsets.only(
+                              bottom: 8.h, left: 16.w, right: 16.w),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 24.w, horizontal: 33.w),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.sqr),
+                              color: AppColors.white),
+                          child: AppIndicator());
+                    }
+                    return ProfileStatusWidget(
+                      read: status?.read ?? markRead,
+                      statusLoaded: statusLoaded,
+                      status: status?.status,
+                      onReload: () {
+                        _profileStatusCubit.getProfileStatus();
+                      },
+                      onUnderstand: () {
+                        _markReadProfileStatusCubit.markRead();
+                        setState(() {
+                          markRead = true;
+                        });
+                      },
+                    );
+                  },
+                ),
                 UserInformation(
                   entity: entity,
                   onChanged: _handleUpdateEntity,
@@ -205,18 +281,24 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   padding:
                       EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
                   child: FlatButton(
-                    onPressed: () {
-                      if (entity.photos
-                          .where(
-                              (element) => element.type == PhotoType.PORTRAIT)
-                          .isEmpty) {
-                        return;
-                      }
-                      if (_formKey.currentState!.validate()) {
-                        Fx.log(entity);
-                        _bloc.add(CreateProfile(profile: entity));
-                      }
-                    },
+                    onPressed: (isFistUpdate ||
+                            (statusLoaded &&
+                                status!.status != ProfileStatus.PENDING))
+                        ? () {
+                            if (entity.photos
+                                    .where((element) =>
+                                        element.type == PhotoType.PORTRAIT)
+                                    .isEmpty ||
+                                !_formKey.currentState!.validate()) {
+                              showRequiredProfileField();
+                              return;
+                            }
+
+                            Fx.log(entity);
+                            _createProfileBloc
+                                .add(CreateProfile(profile: entity));
+                          }
+                        : null,
                     name: 'Lưu',
                     color: AppColors.orange,
                     disableColor: AppColors.potPourri,

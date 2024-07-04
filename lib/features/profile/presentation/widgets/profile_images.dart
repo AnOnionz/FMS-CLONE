@@ -20,17 +20,29 @@ class ProfileImages extends StatefulWidget {
 class _ProfileImagesState extends State<ProfileImages> {
   UserProfileEntity get entity => UserProfileInherited.of(context).entity;
 
-  late final List<ProfilePhoto> _body = entity.photos
-      .where((element) => element.type == PhotoType.FULLBODY)
-      .toList();
-  late final List<ProfilePhoto> _font = entity.photos
-      .where((element) => element.type == PhotoType.IDFRONT)
-      .toList();
-  late final List<ProfilePhoto> _back = entity.photos
-      .where((element) => element.type == PhotoType.IDBACK)
-      .toList();
-  late final List<ProfilePhoto> _cv =
-      entity.photos.where((element) => element.type == PhotoType.CV).toList();
+  late List<ProfilePhoto> _body = [];
+  late List<ProfilePhoto> _font = [];
+  late List<ProfilePhoto> _back = [];
+  late List<ProfilePhoto> _cv = [];
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      _body = entity.photos
+          .where((element) => element.type == PhotoType.FULLBODY)
+          .toList();
+      _font = entity.photos
+          .where((element) => element.type == PhotoType.IDFRONT)
+          .toList();
+      _back = entity.photos
+          .where((element) => element.type == PhotoType.IDBACK)
+          .toList();
+      _cv = entity.photos
+          .where((element) => element.type == PhotoType.CV)
+          .toList();
+    });
+    super.didChangeDependencies();
+  }
 
   void _onAdd(ImageDynamic image, PhotoType type) {
     switch (type) {
@@ -39,7 +51,7 @@ class _ProfileImagesState extends State<ProfileImages> {
           _body.add(ProfilePhoto(
               type: type, localPath: image.path, uuid: Uuid().v1()));
         });
-        print(_body);
+
         _onChanged(type);
 
       case PhotoType.IDFRONT:

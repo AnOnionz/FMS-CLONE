@@ -13,10 +13,10 @@ import '../utilities/overlay.dart';
 import 'bottom_sheet_notification.dart';
 import 'button/outline.dart';
 
-void showSuccess({required String title}) {
+void showSuccess({required String title, Widget? icon}) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
-          icon: SvgPicture.asset(AppIcons.success),
+          icon: icon ?? SvgPicture.asset(AppIcons.success),
           title: title,
           action: OutlineButton(
               onPressed: () =>

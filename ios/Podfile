@@ -34,7 +34,7 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__)) 
 end
 
-$iOSVersion = '13.0'  
+$iOSVersion = '14.0'  
 
 post_install do |installer|
 
@@ -72,8 +72,5 @@ post_install do |installer|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
       end
     end
-
-    
-
   end
 end

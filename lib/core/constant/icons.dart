@@ -77,6 +77,7 @@ class AppIcons {
   static String noSynced = 'no_synced'.icon.svg;
   static String synced = 'synced'.icon.svg;
   static String profileError = 'profile_error'.icon.svg;
+  static String profileSuccess = 'profile_success'.icon.svg;
   static String profileEdit = 'profile_edit'.icon.svg;
   static String cameraProfile = 'camera_profile'.icon.svg;
   static String expanded = 'expanded'.icon.svg;

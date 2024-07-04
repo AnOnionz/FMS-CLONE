@@ -1,14 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
+import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
-import '../../../../core/constant/colors.dart';
-import '../../../../core/utilities/overlay.dart';
-import '../../../../core/widgets/bottom_sheet_notification.dart';
-import '../../../../core/widgets/button/outline.dart';
-import 'require_task_notify.dart';
+import '../../features/home/presentation/widgets/require_task_notify.dart';
+import '../constant/colors.dart';
+import '../utilities/overlay.dart';
+import 'bottom_sheet_notification.dart';
+import 'button/outline.dart';
 
 void showRequiredAttendanceOut(VoidCallback onPressed) {
   showFailure(
@@ -110,4 +111,45 @@ void showFaceNotMatch({required VoidCallback onPressed}) {
     btnText: 'Thử lại',
     onPressed: onPressed,
   );
+}
+
+void showUploadFaceSuccess({
+  required String title,
+}) {
+  OverlayManager.showSheet(
+      body: BottomSheetNotification(
+          icon: SvgPicture.asset(AppIcons.profileSuccess),
+          title: title,
+          action: OutlineButton(
+              onPressed: () => OverlayManager.hide(),
+              name: 'Ok',
+              color: AppColors.royalBlue)));
+}
+
+void showRequiredProfileField() {
+  OverlayManager.showSheet(
+      body: BottomSheetNotification(
+          icon: SvgPicture.asset(AppIcons.requiredTask),
+          title: 'Yêu cầu nhập đủ các trường bắt buộc',
+          message: RichText(
+            text: TextSpan(
+                text: 'Nhập tất cả các trường có dấu ',
+                style: OverlayManager.currentContext!.textTheme.body1
+                    ?.copyWith(color: AppColors.midnightExpress),
+                children: [
+                  TextSpan(
+                    text: ' *',
+                    style: OverlayManager.currentContext!.textTheme.body1
+                        ?.copyWith(
+                            color: AppColors.orange,
+                            fontWeight: FontWeight.normal),
+                  ),
+                ]),
+          ),
+          action: OutlineButton(
+              onPressed: () {
+                OverlayManager.hide();
+              },
+              name: 'Ok',
+              color: AppColors.orange)));
 }

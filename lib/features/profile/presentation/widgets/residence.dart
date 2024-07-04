@@ -14,13 +14,12 @@ import 'dropdown_field.dart';
 
 class Residence extends StatefulWidget {
   final bool isPermanent;
-  final UserProfileEntity entity;
   final Function(UserProfileEntity newValue) onChanged;
-  const Residence(
-      {super.key,
-      required this.onChanged,
-      this.isPermanent = false,
-      required this.entity});
+  const Residence({
+    super.key,
+    required this.onChanged,
+    this.isPermanent = false,
+  });
 
   @override
   State<Residence> createState() => _ResidenceState();
@@ -35,23 +34,16 @@ class _ResidenceState extends State<Residence> {
   List<District> _districts = [];
   List<Ward> _wards = [];
 
-  late ValueNotifier<Province?> _provinceSelected = ValueNotifier(
-      widget.isPermanent
-          ? widget.entity.permanentProvince
-          : widget.entity.province);
-  late ValueNotifier<District?> _districtSelected = ValueNotifier(
-      widget.isPermanent
-          ? widget.entity.permanentDistrict
-          : widget.entity.district);
-  late ValueNotifier<Ward?> _wardSelected = ValueNotifier(
-      widget.isPermanent ? widget.entity.permanentWard : widget.entity.ward);
+  late ValueNotifier<Province?> _provinceSelected = ValueNotifier(null);
+  late ValueNotifier<District?> _districtSelected = ValueNotifier(null);
+  late ValueNotifier<Ward?> _wardSelected = ValueNotifier(null);
 
   late StreamSubscription<FetchProvinceState>? _provinceSubscription;
   late StreamSubscription<FetchDistrictState>? _districtSubscription;
   late StreamSubscription<FetchWardState>? _wardSubscription;
 
   final TextEditingController _provinceController = TextEditingController();
-  final TextEditingController _distrcitController = TextEditingController();
+  final TextEditingController _districtController = TextEditingController();
   final TextEditingController _wardController = TextEditingController();
 
   @override
@@ -84,6 +76,28 @@ class _ResidenceState extends State<Residence> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    final entity = UserProfileInherited.of(context).entity;
+
+    _provinceSelected.value =
+        widget.isPermanent ? entity.permanentProvince : entity.province;
+    if (_provinceSelected.value != null)
+      _provinceController.text = _provinceSelected.value!.name!;
+
+    _districtSelected.value =
+        widget.isPermanent ? entity.permanentDistrict : entity.district;
+    if (_districtSelected.value != null)
+      _districtController.text = _districtSelected.value!.name!;
+
+    _wardSelected.value =
+        widget.isPermanent ? entity.permanentWard : entity.ward;
+    if (_wardSelected.value != null)
+      _wardController.text = _wardSelected.value!.name!;
+
+    super.didChangeDependencies();
+  }
+
   void _fetchDistricts() {
     if (_districtSelected.value == null) {
       setState(() {
@@ -110,7 +124,7 @@ class _ResidenceState extends State<Residence> {
     _provinceSelected.value = province;
     _districtSelected.value = null;
     _wardSelected.value = null;
-    _distrcitController.clear();
+    _districtController.clear();
     _wardController.clear();
     setState(() {});
   }
@@ -160,7 +174,7 @@ class _ResidenceState extends State<Residence> {
         },
       ).bottom18,
       DropdownField<District>(
-        controller: _distrcitController,
+        controller: _districtController,
         hint: 'Quận/Huyện',
         label: (value) => value.name!,
         value: _districtSelected.value,
