@@ -243,7 +243,8 @@ class DioClient extends ApiService {
               message: response.statusMessage,
               btnText: 'Ok',
             ));
-    _authenticationBloc.add(AuthenticationLogout());
+    if (_authenticationBloc.state != AuthenticationStatus.unauthenticated)
+      _authenticationBloc.add(AuthenticationLogout());
     ;
   }
 

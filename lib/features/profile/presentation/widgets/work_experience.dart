@@ -26,6 +26,29 @@ class WorkExperience extends StatefulWidget {
 class _WorkExperienceState extends State<WorkExperience> {
   final _data = [_WorkExperienceEntity(canDelete: false)];
 
+  @override
+  void didChangeDependencies() {
+    final exps = UserProfileInherited.of(context).entity.experiences;
+    if (exps.isEmpty) {
+      return;
+    }
+    if (exps.length == 1) {
+      setState(() {
+        _data.first.experience = exps.first;
+      });
+      return;
+    }
+
+    final newExps =
+        List.generate(exps.length - 1, (index) => _WorkExperienceEntity());
+
+    setState(() {
+      _data.addAll(newExps);
+    });
+
+    super.didChangeDependencies();
+  }
+
   void _onChanged() {
     widget.onChanged(UserProfileInherited.of(context).entity.copyWith(
         experiences: _data
@@ -103,6 +126,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
       .entity
       .experiences
       .contains(widget.entity.experience);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -116,6 +140,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
                 child: ProfileDatePicker(
                     lastDate: DateTime.now(),
                     isRequired: _isRequired,
+                    value: widget.entity.experience.startedAt,
                     onChanged: (time) {
                       setState(() {
                         widget.entity.experience =
@@ -129,6 +154,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
               Flexible(
                 child: ProfileDatePicker(
                     lastDate: DateTime.now(),
+                    value: widget.entity.experience.endedAt,
                     onChanged: (time) {
                       setState(() {
                         widget.entity.experience =
@@ -143,6 +169,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
           AppTextFormField(
             label: 'Tên công ty',
             isRequired: _isRequired,
+            value: widget.entity.experience.companyName,
             validateMode: AutovalidateMode.always,
             onChanged: (value) {
               setState(() {
@@ -156,6 +183,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
           AppTextFormField(
             label: 'Ngành nghề kinh doanh',
             isRequired: false,
+            value: widget.entity.experience.businessLine,
             onChanged: (value) {
               setState(() {
                 widget.entity.experience =
@@ -168,6 +196,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
           AppTextFormField(
             label: 'Chức vụ',
             isRequired: _isRequired,
+            value: widget.entity.experience.title,
             validateMode: AutovalidateMode.always,
             onChanged: (value) {
               setState(() {
@@ -181,6 +210,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
           AppTextFormField(
             label: 'Lý do từ chức',
             isRequired: false,
+            value: widget.entity.experience.leaveReason,
             onChanged: (value) {
               setState(() {
                 widget.entity.experience =

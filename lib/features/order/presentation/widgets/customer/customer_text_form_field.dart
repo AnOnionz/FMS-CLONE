@@ -56,6 +56,8 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
   void didUpdateWidget(covariant AppTextFormField oldWidget) {
     setState(() {
       _controller = TextEditingController(text: widget.value);
+      _controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: _controller.text.length));
     });
     super.didUpdateWidget(oldWidget);
   }
