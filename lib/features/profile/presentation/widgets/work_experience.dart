@@ -214,13 +214,12 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
             },
             textInputAction: TextInputAction.next,
           ).bottom18,
-          if (widget.entity.canDelete)
-            FlatButton(
-              icon: SvgPicture.asset(AppIcons.experienceRemove),
-              color: 'FFF3F3'.toColor(),
-              radius: 8.sqr,
-              onPressed: widget.onRemoved,
-            ).bottom18,
+          FlatButton(
+            icon: SvgPicture.asset(AppIcons.experienceRemove),
+            color: 'FFF3F3'.toColor(),
+            radius: 8.sqr,
+            onPressed: widget.onRemoved,
+          ).bottom18,
           Divider(color: AppColors.whisper).bottom18
         ]);
   }
@@ -228,12 +227,7 @@ class _WorkExperienceFormState extends State<WorkExperienceForm> {
 
 // ignore: must_be_immutable
 class _WorkExperienceEntity extends Equatable {
-  final bool canDelete;
   Experience experience = Experience();
-
-  _WorkExperienceEntity({
-    this.canDelete = true,
-  });
 
   final String uuid = const Uuid().v1();
 

@@ -39,30 +39,30 @@ final class LocationService extends ChangeNotifier {
     }
   }
 
-  static LocationSettings _getLocationSettings() {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidSettings(
-          accuracy: LocationAccuracy.high,
-          distanceFilter: kDistanceFilter,
-          forceLocationManager: true,
-          intervalDuration: 20.seconds,
-          timeLimit: 15.seconds,
-          foregroundNotificationConfig: const ForegroundNotificationConfig(
-            notificationText:
-                "App will continue to receive your location even when you aren't using it",
-            notificationTitle: 'Running in Background',
-            enableWakeLock: true,
-          ));
-    } else if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      return AppleSettings(
-        pauseLocationUpdatesAutomatically: true,
-        timeLimit: 15.seconds,
-      );
-    } else {
-      return LocationSettings(timeLimit: 15.seconds);
-    }
-  }
+  // static LocationSettings _getLocationSettings() {
+  //   if (defaultTargetPlatform == TargetPlatform.android) {
+  //     return AndroidSettings(
+  //         accuracy: LocationAccuracy.high,
+  //         distanceFilter: kDistanceFilter,
+  //         forceLocationManager: true,
+  //         intervalDuration: 20.seconds,
+  //         timeLimit: 15.seconds,
+  //         foregroundNotificationConfig: const ForegroundNotificationConfig(
+  //           notificationText:
+  //               "App will continue to receive your location even when you aren't using it",
+  //           notificationTitle: 'Running in Background',
+  //           enableWakeLock: true,
+  //         ));
+  //   } else if (defaultTargetPlatform == TargetPlatform.iOS ||
+  //       defaultTargetPlatform == TargetPlatform.macOS) {
+  //     return AppleSettings(
+  //       pauseLocationUpdatesAutomatically: true,
+  //       timeLimit: 15.seconds,
+  //     );
+  //   } else {
+  //     return LocationSettings(timeLimit: 15.seconds);
+  //   }
+  // }
 
   StreamSubscription<Position>? _positionStreamSubscription;
 
