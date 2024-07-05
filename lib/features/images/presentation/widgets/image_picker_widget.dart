@@ -14,7 +14,6 @@ import 'package:uuid/uuid.dart';
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
 import '../../../../core/services/network_time/network_time_service.dart';
-import '../../../../core/utilities/overlay.dart';
 import '../../../../core/widgets/popup.dart';
 import '../../domain/entities/image_dynamic.dart';
 

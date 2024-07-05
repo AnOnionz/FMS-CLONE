@@ -9,7 +9,6 @@ import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/constant/images.dart';
 import 'package:fms/core/constant/mapper.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';

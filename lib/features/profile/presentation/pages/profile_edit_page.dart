@@ -13,7 +13,6 @@ import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
-import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:fms/features/profile/mixin_user.dart';

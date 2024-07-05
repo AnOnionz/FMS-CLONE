@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:isar/isar.dart';
-
 import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
+import 'package:isar/isar.dart';
 
 import '../../../../core/constant/enum.dart';
 
