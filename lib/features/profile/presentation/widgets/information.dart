@@ -55,11 +55,9 @@ class _UserInformationState extends State<UserInformation> {
 
       portraitError = false;
 
-      widget.entity.photos
-          .whereNot((element) => element.type == PhotoType.PORTRAIT);
-
       widget.onChanged(widget.entity.copyWith(photos: [
-        ...widget.entity.photos,
+        ...widget.entity.photos
+            .whereNot((element) => element.type == PhotoType.PORTRAIT),
         ...[portraitPhoto!]
       ]));
     }
@@ -319,7 +317,7 @@ class _UserInformationState extends State<UserInformation> {
               initialData: DateTime.now(),
               builder: (context, snapshot) {
                 return ProfileDatePicker(
-                        lastDate: snapshot.data,
+                        maxDate: snapshot.data,
                         value: widget.entity.birthdate,
                         onChanged: (time) {
                           widget.onChanged(
@@ -331,6 +329,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Nơi sinh',
             isRequired: false,
+            maxLength: 255,
             value: widget.entity.birthplace,
             onChanged: (value) {
               widget.onChanged(widget.entity.copyWith(birthplace: value));
@@ -361,6 +360,8 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Mã số thuế',
             isRequired: false,
+            maxLength: 20,
+            textInputType: TextInputType.numberWithOptions(),
             value: widget.entity.personalTaxCode,
             onChanged: (value) {
               widget.onChanged(widget.entity.copyWith(personalTaxCode: value));
@@ -370,6 +371,8 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Số BHXH',
             isRequired: false,
+            maxLength: 20,
+            textInputType: TextInputType.numberWithOptions(),
             value: widget.entity.socialInsuranceNumber,
             onChanged: (value) {
               widget.onChanged(

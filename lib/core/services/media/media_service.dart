@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/permission/permisson_manager.dart';
@@ -11,6 +12,7 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -33,8 +35,21 @@ final class MediaService {
       } else {
         if (source == ImageSource.gallery) {
           final permissionManager = Modular.get<PermissionManager>();
-          final permision =
-              await permissionManager.requestPermission(Permission.photos);
+          PermissionStatus? permision;
+          if (Platform.isAndroid) {
+            final androidInfo = await DeviceInfoPlugin().androidInfo;
+            if (androidInfo.version.sdkInt <= 32) {
+              permision =
+                  await permissionManager.requestPermission(Permission.storage);
+            } else {
+              permision =
+                  await permissionManager.requestPermission(Permission.photos);
+            }
+          } else {
+            permision =
+                await permissionManager.requestPermission(Permission.photos);
+          }
+
           if (permision == PermissionStatus.denied ||
               permision == PermissionStatus.permanentlyDenied) {
             OverlayManager.showServiceDialog(

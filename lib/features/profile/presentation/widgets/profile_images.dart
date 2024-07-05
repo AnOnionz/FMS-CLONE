@@ -67,7 +67,6 @@ class _ProfileImagesState extends State<ProfileImages> {
               type: type, localPath: image.path, uuid: Uuid().v1()));
         });
         _onChanged(type);
-        widget.onChanged(entity.copyWith(photos: entity.photos));
 
       case PhotoType.CV:
         setState(() {

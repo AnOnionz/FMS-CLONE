@@ -126,13 +126,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
         });
         Fx.log(state.entity);
       }
+      if (state is ProfileStatusFailure) {
+        setState(() {
+          status = null;
+          statusLoaded = false;
+        });
+      }
     });
     _getProfileSubscription = _getProfileBloc.stream.listen((state) {
       if (state is GetProfileSuccess) {
         setState(() {
           entity = state.profile;
         });
-        Fx.log(state.profile);
       }
     });
     _createProfileSubscription = _createProfileBloc.stream.listen((state) {
@@ -141,9 +146,16 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
       }
       if (state is ProfileSuccess) {
         OverlayManager.hide();
+
         setState(() {
           entity = state.profile;
         });
+
+        if (isFistUpdate) {
+          showUpdateProfilePending();
+        } else {
+          showSuccess(title: 'Lưu thành công');
+        }
         _profileStatusCubit.getProfileStatus();
       }
       if (state is ProfileFailure) {
@@ -172,12 +184,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
     _createProfileSubscription?.cancel();
     _getProfileSubscription?.cancel();
     _getProfileStatusSubscription?.cancel();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Fx.log(entity);
     return Scaffold(
       appBar: DefaultAppBar(title: 'Profile nhân viên'),
       body: GestureDetector(
@@ -201,19 +213,20 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
                   bloc: _profileStatusCubit,
                   builder: (context, state) {
                     if (state is ProfileStatusLoading) {
-                      return Container(
-                          width: context.screenWidth,
-                          margin: EdgeInsets.only(
-                              bottom: 8.h, left: 16.w, right: 16.w),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 24.w, horizontal: 33.w),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.sqr),
-                              color: AppColors.white),
-                          child: AppIndicator());
+                      return SizedBox();
+                      // Container(
+                      //     width: context.screenWidth,
+                      //     margin: EdgeInsets.only(
+                      //         bottom: 8.h, left: 16.w, right: 16.w),
+                      //     padding: EdgeInsets.symmetric(
+                      //         vertical: 24.w, horizontal: 33.w),
+                      //     decoration: BoxDecoration(
+                      //         borderRadius: BorderRadius.circular(16.sqr),
+                      //         color: AppColors.white),
+                      //     child: AppIndicator());
                     }
                     return ProfileStatusWidget(
-                      read: status?.read ?? markRead,
+                      read: (status?.read ?? false) || markRead,
                       statusLoaded: statusLoaded,
                       status: status?.status,
                       onReload: () {
@@ -285,6 +298,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
                             (statusLoaded &&
                                 status!.status != ProfileStatus.PENDING))
                         ? () {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             if (entity.photos
                                     .where((element) =>
                                         element.type == PhotoType.PORTRAIT)

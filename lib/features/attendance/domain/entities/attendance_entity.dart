@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:isar/isar.dart';
+
+import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 
 import '../../../../core/constant/enum.dart';
 
@@ -159,4 +161,8 @@ class ImageCloud {
 
   factory ImageCloud.fromJson(String source) =>
       ImageCloud.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'ImageCloud(id: $id, filename: $filename, variants: $variants)';
 }

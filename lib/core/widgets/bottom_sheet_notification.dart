@@ -22,14 +22,18 @@ class BottomSheetNotification extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 32.h, bottom: 16.h),
+          padding: EdgeInsets.only(top: 28.h, bottom: 16.h),
           child: icon,
         ),
         Text(title,
+            textAlign: TextAlign.center,
             style: context.textTheme.h2?.copyWith(color: AppColors.nightRider)),
         SizedBox(height: 8.h),
         Flexible(
-          child: message ?? SizedBox(height: 37.h),
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 32.h),
+            child: message ?? SizedBox(),
+          ),
         ),
         action
       ],

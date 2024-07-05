@@ -39,7 +39,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       await _faceVerification(event.file!)
         ..fold((failure) {
           isfaceVerified = false;
-          print(failure);
           if (failure is! InternalFailure && failure is! SocketFailure) {
             emit(AttendanceFailure(FaceVerificationFailure()));
           } else

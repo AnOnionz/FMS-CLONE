@@ -35,8 +35,15 @@ class Appearance extends StatelessWidget {
         children: [
           Flexible(
             child: AppTextFormField(
-              label: 'Chiều cao (m)',
+              label: 'Chiều cao (cm)',
               isRequired: false,
+              validate: (value) {
+                if ((int.tryParse(value ?? '') ?? 0) > 255) {
+                  return 'Số lượng tối đa 255';
+                }
+                return null;
+              },
+              textInputType: TextInputType.numberWithOptions(),
               value: UserProfileInherited.of(context)
                   .entity
                   .bodyHeight
@@ -44,7 +51,7 @@ class Appearance extends StatelessWidget {
               onChanged: (value) {
                 onChanged(UserProfileInherited.of(context)
                     .entity
-                    .copyWith(bodyHeight: int.tryParse(value)));
+                    .copyWith(bodyHeight: int.tryParse(value) ?? 0));
               },
               textInputAction: TextInputAction.next,
             ),
@@ -53,6 +60,13 @@ class Appearance extends StatelessWidget {
           Flexible(
             child: AppTextFormField(
               label: 'Cân nặng (kg)',
+              validate: (value) {
+                if ((int.tryParse(value ?? '') ?? 0) > 255) {
+                  return 'Số lượng tối đa 255';
+                }
+                return null;
+              },
+              textInputType: TextInputType.numberWithOptions(),
               isRequired: false,
               value: UserProfileInherited.of(context)
                   .entity
@@ -61,7 +75,7 @@ class Appearance extends StatelessWidget {
               onChanged: (value) {
                 onChanged(UserProfileInherited.of(context)
                     .entity
-                    .copyWith(bodyWeight: int.tryParse(value)));
+                    .copyWith(bodyWeight: int.tryParse(value) ?? 0));
               },
               textInputAction: TextInputAction.next,
             ),
@@ -139,7 +153,14 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 1',
+            validate: (value) {
+              if ((int.tryParse(value ?? '') ?? 0) > 255) {
+                return 'Số lượng tối đa 255';
+              }
+              return null;
+            },
             isRequired: false,
+            textInputType: TextInputType.numberWithOptions(),
             value: UserProfileInherited.of(context)
                 .entity
                 .bodyBust
@@ -147,7 +168,7 @@ class Appearance extends StatelessWidget {
             onChanged: (value) {
               onChanged(UserProfileInherited.of(context)
                   .entity
-                  .copyWith(bodyBust: int.tryParse(value)));
+                  .copyWith(bodyBust: int.tryParse(value) ?? 0));
             },
             textInputAction: TextInputAction.next,
           ),
@@ -156,7 +177,14 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 2',
+            validate: (value) {
+              if ((int.tryParse(value ?? '') ?? 0) > 255) {
+                return 'Số lượng tối đa 255';
+              }
+              return null;
+            },
             isRequired: false,
+            textInputType: TextInputType.numberWithOptions(),
             value: UserProfileInherited.of(context)
                 .entity
                 .bodyWaist
@@ -164,7 +192,7 @@ class Appearance extends StatelessWidget {
             onChanged: (value) {
               onChanged(UserProfileInherited.of(context)
                   .entity
-                  .copyWith(bodyWaist: int.tryParse(value)));
+                  .copyWith(bodyWaist: int.tryParse(value) ?? 0));
             },
             textInputAction: TextInputAction.next,
           ),
@@ -173,7 +201,14 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 3',
+            validate: (value) {
+              if ((int.tryParse(value ?? '') ?? 0) > 255) {
+                return 'Số lượng tối đa 255';
+              }
+              return null;
+            },
             isRequired: false,
+            textInputType: TextInputType.numberWithOptions(),
             value: UserProfileInherited.of(context)
                 .entity
                 .bodyHips
@@ -181,7 +216,7 @@ class Appearance extends StatelessWidget {
             onChanged: (value) {
               onChanged(UserProfileInherited.of(context)
                   .entity
-                  .copyWith(bodyHips: int.tryParse(value)));
+                  .copyWith(bodyHips: int.tryParse(value) ?? 0));
             },
             textInputAction: TextInputAction.next,
           ),

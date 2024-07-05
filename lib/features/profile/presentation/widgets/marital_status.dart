@@ -29,8 +29,15 @@ class MaritalStatus extends StatelessWidget {
         ),
       ),
       AppTextFormField(
-        label: 'Số con(nếu có)',
+        label: 'Số con (nếu có)',
         isRequired: false,
+        validate: (value) {
+          if ((int.tryParse(value ?? '') ?? 0) > 100) {
+            return 'Số lượng tối đa 100';
+          }
+          return null;
+        },
+        textInputType: TextInputType.numberWithOptions(),
         value: UserProfileInherited.of(context)
             .entity
             .numberOfChildren
@@ -38,7 +45,7 @@ class MaritalStatus extends StatelessWidget {
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
               .entity
-              .copyWith(numberOfChildren: int.tryParse(value)));
+              .copyWith(numberOfChildren: int.tryParse(value) ?? 0));
         },
         textInputAction: TextInputAction.next,
       ),

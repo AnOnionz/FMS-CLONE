@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:fms/core/constant/enum.dart';
@@ -134,10 +135,21 @@ class UserProfileEntity {
       'dressSize': dressSize?.name,
       'shoeSize': shoeSize,
       'educationLevel': educationLevel?.name,
-      'desiredPosition': desiredPosition,
+      'desiredPosition': desiredPosition?.value.toUpperCase(),
       'desiredLocation': desiredLocation,
       'recruitmentSource': recruitmentSource?.name,
-      'experiences': experiences.map((x) => x.toMap()).toList(),
+      'experiences': experiences
+          .whereNot((e) {
+            return e.endedAt == null &&
+                e.startedAt == null &&
+                e.businessLine.isEmptyOrNull &&
+                e.companyName.isEmptyOrNull &&
+                e.description.isEmptyOrNull &&
+                e.leaveReason.isEmptyOrNull &&
+                e.title.isEmptyOrNull;
+          })
+          .map((x) => x.toMap())
+          .toList(),
     };
   }
 

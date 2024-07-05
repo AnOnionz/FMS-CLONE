@@ -9,18 +9,20 @@ import '../../../../core/widgets/date_picker.dart';
 
 class ProfileDatePicker extends StatefulWidget {
   final String label;
-  final DateTime? lastDate;
+  final DateTime? maxDate;
+  final DateTime? minDate;
   final Function(DateTime time) onChanged;
   final DateTime? value;
   final bool isRequired;
 
   const ProfileDatePicker(
       {super.key,
-      this.lastDate,
+      this.maxDate,
       required this.onChanged,
       required this.label,
       this.isRequired = false,
-      this.value});
+      this.value,
+      this.minDate});
 
   @override
   State<ProfileDatePicker> createState() => _ProfileDatePickerState();
@@ -36,7 +38,8 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
   @override
   Widget build(BuildContext context) {
     return DatePicker(
-        lastDate: widget.lastDate,
+        lastDate: widget.maxDate,
+        firstDate: widget.minDate,
         value: widget.value,
         onSelected: widget.onChanged,
         validator: (value) {

@@ -53,53 +53,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   Future<void> takeImage() async {
     if (widget.multiSource) {
-      OverlayManager.showSheet(
-          body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.w),
-            child: Text('Chụp trực tiếp hoặc upload từ thư viện',
-                style: context.textTheme.h3
-                    ?.copyWith(color: AppColors.nightRider)),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.w),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      OverlayManager.hide();
-                      await _take(ImageSource.camera);
-                    },
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(AppIcons.sourceCamera),
-                        Text('Camera',
-                            style: context.textTheme.body1
-                                ?.copyWith(color: AppColors.nightRider))
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      OverlayManager.hide();
-                      await _take(ImageSource.gallery);
-                    },
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(AppIcons.image),
-                        Text('Upload',
-                            style: context.textTheme.body1
-                                ?.copyWith(color: AppColors.nightRider))
-                      ],
-                    ),
-                  )
-                ]),
-          )
-        ],
-      ));
+      showTakeImageMultipleSource(
+          onSource1: () => _take(ImageSource.camera),
+          onSource2: () => _take(ImageSource.gallery));
     } else {
       await _take(ImageSource.camera);
     }

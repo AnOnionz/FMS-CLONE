@@ -33,7 +33,7 @@ class ProfileStatusWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 24.w, horizontal: 33.w),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.sqr), color: AppColors.white),
-      child: (statusLoaded && status == null)
+      child: (!statusLoaded && status == null)
           ? RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -71,14 +71,14 @@ class ProfileStatusWidget extends StatelessWidget {
                       children: [
                         TextSpan(
                             text: status == ProfileStatus.REJECTED
-                                ? 'không được duyệt'
-                                : 'đã được duyệt',
+                                ? 'không được duyệt '
+                                : 'đã được duyệt ',
                             style: context.textTheme.subtitle1
                                 ?.copyWith(color: color)),
                         TextSpan(
                             text: status == ProfileStatus.REJECTED
                                 ? ', vui lòng thử lại hoặc liên hệ cho quản lý.'
-                                : 'kiểm tra lại thông tin đã được cập nhật.',
+                                : 'kiểm tra lại thông tin đã được cập nhật. \n',
                             style: context.textTheme.body1
                                 ?.copyWith(color: color)),
                         TextSpan(

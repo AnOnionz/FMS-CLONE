@@ -579,6 +579,7 @@ extension FeatureTypeExtension on String {
   }
 
   DesiredPosition? toDesiredPosition() {
+    if (this == 'PG/PB') return DesiredPosition.PGPB;
     return DesiredPosition.values
         .firstWhereOrNull((element) => element.name == this);
   }

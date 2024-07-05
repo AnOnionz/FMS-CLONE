@@ -80,8 +80,7 @@ enum EducationLevel {
 }
 
 enum DesiredPosition {
-  PG(value: 'PG'),
-  PB(value: 'PB'),
+  PGPB(value: 'PG/PB'),
   HELPER(value: 'Helper'),
   SUP(value: 'SUP');
 

@@ -20,8 +20,7 @@ class DesiredJobPosition extends StatelessWidget {
         label: (option) => option.value,
         value: UserProfileInherited.of(context).entity.desiredPosition,
         values: [
-          DesiredPosition.PB,
-          DesiredPosition.PG,
+          DesiredPosition.PGPB,
           DesiredPosition.HELPER,
           DesiredPosition.SUP
         ],
@@ -35,6 +34,7 @@ class DesiredJobPosition extends StatelessWidget {
       AppTextFormField(
         label: 'Địa bàn làm việc mong muốn',
         isRequired: false,
+        maxLength: 255,
         value: UserProfileInherited.of(context).entity.desiredLocation,
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)

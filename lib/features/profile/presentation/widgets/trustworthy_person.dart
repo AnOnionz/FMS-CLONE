@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 
+import '../../../../core/constant/mapper.dart';
 import '../../../order/presentation/widgets/customer/customer_text_form_field.dart';
 import '../../domain/entities/user_profile_entity.dart';
 import 'user_profile_inheriterd.dart';
@@ -15,6 +16,7 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Họ tên',
         isRequired: false,
+        maxLength: 255,
         value: UserProfileInherited.of(context).entity.emergencyContactName,
         onChanged: (value) {
           onChanged(UserProfileInherited.of(context)
@@ -26,6 +28,7 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Quan hệ',
         isRequired: false,
+        maxLength: 255,
         value: UserProfileInherited.of(context)
             .entity
             .emergencyContactRelationship,
@@ -39,6 +42,9 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Số điện thoại',
         isRequired: false,
+        validateMode: AutovalidateMode.onUserInteraction,
+        textInputType: TextInputType.numberWithOptions(),
+        validate: Mapper.dataTypeToValidate(dataType: 'phoneNumber'),
         value:
             UserProfileInherited.of(context).entity.emergencyContactPhoneNumber,
         onChanged: (value) {

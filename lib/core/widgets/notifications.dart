@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 
@@ -126,12 +128,29 @@ void showUploadFaceSuccess({
               color: AppColors.royalBlue)));
 }
 
+void showUpdateProfilePending() {
+  OverlayManager.showSheet(
+      body: BottomSheetNotification(
+          icon: SvgPicture.asset(AppIcons.pending),
+          title: 'Gửi yêu cầu thành công',
+          message: Text(
+            'Yêu cầu điều chỉnh hồ sơ của bạn đã được gửi thành công và đang chờ duyệt.',
+            style: OverlayManager.currentContext!.textTheme.body1
+                ?.copyWith(color: AppColors.nero),
+          ),
+          action: OutlineButton(
+              onPressed: () => OverlayManager.hide(),
+              name: 'Về trang chủ',
+              color: AppColors.royalBlue)));
+}
+
 void showRequiredProfileField() {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
-          icon: SvgPicture.asset(AppIcons.requiredTask),
+          icon: SvgPicture.asset(AppIcons.requiredProfileData),
           title: 'Yêu cầu nhập đủ các trường bắt buộc',
           message: RichText(
+            textAlign: TextAlign.center,
             text: TextSpan(
                 text: 'Nhập tất cả các trường có dấu ',
                 style: OverlayManager.currentContext!.textTheme.body1
@@ -152,4 +171,54 @@ void showRequiredProfileField() {
               },
               name: 'Ok',
               color: AppColors.orange)));
+}
+
+void showTakeImageMultipleSource(
+    {required VoidCallback onSource1, required VoidCallback onSource2}) {
+  OverlayManager.showSheet(
+      body: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 20.w),
+        child: Text('Chụp trực tiếp hoặc upload từ thư viện',
+            style: OverlayManager.currentContext!.textTheme.h3
+                ?.copyWith(color: AppColors.nightRider)),
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 40.w),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          InkWell(
+            onTap: () async {
+              OverlayManager.hide();
+              onSource1();
+            },
+            child: Column(
+              children: [
+                SvgPicture.asset(AppIcons.sourceCamera),
+                Text('Camera',
+                    style: OverlayManager.currentContext!.textTheme.body1
+                        ?.copyWith(color: AppColors.nightRider))
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              OverlayManager.hide();
+              onSource2();
+            },
+            child: Column(
+              children: [
+                SvgPicture.asset(AppIcons.image),
+                Text('Upload',
+                    style: OverlayManager.currentContext!.textTheme.body1
+                        ?.copyWith(color: AppColors.nightRider))
+              ],
+            ),
+          )
+        ]),
+      )
+    ],
+  ));
 }

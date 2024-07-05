@@ -64,7 +64,7 @@ class _DatePickerState extends State<DatePicker> {
       style: context.textTheme.body1,
       decoration: widget.decoration,
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }

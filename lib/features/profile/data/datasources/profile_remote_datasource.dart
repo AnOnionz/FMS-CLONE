@@ -77,6 +77,9 @@ class ProfileRemoteDataSource extends ImagesRemoteDataSource
           photos.add(photo.toMap(imageCloud.id));
         }
       }
+      if (photo.image != null) {
+        photos.add(photo.toMap(photo.image!.id!));
+      }
     });
 
     final _data = {

@@ -55,6 +55,9 @@ class _ResidenceState extends State<Residence> {
           _provinces = state.provinces;
         });
       }
+      if (state is FetchProvinceFailure) {
+        provinceCubit.fetchProvinces();
+      }
     });
     _districtSubscription = districtCubit.stream.listen((state) {
       if (state is FetchDistrictSuccess) {
@@ -62,12 +65,20 @@ class _ResidenceState extends State<Residence> {
           _districts = state.districts;
         });
       }
+      if (state is FetchDistrictFailure) {
+        districtCubit.fetchDistricts(provinceId: _provinceSelected.value!.id!);
+      }
     });
     _wardSubscription = wardCubit.stream.listen((state) {
       if (state is FetchWardSuccess) {
         setState(() {
           _wards = state.wards;
         });
+      }
+      if (state is FetchWardFailure) {
+        wardCubit.fetchWards(
+            provinceId: _provinceSelected.value!.id!,
+            districtId: _districtSelected.value!.id!);
       }
     });
 
@@ -212,9 +223,18 @@ class _ResidenceState extends State<Residence> {
       AppTextFormField(
         label: 'Số nhà, tên đường,...',
         isRequired: false,
+        value: (widget.isPermanent)
+            ? UserProfileInherited.of(context).entity.permanentAddress
+            : UserProfileInherited.of(context).entity.address,
         onChanged: (value) {
-          widget.onChanged(
-              UserProfileInherited.of(context).entity.copyWith(address: value));
+          if (widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(permanentAddress: value));
+          if (!widget.isPermanent)
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(address: value));
         },
         textInputAction: TextInputAction.next,
       ),
