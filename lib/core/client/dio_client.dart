@@ -235,16 +235,17 @@ class DioClient extends ApiService {
 
   void reject(
       Response<dynamic> response, AuthenticationBloc _authenticationBloc) {
-    Future.delayed(
-        100.milliseconds,
-        () => showFailure(
-              title: 'Thao tác thất bại',
-              icon: SvgPicture.asset(AppIcons.failure),
-              message: response.statusMessage,
-              btnText: 'Ok',
-            ));
-    if (_authenticationBloc.state != AuthenticationStatus.unauthenticated)
-      _authenticationBloc.add(AuthenticationLogout());
+    Future.delayed(100.milliseconds, () {
+      if (_authenticationBloc.state != AuthenticationStatus.unauthenticated)
+        showFailure(
+          title: 'Thao tác thất bại',
+          icon: SvgPicture.asset(AppIcons.failure),
+          message: response.statusMessage,
+          btnText: 'Ok',
+        );
+    });
+
+    _authenticationBloc.add(AuthenticationLogout());
     ;
   }
 

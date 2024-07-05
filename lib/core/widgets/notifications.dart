@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -135,6 +134,7 @@ void showUpdateProfilePending() {
           title: 'Gửi yêu cầu thành công',
           message: Text(
             'Yêu cầu điều chỉnh hồ sơ của bạn đã được gửi thành công và đang chờ duyệt.',
+            textAlign: TextAlign.center,
             style: OverlayManager.currentContext!.textTheme.body1
                 ?.copyWith(color: AppColors.nero),
           ),
@@ -182,6 +182,7 @@ void showTakeImageMultipleSource(
       Padding(
         padding: EdgeInsets.symmetric(vertical: 20.w),
         child: Text('Chụp trực tiếp hoặc upload từ thư viện',
+            textAlign: TextAlign.center,
             style: OverlayManager.currentContext!.textTheme.h3
                 ?.copyWith(color: AppColors.nightRider)),
       ),
