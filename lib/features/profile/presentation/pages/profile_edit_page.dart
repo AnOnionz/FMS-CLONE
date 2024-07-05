@@ -103,6 +103,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
   ];
   late ProfileStatusEntity? status;
   bool statusLoaded = false;
+  bool profileLoaded = false;
   bool markRead = false;
   late UserProfileEntity entity = UserProfileEntity();
 
@@ -124,7 +125,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
           status = state.entity;
           statusLoaded = true;
         });
-        Fx.log(state.entity);
+        if (!profileLoaded) {
+          _getProfileBloc.add(GetProfile());
+        }
       }
       if (state is ProfileStatusFailure) {
         setState(() {
@@ -137,6 +140,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
       if (state is GetProfileSuccess) {
         setState(() {
           entity = state.profile;
+          profileLoaded = true;
+        });
+      }
+      if (state is GetProfileFailure) {
+        setState(() {
+          profileLoaded = false;
         });
       }
     });
@@ -152,9 +161,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
         });
 
         if (isFistUpdate) {
-          showUpdateProfilePending();
-        } else {
           showSuccess(title: 'Lưu thành công');
+        } else {
+          showUpdateProfilePending();
         }
         _profileStatusCubit.getProfileStatus();
       }

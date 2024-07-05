@@ -29,6 +29,7 @@ class ProfileStatusWidget extends StatelessWidget {
     if ((statusLoaded && status == null) || read) return SizedBox();
 
     return Container(
+      width: context.screenWidth,
       margin: EdgeInsets.only(bottom: 8.h, left: 16.w, right: 16.w),
       padding: EdgeInsets.symmetric(vertical: 24.w, horizontal: 33.w),
       decoration: BoxDecoration(
