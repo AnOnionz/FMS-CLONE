@@ -52,7 +52,9 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Theme(
-        data: ThemeData(splashFactory: NoSplash.splashFactory),
+        data: ThemeData(
+            splashFactory: NoSplash.splashFactory,
+            buttonTheme: ButtonThemeData(alignedDropdown: true)),
         child: DropdownMenu<T>(
           label: Text(
             widget.hint,
@@ -117,11 +119,13 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
           ),
           inputDecorationTheme: InputDecorationTheme(
               isDense: true,
-              constraints: BoxConstraints.tight(Size.fromHeight(56.w)),
               isCollapsed: true,
+              constraints: BoxConstraints.tight(Size.fromHeight(56.w)),
               hintStyle:
                   context.textTheme.body1?.copyWith(color: AppColors.nobel),
-              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              contentPadding: EdgeInsets.only(
+                left: 4,
+              ),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.sqr),
                   borderSide: BorderSide(color: AppColors.nobel)),

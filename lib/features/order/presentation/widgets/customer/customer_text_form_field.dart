@@ -1,4 +1,6 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
@@ -16,6 +18,8 @@ class AppTextFormField extends StatefulWidget {
   final Function(String value) onChanged;
   final AutovalidateMode? validateMode;
   final int? maxLength;
+  final int? maxValue;
+  final bool onlyNumber;
 
   const AppTextFormField(
       {super.key,
@@ -27,7 +31,9 @@ class AppTextFormField extends StatefulWidget {
       this.validate,
       this.value,
       this.validateMode,
-      this.maxLength});
+      this.maxLength,
+      this.onlyNumber = false,
+      this.maxValue});
 
   @override
   State<AppTextFormField> createState() => _AppTextFormFieldState();
@@ -80,6 +86,12 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       onChanged: widget.onChanged,
       focusNode: _focusNode,
       maxLength: widget.maxLength,
+      inputFormatters: [
+        if (widget.onlyNumber)
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        if (widget.maxValue != null)
+          NumericRangeFormatter(min: 0, max: widget.maxValue!),
+      ],
       buildCounter: (context,
               {required currentLength,
               required isFocused,
@@ -144,5 +156,45 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
               borderRadius: BorderRadius.circular(8.sqr),
               borderSide: BorderSide(color: AppColors.summerSky, width: 2.h))),
     );
+  }
+}
+
+class NumericRangeFormatter extends TextInputFormatter {
+  final int min;
+  final int max;
+
+  NumericRangeFormatter({required this.min, required this.max});
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    final newValueNumber = int.tryParse(newValue.text);
+
+    if (newValueNumber == null) {
+      return oldValue;
+    }
+
+    if (newValueNumber < min) {
+      final value = max.toString();
+      return newValue.copyWith(
+          text: value,
+          selection:
+              TextSelection.fromPosition(TextPosition(offset: value.length)));
+    }
+    if (newValueNumber > max) {
+      final value = max.toString();
+
+      return newValue.copyWith(
+          text: value,
+          selection:
+              TextSelection.fromPosition(TextPosition(offset: value.length)));
+    }
+    return newValue;
   }
 }

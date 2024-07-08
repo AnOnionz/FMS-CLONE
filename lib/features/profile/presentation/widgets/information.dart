@@ -263,9 +263,11 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Số điện thoại',
             isRequired: true,
+            maxLength: 10,
             value: widget.entity.phoneNumber,
             validateMode: AutovalidateMode.onUserInteraction,
             textInputType: TextInputType.numberWithOptions(),
+            onlyNumber: true,
             validate: Mapper.dataTypeToValidate(dataType: 'phoneNumber'),
             onChanged: (value) {
               widget.onChanged(widget.entity.copyWith(phoneNumber: value));
@@ -275,8 +277,10 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'CMND/CCCD',
             isRequired: true,
+            maxLength: 12,
             value: widget.entity.identityCardNumber,
             textInputType: TextInputType.numberWithOptions(),
+            onlyNumber: true,
             validate: Mapper.dataTypeToValidate(dataType: 'cccd'),
             onChanged: (value) {
               widget
@@ -311,20 +315,13 @@ class _UserInformationState extends State<UserInformation> {
               ),
             ],
           ).bottom18,
-          FutureBuilder(
-              future: getLastBirthDay(),
-              initialData: DateTime.now(),
-              builder: (context, snapshot) {
-                return ProfileDatePicker(
-                        maxDate: snapshot.data,
-                        value: widget.entity.birthdate,
-                        onChanged: (time) {
-                          widget.onChanged(
-                              widget.entity.copyWith(birthdate: time));
-                        },
-                        label: 'Ngày tháng năm sinh')
-                    .bottom18;
-              }),
+          ProfileDatePicker(
+                  value: widget.entity.birthdate,
+                  onChanged: (time) {
+                    widget.onChanged(widget.entity.copyWith(birthdate: time));
+                  },
+                  label: 'Ngày tháng năm sinh')
+              .bottom18,
           AppTextFormField(
             label: 'Nơi sinh',
             isRequired: false,
@@ -359,6 +356,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Mã số thuế',
             isRequired: false,
+            onlyNumber: true,
             maxLength: 20,
             textInputType: TextInputType.numberWithOptions(),
             value: widget.entity.personalTaxCode,
@@ -370,6 +368,7 @@ class _UserInformationState extends State<UserInformation> {
           AppTextFormField(
             label: 'Số BHXH',
             isRequired: false,
+            onlyNumber: true,
             maxLength: 20,
             textInputType: TextInputType.numberWithOptions(),
             value: widget.entity.socialInsuranceNumber,

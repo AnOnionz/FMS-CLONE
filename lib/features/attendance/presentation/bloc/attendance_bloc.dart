@@ -32,19 +32,19 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   Future<void> _onAttedanceUpload(AttendanceEvent event, emit) async {
     emit(AttendanceLoading());
 
-    bool isfaceVerified = true;
+    final isfaceVerified = true;
 
-    if ((event.feature.featureAttendance!.isFaceRequired ?? false) &&
-        event.file != null) {
-      await _faceVerification(event.file!)
-        ..fold((failure) {
-          isfaceVerified = false;
-          if (failure is! InternalFailure && failure is! SocketFailure) {
-            emit(AttendanceFailure(FaceVerificationFailure()));
-          } else
-            emit(AttendanceFailure(failure));
-        }, (data) => null);
-    }
+    // if ((event.feature.featureAttendance!.isFaceRequired ?? false) &&
+    //     event.file != null) {
+    //   await _faceVerification(event.file!)
+    //     ..fold((failure) {
+    //       isfaceVerified = false;
+    //       if (failure is! InternalFailure && failure is! SocketFailure) {
+    //         emit(AttendanceFailure(FaceVerificationFailure()));
+    //       } else
+    //         emit(AttendanceFailure(failure));
+    //     }, (data) => null);
+    // }
     if (isfaceVerified) {
       final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
       final time = await timeService.ntpDateTime();

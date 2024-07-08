@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
+import 'package:fms/features/home/home_module.dart';
 
 import '../../features/home/presentation/widgets/require_task_notify.dart';
 import '../constant/colors.dart';
@@ -139,7 +141,10 @@ void showUpdateProfilePending() {
                 ?.copyWith(color: AppColors.nero),
           ),
           action: OutlineButton(
-              onPressed: () => OverlayManager.hide(),
+              onPressed: () {
+                OverlayManager.hide();
+                OverlayManager.currentContext!.popUntil(HomeModule.route);
+              },
               name: 'Về trang chủ',
               color: AppColors.royalBlue)));
 }

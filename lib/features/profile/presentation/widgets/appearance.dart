@@ -43,6 +43,7 @@ class Appearance extends StatelessWidget {
                 }
                 return null;
               },
+              onlyNumber: true,
               textInputType: TextInputType.numberWithOptions(),
               value: UserProfileInherited.of(context)
                   .entity
@@ -66,6 +67,7 @@ class Appearance extends StatelessWidget {
                 }
                 return null;
               },
+              onlyNumber: true,
               textInputType: TextInputType.numberWithOptions(),
               isRequired: false,
               value: UserProfileInherited.of(context)
@@ -153,13 +155,10 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 1',
-            validate: (value) {
-              if ((int.tryParse(value ?? '') ?? 0) > 255) {
-                return 'Số lượng tối đa 255';
-              }
-              return null;
-            },
+            maxLength: 255,
+            maxValue: 255,
             isRequired: false,
+            onlyNumber: true,
             textInputType: TextInputType.numberWithOptions(),
             value: UserProfileInherited.of(context)
                 .entity
@@ -177,13 +176,9 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 2',
-            validate: (value) {
-              if ((int.tryParse(value ?? '') ?? 0) > 255) {
-                return 'Số lượng tối đa 255';
-              }
-              return null;
-            },
+            maxValue: 255,
             isRequired: false,
+            onlyNumber: true,
             textInputType: TextInputType.numberWithOptions(),
             value: UserProfileInherited.of(context)
                 .entity
@@ -201,13 +196,9 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 3',
-            validate: (value) {
-              if ((int.tryParse(value ?? '') ?? 0) > 255) {
-                return 'Số lượng tối đa 255';
-              }
-              return null;
-            },
+            maxValue: 255,
             isRequired: false,
+            onlyNumber: true,
             textInputType: TextInputType.numberWithOptions(),
             value: UserProfileInherited.of(context)
                 .entity

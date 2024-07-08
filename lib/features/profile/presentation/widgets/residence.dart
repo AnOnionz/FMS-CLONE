@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fms/core/constant/mapper.dart';
 import 'package:fms/core/mixins/extension/widget.ext.dart';
 import 'package:fms/features/profile/presentation/cubit/fetch_province_cubit.dart';
 import 'package:fms/features/profile/presentation/widgets/user_profile_inheriterd.dart';
@@ -166,7 +167,7 @@ class _ResidenceState extends State<Residence> {
     return Column(children: [
       DropdownField<Province>(
         controller: _provinceController,
-        hint: 'Tỉnh/Thành',
+        hint: 'Tỉnh/Thành phố',
         enableSearch: true,
         label: (value) => value.name!,
         value: _provinceSelected.value,
@@ -175,13 +176,15 @@ class _ResidenceState extends State<Residence> {
           FocusManager.instance.primaryFocus?.unfocus();
           onProvinceSelected(value);
           if (widget.isPermanent)
-            widget.onChanged(UserProfileInherited.of(context)
-                .entity
-                .copyWith(permanentProvince: value));
+            widget.onChanged(UserProfileInherited.of(context).entity.copyWith(
+                permanentProvince: Value(object: value),
+                permanentDistrict: Value(object: null),
+                permanentWard: Value(object: null)));
           if (!widget.isPermanent)
-            widget.onChanged(UserProfileInherited.of(context)
-                .entity
-                .copyWith(province: value));
+            widget.onChanged(UserProfileInherited.of(context).entity.copyWith(
+                province: Value(object: value),
+                district: Value(object: null),
+                ward: Value(object: null)));
         },
       ).bottom18,
       DropdownField<District>(
@@ -192,15 +195,13 @@ class _ResidenceState extends State<Residence> {
         values: _districts,
         onSelected: (value) {
           onDistrictSelected(value);
-
           if (widget.isPermanent)
-            widget.onChanged(UserProfileInherited.of(context)
-                .entity
-                .copyWith(permanentDistrict: value));
+            widget.onChanged(UserProfileInherited.of(context).entity.copyWith(
+                permanentDistrict: Value(object: value),
+                permanentWard: Value(object: null)));
           if (!widget.isPermanent)
-            widget.onChanged(UserProfileInherited.of(context)
-                .entity
-                .copyWith(district: value));
+            widget.onChanged(UserProfileInherited.of(context).entity.copyWith(
+                district: Value(object: value), ward: Value(object: null)));
         },
       ).bottom18,
       DropdownField<Ward>(
@@ -214,10 +215,11 @@ class _ResidenceState extends State<Residence> {
           if (widget.isPermanent)
             widget.onChanged(UserProfileInherited.of(context)
                 .entity
-                .copyWith(permanentWard: value));
+                .copyWith(permanentWard: Value(object: value)));
           if (!widget.isPermanent)
-            widget.onChanged(
-                UserProfileInherited.of(context).entity.copyWith(ward: value));
+            widget.onChanged(UserProfileInherited.of(context)
+                .entity
+                .copyWith(ward: Value(object: value)));
         },
       ).bottom18,
       AppTextFormField(

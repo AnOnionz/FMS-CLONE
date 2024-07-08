@@ -100,3 +100,9 @@ final class Mapper {
     }
   }
 }
+
+class Value<T> {
+  final T? object;
+
+  Value({required this.object});
+}

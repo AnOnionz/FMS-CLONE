@@ -37,6 +37,7 @@ class MaritalStatus extends StatelessWidget {
           }
           return null;
         },
+        onlyNumber: true,
         textInputType: TextInputType.numberWithOptions(),
         value: UserProfileInherited.of(context)
             .entity

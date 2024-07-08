@@ -42,8 +42,10 @@ class TrustworthyPerson extends StatelessWidget {
       AppTextFormField(
         label: 'Số điện thoại',
         isRequired: false,
+        maxLength: 10,
         validateMode: AutovalidateMode.onUserInteraction,
         textInputType: TextInputType.numberWithOptions(),
+        onlyNumber: true,
         validate: Mapper.dataTypeToValidate(dataType: 'phoneNumber'),
         value:
             UserProfileInherited.of(context).entity.emergencyContactPhoneNumber,

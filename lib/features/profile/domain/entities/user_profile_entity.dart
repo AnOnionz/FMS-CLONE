@@ -8,6 +8,7 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../core/constant/mapper.dart';
 import '../../../attendance/domain/entities/attendance_entity.dart';
 
 class UserProfileEntity {
@@ -282,13 +283,13 @@ class UserProfileEntity {
     String? emergencyContactRelationship,
     String? emergencyContactPhoneNumber,
     String? emergencyContactAddress,
-    Province? permanentProvince,
-    District? permanentDistrict,
-    Ward? permanentWard,
+    Value<Province>? permanentProvince,
+    Value<District>? permanentDistrict,
+    Value<Ward>? permanentWard,
     String? permanentAddress,
-    Province? province,
-    District? district,
-    Ward? ward,
+    Value<Province>? province,
+    Value<District>? district,
+    Value<Ward>? ward,
     String? address,
     int? bodyHeight,
     int? bodyWeight,
@@ -329,13 +330,18 @@ class UserProfileEntity {
           emergencyContactPhoneNumber ?? this.emergencyContactPhoneNumber,
       emergencyContactAddress:
           emergencyContactAddress ?? this.emergencyContactAddress,
-      permanentProvince: permanentProvince ?? this.permanentProvince,
-      permanentDistrict: permanentDistrict ?? this.permanentDistrict,
-      permanentWard: permanentWard ?? this.permanentWard,
+      permanentProvince: permanentProvince == null
+          ? this.permanentProvince
+          : permanentProvince.object,
+      permanentDistrict: permanentDistrict == null
+          ? this.permanentDistrict
+          : permanentDistrict.object,
+      permanentWard:
+          permanentWard == null ? this.permanentWard : permanentWard.object,
       permanentAddress: permanentAddress ?? this.permanentAddress,
-      province: province ?? this.province,
-      district: district ?? this.district,
-      ward: ward ?? this.ward,
+      province: province == null ? this.province : province.object,
+      district: district == null ? this.district : district.object,
+      ward: ward == null ? this.ward : ward.object,
       address: address ?? this.address,
       bodyHeight: bodyHeight ?? this.bodyHeight,
       bodyWeight: bodyWeight ?? this.bodyWeight,
