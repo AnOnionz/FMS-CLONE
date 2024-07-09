@@ -123,9 +123,7 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
               constraints: BoxConstraints.tight(Size.fromHeight(56.w)),
               hintStyle:
                   context.textTheme.body1?.copyWith(color: AppColors.nobel),
-              contentPadding: EdgeInsets.only(
-                left: 4,
-              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.sqr),
                   borderSide: BorderSide(color: AppColors.nobel)),

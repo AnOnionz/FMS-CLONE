@@ -141,6 +141,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
                   ),
           ),
           suffixIconConstraints: BoxConstraints(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           hintStyle: context.textTheme.body1?.copyWith(color: AppColors.nobel),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.sqr),

@@ -38,14 +38,11 @@ void showFailure({
           title: title,
           message: message != null
               ? Builder(builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 32.h),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: context.textTheme.body1
-                          ?.copyWith(color: AppColors.nero),
-                    ),
+                  return Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: context.textTheme.body1
+                        ?.copyWith(color: AppColors.nero),
                   );
                 })
               : null,
@@ -71,14 +68,11 @@ void showWarning({
           title: title,
           message: message != null
               ? Builder(builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 32.h),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: context.textTheme.body1
-                          ?.copyWith(color: AppColors.nero),
-                    ),
+                  return Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: context.textTheme.body1
+                        ?.copyWith(color: AppColors.nero),
                   );
                 })
               : null,

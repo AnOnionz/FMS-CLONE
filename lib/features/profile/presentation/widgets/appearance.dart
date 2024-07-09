@@ -45,7 +45,6 @@ class Appearance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = (context.screenWidth - 96.w) / 2;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(
         children: [
@@ -100,69 +99,50 @@ class Appearance extends StatelessWidget {
           ),
         ],
       ).bottom18,
-      Row(
-        children: [
-          Flexible(
-            child: DropdownField<DressSize>(
-                width: width,
-                hint: 'Size áo',
-                value: UserProfileInherited.of(context).entity.shirtSize,
-                label: (option) => option.name,
-                onSelected: (value) {
-                  onChanged(UserProfileInherited.of(context)
-                      .entity
-                      .copyWith(shirtSize: value));
-                },
-                values: dresSizes),
-          ),
-          SizedBox(width: 16.w),
-          Flexible(
-            child: DropdownField<DressSize>(
-                width: width,
-                hint: 'Size quần/váy',
-                value: UserProfileInherited.of(context).entity.pantsSize,
-                label: (option) => option.name,
-                onSelected: (value) {
-                  onChanged(UserProfileInherited.of(context)
-                      .entity
-                      .copyWith(pantsSize: value));
-                },
-                values: dresSizes),
-          ),
-        ],
-      ).bottom18,
-      Row(
-        children: [
-          Flexible(
-            child: DropdownField(
-              width: width,
-              hint: 'Size đầm',
-              value: UserProfileInherited.of(context).entity.dressSize,
+      DropdownField<DressSize>(
+              hint: 'Size áo',
+              value: UserProfileInherited.of(context).entity.shirtSize,
               label: (option) => option.name,
-              values: dresSizes,
               onSelected: (value) {
                 onChanged(UserProfileInherited.of(context)
                     .entity
-                    .copyWith(dressSize: value));
+                    .copyWith(shirtSize: value));
               },
-            ),
-          ),
-          SizedBox(width: 16.w),
-          Flexible(
-            child: DropdownField<int>(
-                width: width,
-                label: (option) => option.toString(),
-                hint: 'Size giày',
-                value: UserProfileInherited.of(context).entity.shoeSize,
-                onSelected: (value) {
-                  onChanged(UserProfileInherited.of(context)
-                      .entity
-                      .copyWith(shoeSize: value));
-                },
-                values: shoeSize),
-          ),
-        ],
+              values: dresSizes)
+          .bottom18,
+      DropdownField<DressSize>(
+              hint: 'Size quần/váy',
+              value: UserProfileInherited.of(context).entity.pantsSize,
+              label: (option) => option.name,
+              onSelected: (value) {
+                onChanged(UserProfileInherited.of(context)
+                    .entity
+                    .copyWith(pantsSize: value));
+              },
+              values: dresSizes)
+          .bottom18,
+      DropdownField<DressSize>(
+        hint: 'Size đầm',
+        value: UserProfileInherited.of(context).entity.dressSize,
+        label: (option) => option.name,
+        values: dresSizes,
+        onSelected: (value) {
+          onChanged(UserProfileInherited.of(context)
+              .entity
+              .copyWith(dressSize: value));
+        },
       ).bottom18,
+      DropdownField<int>(
+              label: (option) => option.toString(),
+              hint: 'Size giày',
+              value: UserProfileInherited.of(context).entity.shoeSize,
+              onSelected: (value) {
+                onChanged(UserProfileInherited.of(context)
+                    .entity
+                    .copyWith(shoeSize: value));
+              },
+              values: shoeSize)
+          .bottom18,
       Text('Số đo 3 vòng:',
               style: context.textTheme.body1
                   ?.copyWith(color: AppColors.midnightExpress))

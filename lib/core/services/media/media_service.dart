@@ -153,7 +153,7 @@ final class MediaService {
       inputImage = InputImage.fromFilePath(image.path);
     }
     final FaceDetector _faceDetector = FaceDetector(
-      options: FaceDetectorOptions(),
+      options: FaceDetectorOptions(minFaceSize: 0.2),
     );
     final faces = await _faceDetector.processImage(inputImage);
     await _faceDetector.close();

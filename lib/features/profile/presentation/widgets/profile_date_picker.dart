@@ -86,7 +86,7 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
                         padding: EdgeInsets.only(right: 12.w),
                         child: SvgPicture.asset(AppIcons.error),
                       )),
-            contentPadding: EdgeInsets.only(left: 4),
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             suffixIconConstraints: BoxConstraints(),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.sqr),
