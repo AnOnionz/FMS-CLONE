@@ -152,11 +152,11 @@ class DioClient extends ApiService {
     }
   }
 
-  Future<T?> putS3<T>(
-      {required String path,
-      int retries = 1,
-      Stream<List<int>>? data,
-      required Options options}) async {
+  Future<T?> putS3<T>({
+    required String path,
+    int retries = 1,
+    FormData? data,
+  }) async {
     try {
       final Dio _http = Dio(
         BaseOptions(
@@ -183,8 +183,7 @@ class DioClient extends ApiService {
 
       final response = await _request(
           retries: retries,
-          _http.put(path,
-              options: options, data: data, cancelToken: cancelToken));
+          _http.post(path, data: data, cancelToken: cancelToken));
       return response as T?;
     } catch (e) {
       rethrow;
@@ -259,7 +258,10 @@ class DioClient extends ApiService {
         Exception(response.data ?? 'Dio client transform response');
 
     return switch (response.statusCode) {
-      StatusCode.OK || StatusCode.CREATED => response.data,
+      StatusCode.OK ||
+      StatusCode.CREATED ||
+      StatusCode.NO_CONTENT =>
+        response.data,
       StatusCode.BAD_REQUEST =>
         throw BadRequestException(message, e, StackTrace.current),
       StatusCode.UNAUTHORIZED =>

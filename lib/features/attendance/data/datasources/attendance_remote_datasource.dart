@@ -16,7 +16,8 @@ abstract class IAttendanceRemoteDataSource {
       Position? position,
       required DateTime time,
       required FeatureEntity feature,
-      required GeneralEntity general});
+      required GeneralEntity general,
+      required bool isFaceRequired});
   Future<AttendanceEntity?> getAttendanceInfo(
       {required FeatureEntity feature, required GeneralEntity general});
   Future<List<AttendanceEntity>> getAttendanceReports(
@@ -42,10 +43,12 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
       Position? position,
       required DateTime time,
       required FeatureEntity feature,
-      required GeneralEntity general}) async {
+      required GeneralEntity general,
+      required bool isFaceRequired}) async {
     ImageUploadModel? imageServerModel;
     if (file != null) {
-      imageServerModel = await uploadImageToServer(file, withS3: true);
+      imageServerModel =
+          await uploadImageToServer(file, withS3: isFaceRequired);
     }
     final form = {
       if (position != null) 'latitude': position.latitude,

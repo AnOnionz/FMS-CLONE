@@ -19,12 +19,10 @@ part 'attendance_state.dart';
 
 class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final AttendanceUsecase _attendance;
-  final FaceVerificationUsecase _faceVerification;
-  final GetAttendanceInfoUsecase _getAttendanceInfo;
+
   final GeneralBloc _generalBloc;
 
-  AttendanceBloc(this._attendance, this._generalBloc, this._getAttendanceInfo,
-      this._faceVerification)
+  AttendanceBloc(this._attendance, this._generalBloc)
       : super(AttendanceInitial()) {
     on<AttendanceEvent>(_onAttedanceUpload, transformer: droppable());
   }
@@ -32,51 +30,29 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   Future<void> _onAttedanceUpload(AttendanceEvent event, emit) async {
     emit(AttendanceLoading());
 
-    final isfaceVerified = true;
-
-    // if ((event.feature.featureAttendance!.isFaceRequired ?? false) &&
-    //     event.file != null) {
-    //   await _faceVerification(event.file!)
-    //     ..fold((failure) {
-    //       isfaceVerified = false;
-    //       if (failure is! InternalFailure && failure is! SocketFailure) {
-    //         emit(AttendanceFailure(FaceVerificationFailure()));
-    //       } else
-    //         emit(AttendanceFailure(failure));
-    //     }, (data) => null);
-    // }
-    if (isfaceVerified) {
-      final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
-      final time = await timeService.ntpDateTime();
-      final execute = await _attendance(AttendanceParams(
+    final NetworkTimeService timeService = Modular.get<NetworkTimeService>();
+    final time = await timeService.ntpDateTime();
+    final execute = await _attendance(AttendanceParams(
         file: event.file,
         position: event.position,
         time: time,
         feature: event.feature,
-      ));
-      final AttendanceEntity? attendance = execute.fold((failure) {
-        emit(AttendanceFailure(failure));
-
+        isFaceRequired:
+            event.feature.featureAttendance!.isFaceRequired ?? false));
+    final AttendanceEntity? attendance = execute.fold((failure) {
+      emit(AttendanceFailure(failure));
+      return null;
+    }, (data) {
+      if (data == null) {
+        emit(AttendanceFailure(DataNullFailure()));
         return null;
-      }, (data) {
-        if (data == null) {
-          emit(AttendanceFailure(DataNullFailure()));
-          return null;
-        }
-        return data;
-      });
-
-      if (attendance != null) {
-        _generalBloc.add(GeneralRefresh(attendance: attendance));
-        // final execute = await _getAttendanceInfo(
-        //     AttendanceParams(time: time, feature: event.feature));
-        // execute.fold((failure) => emit(AttendanceSuccess(null)), (data) {
-        //   emit(AttendanceSuccess(data));
-        //   if (data != null) {
-        //     _generalBloc.add(GeneralRefresh(attendance: data));
-        //   }
-        // });
       }
+      return data;
+    });
+
+    if (attendance != null) {
+      emit(AttendanceSuccess(attendance));
+      _generalBloc.add(GeneralRefresh(attendance: attendance));
     }
   }
 }

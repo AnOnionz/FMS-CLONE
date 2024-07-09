@@ -28,19 +28,20 @@ class AttendanceRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<AttendanceEntity?>> postAttendance({
-    XFile? file,
-    Position? position,
-    required DateTime time,
-    required FeatureEntity feature,
-  }) {
+  Future<Result<AttendanceEntity?>> postAttendance(
+      {XFile? file,
+      Position? position,
+      required DateTime time,
+      required FeatureEntity feature,
+      required bool isFaceRequired}) {
     return todo(() async {
       final attendanceData = await _remote.postAttendance(
           file: file,
           time: time,
           position: position,
           feature: feature,
-          general: general);
+          general: general,
+          isFaceRequired: isFaceRequired);
       return Right(attendanceData);
     }, useInternet: true);
   }

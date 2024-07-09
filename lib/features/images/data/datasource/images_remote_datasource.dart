@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:fms/core/data_source/remote_datasource.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/features/images/data/models/image_upload_model.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -30,22 +28,19 @@ abstract class ImagesRemoteDataSource extends RemoteDatasource {
       await dio.postHttp(
           path: imageUploadModel.uploadUrl, data: formCloudFlare);
 
-      if (imageUploadModel.s3Url != null) {
-        final Uint8List image = await file.readAsBytes();
-        final Options options = Options(
-            contentType: Headers.jsonMimeType
-                .change(type: 'image', subtype: file.name.split('.').last)
-                .mimeType,
-            headers: {
-              'Accept': '*/*',
-              'Content-Length': image.length,
-              'Connection': 'keep-alive',
-              'User-Agent': 'ClinicPlush'
-            });
-        await dio.putS3(
-            path: imageUploadModel.s3Url!,
-            data: Stream.fromIterable(image.map((e) => [e])),
-            options: options);
+      if (imageUploadModel.s3 != null) {
+        final formS3 = FormData.fromMap({
+          ...imageUploadModel.s3!.fields!,
+          'file': MultipartFile.fromBytes(
+            await file.readAsBytes(),
+            filename: file.name,
+          ),
+          'Content-Type': Headers.jsonMimeType
+              .change(type: 'image', subtype: file.name.split('.').last)
+              .mimeType
+        });
+
+        await dio.putS3(path: imageUploadModel.s3!.url!, data: formS3);
       }
     }
     return imageUploadModel;

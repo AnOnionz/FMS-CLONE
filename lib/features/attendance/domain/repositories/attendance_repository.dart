@@ -11,7 +11,8 @@ abstract class AttendanceRepository {
       {XFile? file,
       Position? position,
       required DateTime time,
-      required FeatureEntity feature});
+      required FeatureEntity feature,
+      required bool isFaceRequired});
 
   Future<Result<AttendanceEntity?>> getAttendanceInfo(
       {required FeatureEntity feature});
