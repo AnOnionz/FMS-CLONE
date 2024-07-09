@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class ImageUploadModel {
@@ -31,4 +32,8 @@ class ImageUploadModel {
 
   factory ImageUploadModel.fromJson(String source) =>
       ImageUploadModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'ImageUploadModel(id: $id, uploadUrl: $uploadUrl, s3Url: $s3Url)';
 }

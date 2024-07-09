@@ -28,7 +28,7 @@ class AttendanceRepositoryImpl extends Repository
   }
 
   @override
-  Future<Result<AttendanceData?>> postAttendance({
+  Future<Result<AttendanceEntity?>> postAttendance({
     XFile? file,
     Position? position,
     required DateTime time,

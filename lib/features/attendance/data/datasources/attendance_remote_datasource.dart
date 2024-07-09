@@ -11,7 +11,7 @@ import '../../domain/entities/attendance_entity.dart';
 
 abstract class IAttendanceRemoteDataSource {
   Future<void> faceVerification({required XFile file});
-  Future<AttendanceData?> postAttendance(
+  Future<AttendanceEntity?> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,
@@ -37,7 +37,7 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
     await dio.post(data: _formData, path: '/app/face-verification');
   }
 
-  Future<AttendanceData?> postAttendance(
+  Future<AttendanceEntity?> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,
@@ -59,10 +59,8 @@ class AttendanceRemoteDataSource extends ImagesRemoteDataSource
         path:
             '/app/projects/${general.project.id}/outlets/${general.outlet.id}/booths/${general.booth.id}/features/${feature.id}/attendance');
 
-    return parseJson<AttendanceData>((
-      json: (_resp as Map<String, dynamic>).entries.elementAt(1).value,
-      fromJson: AttendanceData.fromMap
-    ));
+    return parseJson<AttendanceEntity>(
+        (json: _resp, fromJson: AttendanceEntity.fromMap));
   }
 
   @override

@@ -7,7 +7,7 @@ import '../entities/attendance_entity.dart';
 
 abstract class AttendanceRepository {
   Future<Result<void>> faceVerification({required XFile file});
-  Future<Result<AttendanceData?>> postAttendance(
+  Future<Result<AttendanceEntity?>> postAttendance(
       {XFile? file,
       Position? position,
       required DateTime time,

@@ -152,6 +152,45 @@ class DioClient extends ApiService {
     }
   }
 
+  Future<T?> putS3<T>(
+      {required String path,
+      int retries = 1,
+      Stream<List<int>>? data,
+      required Options options}) async {
+    try {
+      final Dio _http = Dio(
+        BaseOptions(
+          baseUrl: path,
+          connectTimeout: kTimeOutDuration,
+          receiveTimeout: kTimeOutDuration,
+          sendTimeout: kTimeOutDuration,
+          contentType: 'application/octet-stream',
+          validateStatus: (int? status) => status != null,
+        ),
+      );
+      _http.interceptors.add(
+        LogInterceptor(
+          logPrint: (object) {
+            final RegExp pattern =
+                RegExp('.{1,800}'); // 800 is the size of each chunk
+            pattern
+                .allMatches(object.toString())
+                .forEach((RegExpMatch match) => debugPrint(match.group(0)));
+          },
+          responseBody: true,
+        ),
+      );
+
+      final response = await _request(
+          retries: retries,
+          _http.put(path,
+              options: options, data: data, cancelToken: cancelToken));
+      return response as T?;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   @override
   Future<T?> put<T>(
       {required String path,

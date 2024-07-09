@@ -54,8 +54,11 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         time: time,
         feature: event.feature,
       ));
-      final attendance =
-          execute.fold((failure) => emit(AttendanceFailure(failure)), (data) {
+      final AttendanceEntity? attendance = execute.fold((failure) {
+        emit(AttendanceFailure(failure));
+
+        return null;
+      }, (data) {
         if (data == null) {
           emit(AttendanceFailure(DataNullFailure()));
           return null;
@@ -64,14 +67,15 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       });
 
       if (attendance != null) {
-        final execute = await _getAttendanceInfo(
-            AttendanceParams(time: time, feature: event.feature));
-        execute.fold((failure) => emit(AttendanceSuccess(null)), (data) {
-          emit(AttendanceSuccess(data));
-          if (data != null) {
-            _generalBloc.add(GeneralRefresh(attendance: data));
-          }
-        });
+        _generalBloc.add(GeneralRefresh(attendance: attendance));
+        // final execute = await _getAttendanceInfo(
+        //     AttendanceParams(time: time, feature: event.feature));
+        // execute.fold((failure) => emit(AttendanceSuccess(null)), (data) {
+        //   emit(AttendanceSuccess(data));
+        //   if (data != null) {
+        //     _generalBloc.add(GeneralRefresh(attendance: data));
+        //   }
+        // });
       }
     }
   }

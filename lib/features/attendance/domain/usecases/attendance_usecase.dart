@@ -7,13 +7,13 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../data/repositories/attendance_repository_impl.dart';
 
-class AttendanceUsecase extends UseCase<AttendanceData?, AttendanceParams> {
+class AttendanceUsecase extends UseCase<AttendanceEntity?, AttendanceParams> {
   final AttendanceRepositoryImpl repository;
 
   AttendanceUsecase(this.repository);
 
   @override
-  Future<Result<AttendanceData?>> call(params) {
+  Future<Result<AttendanceEntity?>> call(params) {
     return repository.postAttendance(
       file: params.file,
       position: params.position,

@@ -34,7 +34,7 @@ class _DatePickerState extends State<DatePicker> {
         currentDate: widget.value,
         locale: context.locale,
         fieldHintText: 'ngày/tháng/năm',
-        firstDate: widget.firstDate ?? DateTime.parse('2000-01-01'),
+        firstDate: widget.firstDate ?? DateTime.parse('1964-01-01'),
         lastDate: widget.lastDate ?? DateTime.parse('2100-01-31'));
 
     if (selectedDay != null) {
