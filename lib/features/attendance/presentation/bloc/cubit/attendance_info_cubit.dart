@@ -18,8 +18,8 @@ class AttendanceInfoCubit extends Cubit<AttendanceInfoState> {
 
   Future<void> getInfo({required FeatureEntity feature}) async {
     emit(AttendanceInfoLoading());
-    final execute = await _getAttendanceInfo(AttendanceParams(
-        time: DateTime.now(), feature: feature, isFaceRequired: false));
+    final execute = await _getAttendanceInfo(
+        AttendanceParams(time: DateTime.now(), feature: feature));
 
     final attendanceInfo = execute.fold((failure) {
       emit(AttendanceInfoFailure(DownloadFailure()));

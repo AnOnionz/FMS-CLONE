@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:fms/core/data_source/remote_datasource.dart';
 import 'package:fms/features/images/data/models/image_upload_model.dart';
