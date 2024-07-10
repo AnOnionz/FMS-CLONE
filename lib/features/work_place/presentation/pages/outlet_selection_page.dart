@@ -31,7 +31,15 @@ class OutletSelectionPage extends StatelessWidget with UserMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DefaultAppBar(title: 'Chọn outlet'),
+        appBar: DefaultAppBar(
+            title: 'Chọn outlet',
+            action: Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: InkWell(
+                  child: SvgPicture.asset(AppIcons.profileEdit),
+                  onTap: () => context.nextRoute(ProfileModule.route,
+                      arguments: _workPlaceBloc.state.entity.project!.id)),
+            )),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
