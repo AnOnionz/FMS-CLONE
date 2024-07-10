@@ -66,22 +66,22 @@ class OutletSelectionPage extends StatelessWidget with UserMixin {
                                 padding: EdgeInsets.only(top: 16.h),
                                 child: OutletItem(
                                   onPressed: () {
-                                    if (user != null &&
-                                        !(user!.isFaceVerified ?? true)) {
-                                      showFailure(
-                                        title: 'Cập nhật Profile',
-                                        icon: SvgPicture.asset(
-                                            AppIcons.requiredProfileData),
-                                        message:
-                                            'Tài khoản chưa được xác thực. Yêu cầu cập nhật Profile trước khi sử dụng tài khoản này',
-                                        btnText: 'Đến Trang Profile Nhân viên',
-                                        onPressed: () => context.nextRoute(
-                                            ProfileModule.route,
-                                            arguments: _workPlaceBloc
-                                                .state.entity.project!.id!),
-                                      );
-                                      return;
-                                    }
+                                    // if (user != null &&
+                                    //     !(user!.isFaceVerified ?? true)) {
+                                    //   showFailure(
+                                    //     title: 'Cập nhật Profile',
+                                    //     icon: SvgPicture.asset(
+                                    //         AppIcons.requiredProfileData),
+                                    //     message:
+                                    //         'Tài khoản chưa được xác thực. Yêu cầu cập nhật Prsofile trước khi sử dụng tài khoản này',
+                                    //     btnText: 'Đến Trang Profile Nhân viên',
+                                    //     onPressed: () => context.nextRoute(
+                                    //         ProfileModule.route,
+                                    //         arguments: _workPlaceBloc
+                                    //             .state.entity.project!.id!),
+                                    //   );
+                                    //   return;
+                                    // }
                                     _workPlaceBloc.add(ApplyOutlet(outlet));
                                   },
                                   outlet: outlet,

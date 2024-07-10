@@ -94,6 +94,7 @@ class GeneralRepository extends Repository
 
   @override
   Future<Result<void>> clearGeneral() async {
+    general = null;
     _local.clearGeneral();
     return Right(Never);
   }
