@@ -22,10 +22,10 @@ class ProfileRepositoryImpl extends Repository
 
   @override
   Future<Result<UserProfileEntity>> createUserProfile(
-      {required UserProfileEntity userProfile}) async {
+      {required UserProfileEntity userProfile, required int projectId}) async {
     return todo(() async {
       await _remote.createUserProfile(
-          userProfile: userProfile, projectId: general.project.id!);
+          userProfile: userProfile, projectId: projectId);
       final profile = await _remote.getUserProfile();
 
       return Right(profile!);

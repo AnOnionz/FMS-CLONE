@@ -152,11 +152,11 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
                                       height: 8.h,
                                     ),
                                     _rowFeature(
-                                      context: context,
-                                      icon: AppIcons.profileEdit,
-                                      name: 'Profile nhân viên',
-                                      route: ProfileModule.route,
-                                    ),
+                                        context: context,
+                                        icon: AppIcons.profileEdit,
+                                        name: 'Profile nhân viên',
+                                        route: ProfileModule.route,
+                                        args: general!.project.id!),
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 30.h),
@@ -172,7 +172,7 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
                                       height: 8.h,
                                     ),
                                     _rowInfo(context, 'Dự án',
-                                        general.project.name ?? ''),
+                                        general!.project.name ?? ''),
                                     SizedBox(
                                       height: 8.h,
                                     ),
@@ -263,12 +263,13 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
       {required BuildContext context,
       required String icon,
       required String name,
+      dynamic args,
       String? route,
       VoidCallback? onPressed}) {
     return GestureDetector(
       onTap: route != null
           ? () {
-              context.nextRoute(route);
+              context.nextRoute(route, arguments: args);
               Scaffold.of(context).closeEndDrawer();
             }
           : onPressed,

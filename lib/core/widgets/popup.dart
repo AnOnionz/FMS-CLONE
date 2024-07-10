@@ -12,14 +12,16 @@ import '../utilities/overlay.dart';
 import 'bottom_sheet_notification.dart';
 import 'button/outline.dart';
 
-void showSuccess({required String title, Widget? icon}) {
+void showSuccess(
+    {required String title, Widget? icon, VoidCallback? onPressed}) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
           icon: icon ?? SvgPicture.asset(AppIcons.success),
           title: title,
           action: OutlineButton(
-              onPressed: () =>
-                  Modular.to.popUntil(ModalRoute.withName(HomeModule.route)),
+              onPressed: onPressed ??
+                  () => Modular.to
+                      .popUntil(ModalRoute.withName(HomeModule.route)),
               name: 'Về trang chủ',
               color: AppColors.royalBlue)));
 }

@@ -43,8 +43,8 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       if (state is NecessaryLockIn) {
         final action = () {
           Modular.to.pushNamed('/${state.feature.type!.name}/',
-              arguments:
-                  GeneralFeatureData(general: general, feature: state.feature));
+              arguments: GeneralFeatureData(
+                  general: general!, feature: state.feature));
         };
         switch (state.feature.type) {
           case FeatureType.attendanceClockingIn:
@@ -66,7 +66,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       if (state is NecessaryUnfastenIn) {
         Modular.to.pushNamed('/${state.feature.type!.name}/',
             arguments:
-                GeneralFeatureData(general: general, feature: state.feature));
+                GeneralFeatureData(general: general!, feature: state.feature));
       }
 
       if (state is NecessaryTask) {
@@ -90,14 +90,15 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
       if (state is NecessaryAttendanceOut) {
         showRequiredAttendanceOut(() {
           Modular.to.pushNamed('/${state.feature.type!.name}/',
-              arguments:
-                  GeneralFeatureData(general: general, feature: state.feature));
+              arguments: GeneralFeatureData(
+                  general: general!, feature: state.feature));
         });
       }
       if (state is NecessaryFaceVerified) {
         showRequiredFaceVerified(
           onPressed: () {
-            Modular.to.pushNamed(ProfileModule.route);
+            Modular.to.pushNamed(ProfileModule.route,
+                arguments: general!.project.id!);
           },
         );
       }
@@ -126,14 +127,14 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     bool _isLock = false;
 
     event.feature.dependentOnFeatureIds!.forEach((dependent) {
-      final feature = general.config.features!
+      final feature = general!.config.features!
           .firstWhereOrNull((feature) => feature.id == dependent);
       if (feature != null) {
         switch (feature.type) {
           case FeatureType.attendanceClockingIn:
-            if (general.attendance == null ||
-                (general.attendance != null &&
-                    general.attendance!.dataOut != null)) {
+            if (general!.attendance == null ||
+                (general!.attendance != null &&
+                    general!.attendance!.dataOut != null)) {
               emit(NecessaryLockIn(feature: feature));
               _isLock = true;
               break;
@@ -157,7 +158,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
 
   Future<void> onNecessaryOut(NecessaryOut event, emit) async {
     final features =
-        await checkTasksNotCompleted(feature: event.feature, general: general);
+        await checkTasksNotCompleted(feature: event.feature, general: general!);
 
     final tasks = features.where((element) =>
         element.type != FeatureType.attendanceClockingOut &&
@@ -209,7 +210,7 @@ class NecessaryBloc extends Bloc<NecessaryEvent, NecessaryState>
     // }
 
     ///check sync
-    final featureSync = general.config.features!.firstWhereOrNull(
+    final featureSync = general!.config.features!.firstWhereOrNull(
         (element) => element.type == FeatureType.synchronization);
 
     if (featureSync != null &&

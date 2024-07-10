@@ -33,9 +33,9 @@ class CrawlRepositoryImpl extends Repository
             dataTimestamp: time,
             dataUuid: Uuid().v1(),
             featureId: feature.id,
-            attendanceId: general.attendance?.id);
+            attendanceId: general!.attendance?.id);
         final response = await _remote.crwalQuantities(
-            quantities: quantities, general: general);
+            quantities: quantities, general: general!);
         if (response != null) {
           quantities =
               quantities.copyWith(id: response.id, status: SyncStatus.synced);
@@ -58,7 +58,7 @@ class CrawlRepositoryImpl extends Repository
         return Right(localCrawlQuantities.last);
       }
       final crawlQuantities =
-          await _remote.getQuantities(general: general, feature: feature);
+          await _remote.getQuantities(general: general!, feature: feature);
       return Right(crawlQuantities);
     });
   }
@@ -99,7 +99,7 @@ class CrawlRepositoryImpl extends Repository
 
     return await Future.forEach(quantitiesNoSynced, (quantities) async {
       final response = await _remote.crwalQuantities(
-          quantities: quantities, general: general);
+          quantities: quantities, general: general!);
       if (response != null) {
         quantities =
             quantities.copyWith(id: response.id, status: SyncStatus.synced);

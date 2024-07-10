@@ -9,6 +9,7 @@ abstract class ProfileEvent extends Equatable {
 
 class CreateProfile extends ProfileEvent {
   final UserProfileEntity profile;
+  final int projectId;
 
-  CreateProfile({required this.profile});
+  CreateProfile({required this.profile, required this.projectId});
 }

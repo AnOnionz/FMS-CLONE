@@ -47,8 +47,8 @@ class NoteRepositoryImpl extends Repository
             .toList();
         return Right((notes, photos));
       }
-      notes = await _remote.allNotes(general: general, feature: feature);
-      photos = await _remote.allPhotos(general: general, feature: feature);
+      notes = await _remote.allNotes(general: general!, feature: feature);
+      photos = await _remote.allPhotos(general: general!, feature: feature);
 
       return Right((notes, photos));
     });
@@ -133,7 +133,7 @@ class NoteRepositoryImpl extends Repository
       required FeatureEntity feature}) async {
     photos.forEach((photo) {
       photo = photo.copyWith(
-          featureId: feature.id, attendanceId: general.attendance!.id);
+          featureId: feature.id, attendanceId: general!.attendance!.id);
       _local.cachePhotoToLocal(photo);
     });
     await Future.forEach(notes, (note) async {
@@ -145,7 +145,7 @@ class NoteRepositoryImpl extends Repository
           dataUuid: Uuid().v1(),
           dataTimestamp: time,
           featureId: feature.id,
-          attendanceId: general.attendance!.id);
+          attendanceId: general!.attendance!.id);
       _local.cacheNoteToLocal(note);
       note.photos.addAll(photosOfNote);
       db.writeTxnSync(() => note.photos.saveSync());
@@ -162,13 +162,13 @@ class NoteRepositoryImpl extends Repository
             if (photo.status == SyncStatus.isDeleted) {
               if (photo.id != null) {
                 await _remotePhoto.deleteNotePhoto(
-                    general: general, feature: feature, id: photo.id!);
+                    general: general!, feature: feature, id: photo.id!);
                 _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
               }
             }
             if (photo.status == SyncStatus.isNoSynced) {
               final resp = await _remote.createPhoto(
-                  photo: photo, general: general, feature: feature);
+                  photo: photo, general: general!, feature: feature);
 
               if (resp != null) {
                 _local.cachePhotoToLocal(photo.copyWith(
@@ -178,7 +178,7 @@ class NoteRepositoryImpl extends Repository
           });
         }
         if (!note.value.isEmptyOrNull) {
-          report = await _remote.createNote(note: note, general: general);
+          report = await _remote.createNote(note: note, general: general!);
         }
       }
 

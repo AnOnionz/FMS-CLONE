@@ -61,7 +61,7 @@ class OrderRepositoryImpl extends Repository
       {required int featureId}) async {
     return todo(() async {
       final onlineOrders = await _remote.fetchOrders(
-          featureId: featureId, attendanceId: general.attendance!.id!);
+          featureId: featureId, attendanceId: general!.attendance!.id!);
 
       return Right(onlineOrders);
     }, useInternet: true);

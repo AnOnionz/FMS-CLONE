@@ -18,7 +18,7 @@ class StatisticRemoteDataSource extends RemoteDatasource
   @override
   Future<StatisticEntity?> fetchIndividualStatistic(
       {required int featureId}) async {
-    final attendanceId = general.attendance!.id;
+    final attendanceId = general!.attendance!.id;
     final _resp = await dio.get(
         path:
             '/app/attendances/${attendanceId}/features/${featureId}/individual-reports/summary');
@@ -29,7 +29,7 @@ class StatisticRemoteDataSource extends RemoteDatasource
   @override
   Future<List<EmployeeEntity>> fetchTeamMembers(
       {required int featureId}) async {
-    final attendanceId = general.attendance!.id;
+    final attendanceId = general!.attendance!.id;
     final _resp = await dio.get(
         path:
             '/app/attendances/${attendanceId}/features/${featureId}/team-reports/members');
@@ -40,7 +40,7 @@ class StatisticRemoteDataSource extends RemoteDatasource
   @override
   Future<StatisticEntity?> fetchTeamStatistic(
       {required int featureId, int? employeeId}) async {
-    final attendanceId = general.attendance!.id;
+    final attendanceId = general!.attendance!.id;
     final data = {'employeeId': employeeId};
     final _resp = await dio.get(
         path:

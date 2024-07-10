@@ -57,6 +57,7 @@ class ProfileModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child(Routes.root, child: (context) => ProfileEditPage());
+    r.child(Routes.root,
+        child: (context) => ProfileEditPage(projectId: r.args.data as int));
   }
 }

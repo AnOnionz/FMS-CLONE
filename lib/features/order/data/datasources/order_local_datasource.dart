@@ -35,7 +35,7 @@ class OrderLocalDataSource
     final time = await Modular.get<NetworkTimeService>().betweenToday();
 
     return db.filter<OrderEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance?.id)
+        .attendanceIdEqualTo(general!.attendance?.id)
         .dataTimestampBetween(time.yesterday, time.today)
         .build());
   }
@@ -45,7 +45,7 @@ class OrderLocalDataSource
     final time = await Modular.get<NetworkTimeService>().betweenToday();
 
     return db.filter<OrderEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance?.id)
+        .attendanceIdEqualTo(general!.attendance?.id)
         .featureIdEqualTo(featureId)
         .dataTimestampBetween(time.yesterday, time.today)
         .build());
@@ -56,7 +56,7 @@ class OrderLocalDataSource
     final time = await Modular.get<NetworkTimeService>().betweenToday();
 
     return db.filter<OrderEntity>((filter) => filter
-        .attendanceIdEqualTo(general.attendance?.id)
+        .attendanceIdEqualTo(general!.attendance?.id)
         .featureIdEqualTo(featureId)
         .dataTimestampBetween(time.yesterday, time.today)
         .statusEqualTo(SyncStatus.isNoSynced)

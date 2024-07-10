@@ -26,8 +26,12 @@ class WorkPlaceModule extends Module {
   static const String selectBooth = 'select_booth';
   static const String config = 'config';
   @override
-  List<Module> get imports =>
-      [SignModule(), GeneralModule(), SyncModule(), ProfileModule()];
+  List<Module> get imports => [
+        SignModule(),
+        GeneralModule(),
+        SyncModule(),
+        ProfileModule(),
+      ];
 
   @override
   void binds(Injector i) {

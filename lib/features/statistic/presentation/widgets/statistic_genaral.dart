@@ -77,7 +77,7 @@ class _StatisticGenaralState extends State<StatisticGenaral>
             children: [
               switch (widget.type) {
                 StatisticType.outlet =>
-                  OutletInfo(outlet: general.outlet, booth: general.booth),
+                  OutletInfo(outlet: general!.outlet, booth: general!.booth),
                 StatisticType.employee =>
                   IndividualInfo(employeeEntity: widget.employee),
                 StatisticType.individual =>

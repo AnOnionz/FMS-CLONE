@@ -14,7 +14,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this._createUserProfile) : super(ProfileInitial()) {
     on<CreateProfile>((event, emit) async {
       emit(ProfileLoading());
-      await _createUserProfile(event.profile)
+      await _createUserProfile(CreateUserProfileParams(
+          userProfile: event.profile, projectId: event.projectId))
         ..fold((failure) => emit(ProfileFailure(failure)),
             (data) => emit(ProfileSuccess(data)));
     });

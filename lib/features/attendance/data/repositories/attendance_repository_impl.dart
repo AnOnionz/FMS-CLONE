@@ -40,7 +40,7 @@ class AttendanceRepositoryImpl extends Repository
           time: time,
           position: position,
           feature: feature,
-          general: general,
+          general: general!,
           isFaceRequired: isFaceRequired);
       return Right(attendanceData);
     }, useInternet: true);
@@ -51,7 +51,7 @@ class AttendanceRepositoryImpl extends Repository
       {required FeatureEntity feature}) {
     return todo(() async {
       final attendanceEntity =
-          await _remote.getAttendanceInfo(feature: feature, general: general);
+          await _remote.getAttendanceInfo(feature: feature, general: general!);
 
       return Right(attendanceEntity);
     }, useInternet: true);
@@ -62,7 +62,7 @@ class AttendanceRepositoryImpl extends Repository
       {required FeatureEntity feature}) async {
     return todo(() async {
       final attendanceEntities = await _remote.getAttendanceReports(
-          feature: feature, general: general);
+          feature: feature, general: general!);
 
       return Right(attendanceEntities);
     }, useInternet: true);

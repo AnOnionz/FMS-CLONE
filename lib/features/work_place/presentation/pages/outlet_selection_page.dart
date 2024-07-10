@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fms/core/constant/icons.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_bar.dart';
+import 'package:fms/core/widgets/popup.dart';
+import 'package:fms/features/profile/mixin_user.dart';
+import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 
 import '../../../../core/widgets/app_indicator.dart';
@@ -13,7 +18,7 @@ import '../bloc/fetch_work_place_bloc.dart';
 import '../bloc/work_place_bloc.dart';
 import '../widgets/outlet_item.dart';
 
-class OutletSelectionPage extends StatelessWidget {
+class OutletSelectionPage extends StatelessWidget with UserMixin {
   OutletSelectionPage({super.key});
 
   late final WorkPlaceBloc _workPlaceBloc = Modular.get();
@@ -47,12 +52,28 @@ class OutletSelectionPage extends StatelessWidget {
                         slivers: [
                           SliverList.builder(
                             itemCount: state.data.length,
-                            itemBuilder: (context, index) {
+                            itemBuilder: (_, index) {
                               final outlet = state.data[index];
                               return Padding(
                                 padding: EdgeInsets.only(top: 16.h),
                                 child: OutletItem(
                                   onPressed: () {
+                                    if (user != null &&
+                                        !(user!.isFaceVerified ?? true)) {
+                                      showFailure(
+                                        title: 'Cập nhật Profile',
+                                        icon: SvgPicture.asset(
+                                            AppIcons.requiredProfileData),
+                                        message:
+                                            'Tài khoản chưa được xác thực. Yêu cầu cập nhật Profile trước khi sử dụng tài khoản này',
+                                        btnText: 'Đến Trang Profile Nhân viên',
+                                        onPressed: () => context.nextRoute(
+                                            ProfileModule.route,
+                                            arguments: _workPlaceBloc
+                                                .state.entity.project!.id!),
+                                      );
+                                      return;
+                                    }
                                     _workPlaceBloc.add(ApplyOutlet(outlet));
                                   },
                                   outlet: outlet,

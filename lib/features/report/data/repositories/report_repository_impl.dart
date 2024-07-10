@@ -34,7 +34,7 @@ class ReportRepositoryImpl extends Repository
         return Right(localPhotos);
       }
       final photos =
-          await _remote.allPhotos(general: general, feature: feature);
+          await _remote.allPhotos(general: general!, feature: feature);
       ;
       return Right(photos);
     });
@@ -47,7 +47,7 @@ class ReportRepositoryImpl extends Repository
     return todo(
       () async {
         photos.forEach((element) {
-          element.attendanceId = general.attendance!.id;
+          element.attendanceId = general!.attendance!.id;
           element.featureId = feature.id;
         });
         await _uploadReport(photos: photos, feature: feature);
@@ -121,13 +121,13 @@ class ReportRepositoryImpl extends Repository
       if (photo.status == SyncStatus.isDeleted) {
         if (photo.id != null) {
           await _remotePhoto.deletePhoto(
-              id: photo.id!, general: general, feature: feature);
+              id: photo.id!, general: general!, feature: feature);
         }
         _localPhoto.deleteLocalPhoto(uuid: photo.dataUuid);
       }
       if (photo.status == SyncStatus.isNoSynced) {
         final report = await _remote.createPhoto(
-            photo: photo, general: general, feature: feature);
+            photo: photo, general: general!, feature: feature);
         if (report != null) {
           photo = photo.copyWith(
               id: report.id, image: report.image, status: SyncStatus.synced);

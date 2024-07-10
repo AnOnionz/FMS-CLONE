@@ -52,12 +52,7 @@ class Appearance extends StatelessWidget {
             child: AppTextFormField(
               label: 'Chiều cao (cm)',
               isRequired: false,
-              validate: (value) {
-                if ((int.tryParse(value ?? '') ?? 0) > 255) {
-                  return 'Số lượng tối đa 255';
-                }
-                return null;
-              },
+              maxValue: 255,
               onlyNumber: true,
               textInputType: TextInputType.numberWithOptions(),
               value: UserProfileInherited.of(context)
@@ -76,12 +71,7 @@ class Appearance extends StatelessWidget {
           Flexible(
             child: AppTextFormField(
               label: 'Cân nặng (kg)',
-              validate: (value) {
-                if ((int.tryParse(value ?? '') ?? 0) > 255) {
-                  return 'Số lượng tối đa 255';
-                }
-                return null;
-              },
+              maxValue: 255,
               onlyNumber: true,
               textInputType: TextInputType.numberWithOptions(),
               isRequired: false,
@@ -151,7 +141,6 @@ class Appearance extends StatelessWidget {
         Flexible(
           child: AppTextFormField(
             label: 'Vòng 1',
-            maxLength: 255,
             maxValue: 255,
             isRequired: false,
             onlyNumber: true,

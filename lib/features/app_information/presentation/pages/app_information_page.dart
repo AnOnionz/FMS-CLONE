@@ -37,13 +37,14 @@ class AppInformationPage extends StatelessWidget
               icon: Image.asset(AppImages.outlet),
               title: 'Thông tin outlet',
               children: [
-                RowInfo(leading: 'Tên outlet', info: general.outlet.name ?? ''),
+                RowInfo(
+                    leading: 'Tên outlet', info: general!.outlet.name ?? ''),
                 space,
-                RowInfo(leading: 'Mã outlet', info: general.outlet.code ?? ''),
+                RowInfo(leading: 'Mã outlet', info: general!.outlet.code ?? ''),
                 space,
-                RowInfo(leading: 'Booth', info: general.booth.name ?? ''),
+                RowInfo(leading: 'Booth', info: general!.booth.name ?? ''),
                 space,
-                RowInfo(leading: 'Địa chỉ', info: general.outlet.address)
+                RowInfo(leading: 'Địa chỉ', info: general!.outlet.address)
               ],
             ),
             if (credentials != null)

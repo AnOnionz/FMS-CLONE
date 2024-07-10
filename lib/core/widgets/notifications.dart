@@ -5,7 +5,6 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
-import 'package:fms/features/home/home_module.dart';
 
 import '../../features/home/presentation/widgets/require_task_notify.dart';
 import '../constant/colors.dart';
@@ -128,7 +127,7 @@ void showUploadFaceSuccess({
               color: AppColors.royalBlue)));
 }
 
-void showUpdateProfilePending() {
+void showUpdateProfilePending({required VoidCallback onPressed}) {
   OverlayManager.showSheet(
       body: BottomSheetNotification(
           icon: SvgPicture.asset(AppIcons.pending),
@@ -142,7 +141,7 @@ void showUpdateProfilePending() {
           action: OutlineButton(
               onPressed: () {
                 OverlayManager.hide();
-                OverlayManager.currentContext!.popUntil(HomeModule.route);
+                onPressed();
               },
               name: 'Về trang chủ',
               color: AppColors.royalBlue)));

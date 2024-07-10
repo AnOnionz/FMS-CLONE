@@ -14,7 +14,7 @@
       "program": "lib/main.dart",
       "request": "launch",
       "type": "dart",
-      "args": ["--flavor", "dev"],
+      "args": ["--flavor", "stag"],
       "toolArgs": ["--dart-define-from-file", ".env/staging.json"]
     },
     {

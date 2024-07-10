@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fms/core/mixins/fx.dart';
 import 'package:isar/isar.dart';
 
 part 'outlet_entity.g.dart';
@@ -66,8 +67,8 @@ class OutletEntity {
       OutletEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   String get address {
-    return (streetName != null ? '$houseNumber ' : '') +
-        (streetName != null ? '$streetName, ' : '') +
+    return (streetName.isNotEmptyAndNotNull ? '$houseNumber ' : '') +
+        (streetName.isNotEmptyAndNotNull ? '$streetName, ' : '') +
         (ward?.name != null ? '${ward!.name}, ' : '') +
         (district?.name != null ? '${district!.name}, ' : '') +
         (province?.name != null ? '${province!.name}' : '');

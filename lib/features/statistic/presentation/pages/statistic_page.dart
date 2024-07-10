@@ -157,7 +157,7 @@ class _StatisticDefaultPageState extends State<StatisticDefaultPage>
                             type: widget.type,
                             statisticEntity: state.statistic,
                             employee: widget.employee,
-                            outlet: general.outlet),
+                            outlet: general!.outlet),
                         StatisticPurchase(
                             total: state.statistic.totalPurchase,
                             purchases: state.statistic.purchases),

@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin, UserMixin {
                         final packageInfo = snapshot.data!;
 
                         return Text(
-                          '${general.project.id}-${user!.phone}-${packageInfo.version}-${kdM.format(general.createdDate)}-${Platform.operatingSystem}',
+                          '${general!.project.id}-${user!.phone}-${packageInfo.version}-${kdM.format(general!.createdDate)}-${Platform.operatingSystem}',
                           style: context.textTheme.caption3,
                         );
                       }
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> with GeneralDataMixin, UserMixin {
                     Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 29.h, horizontal: 16.w),
-                        child: CommonInfo(general: general)),
+                        child: CommonInfo(general: general!)),
                     _title(context, 'Chức năng hỗ trợ'),
                     Padding(
                         padding: EdgeInsets.symmetric(

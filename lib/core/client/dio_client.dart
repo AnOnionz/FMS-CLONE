@@ -53,7 +53,9 @@ class DioClient extends ApiService {
         if (response.statusCode == StatusCode.UNAUTHORIZED) {
           final _authenticationBloc = Modular.get<AuthenticationBloc>();
           if (_lastStatusCode == response.statusCode) {
-            reject(response, _authenticationBloc);
+            if (_authenticationBloc.state.status ==
+                AuthenticationStatus.authenticated)
+              reject(response, _authenticationBloc);
             return;
           }
           _lastStatusCode = response.statusCode;
@@ -65,7 +67,9 @@ class DioClient extends ApiService {
 
           await _hasValidCredentials()
             ..fold((fail) {
-              reject(response, _authenticationBloc);
+              if (_authenticationBloc.state.status ==
+                  AuthenticationStatus.authenticated)
+                reject(response, _authenticationBloc);
               return;
             }, (success) {
               hasValidCredentials = true;
@@ -73,7 +77,9 @@ class DioClient extends ApiService {
           if (hasValidCredentials) {
             await _renewCredentials()
               ..fold((fail) {
-                reject(response, _authenticationBloc);
+                if (_authenticationBloc.state.status ==
+                    AuthenticationStatus.authenticated)
+                  reject(response, _authenticationBloc);
                 return;
               }, (success) => null);
           }
@@ -83,7 +89,9 @@ class DioClient extends ApiService {
           });
         } else if (response.statusCode == StatusCode.FORBIDDEN) {
           final _authenticationBloc = Modular.get<AuthenticationBloc>();
-          reject(response, _authenticationBloc);
+          if (_authenticationBloc.state.status ==
+              AuthenticationStatus.authenticated)
+            reject(response, _authenticationBloc);
         } else {
           handler.next(response);
         }
@@ -277,15 +285,13 @@ class DioClient extends ApiService {
   void reject(
       Response<dynamic> response, AuthenticationBloc _authenticationBloc) {
     Future.delayed(100.milliseconds, () {
-      if (_authenticationBloc.state != AuthenticationStatus.unauthenticated)
-        showFailure(
-          title: 'Thao tác thất bại',
-          icon: SvgPicture.asset(AppIcons.failure),
-          message: response.statusMessage,
-          btnText: 'Ok',
-        );
+      showFailure(
+        title: 'Thao tác thất bại',
+        icon: SvgPicture.asset(AppIcons.failure),
+        message: response.statusMessage,
+        btnText: 'Ok',
+      );
     });
-
     _authenticationBloc.add(AuthenticationLogout());
     ;
   }

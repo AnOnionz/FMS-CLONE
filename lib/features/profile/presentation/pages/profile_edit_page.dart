@@ -14,6 +14,7 @@ import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/core/widgets/popup.dart';
+import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/bloc/profile_bloc.dart';
@@ -23,6 +24,7 @@ import 'package:fms/features/profile/presentation/widgets/appearance.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/widgets/button/flat.dart';
 import '../../../../core/widgets/notifications.dart';
+import '../../../home/home_module.dart';
 import '../../domain/entities/profile_status_entity.dart';
 import '../bloc/get_profile_bloc.dart';
 import '../cubit/profile_status_cubit.dart';
@@ -38,13 +40,15 @@ import '../widgets/user_profile_inheriterd.dart';
 import '../widgets/work_experience.dart';
 
 class ProfileEditPage extends StatefulWidget {
-  const ProfileEditPage({super.key});
+  final int projectId;
+  const ProfileEditPage({super.key, required this.projectId});
 
   @override
   State<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
-class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
+class _ProfileEditPageState extends State<ProfileEditPage>
+    with UserMixin, GeneralDataMixin {
   final _formKey = GlobalKey<FormState>();
 
   bool isFaceVerified = false;
@@ -160,9 +164,20 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
         });
 
         if (isFistUpdate) {
-          showSuccess(title: 'Lưu thành công');
+          showSuccess(
+            title: 'Lưu thành công',
+            onPressed: general == null ? () => context.popIfCan() : null,
+          );
         } else {
-          showUpdateProfilePending();
+          showUpdateProfilePending(
+            onPressed: () {
+              if (general == null) {
+                context.popIfCan();
+              } else {
+                OverlayManager.currentContext!.popUntil(HomeModule.route);
+              }
+            },
+          );
         }
         _profileStatusCubit.getProfileStatus();
       }
@@ -180,7 +195,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
                 'Phát sinh lỗi trong quá trình cập nhật',
             btnText: 'Thử lại',
             onPressed: () {
-              _createProfileBloc.add(CreateProfile(profile: entity));
+              _createProfileBloc.add(
+                  CreateProfile(profile: entity, projectId: widget.projectId));
             });
       }
     });
@@ -317,8 +333,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> with UserMixin {
                             }
 
                             Fx.log(entity);
-                            _createProfileBloc
-                                .add(CreateProfile(profile: entity));
+                            _createProfileBloc.add(CreateProfile(
+                                profile: entity, projectId: widget.projectId));
                           }
                         : null,
                     name: 'Lưu',

@@ -9,7 +9,7 @@ import '../entities/user_profile_entity.dart';
 abstract class ProfileRepository {
   Future<Result<EmployeeEntity?>> getUserInfo();
   Future<Result<void>> createUserProfile(
-      {required UserProfileEntity userProfile});
+      {required UserProfileEntity userProfile, required int projectId});
   Future<Result<void>> uploadFaceVerifyImage(XFile file);
   Future<Result<ProfileStatusEntity?>> getProfileStatus();
   Future<Result<void>> markReadProfileStatus();

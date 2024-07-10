@@ -53,7 +53,7 @@ class _HistoryExchangeDetailPageState extends State<HistoryExchangeDetailPage>
                   final a = await context.nextRoute(HistoryExchangeModule.edit,
                       arguments: [
                         GeneralFeatureData(
-                            general: general, feature: widget.feature),
+                            general: general!, feature: widget.feature),
                         _order
                       ]);
                   if (a != null) {
