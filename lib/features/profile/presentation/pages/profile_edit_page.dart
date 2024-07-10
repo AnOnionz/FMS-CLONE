@@ -20,6 +20,7 @@ import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fms/features/profile/presentation/cubit/mark_read_status_cubit.dart';
 import 'package:fms/features/profile/presentation/widgets/appearance.dart';
+import 'package:fms/features/work_place/work_place_module.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/widgets/button/flat.dart';
@@ -174,7 +175,7 @@ class _ProfileEditPageState extends State<ProfileEditPage>
               if (general == null) {
                 context.popIfCan();
               } else {
-                OverlayManager.currentContext!.popUntil(HomeModule.route);
+                context.popUntil(HomeModule.route);
               }
             },
           );
