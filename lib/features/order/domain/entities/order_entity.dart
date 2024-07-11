@@ -68,7 +68,7 @@ class OrderEntity extends BaseEntity {
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),
     };
-    if (customerInfos!.isNotEmpty) {
+    if (customerInfos != null && customerInfos!.isNotEmpty) {
       data['customers'] = customerInfos!.map((x) => x.toMap()).toList();
     }
 
@@ -81,7 +81,7 @@ class OrderEntity extends BaseEntity {
       'exchanges': exchanges?.map((x) => x.toMap()).toList(),
       'samplings': samplings?.map((x) => x.toMap()).toList(),
     };
-    if (customerInfos!.isNotEmpty) {
+    if (customerInfos != null && customerInfos!.isNotEmpty) {
       data['customers'] = customerInfos!.map((x) => x.toMap()).toList();
     }
 
