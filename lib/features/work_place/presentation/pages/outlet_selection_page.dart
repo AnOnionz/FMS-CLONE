@@ -66,8 +66,10 @@ class OutletSelectionPage extends StatelessWidget with UserMixin {
                                 padding: EdgeInsets.only(top: 16.h),
                                 child: OutletItem(
                                   onPressed: () {
-                                    if (user != null &&
-                                        !(user!.isFaceVerified ?? false)) {
+                                    if (user!.isFaceVerified == true &&
+                                        user!.isProfileVerified == true) {
+                                      _workPlaceBloc.add(ApplyOutlet(outlet));
+                                    } else {
                                       showFailure(
                                         title: 'Cập nhật Profile',
                                         icon: SvgPicture.asset(
@@ -80,9 +82,7 @@ class OutletSelectionPage extends StatelessWidget with UserMixin {
                                             arguments: _workPlaceBloc
                                                 .state.entity.project!.id!),
                                       );
-                                      return;
                                     }
-                                    _workPlaceBloc.add(ApplyOutlet(outlet));
                                   },
                                   outlet: outlet,
                                 ),

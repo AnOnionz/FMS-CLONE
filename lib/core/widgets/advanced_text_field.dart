@@ -73,41 +73,44 @@ class _AdvancedTextFieldState extends State<AdvancedTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      focusNode: _focusNode,
-      controller: _controller,
-      inputFormatters: [kNumberFormater],
-      keyboardType: TextInputType.numberWithOptions(),
-      cursorWidth: 0.54,
-      maxLength: widget.maxLength,
-      cursorHeight: 16.8.sp,
-      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-      textInputAction: widget.textInputAction,
-      textAlignVertical: TextAlignVertical.center,
-      buildCounter: (context,
-              {required currentLength,
-              required isFocused,
-              required maxLength}) =>
-          null,
-      contextMenuBuilder: (context, _) => SizedBox.shrink(),
-      style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
-      decoration: InputDecoration(
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.w),
-          isCollapsed: true,
-          suffixIcon: Padding(
-            padding: EdgeInsets.only(right: 12.w),
-            child: Text(
-              widget.unit,
-              style: context.textTheme.body2?.copyWith(
-                  color: _hasFocus || _hasValue
-                      ? AppColors.orange
-                      : AppColors.nobel),
+    return SizedBox(
+      height: 56,
+      child: TextField(
+        focusNode: _focusNode,
+        controller: _controller,
+        inputFormatters: [kNumberFormater],
+        keyboardType: TextInputType.numberWithOptions(),
+        cursorWidth: 0.54,
+        maxLength: widget.maxLength,
+        cursorHeight: 16.8.sp,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+        textInputAction: widget.textInputAction,
+        textAlignVertical: TextAlignVertical.center,
+        buildCounter: (context,
+                {required currentLength,
+                required isFocused,
+                required maxLength}) =>
+            null,
+        contextMenuBuilder: (context, _) => SizedBox.shrink(),
+        style: context.textTheme.body2?.copyWith(color: '1B1C1F'.toColor()),
+        decoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.w),
+            isCollapsed: true,
+            suffixIcon: Padding(
+              padding: EdgeInsets.only(right: 12.w),
+              child: Text(
+                widget.unit,
+                style: context.textTheme.body2?.copyWith(
+                    color: _hasFocus || _hasValue
+                        ? AppColors.orange
+                        : AppColors.nobel),
+              ),
             ),
-          ),
-          suffixIconConstraints: BoxConstraints(),
-          enabledBorder: _hasValue ? activeBorder : inActiveBorder,
-          focusedBorder: activeBorder),
+            suffixIconConstraints: BoxConstraints(),
+            enabledBorder: _hasValue ? activeBorder : inActiveBorder,
+            focusedBorder: activeBorder),
+      ),
     );
   }
 }

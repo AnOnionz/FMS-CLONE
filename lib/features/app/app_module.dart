@@ -38,7 +38,6 @@ class AppModule extends Module {
         AuthenticationModule(),
         GeneralModule(),
         SyncModule(),
-        ProfileModule()
       ];
   @override
   void binds(i) {

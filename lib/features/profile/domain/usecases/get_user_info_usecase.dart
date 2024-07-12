@@ -9,6 +9,6 @@ class GetUserInfoUsecase extends UseCase<EmployeeEntity?, void> {
   GetUserInfoUsecase(this._repository);
   @override
   Future<Result<EmployeeEntity?>> call([void params]) async {
-    return _repository.getUserInfo();
+    return await _repository.getUserInfo();
   }
 }

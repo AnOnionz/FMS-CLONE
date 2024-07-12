@@ -1,4 +1,5 @@
 import 'package:fms/core/constant/type_def.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/profile/data/datasources/profile_remote_datasource.dart';

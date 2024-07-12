@@ -50,10 +50,16 @@ class MatterContainer extends StatelessWidget {
                 Flexible(child: title)
               else
                 Expanded(child: title),
-              Padding(
-                padding: EdgeInsets.only(left: 12.w),
-                child: trailing,
-              )
+              titleFlexible
+                  ? Flexible(
+                      child: Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: trailing,
+                    ))
+                  : Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: trailing,
+                    )
             ],
           ))
         ],

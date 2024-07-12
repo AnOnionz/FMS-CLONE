@@ -16,5 +16,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     await _getUserInfo()
       ..fold((failure) => emit(UserInfoFailure(failure)),
           (data) => emit(UserInfoSuccess(entity: data!)));
+    print(32132131);
   }
 }

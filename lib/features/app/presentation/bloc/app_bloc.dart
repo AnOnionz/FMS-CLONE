@@ -10,8 +10,6 @@ import 'package:fms/core/services/location/location_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/features/general/data/repository/general_repository_impl.dart';
 import 'package:fms/features/home/home_module.dart';
-import 'package:fms/features/profile/domain/usecases/get_user_info_usecase.dart';
-import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/sync/presentation/bloc/sync_bloc.dart';
 import 'package:fms/features/work_place/work_place_module.dart';
@@ -27,7 +25,7 @@ import '../../../sync/presentation/bloc/sync_progress_bloc.dart';
 part 'app_event.dart';
 part 'app_state.dart';
 
-class AppBloc extends Bloc<AppEvent, AppState> with UserMixin {
+class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationBloc _authenticationBloc;
   final ConnectivityService _connectivityService;
   final NetworkTimeService _networkTimeService;
@@ -35,7 +33,6 @@ class AppBloc extends Bloc<AppEvent, AppState> with UserMixin {
   final SyncBloc _syncBloc;
   final LocationService _locationService;
   final SyncProgressBloc _syncProgressBloc;
-  final GetUserInfoUsecase _getUserInfo;
   final _authenticationBehaviorSubject = BehaviorSubject<AuthenticationState>();
 
   StreamSubscription<AuthenticationState>? _authenticationSubscription;
@@ -49,8 +46,7 @@ class AppBloc extends Bloc<AppEvent, AppState> with UserMixin {
       this._networkTimeService,
       this._syncBloc,
       this._syncProgressBloc,
-      this._locationService,
-      this._getUserInfo)
+      this._locationService)
       : super(const AppInitial()) {
     _authenticationBehaviorSubject.addStream(_authenticationBloc.stream);
 
@@ -78,7 +74,6 @@ class AppBloc extends Bloc<AppEvent, AppState> with UserMixin {
 
   Future<void> _checkAuthenticationStatus(AuthenticationStatus status) async {
     if (status == AuthenticationStatus.authenticated) {
-      _getUserInfo();
       await _generalRepository.getLocalGeneral()
         ..fold((failure) => Modular.to.navigate(WorkPlaceModule.route), (data) {
           if (data != null) {
@@ -157,11 +152,6 @@ class AppBloc extends Bloc<AppEvent, AppState> with UserMixin {
               title: 'Không có kết nối Internet',
               msg: 'Yêu cầu kiểm tra laị đường truyền của bạn',
               context: OverlayManager.currentContext!);
-        }
-      }
-      if (status == InternetStatus.connected) {
-        if (user == null) {
-          _getUserInfo();
         }
       }
     });
