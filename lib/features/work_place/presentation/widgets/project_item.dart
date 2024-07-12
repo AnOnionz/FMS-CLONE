@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/icons.dart';
@@ -50,22 +52,24 @@ class ProjectItem extends StatelessWidget {
             SizedBox(
               width: 20.w,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  project.name!,
-                  style: context.textTheme.subtitle1
-                      ?.copyWith(color: AppColors.nero),
-                ),
-                SizedBox(
-                  height: 6.h,
-                ),
-                Text(
-                    '${project.startDate?.formatBy(kdMy)} - ${project.endDated?.formatBy(kdMy)}',
-                    style: context.textTheme.caption1
-                        ?.copyWith(color: AppColors.dimGray))
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    project.name!,
+                    style: context.textTheme.subtitle1
+                        ?.copyWith(color: AppColors.nero),
+                  ),
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                  Text(
+                      '${project.startDate?.formatBy(kdMy)} - ${project.endDated?.formatBy(kdMy)}',
+                      style: context.textTheme.caption1
+                          ?.copyWith(color: AppColors.dimGray))
+                ],
+              ),
             )
           ],
         ),

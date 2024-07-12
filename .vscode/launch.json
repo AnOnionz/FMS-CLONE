@@ -18,6 +18,14 @@
       "toolArgs": ["--dart-define-from-file", ".env/staging.json"]
     },
     {
+      "name": "STAGINGIOS",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--flavor", "dev"],
+      "toolArgs": ["--dart-define-from-file", ".env/staging.json"]
+    },
+    {
       "name": "PRODUCTION",
       "program": "lib/main.dart",
       "request": "launch",

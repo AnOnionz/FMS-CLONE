@@ -1,4 +1,4 @@
-package vn.imark.fms
+package asia.outcome.fms
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="auth0_domain">demo-nest.jp.auth0.com</string>
-    <string name="auth0_scheme">demo</string>
+    <string name="auth0_domain">fms.jp.auth0.com</string>
+    <string name="auth0_scheme">fms</string>
 </resources>
