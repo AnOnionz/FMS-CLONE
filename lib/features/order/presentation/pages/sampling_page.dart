@@ -15,7 +15,7 @@ import '../widgets/bottom_buttons.dart';
 class OrderSamplingPage extends StatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
-  final void Function(List<SamplingEntity> samplings) onSaveData;
+  final void Function(List<OrderSamplingEntity> samplings) onSaveData;
   const OrderSamplingPage(
       {super.key,
       required this.onNext,
@@ -31,9 +31,9 @@ class _OrderSamplingPageState extends State<OrderSamplingPage> {
   late final featureSamplings =
       (dataFeature.data.feature.featureSamplings ?? [])
           .sorted((a, b) => a.ordinal! - b.ordinal!);
-  late final List<SamplingEntity> _samplings =
+  late final List<OrderSamplingEntity> _samplings =
       dataFeature.order.samplings ?? [];
-  late final Map<FeatureSampling, SamplingEntity> _items = {};
+  late final Map<FeatureSampling, OrderSamplingEntity> _items = {};
 
   bool get validate => _items.entries.any((field) {
         return (field.value.quantity ?? 0) > 0;
@@ -45,7 +45,7 @@ class _OrderSamplingPageState extends State<OrderSamplingPage> {
       final sampling = _samplings.firstWhereOrNull(
           (element) => element.featureSamplingId == featureSampling.id);
 
-      _items[featureSampling] = SamplingEntity(
+      _items[featureSampling] = OrderSamplingEntity(
           id: sampling?.id,
           quantity: sampling?.quantity,
           featureSamplingId: featureSampling.id,

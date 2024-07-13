@@ -23,7 +23,7 @@ class OrderEntity extends BaseEntity {
   final List<CustomerInfo>? customerInfos;
   final List<PurchaseEntity>? purchases;
   final List<ExchangeEntity>? exchanges;
-  final List<SamplingEntity>? samplings;
+  final List<OrderSamplingEntity>? samplings;
   var localPhotos = IsarLinks<PhotoEntity>();
   @Enumerated(EnumType.name)
   final SyncStatus status;
@@ -115,9 +115,9 @@ class OrderEntity extends BaseEntity {
               )
             : null,
         samplings: map['samplings'] != null
-            ? List<SamplingEntity>.from(
-                (map['samplings'] as List<dynamic>).map<SamplingEntity?>(
-                  (x) => SamplingEntity.fromMap(x as Map<String, dynamic>),
+            ? List<OrderSamplingEntity>.from(
+                (map['samplings'] as List<dynamic>).map<OrderSamplingEntity?>(
+                  (x) => OrderSamplingEntity.fromMap(x as Map<String, dynamic>),
                 ),
               )
             : null,
@@ -150,7 +150,7 @@ class OrderEntity extends BaseEntity {
     List<CustomerInfo>? customerInfos,
     List<PurchaseEntity>? purchases,
     List<ExchangeEntity>? exchanges,
-    List<SamplingEntity>? samplings,
+    List<OrderSamplingEntity>? samplings,
     List<PhotoEntity>? photos,
     SyncStatus? status,
   }) {
@@ -426,14 +426,14 @@ class ExchangeEntity {
 }
 
 @embedded
-class SamplingEntity {
+class OrderSamplingEntity {
   int? id;
   int? featureSamplingId;
   final Product? product;
   final ProductPackaging? productPackaging;
   int? quantity;
 
-  SamplingEntity({
+  OrderSamplingEntity({
     this.id,
     this.featureSamplingId,
     this.product,
@@ -448,8 +448,8 @@ class SamplingEntity {
     };
   }
 
-  factory SamplingEntity.fromMap(Map<String, dynamic> map) {
-    return SamplingEntity(
+  factory OrderSamplingEntity.fromMap(Map<String, dynamic> map) {
+    return OrderSamplingEntity(
       id: map['id'] != null ? map['id'] as int : null,
       featureSamplingId: map['featureSamplingId'] != null
           ? map['featureSamplingId'] as int
@@ -460,20 +460,20 @@ class SamplingEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory SamplingEntity.fromJson(String source) =>
-      SamplingEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory OrderSamplingEntity.fromJson(String source) =>
+      OrderSamplingEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
     return 'SamplingEntity(id: $id, featureSamplingId: $featureSamplingId, product: $product, productPackaging: $productPackaging, quantity: $quantity)';
   }
 
-  SamplingEntity copyWith({
+  OrderSamplingEntity copyWith({
     int? id,
     int? featureSamplingId,
     int? quantity,
   }) {
-    return SamplingEntity(
+    return OrderSamplingEntity(
       id: id ?? this.id,
       featureSamplingId: featureSamplingId ?? this.featureSamplingId,
       quantity: quantity ?? this.quantity,

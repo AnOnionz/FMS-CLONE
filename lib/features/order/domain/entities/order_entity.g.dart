@@ -69,7 +69,7 @@ const OrderEntitySchema = CollectionSchema(
       id: 9,
       name: r'samplings',
       type: IsarType.objectList,
-      target: r'SamplingEntity',
+      target: r'OrderSamplingEntity',
     ),
     r'status': PropertySchema(
       id: 10,
@@ -101,7 +101,7 @@ const OrderEntitySchema = CollectionSchema(
     r'ExchangeEntity': ExchangeEntitySchema,
     r'ExchangeProceed': ExchangeProceedSchema,
     r'Item': ItemSchema,
-    r'SamplingEntity': SamplingEntitySchema
+    r'OrderSamplingEntity': OrderSamplingEntitySchema
   },
   getId: _orderEntityGetId,
   getLinks: _orderEntityGetLinks,
@@ -163,11 +163,11 @@ int _orderEntityEstimateSize(
     if (list != null) {
       bytesCount += 3 + list.length * 3;
       {
-        final offsets = allOffsets[SamplingEntity]!;
+        final offsets = allOffsets[OrderSamplingEntity]!;
         for (var i = 0; i < list.length; i++) {
           final value = list[i];
-          bytesCount +=
-              SamplingEntitySchema.estimateSize(value, offsets, allOffsets);
+          bytesCount += OrderSamplingEntitySchema.estimateSize(
+              value, offsets, allOffsets);
         }
       }
     }
@@ -206,10 +206,10 @@ void _orderEntitySerialize(
     PurchaseEntitySchema.serialize,
     object.purchases,
   );
-  writer.writeObjectList<SamplingEntity>(
+  writer.writeObjectList<OrderSamplingEntity>(
     offsets[9],
     allOffsets,
-    SamplingEntitySchema.serialize,
+    OrderSamplingEntitySchema.serialize,
     object.samplings,
   );
   writer.writeString(offsets[10], object.status.name);
@@ -245,11 +245,11 @@ OrderEntity _orderEntityDeserialize(
       allOffsets,
       PurchaseEntity(),
     ),
-    samplings: reader.readObjectList<SamplingEntity>(
+    samplings: reader.readObjectList<OrderSamplingEntity>(
       offsets[9],
-      SamplingEntitySchema.deserialize,
+      OrderSamplingEntitySchema.deserialize,
       allOffsets,
-      SamplingEntity(),
+      OrderSamplingEntity(),
     ),
     status:
         _OrderEntitystatusValueEnumMap[reader.readStringOrNull(offsets[10])] ??
@@ -299,11 +299,11 @@ P _orderEntityDeserializeProp<P>(
         PurchaseEntity(),
       )) as P;
     case 9:
-      return (reader.readObjectList<SamplingEntity>(
+      return (reader.readObjectList<OrderSamplingEntity>(
         offset,
-        SamplingEntitySchema.deserialize,
+        OrderSamplingEntitySchema.deserialize,
         allOffsets,
-        SamplingEntity(),
+        OrderSamplingEntity(),
       )) as P;
     case 10:
       return (_OrderEntitystatusValueEnumMap[reader.readStringOrNull(offset)] ??
@@ -1525,7 +1525,7 @@ extension OrderEntityQueryObject
   }
 
   QueryBuilder<OrderEntity, OrderEntity, QAfterFilterCondition>
-      samplingsElement(FilterQuery<SamplingEntity> q) {
+      samplingsElement(FilterQuery<OrderSamplingEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'samplings');
     });
@@ -1899,7 +1899,7 @@ extension OrderEntityQueryProperty
     });
   }
 
-  QueryBuilder<OrderEntity, List<SamplingEntity>?, QQueryOperations>
+  QueryBuilder<OrderEntity, List<OrderSamplingEntity>?, QQueryOperations>
       samplingsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'samplings');
@@ -3695,9 +3695,9 @@ extension ExchangeEntityQueryObject
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-const SamplingEntitySchema = Schema(
-  name: r'SamplingEntity',
-  id: 4912424377293578739,
+const OrderSamplingEntitySchema = Schema(
+  name: r'OrderSamplingEntity',
+  id: -2590749811578934800,
   properties: {
     r'featureSamplingId': PropertySchema(
       id: 0,
@@ -3727,14 +3727,14 @@ const SamplingEntitySchema = Schema(
       type: IsarType.long,
     )
   },
-  estimateSize: _samplingEntityEstimateSize,
-  serialize: _samplingEntitySerialize,
-  deserialize: _samplingEntityDeserialize,
-  deserializeProp: _samplingEntityDeserializeProp,
+  estimateSize: _orderSamplingEntityEstimateSize,
+  serialize: _orderSamplingEntitySerialize,
+  deserialize: _orderSamplingEntityDeserialize,
+  deserializeProp: _orderSamplingEntityDeserializeProp,
 );
 
-int _samplingEntityEstimateSize(
-  SamplingEntity object,
+int _orderSamplingEntityEstimateSize(
+  OrderSamplingEntity object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -3757,8 +3757,8 @@ int _samplingEntityEstimateSize(
   return bytesCount;
 }
 
-void _samplingEntitySerialize(
-  SamplingEntity object,
+void _orderSamplingEntitySerialize(
+  OrderSamplingEntity object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -3780,13 +3780,13 @@ void _samplingEntitySerialize(
   writer.writeLong(offsets[4], object.quantity);
 }
 
-SamplingEntity _samplingEntityDeserialize(
+OrderSamplingEntity _orderSamplingEntityDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = SamplingEntity(
+  final object = OrderSamplingEntity(
     featureSamplingId: reader.readLongOrNull(offsets[0]),
     id: reader.readLongOrNull(offsets[1]),
     product: reader.readObjectOrNull<Product>(
@@ -3804,7 +3804,7 @@ SamplingEntity _samplingEntityDeserialize(
   return object;
 }
 
-P _samplingEntityDeserializeProp<P>(
+P _orderSamplingEntityDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -3834,9 +3834,9 @@ P _samplingEntityDeserializeProp<P>(
   }
 }
 
-extension SamplingEntityQueryFilter
-    on QueryBuilder<SamplingEntity, SamplingEntity, QFilterCondition> {
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+extension OrderSamplingEntityQueryFilter on QueryBuilder<OrderSamplingEntity,
+    OrderSamplingEntity, QFilterCondition> {
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       featureSamplingIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3845,7 +3845,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       featureSamplingIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -3854,7 +3854,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       featureSamplingIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -3864,7 +3864,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       featureSamplingIdGreaterThan(
     int? value, {
     bool include = false,
@@ -3878,7 +3878,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       featureSamplingIdLessThan(
     int? value, {
     bool include = false,
@@ -3892,7 +3892,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       featureSamplingIdBetween(
     int? lower,
     int? upper, {
@@ -3910,7 +3910,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3919,7 +3919,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       idIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -3928,8 +3928,8 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition> idEqualTo(
-      int? value) {
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
+      idEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -3938,7 +3938,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       idGreaterThan(
     int? value, {
     bool include = false,
@@ -3952,7 +3952,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       idLessThan(
     int? value, {
     bool include = false,
@@ -3966,7 +3966,8 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition> idBetween(
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
+      idBetween(
     int? lower,
     int? upper, {
     bool includeLower = true,
@@ -3983,7 +3984,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       productIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3992,7 +3993,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       productIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -4001,7 +4002,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       productPackagingIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4010,7 +4011,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       productPackagingIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -4019,7 +4020,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       quantityIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4028,7 +4029,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       quantityIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -4037,7 +4038,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       quantityEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -4047,7 +4048,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       quantityGreaterThan(
     int? value, {
     bool include = false,
@@ -4061,7 +4062,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       quantityLessThan(
     int? value, {
     bool include = false,
@@ -4075,7 +4076,7 @@ extension SamplingEntityQueryFilter
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       quantityBetween(
     int? lower,
     int? upper, {
@@ -4094,16 +4095,16 @@ extension SamplingEntityQueryFilter
   }
 }
 
-extension SamplingEntityQueryObject
-    on QueryBuilder<SamplingEntity, SamplingEntity, QFilterCondition> {
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition> product(
-      FilterQuery<Product> q) {
+extension OrderSamplingEntityQueryObject on QueryBuilder<OrderSamplingEntity,
+    OrderSamplingEntity, QFilterCondition> {
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
+      product(FilterQuery<Product> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'product');
     });
   }
 
-  QueryBuilder<SamplingEntity, SamplingEntity, QAfterFilterCondition>
+  QueryBuilder<OrderSamplingEntity, OrderSamplingEntity, QAfterFilterCondition>
       productPackaging(FilterQuery<ProductPackaging> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'productPackaging');

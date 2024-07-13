@@ -60,7 +60,9 @@ class _SelectProductState extends State<SelectProduct> {
                 }
                 final fuse = Fuzzy(
                     widget.products
-                        .map((e) => e.productPackaging!.barcode)
+                        .map((e) =>
+                            (e.productPackaging!.barcode ?? '') +
+                            (e.product!.name ?? ''))
                         .toList(),
                     options: FuzzyOptions(
                       tokenize: true,
@@ -69,7 +71,9 @@ class _SelectProductState extends State<SelectProduct> {
 
                 final result = fuse.search(search).map((suggest) {
                   return widget.products.firstWhere((element) =>
-                      element.productPackaging!.barcode == suggest.item);
+                      (element.productPackaging!.barcode ?? '') +
+                          (element.product!.name ?? '') ==
+                      suggest.item);
                 }).toList();
 
                 setState(() {

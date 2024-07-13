@@ -10,7 +10,7 @@ import '../../../domain/entities/order_entity.dart';
 
 class ReviewSampling extends StatefulWidget {
   final List<FeatureSampling> featureSamplings;
-  final List<SamplingEntity>? samplings;
+  final List<OrderSamplingEntity>? samplings;
   const ReviewSampling(
       {super.key, required this.featureSamplings, required this.samplings});
 
@@ -19,7 +19,7 @@ class ReviewSampling extends StatefulWidget {
 }
 
 class _ReviewSamplingState extends State<ReviewSampling> {
-  final Map<FeatureSampling, SamplingEntity> _items = {};
+  final Map<FeatureSampling, OrderSamplingEntity> _items = {};
 
   @override
   void didChangeDependencies() {
@@ -93,7 +93,7 @@ class _ReviewSamplingState extends State<ReviewSampling> {
 
 class _SamplingInfoItem extends StatelessWidget {
   final FeatureSampling featureSampling;
-  final SamplingEntity sampling;
+  final OrderSamplingEntity sampling;
   const _SamplingInfoItem(
       {required this.featureSampling, required this.sampling});
 
