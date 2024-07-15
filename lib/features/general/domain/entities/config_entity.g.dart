@@ -6739,24 +6739,39 @@ const FeatureSamplingSchema = Schema(
   name: r'FeatureSampling',
   id: -215205104042668557,
   properties: {
-    r'id': PropertySchema(
+    r'denominator': PropertySchema(
       id: 0,
+      name: r'denominator',
+      type: IsarType.long,
+    ),
+    r'hashCode': PropertySchema(
+      id: 1,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 2,
       name: r'id',
       type: IsarType.long,
     ),
+    r'numerator': PropertySchema(
+      id: 3,
+      name: r'numerator',
+      type: IsarType.long,
+    ),
     r'ordinal': PropertySchema(
-      id: 1,
+      id: 4,
       name: r'ordinal',
       type: IsarType.long,
     ),
     r'product': PropertySchema(
-      id: 2,
+      id: 5,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 3,
+      id: 6,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
@@ -6798,16 +6813,19 @@ void _featureSamplingSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.id);
-  writer.writeLong(offsets[1], object.ordinal);
+  writer.writeLong(offsets[0], object.denominator);
+  writer.writeLong(offsets[1], object.hashCode);
+  writer.writeLong(offsets[2], object.id);
+  writer.writeLong(offsets[3], object.numerator);
+  writer.writeLong(offsets[4], object.ordinal);
   writer.writeObject<Product>(
-    offsets[2],
+    offsets[5],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[3],
+    offsets[6],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
@@ -6821,15 +6839,17 @@ FeatureSampling _featureSamplingDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = FeatureSampling(
-    id: reader.readLongOrNull(offsets[0]),
-    ordinal: reader.readLongOrNull(offsets[1]),
+    denominator: reader.readLongOrNull(offsets[0]),
+    id: reader.readLongOrNull(offsets[2]),
+    numerator: reader.readLongOrNull(offsets[3]),
+    ordinal: reader.readLongOrNull(offsets[4]),
     product: reader.readObjectOrNull<Product>(
-      offsets[2],
+      offsets[5],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[3],
+      offsets[6],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
@@ -6847,14 +6867,20 @@ P _featureSamplingDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
+      return (reader.readLongOrNull(offset)) as P;
+    case 3:
+      return (reader.readLongOrNull(offset)) as P;
+    case 4:
+      return (reader.readLongOrNull(offset)) as P;
+    case 5:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 3:
+    case 6:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
@@ -6867,6 +6893,136 @@ P _featureSamplingDeserializeProp<P>(
 
 extension FeatureSamplingQueryFilter
     on QueryBuilder<FeatureSampling, FeatureSampling, QFilterCondition> {
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      denominatorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'denominator',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      denominatorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'denominator',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      denominatorEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'denominator',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      denominatorGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'denominator',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      denominatorLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'denominator',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      denominatorBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'denominator',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
       idIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -6933,6 +7089,80 @@ extension FeatureSamplingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      numeratorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'numerator',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      numeratorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'numerator',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      numeratorEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numerator',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      numeratorGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numerator',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      numeratorLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numerator',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      numeratorBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numerator',
         lower: lower,
         includeLower: includeLower,
         upper: upper,

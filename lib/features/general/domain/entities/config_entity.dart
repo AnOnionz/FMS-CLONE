@@ -2,9 +2,11 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
+import 'package:isar/isar.dart';
+
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
-import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -641,12 +643,16 @@ class FeatureCustomer {
 @embedded
 class FeatureSampling {
   final int? id;
+  final int? numerator;
+  final int? denominator;
   final Product? product;
   final ProductPackaging? productPackaging;
   final int? ordinal;
 
   FeatureSampling({
     this.id,
+    this.numerator,
+    this.denominator,
     this.product,
     this.productPackaging,
     this.ordinal,
@@ -655,6 +661,8 @@ class FeatureSampling {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'numerator': numerator,
+      'denominator': denominator,
       'product': product?.toMap(),
       'productPackaging': productPackaging?.toMap(),
       'ordinal': ordinal,
@@ -664,6 +672,9 @@ class FeatureSampling {
   factory FeatureSampling.fromMap(Map<String, dynamic> map) {
     return FeatureSampling(
       id: map['id'] != null ? map['id'] as int : null,
+      numerator: map['numerator'] != null ? map['numerator'] as int : null,
+      denominator:
+          map['denominator'] != null ? map['denominator'] as int : null,
       product: map['product'] != null
           ? Product.fromMap(map['product'] as Map<String, dynamic>)
           : null,
@@ -682,7 +693,47 @@ class FeatureSampling {
 
   @override
   String toString() {
-    return 'FeatureSampling(id: $id, product: $product, productPackaging: $productPackaging, ordinal: $ordinal)';
+    return 'FeatureSampling(id: $id, numerator: $numerator, denominator: $denominator, product: $product, productPackaging: $productPackaging, ordinal: $ordinal)';
+  }
+
+  FeatureSampling copyWith({
+    int? id,
+    int? numerator,
+    int? denominator,
+    Product? product,
+    ProductPackaging? productPackaging,
+    int? ordinal,
+  }) {
+    return FeatureSampling(
+      id: id ?? this.id,
+      numerator: numerator ?? this.numerator,
+      denominator: denominator ?? this.denominator,
+      product: product ?? this.product,
+      productPackaging: productPackaging ?? this.productPackaging,
+      ordinal: ordinal ?? this.ordinal,
+    );
+  }
+
+  @override
+  bool operator ==(covariant FeatureSampling other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.numerator == numerator &&
+        other.denominator == denominator &&
+        other.product == product &&
+        other.productPackaging == productPackaging &&
+        other.ordinal == ordinal;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        numerator.hashCode ^
+        denominator.hashCode ^
+        product.hashCode ^
+        productPackaging.hashCode ^
+        ordinal.hashCode;
   }
 }
 
