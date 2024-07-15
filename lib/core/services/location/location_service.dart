@@ -148,7 +148,7 @@ final class LocationService extends ChangeNotifier {
           await _handlePermission().timeout(4.seconds, onTimeout: () => false);
 
       if (!hasPermission) {
-        return currentLocation;
+        return getPositionLocal();
       }
 
       final userLocation =
@@ -156,10 +156,10 @@ final class LocationService extends ChangeNotifier {
 
       positionUpdate(userLocation);
 
-      return _currentLocation;
+      return getPositionLocal();
     } catch (e) {
-      if (currentLocation != null) {
-        return currentLocation;
+      if (_currentLocation != null) {
+        return _currentLocation;
       } else {
         return Future.error(LocationLoadError());
       }
@@ -204,7 +204,10 @@ final class LocationService extends ChangeNotifier {
   }
 
   Position? getPositionLocal() {
+    if (_currentLocation != null) return _currentLocation;
+
     final _localPosition = database.getValue(Keys.LOCATION);
+
     if (_localPosition != null) {
       return Position.fromMap(jsonDecode(_localPosition));
     }
