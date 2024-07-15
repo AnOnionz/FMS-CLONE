@@ -140,67 +140,107 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                      child: SearchTextField<OrderProduct>(
-                    label: 'Nhập mã barcode',
-                    itemBuilder: (context, value) => Material(
-                      type: MaterialType.transparency,
-                      child: ListTile(
-                        focusColor: '#FBF6F4'.toColor(),
-                        hoverColor: '#FBF6F4'.toColor(),
-                        splashColor: '#FBF6F4'.toColor(),
-                        selectedColor: '#FBF6F4'.toColor(),
-                        selectedTileColor: '#FBF6F4'.toColor(),
-                        title: Text(
-                          value.product!.name!,
-                          style: context.textTheme.caption1,
+                      child: TextField(
+                    cursorHeight: 19.2.sp,
+                    cursorWidth: 0.9,
+                    canRequestFocus: false,
+                    onTap: () => _showSheetSelectProduct(),
+                    textAlignVertical: TextAlignVertical.center,
+                    style: context.textTheme.body1,
+                    maxLength: 48,
+                    buildCounter: (context,
+                            {required currentLength,
+                            required isFocused,
+                            required maxLength}) =>
+                        null,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.white,
+                        hintText: 'Tìm sản phẩm',
+                        hintStyle: context.textTheme.body1,
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 18.w, vertical: 28.w),
+                        suffixIconConstraints: BoxConstraints(),
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.only(right: 16.w),
+                          child: SvgPicture.asset(
+                            AppIcons.search1,
+                            colorFilter: ColorFilter.mode(
+                                AppColors.black, BlendMode.srcIn),
+                          ),
                         ),
-                        trailing: Text(value.productPackaging!.barcode!,
-                            style: context.textTheme.caption2
-                                ?.copyWith(color: AppColors.nobel)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40.sqr),
+                            borderSide: BorderSide(color: '#EA9567'.toColor())),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40.sqr),
+                            borderSide:
+                                BorderSide(color: '#EA9567'.toColor()))),
+                  )
+
+                      //      SearchTextField<OrderProduct>(
+                      //   label: 'Nhập mã barcode',
+                      //   itemBuilder: (context, value) => Material(
+                      //     type: MaterialType.transparency,
+                      //     child: ListTile(
+                      //       focusColor: '#FBF6F4'.toColor(),
+                      //       hoverColor: '#FBF6F4'.toColor(),
+                      //       splashColor: '#FBF6F4'.toColor(),
+                      //       selectedColor: '#FBF6F4'.toColor(),
+                      //       selectedTileColor: '#FBF6F4'.toColor(),
+                      //       title: Text(
+                      //         value.product!.name!,
+                      //         style: context.textTheme.caption1,
+                      //       ),
+                      //       trailing: Text(value.productPackaging!.barcode!,
+                      //           style: context.textTheme.caption2
+                      //               ?.copyWith(color: AppColors.nobel)),
+                      //     ),
+                      //   ),
+                      //   suggestionsCallback: (search) async {
+                      //     if (search.isEmptyOrNull) {
+                      //       return [];
+                      //     }
+
+                      //     final fuse = Fuzzy(
+                      //         products
+                      //             .map((e) => e.productPackaging!.barcode)
+                      //             .toSet()
+                      //             .toList(),
+                      //         options: FuzzyOptions(
+                      //           tokenize: true,
+                      //           threshold: 0.1,
+                      //         ));
+
+                      //     final result = <OrderProduct>[];
+                      //     fuse.search(search).forEach((suggest) {
+                      //       final sameAsBarcodeProducts = products.where(
+                      //           (element) =>
+                      //               element.productPackaging!.barcode ==
+                      //               suggest.item);
+                      //       result.addAll(sameAsBarcodeProducts);
+                      //     });
+
+                      //     return result;
+                      //   },
+                      //   onSelected: (value) {
+                      //     onSelectedProduct(value);
+                      //   },
+                      // )
                       ),
-                    ),
-                    suggestionsCallback: (search) async {
-                      if (search.isEmptyOrNull) {
-                        return [];
-                      }
-
-                      final fuse = Fuzzy(
-                          products
-                              .map((e) => e.productPackaging!.barcode)
-                              .toSet()
-                              .toList(),
-                          options: FuzzyOptions(
-                            tokenize: true,
-                            threshold: 0.1,
-                          ));
-
-                      final result = <OrderProduct>[];
-                      fuse.search(search).forEach((suggest) {
-                        final sameAsBarcodeProducts = products.where(
-                            (element) =>
-                                element.productPackaging!.barcode ==
-                                suggest.item);
-                        result.addAll(sameAsBarcodeProducts);
-                      });
-
-                      return result;
-                    },
-                    onSelected: (value) {
-                      onSelectedProduct(value);
-                    },
-                  )),
                   SizedBox(width: 4.w),
                   IconButton(
                       style: IconButton.styleFrom(
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                       onPressed: () async => _scanProductBarcode(),
                       icon: SvgPicture.asset(AppIcons.barcode)),
-                  SizedBox(width: 0.w),
-                  IconButton(
-                      style: IconButton.styleFrom(
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                      onPressed: () => _showSheetSelectProduct(),
-                      icon: SvgPicture.asset(AppIcons.hamburger)),
+                  // SizedBox(width: 0.w),
+                  // IconButton(
+                  //     style: IconButton.styleFrom(
+                  //         tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  //     onPressed: () => _showSheetSelectProduct(),
+                  //     icon: SvgPicture.asset(AppIcons.hamburger)),
                 ],
               ),
             ),

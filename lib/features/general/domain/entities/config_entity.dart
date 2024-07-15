@@ -2,11 +2,9 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
-
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:isar/isar.dart';
 
 part 'config_entity.g.dart';
 
@@ -643,6 +641,7 @@ class FeatureCustomer {
 @embedded
 class FeatureSampling {
   final int? id;
+  final Unit? unit;
   final int? numerator;
   final int? denominator;
   final Product? product;
@@ -651,6 +650,7 @@ class FeatureSampling {
 
   FeatureSampling({
     this.id,
+    this.unit,
     this.numerator,
     this.denominator,
     this.product,
@@ -661,6 +661,7 @@ class FeatureSampling {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'unit': unit?.toMap(),
       'numerator': numerator,
       'denominator': denominator,
       'product': product?.toMap(),
@@ -672,6 +673,9 @@ class FeatureSampling {
   factory FeatureSampling.fromMap(Map<String, dynamic> map) {
     return FeatureSampling(
       id: map['id'] != null ? map['id'] as int : null,
+      unit: map['unit'] != null
+          ? Unit.fromMap(map['unit'] as Map<String, dynamic>)
+          : null,
       numerator: map['numerator'] != null ? map['numerator'] as int : null,
       denominator:
           map['denominator'] != null ? map['denominator'] as int : null,
@@ -693,11 +697,12 @@ class FeatureSampling {
 
   @override
   String toString() {
-    return 'FeatureSampling(id: $id, numerator: $numerator, denominator: $denominator, product: $product, productPackaging: $productPackaging, ordinal: $ordinal)';
+    return 'FeatureSampling(id: $id, unit: $unit, numerator: $numerator, denominator: $denominator, product: $product, productPackaging: $productPackaging, ordinal: $ordinal)';
   }
 
   FeatureSampling copyWith({
     int? id,
+    Unit? unit,
     int? numerator,
     int? denominator,
     Product? product,
@@ -706,6 +711,7 @@ class FeatureSampling {
   }) {
     return FeatureSampling(
       id: id ?? this.id,
+      unit: unit ?? this.unit,
       numerator: numerator ?? this.numerator,
       denominator: denominator ?? this.denominator,
       product: product ?? this.product,
@@ -719,6 +725,7 @@ class FeatureSampling {
     if (identical(this, other)) return true;
 
     return other.id == id &&
+        other.unit == unit &&
         other.numerator == numerator &&
         other.denominator == denominator &&
         other.product == product &&
@@ -729,6 +736,7 @@ class FeatureSampling {
   @override
   int get hashCode {
     return id.hashCode ^
+        unit.hashCode ^
         numerator.hashCode ^
         denominator.hashCode ^
         product.hashCode ^
@@ -1103,6 +1111,7 @@ class ProductPackaging {
   final String? barcode;
   final int? price;
   final int? rate;
+  final Unit? unit;
   final String? unitName;
 
   ProductPackaging({
@@ -1110,18 +1119,31 @@ class ProductPackaging {
     this.barcode,
     this.price,
     this.rate,
+    this.unit,
     this.unitName,
   });
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ProductPackaging &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+  bool operator ==(covariant ProductPackaging other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.barcode == barcode &&
+        other.price == price &&
+        other.rate == rate &&
+        other.unit == unit &&
+        other.unitName == unitName;
+  }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        barcode.hashCode ^
+        price.hashCode ^
+        rate.hashCode ^
+        unit.hashCode ^
+        unitName.hashCode;
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -1129,17 +1151,21 @@ class ProductPackaging {
       'barcode': barcode,
       'price': price,
       'rate': rate,
+      'unit': unit?.toMap(),
       'unitName': unitName,
     };
   }
 
   factory ProductPackaging.fromMap(Map<String, dynamic> map) {
     return ProductPackaging(
-      id: map['id'] as int,
-      barcode: map['barcode'] as String,
-      price: map['price'] as int,
-      rate: map['rate'] as int?,
-      unitName: map['unitName'] as String,
+      id: map['id'] != null ? map['id'] as int : null,
+      barcode: map['barcode'] != null ? map['barcode'] as String : null,
+      price: map['price'] != null ? map['price'] as int : null,
+      rate: map['rate'] != null ? map['rate'] as int : null,
+      unit: map['unit'] != null
+          ? Unit.fromMap(map['unit'] as Map<String, dynamic>)
+          : null,
+      unitName: map['unitName'] != null ? map['unitName'] as String : null,
     );
   }
 
@@ -1150,8 +1176,88 @@ class ProductPackaging {
 
   @override
   String toString() {
-    return 'ProductPackaging(id: $id, barcode: $barcode, price: $price, rate: $rate, unitName: $unitName)';
+    return 'ProductPackaging(id: $id, barcode: $barcode, price: $price, rate: $rate, unit: $unit, unitName: $unitName)';
   }
+
+  ProductPackaging copyWith({
+    int? id,
+    String? barcode,
+    int? price,
+    int? rate,
+    Unit? unit,
+    String? unitName,
+  }) {
+    return ProductPackaging(
+      id: id ?? this.id,
+      barcode: barcode ?? this.barcode,
+      price: price ?? this.price,
+      rate: rate ?? this.rate,
+      unit: unit ?? this.unit,
+      unitName: unitName ?? this.unitName,
+    );
+  }
+}
+
+@embedded
+class Unit {
+  final int? id;
+  final String? name;
+  final String? description;
+
+  Unit({
+    this.id,
+    this.name,
+    this.description,
+  });
+
+  Unit copyWith({
+    int? id,
+    String? name,
+    String? description,
+  }) {
+    return Unit(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+    };
+  }
+
+  factory Unit.fromMap(Map<String, dynamic> map) {
+    return Unit(
+      id: map['id'] != null ? map['id'] as int : null,
+      name: map['name'] != null ? map['name'] as String : null,
+      description:
+          map['description'] != null ? map['description'] as String : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Unit.fromJson(String source) =>
+      Unit.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'Unit(id: $id, name: $name, description: $description)';
+
+  @override
+  bool operator ==(covariant Unit other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.description == description;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode ^ description.hashCode;
 }
 
 @embedded

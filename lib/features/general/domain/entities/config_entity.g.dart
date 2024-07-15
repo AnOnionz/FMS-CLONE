@@ -895,6 +895,7 @@ const _FeatureEntitytypeEnumValueMap = {
       r'multiSubjectMultimediaInformationCapturing',
   r'multipleEntitiesQuantityCapturing': r'multipleEntitiesQuantityCapturing',
   r'historyExchange': r'historyExchange',
+  r'sampling': r'sampling',
   r'synchronization': r'synchronization',
   r'onlineIndividualSummaryReport': r'onlineIndividualSummaryReport',
   r'onlineTeamSummaryReport': r'onlineTeamSummaryReport',
@@ -911,6 +912,7 @@ const _FeatureEntitytypeValueEnumMap = {
   r'multipleEntitiesQuantityCapturing':
       FeatureType.multipleEntitiesQuantityCapturing,
   r'historyExchange': FeatureType.historyExchange,
+  r'sampling': FeatureType.sampling,
   r'synchronization': FeatureType.synchronization,
   r'onlineIndividualSummaryReport': FeatureType.onlineIndividualSummaryReport,
   r'onlineTeamSummaryReport': FeatureType.onlineTeamSummaryReport,
@@ -6775,6 +6777,12 @@ const FeatureSamplingSchema = Schema(
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
+    ),
+    r'unit': PropertySchema(
+      id: 7,
+      name: r'unit',
+      type: IsarType.object,
+      target: r'Unit',
     )
   },
   estimateSize: _featureSamplingEstimateSize,
@@ -6804,6 +6812,13 @@ int _featureSamplingEstimateSize(
               value, allOffsets[ProductPackaging]!, allOffsets);
     }
   }
+  {
+    final value = object.unit;
+    if (value != null) {
+      bytesCount +=
+          3 + UnitSchema.estimateSize(value, allOffsets[Unit]!, allOffsets);
+    }
+  }
   return bytesCount;
 }
 
@@ -6830,6 +6845,12 @@ void _featureSamplingSerialize(
     ProductPackagingSchema.serialize,
     object.productPackaging,
   );
+  writer.writeObject<Unit>(
+    offsets[7],
+    allOffsets,
+    UnitSchema.serialize,
+    object.unit,
+  );
 }
 
 FeatureSampling _featureSamplingDeserialize(
@@ -6851,6 +6872,11 @@ FeatureSampling _featureSamplingDeserialize(
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
       offsets[6],
       ProductPackagingSchema.deserialize,
+      allOffsets,
+    ),
+    unit: reader.readObjectOrNull<Unit>(
+      offsets[7],
+      UnitSchema.deserialize,
       allOffsets,
     ),
   );
@@ -6884,6 +6910,12 @@ P _featureSamplingDeserializeProp<P>(
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 7:
+      return (reader.readObjectOrNull<Unit>(
+        offset,
+        UnitSchema.deserialize,
         allOffsets,
       )) as P;
     default:
@@ -7280,6 +7312,24 @@ extension FeatureSamplingQueryFilter
       ));
     });
   }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      unitIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'unit',
+      ));
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition>
+      unitIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'unit',
+      ));
+    });
+  }
 }
 
 extension FeatureSamplingQueryObject
@@ -7295,6 +7345,13 @@ extension FeatureSamplingQueryObject
       productPackaging(FilterQuery<ProductPackaging> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'productPackaging');
+    });
+  }
+
+  QueryBuilder<FeatureSampling, FeatureSampling, QAfterFilterCondition> unit(
+      FilterQuery<Unit> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'unit');
     });
   }
 }
@@ -10959,8 +11016,14 @@ const ProductPackagingSchema = Schema(
       name: r'rate',
       type: IsarType.long,
     ),
-    r'unitName': PropertySchema(
+    r'unit': PropertySchema(
       id: 5,
+      name: r'unit',
+      type: IsarType.object,
+      target: r'Unit',
+    ),
+    r'unitName': PropertySchema(
+      id: 6,
       name: r'unitName',
       type: IsarType.string,
     )
@@ -10984,6 +11047,13 @@ int _productPackagingEstimateSize(
     }
   }
   {
+    final value = object.unit;
+    if (value != null) {
+      bytesCount +=
+          3 + UnitSchema.estimateSize(value, allOffsets[Unit]!, allOffsets);
+    }
+  }
+  {
     final value = object.unitName;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -11003,7 +11073,13 @@ void _productPackagingSerialize(
   writer.writeLong(offsets[2], object.id);
   writer.writeLong(offsets[3], object.price);
   writer.writeLong(offsets[4], object.rate);
-  writer.writeString(offsets[5], object.unitName);
+  writer.writeObject<Unit>(
+    offsets[5],
+    allOffsets,
+    UnitSchema.serialize,
+    object.unit,
+  );
+  writer.writeString(offsets[6], object.unitName);
 }
 
 ProductPackaging _productPackagingDeserialize(
@@ -11017,7 +11093,12 @@ ProductPackaging _productPackagingDeserialize(
     id: reader.readLongOrNull(offsets[2]),
     price: reader.readLongOrNull(offsets[3]),
     rate: reader.readLongOrNull(offsets[4]),
-    unitName: reader.readStringOrNull(offsets[5]),
+    unit: reader.readObjectOrNull<Unit>(
+      offsets[5],
+      UnitSchema.deserialize,
+      allOffsets,
+    ),
+    unitName: reader.readStringOrNull(offsets[6]),
   );
   return object;
 }
@@ -11040,6 +11121,12 @@ P _productPackagingDeserializeProp<P>(
     case 4:
       return (reader.readLongOrNull(offset)) as P;
     case 5:
+      return (reader.readObjectOrNull<Unit>(
+        offset,
+        UnitSchema.deserialize,
+        allOffsets,
+      )) as P;
+    case 6:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -11481,6 +11568,24 @@ extension ProductPackagingQueryFilter
   }
 
   QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
+      unitIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'unit',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
+      unitIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'unit',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition>
       unitNameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -11636,7 +11741,529 @@ extension ProductPackagingQueryFilter
 }
 
 extension ProductPackagingQueryObject
-    on QueryBuilder<ProductPackaging, ProductPackaging, QFilterCondition> {}
+    on QueryBuilder<ProductPackaging, ProductPackaging, QFilterCondition> {
+  QueryBuilder<ProductPackaging, ProductPackaging, QAfterFilterCondition> unit(
+      FilterQuery<Unit> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'unit');
+    });
+  }
+}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const UnitSchema = Schema(
+  name: r'Unit',
+  id: 5852079958688209740,
+  properties: {
+    r'description': PropertySchema(
+      id: 0,
+      name: r'description',
+      type: IsarType.string,
+    ),
+    r'hashCode': PropertySchema(
+      id: 1,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'id': PropertySchema(
+      id: 2,
+      name: r'id',
+      type: IsarType.long,
+    ),
+    r'name': PropertySchema(
+      id: 3,
+      name: r'name',
+      type: IsarType.string,
+    )
+  },
+  estimateSize: _unitEstimateSize,
+  serialize: _unitSerialize,
+  deserialize: _unitDeserialize,
+  deserializeProp: _unitDeserializeProp,
+);
+
+int _unitEstimateSize(
+  Unit object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.description;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.name;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  return bytesCount;
+}
+
+void _unitSerialize(
+  Unit object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.description);
+  writer.writeLong(offsets[1], object.hashCode);
+  writer.writeLong(offsets[2], object.id);
+  writer.writeString(offsets[3], object.name);
+}
+
+Unit _unitDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = Unit(
+    description: reader.readStringOrNull(offsets[0]),
+    id: reader.readLongOrNull(offsets[2]),
+    name: reader.readStringOrNull(offsets[3]),
+  );
+  return object;
+}
+
+P _unitDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readStringOrNull(offset)) as P;
+    case 1:
+      return (reader.readLong(offset)) as P;
+    case 2:
+      return (reader.readLongOrNull(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension UnitQueryFilter on QueryBuilder<Unit, Unit, QFilterCondition> {
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'description',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'description',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'description',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'description',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'description',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> descriptionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'description',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> hashCodeEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> idEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> idGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> idLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> idBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'name',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'name',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'name',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'name',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Unit, Unit, QAfterFilterCondition> nameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+}
+
+extension UnitQueryObject on QueryBuilder<Unit, Unit, QFilterCondition> {}
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types

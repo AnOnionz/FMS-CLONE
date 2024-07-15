@@ -67,7 +67,7 @@ class _CrawlItemState extends State<CrawlItem> {
             ],
           ),
           trailing: AdvancedTextField(
-            initialValue: widget.quantityValue.value != null
+            value: widget.quantityValue.value != null
                 ? widget.quantityValue.value.toString()
                 : null,
             onChanged: widget.onChanged,

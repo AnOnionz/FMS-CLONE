@@ -6,11 +6,13 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
+import 'package:fms/core/services/connectivity/connectivity_service.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/cached_image.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/images/presentation/bloc/delete_image_bloc.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
@@ -28,6 +30,7 @@ class ImageViewWidget extends StatefulWidget {
 }
 
 class _ImageViewWidgetState extends State<ImageViewWidget> {
+  final connectivityService = Modular.get<ConnectivityService>();
   final _bloc = Modular.get<DeleteImageBloc>();
 
   late StreamSubscription<DeleteImageState> _subscription;
@@ -83,11 +86,16 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                       );
                     }),
                   )
-                : Align(
-                    child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4.sqr),
-                    child: CachedImage(
-                        placeholder: (p0, p1) => SizedBox(
+                : StreamBuilder(
+                    stream: connectivityService.onConnectionChange,
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null &&
+                          snapshot.data == InternetStatus.connected) {
+                        return Align(
+                            child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4.sqr),
+                          child: CachedImage(
+                            placeholder: (p0, p1) => SizedBox(
                               height: 300.h,
                               width: context.screenWidth - 32.w,
                               child: Column(
@@ -97,9 +105,23 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                                 ],
                               ),
                             ),
-                        errorWidget: (p0, p1, p2) => SizedBox(),
-                        imageUrl: widget.image.networkImage!.getImage()),
-                  )),
+                            errorWidget: (p0, p1, p2) => SizedBox(),
+                            imageUrl: widget.image.networkImage!.getImage(),
+                          ),
+                        ));
+                      }
+                      return SizedBox(
+                        height: 300.h,
+                        width: context.screenWidth - 32.w,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppIndicator(),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
             if (_isImageLoaded)
               Positioned(
                 right: 10.h,

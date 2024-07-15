@@ -106,7 +106,7 @@ class _OrderSamplingPageState extends State<OrderSamplingPage> {
                                   asset: samplingProduct.product!.brandName!,
                                 ),
                                 trailing: AdvancedTextField(
-                                  initialValue: sampling.quantity != null
+                                  value: sampling.quantity != null
                                       ? sampling.quantity.toString()
                                       : null,
                                   unit: samplingProduct

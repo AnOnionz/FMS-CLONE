@@ -13,6 +13,7 @@ import 'package:fms/features/order/history_exchange_module.dart';
 import 'package:fms/features/order/order_module.dart';
 import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/report/report_module.dart';
+import 'package:fms/features/sampling/sampling_module.dart';
 import 'package:fms/features/setting/setting_module.dart';
 import 'package:fms/features/sign/sign_module.dart';
 import 'package:fms/features/statistic/statistic_module.dart';
@@ -89,6 +90,8 @@ class AppModule extends Module {
     r.module(IndividualStatisticOfflineModule.route,
         module: IndividualStatisticOfflineModule(),
         transition: TransitionType.fadeIn);
+    r.module(SamplingModule.route,
+        module: SamplingModule(), transition: TransitionType.fadeIn);
     r.module(ProfileModule.route,
         module: ProfileModule(), transition: TransitionType.fadeIn);
     r.module(LockModule.route,

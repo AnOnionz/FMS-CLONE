@@ -15,6 +15,7 @@ enum FeatureType {
   multiSubjectMultimediaInformationCapturing(),
   multipleEntitiesQuantityCapturing(),
   historyExchange(),
+  sampling(),
   synchronization(true),
   onlineIndividualSummaryReport(true, true),
   onlineTeamSummaryReport(true, true),

@@ -62,6 +62,7 @@ const StatisticEntitySchema = CollectionSchema(
     r'PurchaseStatistic': PurchaseStatisticSchema,
     r'Product': ProductSchema,
     r'ProductPackaging': ProductPackagingSchema,
+    r'Unit': UnitSchema,
     r'ExchangeStatistic': ExchangeStatisticSchema,
     r'Item': ItemSchema,
     r'SamplingStatistic': SamplingStatisticSchema

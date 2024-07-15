@@ -1,5 +1,12 @@
 import 'dart:convert';
 
+import 'package:isar/isar.dart';
+
+import '../../../../core/constant/mapper.dart';
+
+part 'sampling_value_entity.g.dart';
+
+@embedded
 class SamplingValueEntity {
   final int? id;
   final int? featureSamplingId;
@@ -19,22 +26,24 @@ class SamplingValueEntity {
     int? id,
     int? featureSamplingId,
     double? conversionRate,
-    int? conversionValue,
-    int? value,
+    Value<int>? conversionValue,
+    Value<int>? value,
   }) {
     return SamplingValueEntity(
       id: id ?? this.id,
       featureSamplingId: featureSamplingId ?? this.featureSamplingId,
       conversionRate: conversionRate ?? this.conversionRate,
-      conversionValue: conversionValue ?? this.conversionValue,
-      value: value ?? this.value,
+      conversionValue: conversionValue == null
+          ? this.conversionValue
+          : conversionValue.object,
+      value: value == null ? this.value : value.object,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'featureSamplingId': featureSamplingId,
-      'value': value,
+      'value': value ?? 0,
     };
   }
 
@@ -67,11 +76,7 @@ class SamplingValueEntity {
   bool operator ==(covariant SamplingValueEntity other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
-        other.featureSamplingId == featureSamplingId &&
-        other.conversionRate == conversionRate &&
-        other.conversionValue == conversionValue &&
-        other.value == value;
+    return other.featureSamplingId == featureSamplingId;
   }
 
   @override

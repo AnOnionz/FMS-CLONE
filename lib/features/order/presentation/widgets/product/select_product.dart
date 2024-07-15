@@ -46,7 +46,7 @@ class _SelectProductState extends State<SelectProduct> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 22.h),
             child: SearchTextField(
-              label: 'Nhập mã barcode',
+              label: 'Nhập tên hoặc mã barcode',
               itemBuilder: (context, value) => SizedBox.shrink(),
               suggestionsCallback: (search) {
                 if (search.isEmptyOrNull) {
@@ -61,8 +61,8 @@ class _SelectProductState extends State<SelectProduct> {
                 final fuse = Fuzzy(
                     widget.products
                         .map((e) =>
-                            (e.productPackaging!.barcode ?? '') +
-                            (e.product!.name ?? ''))
+                            (e.product!.name ?? '') +
+                            (e.productPackaging!.barcode ?? ''))
                         .toList(),
                     options: FuzzyOptions(
                       tokenize: true,
@@ -71,8 +71,8 @@ class _SelectProductState extends State<SelectProduct> {
 
                 final result = fuse.search(search).map((suggest) {
                   return widget.products.firstWhere((element) =>
-                      (element.productPackaging!.barcode ?? '') +
-                          (element.product!.name ?? '') ==
+                      (element.product!.name ?? '') +
+                          (element.productPackaging!.barcode ?? '') ==
                       suggest.item);
                 }).toList();
 

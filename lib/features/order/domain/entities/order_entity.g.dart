@@ -98,6 +98,7 @@ const OrderEntitySchema = CollectionSchema(
     r'PurchaseEntity': PurchaseEntitySchema,
     r'Product': ProductSchema,
     r'ProductPackaging': ProductPackagingSchema,
+    r'Unit': UnitSchema,
     r'ExchangeEntity': ExchangeEntitySchema,
     r'ExchangeProceed': ExchangeProceedSchema,
     r'Item': ItemSchema,
