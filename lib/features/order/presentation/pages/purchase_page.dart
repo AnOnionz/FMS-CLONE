@@ -116,9 +116,9 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
     super.didChangeDependencies();
   }
 
-  bool get validate => selectedItems.entries.any((item) {
-        return item.value.quantity! > 0;
-      });
+  // bool get validate => selectedItems.entries.any((item) {
+  //       return item.value.quantity! > 0;
+  //     });
 
   @override
   Widget build(BuildContext context) {
@@ -318,17 +318,14 @@ class _OrderPurchasePageState extends State<OrderPurchasePage> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: BottomButtons(
                   onBack: widget.onBack,
-                  onNext: validate
-                      ? () {
-                          widget.onSaveData(selectedItems.entries
-                              .map((e) => e.value)
-                              .where((element) =>
-                                  element.quantity != null &&
-                                  element.quantity! > 0)
-                              .toList());
-                          widget.onNext();
-                        }
-                      : null,
+                  onNext: () {
+                    widget.onSaveData(selectedItems.entries
+                        .map((e) => e.value)
+                        .where((element) =>
+                            element.quantity != null && element.quantity! > 0)
+                        .toList());
+                    widget.onNext();
+                  },
                 ),
               )
             ],

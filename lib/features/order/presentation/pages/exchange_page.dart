@@ -35,8 +35,8 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
   late final ExchangeController _exchangeController = ExchangeController(
       order: dataFeature.order, feature: dataFeature.data.feature);
 
-  bool get validate =>
-      _exchangeEntites.any((exchange) => exchange.quantity! > 0);
+  // bool get validate =>
+  //     _exchangeEntites.any((exchange) => exchange.quantity! > 0);
 
   late final exchanges =
       (DataFeature.of(context).data.feature.featureSchemes ?? [])
@@ -202,12 +202,12 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: BottomButtons(
               onBack: widget.onBack,
-              onNext: validate
-                  ? () {
-                      widget.onSaveData(_exchangeEntites);
-                      widget.onNext();
-                    }
-                  : null,
+              onNext: () {
+                widget.onSaveData(_exchangeEntites
+                    .where((element) => (element.quantity ?? 0) > 0)
+                    .toList());
+                widget.onNext();
+              },
             ),
           ),
         )
