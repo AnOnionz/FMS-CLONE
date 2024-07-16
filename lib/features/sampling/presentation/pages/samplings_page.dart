@@ -97,7 +97,7 @@ class _SamplingsPageState extends State<SamplingsPage> {
         (featureSampling.numerator ?? 1) / (featureSampling.denominator ?? 1);
 
     final conversionValue =
-        samplingValue == null ? null : (rate * samplingValue).round();
+        samplingValue == null ? null : (rate * samplingValue).ceil();
 
     final initialSamplingValueEntity =
         SamplingValueEntity(featureSamplingId: featureSampling.id);
