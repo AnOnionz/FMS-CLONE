@@ -24,6 +24,10 @@ class UserProfileEntity {
   final String? birthplace;
   final String? socialInsuranceNumber;
   final String? personalTaxCode;
+  final int? bankId;
+  final String? bankBranch;
+  final String? bankAccountNumber;
+  final String? bankAccountName;
   final Marital? maritalStatus;
   final int? numberOfChildren;
   final String? emergencyContactName;
@@ -67,6 +71,10 @@ class UserProfileEntity {
     this.birthplace,
     this.socialInsuranceNumber,
     this.personalTaxCode,
+    this.bankId,
+    this.bankBranch,
+    this.bankAccountNumber,
+    this.bankAccountName,
     this.maritalStatus,
     this.numberOfChildren,
     this.emergencyContactName,
@@ -112,6 +120,10 @@ class UserProfileEntity {
       'birthplace': birthplace,
       'socialInsuranceNumber': socialInsuranceNumber,
       'personalTaxCode': personalTaxCode,
+      'bankId': bankId,
+      'bankBranch': bankBranch,
+      'bankAccountNumber': bankAccountNumber,
+      'bankAccountName': bankAccountName,
       'maritalStatus': maritalStatus?.name,
       'numberOfChildren': numberOfChildren,
       'emergencyContactName': emergencyContactName,
@@ -178,6 +190,15 @@ class UserProfileEntity {
           : null,
       personalTaxCode: map['personalTaxCode'] != null
           ? map['personalTaxCode'] as String
+          : null,
+      bankId: map['bankId'] != null ? map['bankId'] as int : null,
+      bankBranch:
+          map['bankBranch'] != null ? map['bankBranch'] as String : null,
+      bankAccountNumber: map['bankAccountNumber'] != null
+          ? map['bankAccountNumber'] as String
+          : null,
+      bankAccountName: map['bankAccountName'] != null
+          ? map['bankAccountName'] as String
           : null,
       maritalStatus: map['maritalStatus'] != null
           ? (map['maritalStatus'] as String).toMerital()
@@ -277,6 +298,10 @@ class UserProfileEntity {
     String? birthplace,
     String? socialInsuranceNumber,
     String? personalTaxCode,
+    int? bankId,
+    String? bankBranch,
+    String? bankAccountNumber,
+    String? bankAccountName,
     Marital? maritalStatus,
     int? numberOfChildren,
     String? emergencyContactName,
@@ -321,6 +346,10 @@ class UserProfileEntity {
       socialInsuranceNumber:
           socialInsuranceNumber ?? this.socialInsuranceNumber,
       personalTaxCode: personalTaxCode ?? this.personalTaxCode,
+      bankId: bankId ?? this.bankId,
+      bankBranch: bankBranch ?? this.bankBranch,
+      bankAccountNumber: bankAccountNumber ?? this.bankAccountNumber,
+      bankAccountName: bankAccountName ?? this.bankAccountName,
       maritalStatus: maritalStatus ?? this.maritalStatus,
       numberOfChildren: numberOfChildren ?? this.numberOfChildren,
       emergencyContactName: emergencyContactName ?? this.emergencyContactName,

@@ -28,6 +28,7 @@ import '../../../home/home_module.dart';
 import '../../domain/entities/profile_status_entity.dart';
 import '../bloc/get_profile_bloc.dart';
 import '../cubit/profile_status_cubit.dart';
+import '../widgets/banking.dart';
 import '../widgets/desires_job_position.dart';
 import '../widgets/face_verified.dart';
 import '../widgets/information.dart';
@@ -62,6 +63,9 @@ class _ProfileEditPageState extends State<ProfileEditPage>
   StreamSubscription<GetProfileState>? _getProfileSubscription;
   StreamSubscription<ProfileStatusState>? _getProfileStatusSubscription;
   late final List<ProfileItem> _data = [
+    ProfileItem(
+        header: 'Tài khoản ngân hàng',
+        child: Banking(onChanged: _handleUpdateEntity)),
     ProfileItem(
         header: 'Nơi ở hiện tại',
         child: Residence(

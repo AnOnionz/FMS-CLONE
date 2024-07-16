@@ -2,6 +2,7 @@ import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:fms/features/profile/domain/entities/bank_entity.dart';
 import 'package:fms/features/profile/domain/entities/profile_status_entity.dart';
 import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:fms/features/profile/domain/repositories/profile_repository.dart';
@@ -78,6 +79,14 @@ class ProfileRepositoryImpl extends Repository
       final wards = await _remote.getWards(
           provinceId: provinceId, districtId: districtId);
       return Right(wards);
+    });
+  }
+
+  @override
+  Future<Result<List<BankEntity>>> getBanks() async {
+    return todo(() async {
+      final banks = await _remote.getBanks();
+      return Right(banks);
     });
   }
 

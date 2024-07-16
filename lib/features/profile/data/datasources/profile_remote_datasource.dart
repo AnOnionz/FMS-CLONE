@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/utilities/parser.dart';
 import '../../../images/data/datasource/images_remote_datasource.dart';
 import '../../../statistic/domain/entities/employee_entity.dart';
+import '../../domain/entities/bank_entity.dart';
 import '../../domain/entities/profile_status_entity.dart';
 
 abstract class IProfileRemoteDataSource {
@@ -19,6 +20,7 @@ abstract class IProfileRemoteDataSource {
   Future<List<District>> getDistricts({required int provinceId});
   Future<List<Ward>> getWards(
       {required int provinceId, required int districtId});
+  Future<List<BankEntity>> getBanks();
 }
 
 class ProfileRemoteDataSource extends ImagesRemoteDataSource
@@ -62,6 +64,13 @@ class ProfileRemoteDataSource extends ImagesRemoteDataSource
         path: '/locations/provinces/$provinceId/districts/$districtId/wards');
 
     return parseListJson((listJson: _resp, fromJson: Ward.fromMap));
+  }
+
+  @override
+  Future<List<BankEntity>> getBanks() async {
+    final _resp = await dio.get(path: '/banks');
+
+    return parseListJson((listJson: _resp, fromJson: BankEntity.fromMap));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:fms/features/profile/domain/entities/bank_entity.dart';
 import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,4 +19,5 @@ abstract class ProfileRepository {
   Future<Result<List<District>>> getDistricts({required int provinceId});
   Future<Result<List<Ward>>> getWards(
       {required int provinceId, required int districtId});
+  Future<Result<List<BankEntity>>> getBanks();
 }
