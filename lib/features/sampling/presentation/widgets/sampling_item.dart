@@ -45,14 +45,13 @@ class _SamplingItemState extends State<SamplingItem> {
                 widget.featureSampling.product!.name!,
                 style: context.textTheme.caption1,
               )),
-              Flexible(
-                  child: Text(' - ',
-                      style: context.textTheme.caption1
-                          ?.copyWith(color: AppColors.nobel))),
-              Flexible(
-                  child: Text(widget.featureSampling.productPackaging!.barcode!,
-                      style: context.textTheme.caption1
-                          ?.copyWith(color: AppColors.nobel)))
+              // Text(' - ',
+              //     style: context.textTheme.caption1
+              //         ?.copyWith(color: AppColors.nobel)),
+              // Flexible(
+              //     child: Text(widget.featureSampling.productPackaging!.barcode!,
+              //         style: context.textTheme.caption1
+              //             ?.copyWith(color: AppColors.nobel)))
             ],
           ),
           SizedBox(height: 8.w),
@@ -82,8 +81,7 @@ class _SamplingItemState extends State<SamplingItem> {
                   child: AdvancedTextField(
                       enable: false,
                       value: widget.entity?.conversionValue?.toString(),
-                      unit:
-                          widget.featureSampling.productPackaging!.unit?.name),
+                      unit: widget.featureSampling.productPackaging!.unitName),
                 ),
               ],
             ),

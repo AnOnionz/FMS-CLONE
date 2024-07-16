@@ -8505,31 +8505,36 @@ const ExchangeProceedSchema = Schema(
   name: r'ExchangeProceed',
   id: 9002125092770463445,
   properties: {
-    r'id': PropertySchema(
+    r'hasPlayedGame': PropertySchema(
       id: 0,
+      name: r'hasPlayedGame',
+      type: IsarType.bool,
+    ),
+    r'id': PropertySchema(
+      id: 1,
       name: r'id',
       type: IsarType.long,
     ),
     r'item': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'item',
       type: IsarType.object,
       target: r'Item',
     ),
     r'product': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
     ),
     r'quantity': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -8577,26 +8582,27 @@ void _exchangeProceedSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.id);
+  writer.writeBool(offsets[0], object.hasPlayedGame);
+  writer.writeLong(offsets[1], object.id);
   writer.writeObject<Item>(
-    offsets[1],
+    offsets[2],
     allOffsets,
     ItemSchema.serialize,
     object.item,
   );
   writer.writeObject<Product>(
-    offsets[2],
+    offsets[3],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[3],
+    offsets[4],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
   );
-  writer.writeLong(offsets[4], object.quantity);
+  writer.writeLong(offsets[5], object.quantity);
 }
 
 ExchangeProceed _exchangeProceedDeserialize(
@@ -8606,23 +8612,24 @@ ExchangeProceed _exchangeProceedDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = ExchangeProceed(
-    id: reader.readLongOrNull(offsets[0]),
+    hasPlayedGame: reader.readBoolOrNull(offsets[0]),
+    id: reader.readLongOrNull(offsets[1]),
     item: reader.readObjectOrNull<Item>(
-      offsets[1],
+      offsets[2],
       ItemSchema.deserialize,
       allOffsets,
     ),
     product: reader.readObjectOrNull<Product>(
-      offsets[2],
+      offsets[3],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[3],
+      offsets[4],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
-    quantity: reader.readLongOrNull(offsets[4]),
+    quantity: reader.readLongOrNull(offsets[5]),
   );
   return object;
 }
@@ -8635,26 +8642,28 @@ P _exchangeProceedDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 1:
+      return (reader.readLongOrNull(offset)) as P;
+    case 2:
       return (reader.readObjectOrNull<Item>(
         offset,
         ItemSchema.deserialize,
         allOffsets,
       )) as P;
-    case 2:
+    case 3:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 3:
+    case 4:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
         allOffsets,
       )) as P;
-    case 4:
+    case 5:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -8663,6 +8672,34 @@ P _exchangeProceedDeserializeProp<P>(
 
 extension ExchangeProceedQueryFilter
     on QueryBuilder<ExchangeProceed, ExchangeProceed, QFilterCondition> {
+  QueryBuilder<ExchangeProceed, ExchangeProceed, QAfterFilterCondition>
+      hasPlayedGameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'hasPlayedGame',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeProceed, ExchangeProceed, QAfterFilterCondition>
+      hasPlayedGameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'hasPlayedGame',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeProceed, ExchangeProceed, QAfterFilterCondition>
+      hasPlayedGameEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasPlayedGame',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<ExchangeProceed, ExchangeProceed, QAfterFilterCondition>
       idIsNull() {
     return QueryBuilder.apply(this, (query) {

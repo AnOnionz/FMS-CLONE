@@ -30,6 +30,7 @@ class AuthRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
   Future<bool> logout() async {
     try {
       await webAuthentication.logout();
+      // await auth0.credentialsManager.clearCredentials();
       return true;
     } on WebAuthenticationException catch (_) {
       return false;

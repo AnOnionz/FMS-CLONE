@@ -905,6 +905,7 @@ class ExchangeProceed {
   final ProductPackaging? productPackaging;
   final Item? item;
   final int? quantity;
+  final bool? hasPlayedGame;
 
   ExchangeProceed({
     this.id,
@@ -912,6 +913,7 @@ class ExchangeProceed {
     this.productPackaging,
     this.item,
     this.quantity,
+    this.hasPlayedGame = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -957,14 +959,15 @@ class ExchangeProceed {
     ProductPackaging? productPackaging,
     Item? item,
     int? quantity,
+    bool? hasPlayedGame,
   }) {
     return ExchangeProceed(
-      id: id ?? this.id,
-      product: product ?? this.product,
-      productPackaging: productPackaging ?? this.productPackaging,
-      item: item ?? this.item,
-      quantity: quantity ?? this.quantity,
-    );
+        id: id ?? this.id,
+        product: product ?? this.product,
+        productPackaging: productPackaging ?? this.productPackaging,
+        item: item ?? this.item,
+        quantity: quantity ?? this.quantity,
+        hasPlayedGame: hasPlayedGame ?? this.hasPlayedGame);
   }
 }
 

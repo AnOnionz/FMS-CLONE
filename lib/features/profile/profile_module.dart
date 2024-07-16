@@ -16,12 +16,14 @@ import 'package:fms/features/profile/presentation/pages/profile_edit_page.dart';
 
 import '../../routes/routes.dart';
 import 'data/datasources/profile_local_datasource.dart';
+import 'domain/usecases/get_banks_usecase.dart';
 import 'domain/usecases/get_districts_usecase.dart';
 import 'domain/usecases/get_profile_status_usecase.dart';
 import 'domain/usecases/get_provinces_usecase.dart';
 import 'domain/usecases/get_wards_usecase.dart';
 import 'domain/usecases/mark_read_profile_status_usecase.dart';
 import 'presentation/bloc/get_profile_bloc.dart';
+import 'presentation/cubit/fetch_bank_cubit.dart';
 import 'presentation/cubit/upload_face_cubit.dart';
 
 class ProfileModule extends Module {
@@ -44,10 +46,12 @@ class ProfileModule extends Module {
     i.addSingleton(UploadFaceVerifyImageUsecase.new);
     i.addSingleton(MarkReadProfileStatusUsecase.new);
     i.addSingleton(GetProfileStatusUsecase.new);
+    i.addSingleton(GetBanksUsecase.new);
     i.add(UserInfoCubit.new);
     i.add(FetchProvinceCubit.new);
     i.add(FetchDistrictCubit.new);
     i.add(FetchWardCubit.new);
+    i.add(FetchBankCubit.new);
     i.add(ProfileBloc.new);
     i.add(GetProfileBloc.new);
     i.add(UploadFaceCubit.new);

@@ -55,19 +55,31 @@ class _ReviewGiftState extends State<ReviewGift> {
           (element) => element.id == exchange.featureSchemeExchangeId);
 
       if (schemeExchange != null) {
-        final gifts = (schemeExchange.exchangeProceeds ?? [])
-            .map((e) => e.copyWith(quantity: e.quantity! * exchange.quantity!));
+        final gifts = (schemeExchange.exchangeProceeds ?? []).map((e) =>
+            e.copyWith(
+                quantity: e.quantity! * exchange.quantity!,
+                hasPlayedGame: schemeExchange.hasPlayedGame));
         _exchangeProceeds.addAll(gifts);
       }
     });
 
     _exchangeProceeds.forEachIndexed((index, element) {
       if (element.product != null) {
-        _gifts[(element.product, element.productPackaging)] =
-            (_gifts[(element.product, element.productPackaging)] ?? 0) +
-                element.quantity!;
+        _gifts[(
+          element.product,
+          element.productPackaging,
+          element.hasPlayedGame
+        )] = (_gifts[(
+                  element.product,
+                  element.productPackaging,
+                  element.hasPlayedGame
+                )] ??
+                0) +
+            element.quantity!;
       } else {
-        _gifts[element.item] = (_gifts[element.item] ?? 0) + element.quantity!;
+        _gifts[(element.item, element.hasPlayedGame)] =
+            (_gifts[(element.item, element.hasPlayedGame)] ?? 0) +
+                element.quantity!;
       }
     });
     total = _gifts.entries
@@ -128,24 +140,39 @@ class _GiftInfoItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           switch (gift) {
-            (final Product product, final ProductPackaging _) => Expanded(
-                child: Text(
-                  product.name!,
-                  style: context.textTheme.body1,
+            (
+              final Product product,
+              final ProductPackaging _,
+              final bool? hasPlayedGame
+            ) =>
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                      text: product.name ?? '',
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.black),
+                      children: [
+                        if (hasPlayedGame == true)
+                          TextSpan(
+                              text: ' (Quà game)',
+                              style: context.textTheme.caption2
+                                  ?.copyWith(color: '0043CE'.toColor()))
+                      ]),
                 ),
               ),
-            (final Item gift) => Expanded(
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        gift.name!,
-                        style: context.textTheme.body1,
-                      ),
-                    ],
-                  ),
-                  constraints: BoxConstraints(),
+            (final Item gift, final bool? hasPlayedGame) => Expanded(
+                child: RichText(
+                  text: TextSpan(
+                      text: gift.name ?? '',
+                      style: context.textTheme.body1
+                          ?.copyWith(color: AppColors.black),
+                      children: [
+                        if (hasPlayedGame == true)
+                          TextSpan(
+                              text: ' (Quà game)',
+                              style: context.textTheme.caption2
+                                  ?.copyWith(color: '0043CE'.toColor()))
+                      ]),
                 ),
               ),
             Object() => SizedBox(),

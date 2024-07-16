@@ -54,7 +54,7 @@ class SamplingValueEntity {
           ? map['featureSamplingId'] as int
           : null,
       conversionRate: map['conversionRate'] != null
-          ? map['conversionRate'] as double
+          ? (map['conversionRate'] as num).toDouble()
           : null,
       conversionValue:
           map['conversionValue'] != null ? map['conversionValue'] as int : null,
