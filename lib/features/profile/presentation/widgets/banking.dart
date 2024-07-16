@@ -52,7 +52,7 @@ class _BankingState extends State<Banking> {
 
     setState(() {
       _bankSelected =
-          _banks.firstWhereOrNull((element) => element.id == entity.bankId);
+          _banks.firstWhereOrNull((element) => element.id == entity.bank?.id);
     });
 
     super.didChangeDependencies();
@@ -82,9 +82,8 @@ class _BankingState extends State<Banking> {
         onSelected: (value) {
           FocusManager.instance.primaryFocus?.unfocus();
 
-          widget.onChanged(UserProfileInherited.of(context)
-              .entity
-              .copyWith(bankId: value.id));
+          widget.onChanged(
+              UserProfileInherited.of(context).entity.copyWith(bank: value));
         },
       ).bottom18,
       AppTextFormField(

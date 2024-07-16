@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/mixins/fx.dart';
+import 'package:fms/features/profile/domain/entities/bank_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,7 +25,7 @@ class UserProfileEntity {
   final String? birthplace;
   final String? socialInsuranceNumber;
   final String? personalTaxCode;
-  final int? bankId;
+  final BankEntity? bank;
   final String? bankBranch;
   final String? bankAccountNumber;
   final String? bankAccountName;
@@ -71,7 +72,7 @@ class UserProfileEntity {
     this.birthplace,
     this.socialInsuranceNumber,
     this.personalTaxCode,
-    this.bankId,
+    this.bank,
     this.bankBranch,
     this.bankAccountNumber,
     this.bankAccountName,
@@ -120,7 +121,7 @@ class UserProfileEntity {
       'birthplace': birthplace,
       'socialInsuranceNumber': socialInsuranceNumber,
       'personalTaxCode': personalTaxCode,
-      'bankId': bankId,
+      'bankId': bank?.id,
       'bankBranch': bankBranch,
       'bankAccountNumber': bankAccountNumber,
       'bankAccountName': bankAccountName,
@@ -191,7 +192,9 @@ class UserProfileEntity {
       personalTaxCode: map['personalTaxCode'] != null
           ? map['personalTaxCode'] as String
           : null,
-      bankId: map['bankId'] != null ? map['bankId'] as int : null,
+      bank: map['bank'] != null
+          ? BankEntity.fromMap(map['bank'] as Map<String, dynamic>)
+          : null,
       bankBranch:
           map['bankBranch'] != null ? map['bankBranch'] as String : null,
       bankAccountNumber: map['bankAccountNumber'] != null
@@ -298,7 +301,7 @@ class UserProfileEntity {
     String? birthplace,
     String? socialInsuranceNumber,
     String? personalTaxCode,
-    int? bankId,
+    BankEntity? bank,
     String? bankBranch,
     String? bankAccountNumber,
     String? bankAccountName,
@@ -346,7 +349,7 @@ class UserProfileEntity {
       socialInsuranceNumber:
           socialInsuranceNumber ?? this.socialInsuranceNumber,
       personalTaxCode: personalTaxCode ?? this.personalTaxCode,
-      bankId: bankId ?? this.bankId,
+      bank: bank ?? this.bank,
       bankBranch: bankBranch ?? this.bankBranch,
       bankAccountNumber: bankAccountNumber ?? this.bankAccountNumber,
       bankAccountName: bankAccountName ?? this.bankAccountName,
