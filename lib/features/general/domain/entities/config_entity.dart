@@ -750,6 +750,7 @@ class Exchange {
   final int? id;
   final int? maxReceiveQuantity;
   final int? reachAmount;
+  final bool? hasPlayedGame;
   final String? logical;
   final List<ExchangeCondition>? exchangeConditions;
   final List<ExchangeProceed>? exchangeProceeds;
@@ -759,6 +760,7 @@ class Exchange {
     this.maxReceiveQuantity,
     this.reachAmount,
     this.logical,
+    this.hasPlayedGame,
     this.exchangeConditions,
     this.exchangeProceeds,
   });
@@ -769,6 +771,7 @@ class Exchange {
       'maxReceiveQuantity': maxReceiveQuantity,
       'reachAmount': reachAmount,
       'logical': logical,
+      'hasPlayedGame': hasPlayedGame,
       'exchangeConditions': exchangeConditions?.map((x) => x.toMap()).toList(),
       'exchangeProceeds': exchangeProceeds?.map((x) => x.toMap()).toList(),
     };
@@ -780,6 +783,8 @@ class Exchange {
       maxReceiveQuantity: map['maxReceiveQuantity'] != null
           ? map['maxReceiveQuantity'] as int
           : null,
+      hasPlayedGame:
+          map['hasPlayedGame'] != null ? map['hasPlayedGame'] as bool : null,
       reachAmount:
           map['reachAmount'] != null ? map['reachAmount'] as int : null,
       logical: map['logical'] != null ? map['logical'] as String : null,
@@ -824,6 +829,7 @@ class Exchange {
       maxReceiveQuantity: maxReceiveQuantity ?? this.maxReceiveQuantity,
       reachAmount: reachAmount ?? this.reachAmount,
       logical: logical ?? this.logical,
+      hasPlayedGame: this.hasPlayedGame,
       exchangeConditions: exchangeConditions ?? this.exchangeConditions,
       exchangeProceeds: exchangeProceeds ?? this.exchangeProceeds,
     );

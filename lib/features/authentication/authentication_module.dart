@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/features/authentication/domain/usecases/logout_success_usecase%20copy.dart';
+import 'package:fms/features/profile/profile_module.dart';
 
 import '../../routes/core_module.dart';
 import 'data/datasources/auth_local_data_source.dart';
@@ -15,9 +16,7 @@ import 'presentation/blocs/authentication_bloc.dart';
 
 class AuthenticationModule extends Module {
   @override
-  List<Module> get imports => [
-        CoreModule(),
-      ];
+  List<Module> get imports => [CoreModule(), ProfileModule()];
 
   @override
   void exportedBinds(Injector i) {

@@ -17,7 +17,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/widgets/notifications.dart';
 import '../cubit/upload_face_cubit.dart';
-import '../cubit/user_info_cubit.dart';
 
 class FaceVerifiedWidget extends StatefulWidget {
   final VoidCallback onSuccess;
@@ -30,7 +29,7 @@ class FaceVerifiedWidget extends StatefulWidget {
 class _FaceVerifiedWidgetState extends State<FaceVerifiedWidget>
     with UserMixin {
   final _cubit = Modular.get<UploadFaceCubit>();
-  final _userInfoCubit = Modular.get<UserInfoCubit>();
+
   StreamSubscription<UploadFaceState>? _subscription;
   final _mediaService = MediaService();
   XFile? image;
@@ -60,7 +59,7 @@ class _FaceVerifiedWidgetState extends State<FaceVerifiedWidget>
       }
       if (state is UploadFaceSuccess) {
         OverlayManager.hide();
-        _userInfoCubit.getUserInfo();
+
         showUploadFaceSuccess(
           title: 'Cập nhật thành công',
         );

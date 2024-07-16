@@ -75,7 +75,7 @@ class OutletSelectionPage extends StatelessWidget with UserMixin {
                                         icon: SvgPicture.asset(
                                             AppIcons.requiredProfileData),
                                         message:
-                                            'Tài khoản chưa được xác thực. Yêu cầu cập nhật Prsofile trước khi sử dụng tài khoản này',
+                                            'Tài khoản chưa được xác thực. Yêu cầu cập nhật Profile trước khi sử dụng tài khoản này',
                                         btnText: 'Đến Trang Profile Nhân viên',
                                         onPressed: () => context.nextRoute(
                                             ProfileModule.route,

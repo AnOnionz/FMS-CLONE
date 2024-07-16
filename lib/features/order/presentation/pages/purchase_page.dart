@@ -8,13 +8,11 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/utilities/overlay.dart';
 import 'package:fms/core/widgets/popup.dart';
-import 'package:fms/core/widgets/search_text_field.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/order/presentation/widgets/data_feature_widget.dart';
 import 'package:fms/features/order/presentation/widgets/product/concur_product.dart';
 import 'package:fms/features/order/presentation/widgets/product/select_product.dart';
-import 'package:fuzzy/fuzzy.dart';
 
 import '../../order_module.dart';
 import '../widgets/bottom_buttons.dart';

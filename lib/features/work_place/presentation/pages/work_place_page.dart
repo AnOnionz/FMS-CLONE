@@ -1,4 +1,3 @@
-import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -11,7 +10,6 @@ import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
 import 'package:fms/core/widgets/app_indicator.dart';
-import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/presentation/cubit/user_info_cubit.dart';
 import 'package:fms/features/sign/presentation/bloc/sign_bloc.dart';
@@ -32,9 +30,6 @@ class WorkPlacePage extends StatefulWidget {
 }
 
 class _WorkPlacePageState extends State<WorkPlacePage> with UserMixin {
-  // final Credentials credentials =
-  //     Modular.get<AuthenticationRepository>().credentials!;
-
   final _signBloc = Modular.get<SignBloc>();
   final _userInfoCubit = Modular.get<UserInfoCubit>();
 

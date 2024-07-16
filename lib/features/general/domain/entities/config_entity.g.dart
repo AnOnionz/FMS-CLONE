@@ -7375,23 +7375,28 @@ const ExchangeSchema = Schema(
       type: IsarType.objectList,
       target: r'ExchangeProceed',
     ),
-    r'id': PropertySchema(
+    r'hasPlayedGame': PropertySchema(
       id: 2,
+      name: r'hasPlayedGame',
+      type: IsarType.bool,
+    ),
+    r'id': PropertySchema(
+      id: 3,
       name: r'id',
       type: IsarType.long,
     ),
     r'logical': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'logical',
       type: IsarType.string,
     ),
     r'maxReceiveQuantity': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'maxReceiveQuantity',
       type: IsarType.long,
     ),
     r'reachAmount': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'reachAmount',
       type: IsarType.long,
     )
@@ -7463,10 +7468,11 @@ void _exchangeSerialize(
     ExchangeProceedSchema.serialize,
     object.exchangeProceeds,
   );
-  writer.writeLong(offsets[2], object.id);
-  writer.writeString(offsets[3], object.logical);
-  writer.writeLong(offsets[4], object.maxReceiveQuantity);
-  writer.writeLong(offsets[5], object.reachAmount);
+  writer.writeBool(offsets[2], object.hasPlayedGame);
+  writer.writeLong(offsets[3], object.id);
+  writer.writeString(offsets[4], object.logical);
+  writer.writeLong(offsets[5], object.maxReceiveQuantity);
+  writer.writeLong(offsets[6], object.reachAmount);
 }
 
 Exchange _exchangeDeserialize(
@@ -7488,10 +7494,11 @@ Exchange _exchangeDeserialize(
       allOffsets,
       ExchangeProceed(),
     ),
-    id: reader.readLongOrNull(offsets[2]),
-    logical: reader.readStringOrNull(offsets[3]),
-    maxReceiveQuantity: reader.readLongOrNull(offsets[4]),
-    reachAmount: reader.readLongOrNull(offsets[5]),
+    hasPlayedGame: reader.readBoolOrNull(offsets[2]),
+    id: reader.readLongOrNull(offsets[3]),
+    logical: reader.readStringOrNull(offsets[4]),
+    maxReceiveQuantity: reader.readLongOrNull(offsets[5]),
+    reachAmount: reader.readLongOrNull(offsets[6]),
   );
   return object;
 }
@@ -7518,12 +7525,14 @@ P _exchangeDeserializeProp<P>(
         ExchangeProceed(),
       )) as P;
     case 2:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
-    case 4:
       return (reader.readLongOrNull(offset)) as P;
+    case 4:
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
+      return (reader.readLongOrNull(offset)) as P;
+    case 6:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -7743,6 +7752,34 @@ extension ExchangeQueryFilter
         upper,
         includeUpper,
       );
+    });
+  }
+
+  QueryBuilder<Exchange, Exchange, QAfterFilterCondition>
+      hasPlayedGameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'hasPlayedGame',
+      ));
+    });
+  }
+
+  QueryBuilder<Exchange, Exchange, QAfterFilterCondition>
+      hasPlayedGameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'hasPlayedGame',
+      ));
+    });
+  }
+
+  QueryBuilder<Exchange, Exchange, QAfterFilterCondition> hasPlayedGameEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasPlayedGame',
+        value: value,
+      ));
     });
   }
 

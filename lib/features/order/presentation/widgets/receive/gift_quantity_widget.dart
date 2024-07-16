@@ -60,6 +60,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.exchange.hasPlayedGame);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.h),
       child: IntrinsicHeight(
@@ -85,11 +86,28 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
                                           style: context.textTheme.subtitle1)),
                                   Expanded(
                                       flex: 15,
-                                      child: Text(
-                                          gift.item != null
-                                              ? gift.item!.name!
-                                              : gift.product!.name!,
-                                          style: context.textTheme.body1)),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                                gift.item != null
+                                                    ? gift.item!.name!
+                                                    : gift.product!.name!,
+                                                style: context.textTheme.body1),
+                                          ),
+                                          if (widget.exchange.hasPlayedGame ==
+                                              true)
+                                            Text(
+                                              'Quà game',
+                                              style: context.textTheme.caption2
+                                                  ?.copyWith(
+                                                      color:
+                                                          '0043CE'.toColor()),
+                                            ),
+                                        ],
+                                      )),
                                 ],
                               ),
                             ))

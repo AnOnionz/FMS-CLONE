@@ -1,5 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/features/order/presentation/widgets/review/review_container.dart';
@@ -127,19 +129,27 @@ class _GiftInfoItem extends StatelessWidget {
         children: [
           switch (gift) {
             (final Product product, final ProductPackaging _) => Expanded(
-                flex: 5,
                 child: Text(
                   product.name!,
                   style: context.textTheme.body1,
-                )),
+                ),
+              ),
             (final Item gift) => Expanded(
-                flex: 5,
-                child: Text(
-                  gift.name!,
-                  style: context.textTheme.body1,
-                )),
-            Object() => throw UnimplementedError(),
-            null => throw UnimplementedError(),
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        gift.name!,
+                        style: context.textTheme.body1,
+                      ),
+                    ],
+                  ),
+                  constraints: BoxConstraints(),
+                ),
+              ),
+            Object() => SizedBox(),
+            null => SizedBox(),
           },
           Flexible(
               child: Text(

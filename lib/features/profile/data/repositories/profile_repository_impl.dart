@@ -1,11 +1,11 @@
 import 'package:fms/core/constant/type_def.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:fms/features/profile/domain/entities/profile_status_entity.dart';
 import 'package:fms/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:fms/features/profile/domain/repositories/profile_repository.dart';
+import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/statistic/domain/entities/employee_entity.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +14,7 @@ import '../../../../core/usecase/either.dart';
 import '../datasources/profile_local_datasource.dart';
 
 class ProfileRepositoryImpl extends Repository
-    with GeneralDataMixin
+    with GeneralDataMixin, UserMixin
     implements ProfileRepository {
   final ProfileRemoteDataSource _remote;
   final ProfileLocalDataSource _local;
@@ -28,6 +28,7 @@ class ProfileRepositoryImpl extends Repository
       await _remote.createUserProfile(
           userProfile: userProfile, projectId: projectId);
       final profile = await _remote.getUserProfile();
+      if (user!.isProfileVerified == false) await getUserInfo();
 
       return Right(profile!);
     });
@@ -84,6 +85,7 @@ class ProfileRepositoryImpl extends Repository
   Future<Result<void>> uploadFaceVerifyImage(XFile file) async {
     return todo(() async {
       await _remote.uploadFaceVerifyImage(file);
+      if (user!.isFaceVerified == false) await getUserInfo();
       return Right(Never);
     }, useInternet: true);
   }

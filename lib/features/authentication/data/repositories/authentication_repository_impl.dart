@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:fms/core/client/dio_client.dart';
+import 'package:fms/features/profile/data/datasources/profile_local_datasource.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../domain/repositories/authentication_repository.dart';
@@ -12,7 +13,7 @@ import '/core/usecase/either.dart';
 
 class AuthenticationRepositoryImpl extends Repository
     implements AuthenticationRepository {
-  AuthenticationRepositoryImpl(
+  AuthenticationRepositoryImpl(this._profileLocal,
       {required AuthenticationRemoteDataSource remote,
       required AuthenticationLocalDataSource local,
       required DioClient dio})
@@ -29,6 +30,7 @@ class AuthenticationRepositoryImpl extends Repository
       final credentials = await _remote.login();
       _credentials = credentials;
       if (credentials != null) {
+        _profileLocal.clearUser();
         _local.cacheRefreshToken(credentials.refreshToken!);
         _local.cacheIdentifier(credentials.user.sub);
         _dio.setBearerAuth(
@@ -66,6 +68,7 @@ class AuthenticationRepositoryImpl extends Repository
     _credentials = null;
     _local.clearToken();
     _dio.clearBearerAuth();
+    _profileLocal.clearUser();
     return Right(true);
   }
 
@@ -129,5 +132,6 @@ class AuthenticationRepositoryImpl extends Repository
   final AuthenticationRemoteDataSource _remote;
   final AuthenticationLocalDataSource _local;
   final DioClient _dio;
+  final ProfileLocalDataSource _profileLocal;
   Credentials? _credentials;
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/app_bar.dart';
 import 'package:fms/features/app_information/presentation/widgets/row_info.dart';
-import 'package:fms/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
 import 'package:fms/features/profile/mixin_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -17,8 +15,6 @@ import '../widgets/information_box.dart';
 class AppInformationPage extends StatelessWidget
     with GeneralDataMixin, UserMixin {
   AppInformationPage({super.key});
-
-  final credentials = Modular.get<AuthenticationRepository>().credentials;
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +43,19 @@ class AppInformationPage extends StatelessWidget
                 RowInfo(leading: 'Địa chỉ', info: general!.outlet.address)
               ],
             ),
-            if (credentials != null)
-              InformationBox(
-                icon: Image.asset(AppImages.employee),
-                title: 'Thông tin nhân sự',
-                children: [
-                  RowInfo(
-                      leading: 'Tên nhân sự',
-                      info: credentials!.user.name ?? ''),
-                  space,
-                  // RowInfo(leading: 'Mã nhân sự', info: 'MA0001'),
-                  // space,
-                  RowInfo(leading: 'SĐT', info: user!.phone ?? ''),
-                  space,
-                  RowInfo(leading: 'Địa chỉ', info: '')
-                ],
-              ),
+            InformationBox(
+              icon: Image.asset(AppImages.employee),
+              title: 'Thông tin nhân sự',
+              children: [
+                RowInfo(leading: 'Tên nhân sự', info: user!.name ?? ''),
+                space,
+                // RowInfo(leading: 'Mã nhân sự', info: 'MA0001'),
+                // space,
+                RowInfo(leading: 'SĐT', info: user!.phone ?? ''),
+                space,
+                RowInfo(leading: 'Địa chỉ', info: '')
+              ],
+            ),
             FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, snapshot) {

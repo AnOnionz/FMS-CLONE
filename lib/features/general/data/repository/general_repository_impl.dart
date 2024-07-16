@@ -17,7 +17,9 @@ import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/general/domain/entities/general_entity.dart';
 import 'package:fms/features/general/domain/repository/general_repository.dart';
 import 'package:fms/features/note/domain/entities/note_entity.dart';
+import 'package:fms/features/order/domain/entities/order_entity.dart';
 import 'package:fms/features/report/domain/entities/photo_entity.dart';
+import 'package:fms/features/sampling/domain/entities/sampling_entity.dart';
 import 'package:fms/features/work_place/domain/entities/work_place_entity.dart';
 
 class GeneralRepository extends Repository
@@ -38,23 +40,19 @@ class GeneralRepository extends Repository
     if (localGeneral == null) {
       return Right(null);
     }
-    final time = await Modular.get<NetworkTimeService>().ntpDateTime();
-    final dateNow = time.dMy();
-    if (dateNow.isAfter(localGeneral.createdDate)) {
-      db.clearCollection<PhotoEntity>();
-      db.clearCollection<NoteEntity>();
-      db.clearCollection<CrawlQuantityEntity>();
+    final _general = await clearLastData(localGeneral);
+    if (_general == null) {
       return Right(null);
     }
-    general = localGeneral;
-    return Right(localGeneral);
+    general = _general;
+
+    return Right(_general);
   }
 
   @override
   Future<Result<ConfigEntity?>> getRemoteConfig(WorkPlaceEntity model) {
     return todo(() async {
       final config = await _remote.getConfigs(model);
-
       return Right(config);
     });
   }
@@ -64,6 +62,7 @@ class GeneralRepository extends Repository
     final identifer = _localAuth.getIdentifier();
     general = entity.copyWith(identifer: identifer);
     _local.cacheGeneral(general!);
+    await clearLastData(general!);
     return Right(Never);
   }
 
@@ -97,5 +96,19 @@ class GeneralRepository extends Repository
     general = null;
     _local.clearGeneral();
     return Right(Never);
+  }
+
+  Future<GeneralEntity?> clearLastData(GeneralEntity generalEntity) async {
+    final time = await Modular.get<NetworkTimeService>().ntpDateTime();
+    final dateNow = time.dMy();
+    if (dateNow.isAfter(generalEntity.createdDate)) {
+      db.clearCollection<PhotoEntity>();
+      db.clearCollection<NoteEntity>();
+      db.clearCollection<CrawlQuantityEntity>();
+      db.clearCollection<SamplingEntity>();
+      db.clearCollection<OrderEntity>();
+      return null;
+    }
+    return generalEntity;
   }
 }
