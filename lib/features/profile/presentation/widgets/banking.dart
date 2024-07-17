@@ -91,6 +91,7 @@ class _BankingState extends State<Banking> {
       AppTextFormField(
         label: 'Chi nhánh',
         isRequired: false,
+        maxLength: 255,
         value: UserProfileInherited.of(context).entity.bankBranch,
         onChanged: (value) {
           widget.onChanged(UserProfileInherited.of(context)
@@ -102,6 +103,8 @@ class _BankingState extends State<Banking> {
       AppTextFormField(
         label: 'Số tài khoản',
         isRequired: false,
+        onlyNumber: true,
+        maxLength: 20,
         value: UserProfileInherited.of(context).entity.bankAccountNumber,
         onChanged: (value) {
           widget.onChanged(UserProfileInherited.of(context)
@@ -113,6 +116,7 @@ class _BankingState extends State<Banking> {
       AppTextFormField(
         label: 'Họ và tên',
         isRequired: false,
+        maxLength: 255,
         value: UserProfileInherited.of(context).entity.bankAccountName,
         onChanged: (value) {
           widget.onChanged(UserProfileInherited.of(context)

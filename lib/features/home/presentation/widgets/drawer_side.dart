@@ -89,7 +89,7 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
                                                       padding: EdgeInsets.only(
                                                           bottom: 8.h),
                                                       child: Text(
-                                                        user!.email!,
+                                                        user!.email ?? '',
                                                         style: context
                                                             .textTheme.body1
                                                             ?.copyWith(
@@ -246,6 +246,7 @@ class DrawerSide extends StatelessWidget with GeneralDataMixin, UserMixin {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(left),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text(
               right,
