@@ -52,8 +52,8 @@ class AppInformationPage extends StatelessWidget
                 // RowInfo(leading: 'Mã nhân sự', info: 'MA0001'),
                 // space,
                 RowInfo(leading: 'SĐT', info: user!.phone ?? ''),
-                space,
-                RowInfo(leading: 'Địa chỉ', info: '')
+                // space,
+                // RowInfo(leading: 'Địa chỉ', info: ''),
               ],
             ),
             FutureBuilder<PackageInfo>(

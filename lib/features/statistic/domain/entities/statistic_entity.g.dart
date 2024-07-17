@@ -1035,26 +1035,31 @@ const ExchangeStatisticSchema = Schema(
       name: r'hashCode',
       type: IsarType.long,
     ),
-    r'item': PropertySchema(
+    r'isGameReward': PropertySchema(
       id: 1,
+      name: r'isGameReward',
+      type: IsarType.bool,
+    ),
+    r'item': PropertySchema(
+      id: 2,
       name: r'item',
       type: IsarType.object,
       target: r'Item',
     ),
     r'product': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'product',
       type: IsarType.object,
       target: r'Product',
     ),
     r'productPackaging': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'productPackaging',
       type: IsarType.object,
       target: r'ProductPackaging',
     ),
     r'quantity': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -1103,25 +1108,26 @@ void _exchangeStatisticSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.hashCode);
+  writer.writeBool(offsets[1], object.isGameReward);
   writer.writeObject<Item>(
-    offsets[1],
+    offsets[2],
     allOffsets,
     ItemSchema.serialize,
     object.item,
   );
   writer.writeObject<Product>(
-    offsets[2],
+    offsets[3],
     allOffsets,
     ProductSchema.serialize,
     object.product,
   );
   writer.writeObject<ProductPackaging>(
-    offsets[3],
+    offsets[4],
     allOffsets,
     ProductPackagingSchema.serialize,
     object.productPackaging,
   );
-  writer.writeLong(offsets[4], object.quantity);
+  writer.writeLong(offsets[5], object.quantity);
 }
 
 ExchangeStatistic _exchangeStatisticDeserialize(
@@ -1131,22 +1137,23 @@ ExchangeStatistic _exchangeStatisticDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = ExchangeStatistic(
+    isGameReward: reader.readBoolOrNull(offsets[1]),
     item: reader.readObjectOrNull<Item>(
-      offsets[1],
+      offsets[2],
       ItemSchema.deserialize,
       allOffsets,
     ),
     product: reader.readObjectOrNull<Product>(
-      offsets[2],
+      offsets[3],
       ProductSchema.deserialize,
       allOffsets,
     ),
     productPackaging: reader.readObjectOrNull<ProductPackaging>(
-      offsets[3],
+      offsets[4],
       ProductPackagingSchema.deserialize,
       allOffsets,
     ),
-    quantity: reader.readLongOrNull(offsets[4]),
+    quantity: reader.readLongOrNull(offsets[5]),
   );
   return object;
 }
@@ -1161,24 +1168,26 @@ P _exchangeStatisticDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 2:
       return (reader.readObjectOrNull<Item>(
         offset,
         ItemSchema.deserialize,
         allOffsets,
       )) as P;
-    case 2:
+    case 3:
       return (reader.readObjectOrNull<Product>(
         offset,
         ProductSchema.deserialize,
         allOffsets,
       )) as P;
-    case 3:
+    case 4:
       return (reader.readObjectOrNull<ProductPackaging>(
         offset,
         ProductPackagingSchema.deserialize,
         allOffsets,
       )) as P;
-    case 4:
+    case 5:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1239,6 +1248,34 @@ extension ExchangeStatisticQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      isGameRewardIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isGameReward',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      isGameRewardIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isGameReward',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeStatistic, ExchangeStatistic, QAfterFilterCondition>
+      isGameRewardEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isGameReward',
+        value: value,
       ));
     });
   }

@@ -89,11 +89,13 @@ class MatterInfoWidget extends StatelessWidget {
   final Product? product;
   final ProductPackaging? productPackaging;
   final Item? item;
+  final bool isGameReward;
   const MatterInfoWidget(
       {super.key,
       this.product,
       this.productPackaging,
       this.item,
+      this.isGameReward = false,
       required this.asset});
 
   @override
@@ -104,11 +106,18 @@ class MatterInfoWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
-          child: Text(
-            isItem ? item!.name! : product!.name!,
-            style: context.textTheme.caption1,
-          ),
-        ),
+            child: RichText(
+                text: TextSpan(
+                    text: isItem ? item!.name! : product!.name!,
+                    style: context.textTheme.caption1
+                        ?.copyWith(color: AppColors.black),
+                    children: [
+              if (isGameReward == true)
+                TextSpan(
+                    text: ' (Quà game)',
+                    style: context.textTheme.caption2
+                        ?.copyWith(color: '0043CE'.toColor()))
+            ]))),
         Text(
           isItem ? item!.unitName! : productPackaging!.barcode!,
           style: context.textTheme.caption2?.copyWith(color: AppColors.nobel),

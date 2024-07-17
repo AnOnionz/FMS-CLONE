@@ -3255,8 +3255,13 @@ const ExchangeEntitySchema = Schema(
       name: r'id',
       type: IsarType.long,
     ),
-    r'quantity': PropertySchema(
+    r'isGameReward': PropertySchema(
       id: 3,
+      name: r'isGameReward',
+      type: IsarType.bool,
+    ),
+    r'quantity': PropertySchema(
+      id: 4,
       name: r'quantity',
       type: IsarType.long,
     )
@@ -3304,7 +3309,8 @@ void _exchangeEntitySerialize(
   );
   writer.writeLong(offsets[1], object.featureSchemeExchangeId);
   writer.writeLong(offsets[2], object.id);
-  writer.writeLong(offsets[3], object.quantity);
+  writer.writeBool(offsets[3], object.isGameReward);
+  writer.writeLong(offsets[4], object.quantity);
 }
 
 ExchangeEntity _exchangeEntityDeserialize(
@@ -3322,7 +3328,8 @@ ExchangeEntity _exchangeEntityDeserialize(
     ),
     featureSchemeExchangeId: reader.readLongOrNull(offsets[1]),
     id: reader.readLongOrNull(offsets[2]),
-    quantity: reader.readLongOrNull(offsets[3]),
+    isGameReward: reader.readBoolOrNull(offsets[3]),
+    quantity: reader.readLongOrNull(offsets[4]),
   );
   return object;
 }
@@ -3346,6 +3353,8 @@ P _exchangeEntityDeserializeProp<P>(
     case 2:
       return (reader.readLongOrNull(offset)) as P;
     case 3:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 4:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3604,6 +3613,34 @@ extension ExchangeEntityQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      isGameRewardIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isGameReward',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      isGameRewardIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isGameReward',
+      ));
+    });
+  }
+
+  QueryBuilder<ExchangeEntity, ExchangeEntity, QAfterFilterCondition>
+      isGameRewardEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isGameReward',
+        value: value,
       ));
     });
   }

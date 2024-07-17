@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fms/core/constant/colors.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/widgets/matter_container.dart';
@@ -38,6 +39,7 @@ class StatisticGift extends StatelessWidget {
             itemCount: exchanges.length,
             itemBuilder: (context, index) {
               final exchange = exchanges[index];
+
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
                 margin: EdgeInsets.symmetric(vertical: 4.h),
@@ -51,6 +53,7 @@ class StatisticGift extends StatelessWidget {
                             ? exchange.item!.imageUrl
                             : exchange.product!.imageUrl),
                     title: MatterInfoWidget(
+                      isGameReward: exchange.isGameReward ?? false,
                       product: exchange.product,
                       productPackaging: exchange.productPackaging,
                       item: exchange.item,

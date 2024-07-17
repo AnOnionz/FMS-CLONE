@@ -51,9 +51,12 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
     if (exchangeEntity != null) {
       _exchangeEntites.remove(exchangeEntity);
       if (entity.quantity! > 0)
-        _exchangeEntites.add(entity.copyWith(quantity: entity.quantity));
+        _exchangeEntites.add(entity.copyWith(
+            quantity: entity.quantity,
+            isGameReward: exchange.hasPlayedGame ?? false));
     } else {
-      _exchangeEntites.add(entity);
+      _exchangeEntites
+          .add(entity.copyWith(isGameReward: exchange.hasPlayedGame ?? false));
     }
     if (type == ValueType.increase) {
       _exchangeController.addExchange(exchange);

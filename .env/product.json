@@ -1,5 +1,5 @@
 { 
-    "appname": "FMS 2024",
+    "appname": "Field Management System",
     "baseURL": "https://api-fms.outcome.asia",
     "AUTH0_DOMAIN": "fms.jp.auth0.com",
     "AUTH0_CLIENT_ID":"qh9d2X8TNqKhzzsOq8uS951SzWqT8P75",

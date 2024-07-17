@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fms/core/constant/type_def.dart';
 import 'package:fms/core/errors/failure.dart';
+import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/repository/repository.dart';
 import 'package:fms/core/usecase/either.dart';
 import 'package:fms/features/general/presentation/page/mixin_general.dart';
@@ -60,7 +61,8 @@ class StatisticRepositoryImpl extends Repository
                     item: e.item,
                     product: e.product,
                     productPackaging: e.productPackaging,
-                    quantity: e.quantity! * exchange.quantity!));
+                    quantity: e.quantity! * exchange.quantity!,
+                    isGameReward: exchange.isGameReward));
 
             return gifts;
           }).expand((element) => element);
@@ -92,13 +94,9 @@ class StatisticRepositoryImpl extends Repository
         final exchanges = <ExchangeStatistic>[];
         orderExchanges.forEach((element) {
           if (exchanges.contains(element)) {
-            final purchase = exchanges.firstWhere((value) =>
-                value.product == element.product &&
-                value.productPackaging == element.productPackaging &&
-                value.item == element.item);
-            exchanges.remove(purchase);
-            exchanges.add(purchase.copyWith(
-                quantity: purchase.quantity! + element.quantity!));
+            exchanges.remove(element);
+            exchanges.add(element.copyWith(
+                quantity: element.quantity! + element.quantity!));
           } else {
             exchanges.add(element);
           }

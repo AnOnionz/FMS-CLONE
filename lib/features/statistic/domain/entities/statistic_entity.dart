@@ -83,36 +83,37 @@ class ExchangeStatistic {
   final ProductPackaging? productPackaging;
   final Item? item;
   final int? quantity;
+  final bool? isGameReward;
 
-  ExchangeStatistic({
-    this.product,
-    this.productPackaging,
-    this.item,
-    this.quantity,
-  });
+  ExchangeStatistic(
+      {this.product,
+      this.productPackaging,
+      this.item,
+      this.quantity,
+      this.isGameReward});
 
   String toJson() => json.encode(toMap());
 
   factory ExchangeStatistic.fromJson(String source) =>
       ExchangeStatistic.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  ExchangeStatistic copyWith({
-    Product? product,
-    ProductPackaging? productPackaging,
-    Item? item,
-    int? quantity,
-  }) {
+  ExchangeStatistic copyWith(
+      {Product? product,
+      ProductPackaging? productPackaging,
+      Item? item,
+      int? quantity,
+      bool? isGameReward}) {
     return ExchangeStatistic(
-      product: product ?? this.product,
-      productPackaging: productPackaging ?? this.productPackaging,
-      item: item ?? this.item,
-      quantity: quantity ?? this.quantity,
-    );
+        product: product ?? this.product,
+        productPackaging: productPackaging ?? this.productPackaging,
+        item: item ?? this.item,
+        quantity: quantity ?? this.quantity,
+        isGameReward: isGameReward ?? this.isGameReward);
   }
 
   @override
   String toString() {
-    return 'ExchangeStatistic(product: $product, productPackaging: $productPackaging, item: $item, quantity: $quantity)';
+    return 'ExchangeStatistic(product: $product, productPackaging: $productPackaging, item: $item, quantity: $quantity, isGameReward: $isGameReward)';
   }
 
   Map<String, dynamic> toMap() {
@@ -121,23 +122,25 @@ class ExchangeStatistic {
       'productPackaging': productPackaging?.toMap(),
       'item': item?.toMap(),
       'quantity': quantity,
+      'isGameReward': isGameReward
     };
   }
 
   factory ExchangeStatistic.fromMap(Map<String, dynamic> map) {
     return ExchangeStatistic(
-      product: map['product'] != null
-          ? Product.fromMap(map['product'] as Map<String, dynamic>)
-          : null,
-      productPackaging: map['productPackaging'] != null
-          ? ProductPackaging.fromMap(
-              map['productPackaging'] as Map<String, dynamic>)
-          : null,
-      item: map['item'] != null
-          ? Item.fromMap(map['item'] as Map<String, dynamic>)
-          : null,
-      quantity: map['quantity'] != null ? map['quantity'] as int : null,
-    );
+        product: map['product'] != null
+            ? Product.fromMap(map['product'] as Map<String, dynamic>)
+            : null,
+        productPackaging: map['productPackaging'] != null
+            ? ProductPackaging.fromMap(
+                map['productPackaging'] as Map<String, dynamic>)
+            : null,
+        item: map['item'] != null
+            ? Item.fromMap(map['item'] as Map<String, dynamic>)
+            : null,
+        quantity: map['quantity'] != null ? map['quantity'] as int : null,
+        isGameReward:
+            map['isGameReward'] != null ? map['isGameReward'] as bool : null);
   }
 
   @override
@@ -146,12 +149,16 @@ class ExchangeStatistic {
 
     return other.product == product &&
         other.productPackaging == productPackaging &&
-        other.item == item;
+        other.item == item &&
+        other.isGameReward == isGameReward;
   }
 
   @override
   int get hashCode {
-    return product.hashCode ^ productPackaging.hashCode ^ item.hashCode;
+    return product.hashCode ^
+        productPackaging.hashCode ^
+        item.hashCode ^
+        isGameReward.hashCode;
   }
 }
 

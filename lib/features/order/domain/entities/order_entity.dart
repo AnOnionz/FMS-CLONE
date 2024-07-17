@@ -375,13 +375,14 @@ class ExchangeEntity {
   final int? featureSchemeExchangeId;
   final List<ExchangeProceed>? exchangeProceeds;
   final int? quantity;
+  final bool? isGameReward;
 
-  ExchangeEntity({
-    this.id,
-    this.featureSchemeExchangeId,
-    this.exchangeProceeds,
-    this.quantity,
-  });
+  ExchangeEntity(
+      {this.id,
+      this.featureSchemeExchangeId,
+      this.exchangeProceeds,
+      this.quantity,
+      this.isGameReward});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -407,21 +408,21 @@ class ExchangeEntity {
 
   @override
   String toString() {
-    return 'ExchangeEntity(id: $id, featureSchemeExchangeId: $featureSchemeExchangeId, exchangeProceeds: $exchangeProceeds, quantity: $quantity)';
+    return 'ExchangeEntity(id: $id, featureSchemeExchangeId: $featureSchemeExchangeId, exchangeProceeds: $exchangeProceeds, quantity: $quantity, isGameReward: $isGameReward)';
   }
 
-  ExchangeEntity copyWith({
-    int? id,
-    int? featureSchemeExchangeId,
-    int? quantity,
-  }) {
+  ExchangeEntity copyWith(
+      {int? id,
+      int? featureSchemeExchangeId,
+      int? quantity,
+      bool? isGameReward}) {
     return ExchangeEntity(
-      id: id ?? this.id,
-      exchangeProceeds: this.exchangeProceeds,
-      featureSchemeExchangeId:
-          featureSchemeExchangeId ?? this.featureSchemeExchangeId,
-      quantity: quantity ?? this.quantity,
-    );
+        id: id ?? this.id,
+        exchangeProceeds: this.exchangeProceeds,
+        featureSchemeExchangeId:
+            featureSchemeExchangeId ?? this.featureSchemeExchangeId,
+        quantity: quantity ?? this.quantity,
+        isGameReward: isGameReward ?? this.isGameReward);
   }
 }
 

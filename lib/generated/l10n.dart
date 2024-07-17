@@ -50,10 +50,10 @@ class L {
     return Localizations.of<L>(context, L);
   }
 
-  /// `FMS 2023`
+  /// `Field Management System`
   String get appName {
     return Intl.message(
-      'FMS 2023',
+      'Field Management System',
       name: 'appName',
       desc: '',
       args: [],
