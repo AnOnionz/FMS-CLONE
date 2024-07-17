@@ -56,8 +56,8 @@ class AuthRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
   Future<Credentials?> login() async {
     try {
       final credentials = await webAuthentication.login(
-          audience: 'https://ocs-demo.ocs.com',
-          // audience: 'https://fms.outcome.asia',
+          // audience: 'https://ocs-demo.ocs.com',
+          audience: 'https://fms.outcome.asia',
           parameters: {
             'prompt': 'login',
           },
