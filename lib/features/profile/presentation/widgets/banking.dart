@@ -38,6 +38,8 @@ class _BankingState extends State<Banking> {
       if (state is FetchBankSuccess) {
         setState(() {
           _banks = state.banks;
+          _bankSelected = _banks.firstWhereOrNull((element) =>
+              element.id == UserProfileInherited.of(context).entity.bank?.id);
         });
       }
       if (state is FetchBankFailure) {

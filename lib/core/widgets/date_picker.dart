@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fms/core/mixins/fx.dart';
 
 class DatePicker extends StatefulWidget {
@@ -33,6 +34,7 @@ class _DatePickerState extends State<DatePicker> {
         context: context,
         currentDate: widget.value,
         locale: context.locale,
+        initialEntryMode: DatePickerEntryMode.calendarOnly,
         fieldHintText: 'ngày/tháng/năm',
         firstDate: widget.firstDate ?? DateTime.parse('1964-01-01'),
         lastDate: widget.lastDate ?? DateTime.parse('2100-01-31'));

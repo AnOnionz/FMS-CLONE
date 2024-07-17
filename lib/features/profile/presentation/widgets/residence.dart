@@ -92,20 +92,9 @@ class _ResidenceState extends State<Residence> {
   void didChangeDependencies() {
     final entity = UserProfileInherited.of(context).entity;
 
-    _provinceSelected.value =
-        widget.isPermanent ? entity.permanentProvince : entity.province;
-    if (_provinceSelected.value != null)
-      _provinceController.text = _provinceSelected.value!.name!;
-
-    _districtSelected.value =
-        widget.isPermanent ? entity.permanentDistrict : entity.district;
-    if (_districtSelected.value != null)
-      _districtController.text = _districtSelected.value!.name!;
-
-    _wardSelected.value =
-        widget.isPermanent ? entity.permanentWard : entity.ward;
-    if (_wardSelected.value != null)
-      _wardController.text = _wardSelected.value!.name!;
+    updateProvince(entity);
+    updateDistrict(entity);
+    updateWard(entity);
 
     super.didChangeDependencies();
   }
@@ -150,6 +139,27 @@ class _ResidenceState extends State<Residence> {
 
   void onWardSelected(Ward ward) {
     _wardSelected.value = ward;
+  }
+
+  void updateProvince(UserProfileEntity entity) {
+    _provinceSelected.value =
+        widget.isPermanent ? entity.permanentProvince : entity.province;
+    if (_provinceSelected.value != null)
+      _provinceController.text = _provinceSelected.value!.name!;
+  }
+
+  void updateDistrict(UserProfileEntity entity) {
+    _districtSelected.value =
+        widget.isPermanent ? entity.permanentDistrict : entity.district;
+    if (_districtSelected.value != null)
+      _districtController.text = _districtSelected.value!.name!;
+  }
+
+  void updateWard(UserProfileEntity entity) {
+    _wardSelected.value =
+        widget.isPermanent ? entity.permanentWard : entity.ward;
+    if (_wardSelected.value != null)
+      _wardController.text = _wardSelected.value!.name!;
   }
 
   @override
