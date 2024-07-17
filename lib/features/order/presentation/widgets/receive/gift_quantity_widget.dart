@@ -60,7 +60,6 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.exchange.hasPlayedGame);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.h),
       child: IntrinsicHeight(

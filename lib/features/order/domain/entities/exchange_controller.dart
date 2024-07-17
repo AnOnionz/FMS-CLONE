@@ -5,6 +5,8 @@ import 'package:collection/collection.dart';
 import 'package:fms/features/general/domain/entities/config_entity.dart';
 import 'package:fms/features/order/domain/entities/order_entity.dart';
 
+import '../../../../core/mixins/common.dart';
+
 final class ExchangeController {
   final FeatureEntity feature;
   final OrderEntity order;
@@ -61,6 +63,7 @@ final class ExchangeController {
     if (exchange.exchangeConditions!.isNotEmpty) {
       if (exchange.logical == 'or') {
         final or = _or(exchange);
+
         return _isExpectedPrice(or);
       }
 
@@ -150,8 +153,7 @@ final class ExchangeController {
                   exchangeCondition.productPackaging!.id);
 
       if (purchaseUnExchanged != null && quantity > 0) {
-        final purchaseQuantity =
-            min(exchangeCondition.quantity!, purchaseUnExchanged.$2);
+        final purchaseQuantity = min(quantity, purchaseUnExchanged.$2);
 
         quantity -= purchaseQuantity;
         _exchangeConditions
