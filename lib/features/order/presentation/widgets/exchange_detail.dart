@@ -37,7 +37,16 @@ class ExchangeDetail extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: ReviewGift(
-            schemes: feature.featureSchemes ?? [],
+            title: 'Quà tặng',
+            schemes: feature.featureSchemes ?? <FeatureScheme>[],
+            exchanges: order.exchanges ?? [],
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: ReviewGift(
+            title: 'Quà tặng game',
+            isPlayedGame: true,
+            schemes: feature.featureSchemes ?? <FeatureScheme>[],
             exchanges: order.exchanges ?? [],
           ),
         ),

@@ -11,12 +11,16 @@ import '../../../../general/domain/entities/config_entity.dart';
 import '../../../domain/entities/order_entity.dart';
 
 class ReviewGift extends StatefulWidget {
+  final String title;
+  final bool isPlayedGame;
   final List<FeatureScheme> schemes;
   final List<ExchangeEntity> exchanges;
   const ReviewGift({
     super.key,
     required this.schemes,
     required this.exchanges,
+    required this.title,
+    this.isPlayedGame = false,
   });
 
   @override
@@ -33,6 +37,8 @@ class _ReviewGiftState extends State<ReviewGift> {
   late final schemeExchanges = widget.schemes
       .map((e) => e.exchanges)
       .expand((element) => element ?? <Exchange>[])
+      .where(
+          (element) => (element.hasPlayedGame ?? false) == widget.isPlayedGame)
       .toList();
 
   @override
@@ -96,7 +102,7 @@ class _ReviewGiftState extends State<ReviewGift> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Danh sách quà',
+              widget.title,
               style: context.textTheme.subtitle1,
             ),
             SizedBox(
