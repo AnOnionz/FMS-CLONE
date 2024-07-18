@@ -7,7 +7,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/colors.dart';
 import 'package:fms/core/constant/enum.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
@@ -221,7 +220,6 @@ class _ProfileEditPageState extends State<ProfileEditPage>
 
   @override
   Widget build(BuildContext context) {
-    Fx.log(entity);
     return Scaffold(
       appBar: DefaultAppBar(title: 'Profile nhân viên'),
       body: GestureDetector(
@@ -340,7 +338,6 @@ class _ProfileEditPageState extends State<ProfileEditPage>
                               return;
                             }
 
-                            Fx.log(entity);
                             _createProfileBloc.add(CreateProfile(
                                 profile: entity, projectId: widget.projectId));
                           }

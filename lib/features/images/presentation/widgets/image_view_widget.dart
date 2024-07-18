@@ -12,11 +12,9 @@ import 'package:fms/core/widgets/app_indicator.dart';
 import 'package:fms/core/widgets/cached_image.dart';
 import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/images/presentation/bloc/delete_image_bloc.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
-import '../../../../core/mixins/common.dart';
 import '../../domain/entities/image_dynamic.dart';
 
 class ImageViewWidget extends StatefulWidget {
