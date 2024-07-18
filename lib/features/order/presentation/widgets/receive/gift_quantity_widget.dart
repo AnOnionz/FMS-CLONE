@@ -36,7 +36,7 @@ class GiftQuantityWidget extends StatefulWidget {
 
 class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
   late final _exchange = widget.exchange;
-  late final bool isCanExchange = widget.controller.isValid(_exchange, _value);
+  bool get isCanExchange => widget.controller.isValid(_exchange, _value);
   late int _value = widget.entity?.quantity ?? 0;
 
   String getGiftUnitName(ExchangeProceed gift) {

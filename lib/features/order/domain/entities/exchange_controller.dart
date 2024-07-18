@@ -223,8 +223,7 @@ final class ExchangeController {
                       exchangeCondition.productPackaging!.id);
 
           if (purchaseUnExchanged != null && quantity > 0) {
-            final purchaseQuantity =
-                min(exchangeCondition.quantity!, purchaseUnExchanged.$2);
+            final purchaseQuantity = min(quantity, purchaseUnExchanged.$2);
 
             quantity -= purchaseQuantity;
             _exchangeConditions
