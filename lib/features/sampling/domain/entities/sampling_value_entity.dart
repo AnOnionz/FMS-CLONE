@@ -43,7 +43,7 @@ class SamplingValueEntity {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'featureSamplingId': featureSamplingId,
-      'value': value ?? 0,
+      'value': value,
     };
   }
 
