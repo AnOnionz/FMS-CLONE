@@ -40,7 +40,8 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: Fx.pV16,
             child: Text(env.variables[Keys.APP_NAME] as String,
-                style: context.textTheme.h1, textAlign: TextAlign.center),
+                style: context.textTheme.h1?.copyWith(fontSize: 25.sp),
+                textAlign: TextAlign.center),
           ),
           // Padding(
           //   padding: EdgeInsets.symmetric(horizontal: 70.w),
