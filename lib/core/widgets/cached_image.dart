@@ -46,8 +46,7 @@ class CachedImage extends StatelessWidget {
       fadeInCurve: Curves.easeOut,
       fadeOutCurve: Curves.easeIn,
       fit: fit,
-      errorWidget:
-          errorWidget ?? (_, string, obj) => Icon(Icons.broken_image_outlined),
+      errorWidget: errorWidget ?? (_, string, obj) => Icon(Icons.error),
     );
   }
 }

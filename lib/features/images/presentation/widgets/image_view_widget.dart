@@ -16,6 +16,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 
 import '../../../../core/constant/colors.dart';
 import '../../../../core/constant/icons.dart';
+import '../../../../core/mixins/common.dart';
 import '../../domain/entities/image_dynamic.dart';
 
 class ImageViewWidget extends StatefulWidget {
@@ -86,31 +87,11 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                       );
                     }),
                   )
-                : StreamBuilder(
-                    stream: connectivityService.onConnectionChange,
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null &&
-                          snapshot.data == InternetStatus.connected) {
-                        return Align(
-                            child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4.sqr),
-                          child: CachedImage(
-                            placeholder: (p0, p1) => SizedBox(
-                              height: 300.h,
-                              width: context.screenWidth - 32.w,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AppIndicator(),
-                                ],
-                              ),
-                            ),
-                            errorWidget: (p0, p1, p2) => SizedBox(),
-                            imageUrl: widget.image.networkImage!.getImage(),
-                          ),
-                        ));
-                      }
-                      return SizedBox(
+                : Align(
+                    child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4.sqr),
+                    child: CachedImage(
+                      placeholder: (p0, p1) => SizedBox(
                         height: 300.h,
                         width: context.screenWidth - 32.w,
                         child: Column(
@@ -119,9 +100,11 @@ class _ImageViewWidgetState extends State<ImageViewWidget> {
                             AppIndicator(),
                           ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                      errorWidget: (p0, p1, p2) => Icon(Icons.error),
+                      imageUrl: widget.image.networkImage!.getImage(),
+                    ),
+                  )),
             if (_isImageLoaded)
               Positioned(
                 right: 10.h,
