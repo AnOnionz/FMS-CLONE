@@ -103,7 +103,6 @@ class _BankingState extends State<Banking> {
       AppTextFormField(
         label: 'Số tài khoản',
         isRequired: false,
-        onlyNumber: true,
         maxLength: 20,
         value: UserProfileInherited.of(context).entity.bankAccountNumber,
         onChanged: (value) {
