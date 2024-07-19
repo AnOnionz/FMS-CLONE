@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fms/core/constant/icons.dart';
-import 'package:fms/core/mixins/common.dart';
 import 'package:fms/core/mixins/fx.dart';
 import 'package:fms/core/responsive/responsive.dart';
 import 'package:fms/core/styles/theme.dart';
@@ -15,7 +13,6 @@ import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
 import 'package:fuzzy/fuzzy.dart';
 
-import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
 import '../../../../core/widgets/search_text_field.dart';
@@ -95,7 +92,6 @@ class _OutletSelectionPageState extends State<OutletSelectionPage>
                             findAllMatches: true));
 
                     final result = fuse.search(search).map((suggest) {
-                      Fx.log(suggest.item);
                       return _outlets.firstWhere((element) =>
                           (element.name ?? '') +
                               ' ' +
