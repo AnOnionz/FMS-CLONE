@@ -190,7 +190,7 @@ class _OutletSelectionPageState extends State<OutletSelectionPage>
                                         icon: SvgPicture.asset(
                                             AppIcons.requiredProfileData),
                                         message:
-                                            'Tài khoản chưa được xác thực. Yêu cầu cập nhật Profile trước khi sử dụng tài khoản này',
+                                            'Tài khoản chưa được xác thực. Vui lòng cập nhật ${user!.isFaceVerified == false ? 'hình ảnh xác thực gương mặt' : ''} ${user!.isFaceVerified == false && user!.isProfileVerified == false ? 'và' : ''} ${user!.isProfileVerified == false ? 'profile' : ''} trước khi sử dụng tài khoản này',
                                         btnText: 'Đến Trang Profile Nhân viên',
                                         onPressed: () => context.nextRoute(
                                             ProfileModule.route,
