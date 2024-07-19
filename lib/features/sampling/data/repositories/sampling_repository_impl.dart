@@ -53,7 +53,7 @@ class SamplingRepositoryImpl extends Repository
           attendanceId: general!.attendance?.id);
       _local.cacheSamplingToLocal(sampling);
       final response = await _remote.updateSamplings(
-          entity: entity, featureId: featureId, attendanceId: attendanceId);
+          entity: sampling, featureId: featureId, attendanceId: attendanceId);
       if (response != null) {
         final _sampling =
             sampling.copyWith(id: response.id, status: SyncStatus.synced);

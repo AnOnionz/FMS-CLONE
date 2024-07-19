@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,23 +12,42 @@ import 'package:fms/core/widgets/popup.dart';
 import 'package:fms/features/profile/mixin_user.dart';
 import 'package:fms/features/profile/profile_module.dart';
 import 'package:fms/features/work_place/domain/entities/outlet_entity.dart';
+import 'package:fuzzy/fuzzy.dart';
 
+import '../../../../core/constant/colors.dart';
 import '../../../../core/widgets/app_indicator.dart';
 import '../../../../core/widgets/data_load_error_widget.dart';
+import '../../../../core/widgets/search_text_field.dart';
 import '../bloc/fetch_work_place_bloc.dart';
 import '../bloc/work_place_bloc.dart';
 import '../widgets/outlet_item.dart';
 
-class OutletSelectionPage extends StatelessWidget with UserMixin {
+class OutletSelectionPage extends StatefulWidget {
   OutletSelectionPage({super.key});
 
+  @override
+  State<OutletSelectionPage> createState() => _OutletSelectionPageState();
+}
+
+class _OutletSelectionPageState extends State<OutletSelectionPage>
+    with UserMixin {
   late final WorkPlaceBloc _workPlaceBloc = Modular.get();
 
   late final FetchWorkPlaceBloc _fetchWorkPlaceBloc =
-      Modular.get<FetchWorkPlaceBloc>()
-        ..add(FetchOutlets(workPlace: _workPlaceBloc.state.entity));
+      Modular.get<FetchWorkPlaceBloc>();
+
+  late List<OutletEntity> _outlets = [];
+  late List<OutletEntity> _outletResults = [];
+  bool isLoading = false;
+  final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _fetchWorkPlaceBloc
+        .add(FetchOutlets(workPlace: _workPlaceBloc.state.entity));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,22 +66,108 @@ class OutletSelectionPage extends StatelessWidget with UserMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Danh sách Outlet',
-                  style: context.textTheme.h3,
+                SearchTextField(
+                  label: 'Nhập tên, mã, địa chỉ outlet cần tìm',
+                  controller: _controller,
+                  itemBuilder: (context, value) => SizedBox.shrink(),
+                  suggestionsCallback: (search) {
+                    if (search.isEmptyOrNull) {
+                      setState(() {
+                        _outletResults = _outlets;
+                      });
+
+                      return _outlets;
+                    }
+                    final fuse = Fuzzy(
+                        _outlets
+                            .map((e) =>
+                                (e.name ?? '') + (e.code ?? '') + (e.address))
+                            .toList(),
+                        options: FuzzyOptions(
+                          tokenize: true,
+                          threshold: 0.1,
+                        ));
+
+                    final result = fuse.search(search).map((suggest) {
+                      return _outlets.firstWhere((element) =>
+                          (element.name ?? '') +
+                              (element.code ?? '') +
+                              (element.address) ==
+                          suggest.item);
+                    }).toList();
+
+                    setState(() {
+                      _outletResults = result;
+                    });
+                    return result;
+                  },
+                  onSelected: (value) => null,
                 ),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 6.h),
+                      child: TextButton(
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  _fetchWorkPlaceBloc.add(FetchOutlets(
+                                      workPlace: _workPlaceBloc.state.entity));
+                                  setState(() {
+                                    _controller.clear();
+                                  });
+                                },
+                          child: Text(
+                            'Làm mới',
+                            style: context.textTheme.subtitle1,
+                          )),
+                    )),
                 Expanded(
-                    child: BlocBuilder<FetchWorkPlaceBloc, FetchWorkPlaceState>(
+                    child:
+                        BlocConsumer<FetchWorkPlaceBloc, FetchWorkPlaceState>(
                   bloc: _fetchWorkPlaceBloc,
+                  listener: (context, state) {
+                    if (state is FetchWorkPlaceSuccess<OutletEntity>) {
+                      setState(() {
+                        isLoading = false;
+                        _outlets = state.data;
+                        _outletResults = state.data;
+                      });
+                    }
+                    if (state is FetchWorkPlaceLoading) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                    }
+                    if (state is FetchWorkPlaceFailure) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  },
                   builder: (context, state) {
                     if (state is FetchWorkPlaceSuccess<OutletEntity>) {
+                      if (state.data.isEmpty) {
+                        return Center(
+                            child: Text(
+                          'Không có dữ liệu',
+                          style: context.textTheme.body1,
+                        ));
+                      }
+                      if (_outletResults.length == 0) {
+                        return Center(
+                            child: Text(
+                          'Không Tìm thấy outlet nào',
+                          style: context.textTheme.body1,
+                        ));
+                      }
                       return CustomScrollView(
                         physics: kPhysics,
                         slivers: [
                           SliverList.builder(
-                            itemCount: state.data.length,
+                            itemCount: _outletResults.length,
                             itemBuilder: (_, index) {
-                              final outlet = state.data[index];
+                              final outlet = _outletResults[index];
                               return Padding(
                                 padding: EdgeInsets.only(top: 16.h),
                                 child: OutletItem(

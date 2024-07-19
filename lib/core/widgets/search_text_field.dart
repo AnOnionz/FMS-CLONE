@@ -13,6 +13,7 @@ import '../styles/theme.dart';
 class SearchTextField<T> extends StatefulWidget {
   final String label;
   final FutureOr<List<T>?> Function(String search) suggestionsCallback;
+  final TextEditingController? controller;
   final Widget Function(
     BuildContext context,
     T value,
@@ -23,14 +24,16 @@ class SearchTextField<T> extends StatefulWidget {
       required this.suggestionsCallback,
       required this.itemBuilder,
       required this.onSelected,
-      required this.label});
+      required this.label,
+      this.controller});
 
   @override
   State<SearchTextField<T>> createState() => _SearchTextFieldState<T>();
 }
 
 class _SearchTextFieldState<T> extends State<SearchTextField<T>> {
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller =
+      widget.controller ?? TextEditingController();
 
   final SuggestionsController<T> _suggestionsController =
       SuggestionsController();
@@ -60,7 +63,7 @@ class _SearchTextFieldState<T> extends State<SearchTextField<T>> {
           cursorWidth: 0.9,
           textAlignVertical: TextAlignVertical.center,
           style: context.textTheme.body1,
-          maxLength: 48,
+          maxLength: 255,
           buildCounter: (context,
                   {required currentLength,
                   required isFocused,
@@ -73,7 +76,7 @@ class _SearchTextFieldState<T> extends State<SearchTextField<T>> {
               hintStyle: context.textTheme.body1,
               isCollapsed: true,
               contentPadding:
-                  EdgeInsets.symmetric(horizontal: 18.w, vertical: 28.w),
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
               suffixIconConstraints: BoxConstraints(),
               suffixIcon: Padding(
                 padding: EdgeInsets.only(right: 16.w),
