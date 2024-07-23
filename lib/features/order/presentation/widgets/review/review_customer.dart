@@ -74,10 +74,12 @@ class ReviewCustomer extends StatelessWidget {
                   style: context.textTheme.body1
                       ?.copyWith(color: AppColors.nobel)),
               (customerInfo?.options ?? []).isEmpty
-                  ? Text(
-                      customerInfo?.value ?? '',
-                      style: context.textTheme.body1
-                          ?.copyWith(color: AppColors.black),
+                  ? Flexible(
+                      child: Text(
+                        customerInfo?.value ?? '',
+                        style: context.textTheme.body1
+                            ?.copyWith(color: AppColors.black),
+                      ),
                     )
                   : Column(
                       mainAxisSize: MainAxisSize.min,

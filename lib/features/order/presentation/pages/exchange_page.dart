@@ -195,12 +195,12 @@ class _OrderExchangePageState extends State<OrderExchangePage> {
           ),
         )),
         Container(
-          decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-            BoxShadow(
-                offset: Offset(0, -2),
-                blurRadius: 25,
-                color: AppColors.black.withOpacity(0.15))
-          ]),
+          // decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+          //   BoxShadow(
+          //       offset: Offset(0, -2),
+          //       blurRadius: 25,
+          //       color: AppColors.black.withOpacity(0.15))
+          // ]),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: BottomButtons(

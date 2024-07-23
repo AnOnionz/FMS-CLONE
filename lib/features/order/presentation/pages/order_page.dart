@@ -30,6 +30,7 @@ import '../widgets/exchange_detail.dart';
 import 'customer_page.dart';
 import 'exchange_page.dart';
 import 'order_photo_page.dart';
+import 'purchase_1_page.dart';
 import 'sampling_page.dart';
 
 class OrderPage extends StatefulWidget {
@@ -346,7 +347,7 @@ class _OrderPageState extends State<OrderPage> {
     }
     if (widget.entity.feature.featureOrder?.hasPurchase == true) {
       _steps.add(PurchaseStep(name: 'Sản phẩm', index: index++));
-      _body.add(OrderPurchasePage(
+      _body.add(OrderPurchase1Page(
         key: PageStorageKey('product'),
         onBack: onBack,
         onNext: onNext,
