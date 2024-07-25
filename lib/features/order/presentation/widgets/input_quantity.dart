@@ -71,13 +71,14 @@ class _InputQuantityState extends State<InputQuantity> {
         Padding(
           padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 6.w),
           child: SizedBox(
-            width: 32.w,
-            height: 24.h,
+            width: 40.w,
+            height: 32.h,
             child: Center(
               child: Text(
                 _value.toString(),
                 style: context.textTheme.body2?.copyWith(
-                    color: _value > 0 ? AppColors.black : AppColors.nobel),
+                    color: _value > 0 ? AppColors.black : AppColors.nobel,
+                    fontSize: 20.sp),
               ),
             ),
           ),
@@ -91,11 +92,11 @@ class _InputQuantityState extends State<InputQuantity> {
     required String icon,
     required VoidCallback onPressed,
   }) {
-    return InkWell(
+    return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 30.h,
-        width: 30.h,
+        height: 40.h,
+        width: 40.h,
         decoration: BoxDecoration(
             color: _value > 0 ? '#FFF2CF'.toColor() : '#F3F3F3'.toColor(),
             borderRadius: BorderRadius.circular(8.sqr)),

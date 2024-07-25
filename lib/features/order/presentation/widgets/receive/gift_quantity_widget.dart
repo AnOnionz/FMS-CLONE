@@ -116,7 +116,7 @@ class _GiftQuantityWidgetState extends State<GiftQuantityWidget> {
             Flexible(
                 flex: 4,
                 child: InputQuantity(
-                  key: ValueKey(_exchange.id!.toString()),
+                  // key: ValueKey(_exchange.id!.toString()),
                   isMax: !isCanExchange,
                   max: widget.exchange.maxReceiveQuantity!,
                   value: _value,
